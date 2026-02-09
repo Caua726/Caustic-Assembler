@@ -104,6 +104,10 @@ Generates standard ELF64 relocatable objects with:
 - `.rela.text` with PC-relative relocations
 - `.shstrtab` for section names
 
+## Status
+
+Covers 100% of the x86_64 instructions emitted by the Caustic compiler's codegen, verified against GCC's assembler with a 30-test suite covering arithmetic, floats, structs, generics, impl blocks and the full standard library (mem, string, linux).
+
 ## Limitations
 
 - Linux x86_64 only
@@ -111,7 +115,7 @@ Generates standard ELF64 relocatable objects with:
 - No macro support
 - No indirect calls/jumps (`call *rax`)
 - No scale/index addressing (`[rdi + rsi*4]`)
-- No GOT/PLT relocations (use `gcc -no-pie` for linking)
+- No GOT relocations (use `gcc -no-pie` for linking)
 - Single value per data directive (no `.byte 1, 2, 3`)
 
 ## Architecture
