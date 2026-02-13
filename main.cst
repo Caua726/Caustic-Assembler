@@ -695,7 +695,15 @@ fn pass2(lines as *ParsedLines, symtab as *elf.SymbolTable, text_buf as *enc.Byt
                 mem.gfree(tmp.data);
                 // The rel32 is at the last 4 bytes of the instruction
                 let is i64 as reloc_off = line.offset + cast(i64, sz) - 4;
-                elf.reloc_add(relocs, reloc_off, cast(i64, sym_idx), elf.R_X86_64_PC32, 0 - 4);
+
+                // Check if this is a MOV to undefined symbol — use GOTPCREL
+                let is *elf.Symbol as rip_sym = elf.sym_get(symtab, sym_idx);
+                if (line.inst_id == enc.INST_MOV && rip_sym.section == SECTION_UNDEF) {
+                    rip_sym.is_global = 1;
+                    elf.reloc_add(relocs, reloc_off, cast(i64, sym_idx), elf.R_X86_64_GOTPCREL, 0 - 4);
+                } else {
+                    elf.reloc_add(relocs, reloc_off, cast(i64, sym_idx), elf.R_X86_64_PC32, 0 - 4);
+                }
 
                 // Encode with resolve_label = 0 (relocation will fix it)
                 enc.encode(text_buf, line.inst_id, &o1, &o2, 0, line.offset);
