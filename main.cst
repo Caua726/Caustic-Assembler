@@ -73,8 +73,9 @@ struct ParsedLines {
     cap as i32;
 }
 
-fn pl_init() as ParsedLines {
-    let is i32 as cap = 4096;
+fn pl_init(hint as i32) as ParsedLines {
+    let is i32 as cap with mut = hint;
+    if (cap < 4096) { cap = 4096; }
     let is ParsedLines as pl;
     pl.data = mem.galloc(cast(i64, cap) * sizeof(ParsedLine));
     pl.count = 0;
@@ -315,8 +316,8 @@ fn decode_string(ptr as *u8, len as i32, out_len as *i32) as *u8 {
 }
 
 // Parse tokens into ParsedLines
-fn parse_all(tl as *lex.TokenList) as ParsedLines {
-    let is ParsedLines as lines = pl_init();
+fn parse_all(tl as *lex.TokenList, line_hint as i32) as ParsedLines {
+    let is ParsedLines as lines = pl_init(line_hint);
     let is i32 as pos with mut = 0;
     let is i32 as current_section with mut = SECTION_TEXT;
 
@@ -823,14 +824,16 @@ fn main(argc as i64, argv as i64) as i32 {
         return 1;
     }
 
-    mem.gheapinit(4194304); // 4MB heap
-
     // Get filename from argv[1]
     let is *i64 as argv_arr = cast(*i64, argv);
     let is *u8 as filename = cast(*u8, argv_arr[1]);
 
-    // Read file
+    // Read file size first, then allocate heap proportionally
     let is i64 as file_size = read_file_size(filename);
+    let is i64 as heap_size = file_size * 30 + 4194304;
+    if (heap_size < 8388608) { heap_size = 8388608; }
+    mem.gheapinit(heap_size);
+
     let is *u8 as src = read_file(filename);
     if (cast(i64, src) == 0) {
         linux.write(linux.STDERR, "Error: cannot read file\n", 24);
@@ -849,8 +852,9 @@ fn main(argc as i64, argv as i64) as i32 {
     print_int(cast(i64, tokens.count));
     print_str("\n");
 
-    // Parse
-    let is ParsedLines as lines = parse_all(&tokens);
+    // Parse — estimate ~1 line per 24 bytes of source
+    let is i32 as line_hint = cast(i32, file_size / 24) + 1024;
+    let is ParsedLines as lines = parse_all(&tokens, line_hint);
     print_str("  lines: ");
     print_int(cast(i64, lines.count));
     print_str("\n");

@@ -37,8 +37,9 @@ struct TokenList {
     cap as i32;
 }
 
-fn tl_init() as TokenList {
-    let is i32 as cap = 8192;
+fn tl_init(hint as i32) as TokenList {
+    let is i32 as cap with mut = hint;
+    if (cap < 8192) { cap = 8192; }
     let is TokenList as tl;
     tl.data = mem.galloc(cast(i64, cap) * sizeof(Token));
     tl.count = 0;
@@ -156,7 +157,9 @@ fn count_number_len(src as *u8, pos as i64, src_len as i64) as i32 {
 }
 
 fn tokenize(src as *u8, src_len as i64) as TokenList {
-    let is TokenList as tl = tl_init();
+    // Estimate ~2 tokens per 12 bytes of source
+    let is i32 as tok_hint = cast(i32, src_len / 6) + 4096;
+    let is TokenList as tl = tl_init(tok_hint);
     let is i64 as i with mut = 0;
     let is i32 as line with mut = 1;
 
