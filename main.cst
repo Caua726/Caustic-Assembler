@@ -830,7 +830,7 @@ fn main(argc as i64, argv as i64) as i32 {
 
     // Read file size first, then allocate heap proportionally
     let is i64 as file_size = read_file_size(filename);
-    let is i64 as heap_size = file_size * 50 + 8388608;
+    let is i64 as heap_size with mut = file_size * 50 + 8388608;
     if (heap_size < 16777216) { heap_size = 16777216; }
     mem.gheapinit(heap_size);
 

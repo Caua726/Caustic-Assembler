@@ -256,7 +256,7 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
             // st_other
             enc.buf_emit8(&symtab_buf, 0);
             // st_shndx
-            let is i32 as shndx = s.section + 1;
+            let is i32 as shndx with mut = s.section + 1;
             if (s.section == 99) { shndx = 0; }
             enc.buf_emit16_le(&symtab_buf, shndx);
             // st_value
@@ -289,7 +289,7 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
             let is i32 as info = sym_type + STB_GLOBAL * 16;
             enc.buf_emit8(&symtab_buf, info);
             enc.buf_emit8(&symtab_buf, 0);
-            let is i32 as shndx = s.section + 1;
+            let is i32 as shndx with mut = s.section + 1;
             if (s.section == 99) { shndx = 0; }
             enc.buf_emit16_le(&symtab_buf, shndx);
             enc.buf_emit64_le(&symtab_buf, s.offset);
@@ -310,7 +310,7 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
         // r_offset
         enc.buf_emit64_le(&rela_buf, r.offset);
         // r_info = (sym_idx << 32) | type
-        let is i64 as mapped_idx = r.sym_idx;
+        let is i64 as mapped_idx with mut = r.sym_idx;
         // Look up in sym_map if it's a user symbol
         if (r.sym_idx >= 0 && r.sym_idx < cast(i64, symtab.count)) {
             let is *i32 as map_slot = cast(*i32, cast(i64, sym_map) + r.sym_idx * 4);
