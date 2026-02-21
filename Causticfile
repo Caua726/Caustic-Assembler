@@ -1,0 +1,8 @@
+name "caustic-as"
+version "0.1.0"
+author "Caua"
+
+target "caustic-as" {
+    src "main.cst"
+    out "caustic-as"
+}
