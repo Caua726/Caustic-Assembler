@@ -818,6 +818,71 @@ fn make_output_name(input as *u8) as *u8 {
     return out;
 }
 
+// Assemble a .s file into a .o file (for use as library function)
+// Caller must have initialized the heap before calling this.
+// === Assembler profiling ===
+// 5 sub-phases: tokenize, parse, pass1, pass2, elf
+let is [5]i64 as asm_prof_times with mut;
+let is i32 as asm_prof_enabled with mut = 0;
+
+fn asm_prof_time() as i64 {
+    let is [2]i64 as ts;
+    syscall(228, 1, &ts);
+    return ts[0] * 1000000 + ts[1] / 1000;
+}
+
+fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
+    let is i64 as file_size = read_file_size(asm_path);
+    let is *u8 as src = read_file(asm_path);
+    if (cast(i64, src) == 0) {
+        print_str("caustic-as: error: cannot read ");
+        print_str(asm_path);
+        print_str("\n");
+        return 1;
+    }
+
+    // Tokenize
+    let is i64 as t0 = asm_prof_time();
+    let is lex.TokenList as tokens = lex.tokenize(src, file_size);
+    if (asm_prof_enabled == 1) { asm_prof_times[0] = asm_prof_time() - t0; }
+
+    // Parse
+    let is i64 as t1 = asm_prof_time();
+    let is i32 as line_hint = cast(i32, file_size / 24) + 1024;
+    let is ParsedLines as lines = parse_all(&tokens, line_hint);
+    if (asm_prof_enabled == 1) { asm_prof_times[1] = asm_prof_time() - t1; }
+
+    // Pass 1: collect symbols, calculate sizes
+    let is i64 as t2 = asm_prof_time();
+    let is elf.SymbolTable as symtab = elf.sym_init();
+    pass1(&lines, &symtab);
+    if (asm_prof_enabled == 1) { asm_prof_times[2] = asm_prof_time() - t2; }
+
+    // Pass 2: encode
+    let is i64 as t3 = asm_prof_time();
+    let is enc.ByteBuffer as text_buf = enc.buf_init(65536);
+    let is enc.ByteBuffer as data_buf = enc.buf_init(4096);
+    let is enc.ByteBuffer as rodata_buf = enc.buf_init(4096);
+    let is i64 as bss_size with mut = 0;
+    let is elf.RelocList as relocs = elf.reloc_init();
+    pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs);
+    if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
+
+    // Write ELF
+    let is i64 as t4 = asm_prof_time();
+    let is i64 as fd = linux.open(obj_path, 577, 420);
+    if (fd < 0) {
+        print_str("caustic-as: error: cannot create ");
+        print_str(obj_path);
+        print_str("\n");
+        return 1;
+    }
+    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs);
+    linux.close(fd);
+    if (asm_prof_enabled == 1) { asm_prof_times[4] = asm_prof_time() - t4; }
+    return 0;
+}
+
 fn main(argc as i64, argv as i64) as i32 {
     if (argc < 2) {
         linux.write(linux.STDERR, "Usage: caustic-as <input.s>\n", 28);
