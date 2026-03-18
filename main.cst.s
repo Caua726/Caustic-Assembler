@@ -915,6 +915,23 @@ asm_prof_times:
 .globl _caustic_assembler_asm_defs_cst_operand_mem
 .globl _caustic_assembler_asm_defs_cst_operand_label
 .globl _caustic_assembler_asm_defs_cst_operand_rip_label
+.globl _caustic_assembler_lexer_cst_tl_init
+.globl _caustic_assembler_lexer_cst_tl_push
+.globl _caustic_assembler_lexer_cst_tl_next
+.globl _caustic_assembler_lexer_cst_tl_get
+.globl _caustic_assembler_lexer_cst_make_tok
+.globl _caustic_assembler_lexer_cst_init_char_tab
+.globl _caustic_assembler_lexer_cst_is_alpha
+.globl _caustic_assembler_lexer_cst_is_digit
+.globl _caustic_assembler_lexer_cst_is_alnum
+.globl _caustic_assembler_lexer_cst_is_alnum_dot
+.globl _caustic_assembler_lexer_cst_parse_number_fast
+.globl _caustic_assembler_lexer_cst_init_ri_first
+.globl _caustic_assembler_lexer_cst_ht_hash
+.globl _caustic_assembler_lexer_cst_ht_insert
+.globl _caustic_assembler_lexer_cst_ht_lookup
+.globl _caustic_assembler_lexer_cst_init_ht
+.globl _caustic_assembler_lexer_cst_tokenize
 .globl _caustic_assembler_buf_cst_buf_init
 .globl _caustic_assembler_buf_cst_buf_ensure
 .globl _caustic_assembler_buf_cst_buf_emit8
@@ -943,23 +960,6 @@ asm_prof_times:
 .globl _caustic_assembler_encoder_cst_mem_modrm_size
 .globl _caustic_assembler_encoder_cst_encode
 .globl _caustic_assembler_encoder_cst_fast_inst_size
-.globl _caustic_assembler_lexer_cst_tl_init
-.globl _caustic_assembler_lexer_cst_tl_push
-.globl _caustic_assembler_lexer_cst_tl_next
-.globl _caustic_assembler_lexer_cst_tl_get
-.globl _caustic_assembler_lexer_cst_make_tok
-.globl _caustic_assembler_lexer_cst_init_char_tab
-.globl _caustic_assembler_lexer_cst_is_alpha
-.globl _caustic_assembler_lexer_cst_is_digit
-.globl _caustic_assembler_lexer_cst_is_alnum
-.globl _caustic_assembler_lexer_cst_is_alnum_dot
-.globl _caustic_assembler_lexer_cst_parse_number_fast
-.globl _caustic_assembler_lexer_cst_init_ri_first
-.globl _caustic_assembler_lexer_cst_ht_hash
-.globl _caustic_assembler_lexer_cst_ht_insert
-.globl _caustic_assembler_lexer_cst_ht_lookup
-.globl _caustic_assembler_lexer_cst_init_ht
-.globl _caustic_assembler_lexer_cst_tokenize
 .globl _caustic_assembler_elf_cst_sym_hash
 .globl _caustic_assembler_elf_cst_sym_init
 .globl _caustic_assembler_elf_cst_sym_get
@@ -3417,6 +3417,11320 @@ _caustic_assembler_asm_defs_cst_operand_rip_label:
   pop rbx
   pop rbp
   ret
+_caustic_assembler_lexer_cst_tl_init:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 72
+.loc 1 33 0
+  mov rbx, rdi
+.loc 1 232 0
+  mov r12, rsi
+.loc 1 35 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r13, r15
+.loc 1 34 0
+  mov rax, r13
+  mov DWORD PTR [rbp-56], eax
+.loc 1 35 0
+  movsxd r15, DWORD PTR [rbp-56]
+  mov r12, r15
+  mov r15, r12
+  cmp r15, 8192
+  jge .L38
+.loc 1 36 0
+  mov r12, 8192
+  mov rax, r12
+  mov DWORD PTR [rbp-56], eax
+.loc 1 35 0
+  jmp .L39
+.L38:
+.L39:
+.loc 1 38 0
+  lea r12, [rbp-72]
+.loc 1 39 0
+  mov r10, r12
+.loc 1 41 0
+  movsxd r15, DWORD PTR [rbp-56]
+  mov r13, r15
+.loc 1 40 0
+  mov r15, r13
+  mov r14, r15
+.loc 1 43 0
+.loc 1 40 0
+  mov r15, r14
+  mov rax, 40
+  imul r15, rax
+  mov r13, r15
+  mov rdi, r13
+  call _std_mem_cst_galloc
+  mov r13, rax
+.loc 1 39 0
+  mov rax, r13
+  mov r15, r12
+  mov QWORD PTR [r15], rax
+.loc 1 45 0
+  lea r12, [rbp-72]
+  mov r13, r12
+  add r13, 8
+.loc 1 46 0
+  mov r12, 0
+.loc 1 45 0
+  mov rax, r12
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+.loc 1 46 0
+  lea r12, [rbp-72]
+  mov r13, r12
+  add r13, 12
+.loc 1 47 0
+  movsxd r15, DWORD PTR [rbp-56]
+  mov r12, r15
+.loc 1 46 0
+  mov rax, r12
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+.loc 1 48 0
+  lea r12, [rbp-72]
+  mov rdi, rbx
+  mov rsi, r12
+  mov rcx, 16
+  cld
+  rep movsb
+  mov rax, rbx
+  add rsp, 72
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 72
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_tl_push:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 120
+.loc 1 307 0
+  mov rbx, rdi
+.loc 1 312 0
+  mov r12, rsi
+  mov rax, r12
+  mov r15, rax
+  mov rax, QWORD PTR [r15+0]
+  mov QWORD PTR [rbp-96], rax
+  mov rax, QWORD PTR [r15+8]
+  mov QWORD PTR [rbp-88], rax
+  mov rax, QWORD PTR [r15+16]
+  mov QWORD PTR [rbp-80], rax
+  mov rax, QWORD PTR [r15+24]
+  mov QWORD PTR [rbp-72], rax
+  mov rax, QWORD PTR [r15+32]
+  mov QWORD PTR [rbp-64], rax
+.loc 1 54 0
+  mov r12, rbx
+  add r12, 8
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 55 0
+  mov r12, rbx
+  add r12, 12
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+.loc 1 54 0
+  mov r15, r13
+  cmp r15, r14
+  jl .L40
+.loc 1 53 0
+.loc 1 57 0
+.loc 1 58 0
+  mov r12, rbx
+  add r12, 12
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  shl r15, 1
+  mov r12, r15
+.loc 1 56 0
+.loc 1 59 0
+  xor r10, r10
+.loc 1 63 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r13, r15
+.loc 1 62 0
+  mov r15, r13
+  mov r14, r15
+.loc 1 64 0
+.loc 1 62 0
+  mov r15, r14
+  mov rax, 40
+  imul r15, rax
+  mov r13, r15
+.loc 1 61 0
+  mov rdi, r13
+  call _std_mem_cst_galloc
+  mov r13, rax
+.loc 1 59 0
+.loc 1 66 0
+.loc 1 67 0
+  mov r15, rbx
+  mov r15, QWORD PTR [r15]
+  mov r14, r15
+.loc 1 68 0
+.loc 1 69 0
+  mov r8, rbx
+  add r8, 8
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r9, r15
+.loc 1 67 0
+  mov r15, r9
+  mov r8, r15
+.loc 1 70 0
+.loc 1 67 0
+  mov r15, r8
+  mov rax, 40
+  imul r15, rax
+  mov r9, r15
+.loc 1 65 0
+  mov rdi, r13
+  mov rsi, r14
+  mov rdx, r9
+  call _std_mem_cst_memcpy
+  mov r14, rax
+.loc 1 74 0
+  mov r15, rbx
+  mov r15, QWORD PTR [r15]
+  mov r14, r15
+.loc 1 71 0
+  mov rdi, r14
+  call _std_mem_cst_gfree
+  mov r14, rax
+.loc 1 75 0
+.loc 1 76 0
+.loc 1 75 0
+  mov rax, r13
+  mov r15, rbx
+  mov QWORD PTR [r15], rax
+.loc 1 77 0
+  mov r13, rbx
+  add r13, 12
+.loc 1 78 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r14, r15
+.loc 1 77 0
+  mov rax, r14
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+.loc 1 53 0
+  jmp .L41
+.L40:
+.L41:
+.loc 1 81 0
+  mov r15, rbx
+  mov r15, QWORD PTR [r15]
+  mov r12, r15
+  mov r15, r12
+  mov r13, r15
+.loc 1 82 0
+  mov r12, rbx
+  add r12, 8
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+  mov r15, r14
+  mov r12, r15
+.loc 1 83 0
+.loc 1 82 0
+  mov r15, r12
+  mov rax, 40
+  imul r15, rax
+  mov r14, r15
+.loc 1 81 0
+  mov r12, r13
+  add r12, r14
+.loc 1 80 0
+  mov r15, r12
+  mov r13, r15
+.loc 1 84 0
+  movsxd r15, DWORD PTR [rbp-96]
+  mov r12, r15
+  mov rax, r12
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+  mov r12, r13
+  add r12, 4
+  lea r14, [rbp-96]
+  mov r8, r14
+  add r8, 4
+  mov r15, r8
+  mov r15, QWORD PTR [r15]
+  mov r14, r15
+  mov rax, r14
+  mov r15, r12
+  mov QWORD PTR [r15], rax
+  mov r12, r13
+  add r12, 12
+  lea r14, [rbp-96]
+.loc 1 85 0
+  mov r8, r14
+  add r8, 12
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+.loc 1 84 0
+  mov rax, r14
+  mov r15, r12
+  mov DWORD PTR [r15], eax
+.loc 1 85 0
+  mov r12, r13
+  add r12, 16
+.loc 1 86 0
+  lea r14, [rbp-96]
+  mov r8, r14
+  add r8, 16
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+.loc 1 85 0
+  mov rax, r14
+  mov r15, r12
+  mov DWORD PTR [r15], eax
+.loc 1 86 0
+.loc 1 87 0
+  mov r12, r13
+  add r12, 20
+.loc 1 88 0
+  lea r14, [rbp-96]
+.loc 1 90 0
+  mov r8, r14
+  add r8, 20
+  mov r15, r8
+  mov r15, QWORD PTR [r15]
+  mov r14, r15
+.loc 1 87 0
+  mov rax, r14
+  mov r15, r12
+  mov QWORD PTR [r15], rax
+.loc 1 90 0
+  mov r12, r13
+  add r12, 28
+  lea r14, [rbp-96]
+  mov r8, r14
+  add r8, 28
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+  mov rax, r14
+  mov r15, r12
+  mov DWORD PTR [r15], eax
+  mov r12, r13
+  add r12, 32
+  lea r14, [rbp-96]
+.loc 1 91 0
+  mov r8, r14
+  add r8, 32
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+.loc 1 90 0
+  mov rax, r14
+  mov r15, r12
+  mov DWORD PTR [r15], eax
+.loc 1 91 0
+  mov r12, r13
+  add r12, 36
+  lea r13, [rbp-96]
+  mov r14, r13
+  add r14, 36
+  mov r15, r14
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov rax, r13
+  mov r15, r12
+  mov DWORD PTR [r15], eax
+  mov r12, rbx
+  add r12, 8
+  mov r13, rbx
+  add r13, 8
+  mov r15, r13
+  movsxd r15, DWORD PTR [r15]
+  mov rbx, r15
+  mov r13, rbx
+  add r13, 1
+  mov rax, r13
+  mov r15, r12
+  mov DWORD PTR [r15], eax
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 120
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_tl_next:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 88
+.loc 1 527 0
+  mov rbx, rdi
+.loc 1 94 0
+  mov r12, rbx
+  add r12, 8
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 95 0
+  mov r12, rbx
+  add r12, 12
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+.loc 1 94 0
+  mov r15, r13
+  cmp r15, r14
+  jl .L42
+.loc 1 95 0
+.loc 1 96 0
+  mov r12, rbx
+  add r12, 12
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  shl r15, 1
+  mov r12, r15
+.loc 1 95 0
+.loc 1 96 0
+  xor r10, r10
+.loc 1 97 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r13, r15
+  mov r15, r13
+  mov r14, r15
+  mov r15, r14
+  mov rax, 40
+  imul r15, rax
+  mov r13, r15
+  mov rdi, r13
+  call _std_mem_cst_galloc
+  mov r13, rax
+.loc 1 96 0
+.loc 1 97 0
+.loc 1 98 0
+  mov r15, rbx
+  mov r15, QWORD PTR [r15]
+  mov r14, r15
+  mov r8, rbx
+  add r8, 8
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r9, r15
+  mov r15, r9
+  mov r8, r15
+  mov r15, r8
+  mov rax, 40
+  imul r15, rax
+  mov r9, r15
+.loc 1 97 0
+  mov rdi, r13
+  mov rsi, r14
+  mov rdx, r9
+  call _std_mem_cst_memcpy
+  mov r14, rax
+.loc 1 98 0
+  mov r15, rbx
+  mov r15, QWORD PTR [r15]
+  mov r14, r15
+  mov rdi, r14
+  call _std_mem_cst_gfree
+  mov r14, rax
+.loc 1 99 0
+  mov rax, r13
+  mov r15, rbx
+  mov QWORD PTR [r15], rax
+.loc 1 100 0
+  mov r13, rbx
+  add r13, 12
+  mov r15, r12
+  movsxd r15, r15d
+  mov r14, r15
+  mov rax, r14
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+.loc 1 94 0
+  jmp .L43
+.L42:
+.L43:
+.loc 1 103 0
+  mov r15, rbx
+  mov r15, QWORD PTR [r15]
+  mov r12, r15
+  mov r15, r12
+  mov r13, r15
+.loc 1 104 0
+  mov r12, rbx
+  add r12, 8
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+.loc 1 103 0
+  mov r15, r14
+  mov r12, r15
+.loc 1 105 0
+.loc 1 103 0
+  mov r15, r12
+  mov rax, 40
+  imul r15, rax
+  mov r14, r15
+  mov r12, r13
+  add r12, r14
+  mov r15, r12
+  mov r13, r15
+.loc 1 101 0
+.loc 1 106 0
+  mov r12, rbx
+  add r12, 8
+  mov r14, rbx
+  add r14, 8
+  mov r15, r14
+  movsxd r15, DWORD PTR [r15]
+  mov rbx, r15
+.loc 1 107 0
+.loc 1 106 0
+  mov r14, rbx
+  add r14, 1
+  mov rax, r14
+  mov r15, r12
+  mov DWORD PTR [r15], eax
+.loc 1 107 0
+  mov rax, r13
+  add rsp, 88
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 88
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_tl_get:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 72
+.loc 1 683 0
+  mov rbx, rdi
+.loc 1 688 0
+  mov r12, rsi
+.loc 1 111 0
+  mov r15, rbx
+  mov r15, QWORD PTR [r15]
+  mov r13, r15
+.loc 1 110 0
+  mov r15, r13
+  mov rbx, r15
+.loc 1 113 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r13, r15
+.loc 1 112 0
+  mov r15, r13
+  mov r12, r15
+.loc 1 113 0
+.loc 1 112 0
+  mov r15, r12
+  mov rax, 40
+  imul r15, rax
+  mov r13, r15
+.loc 1 110 0
+  mov r12, rbx
+  add r12, r13
+  mov r15, r12
+  mov rbx, r15
+  mov rax, rbx
+  add rsp, 72
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 72
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_make_tok:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 120
+.loc 1 113 0
+  mov rbx, rdi
+.loc 1 728 0
+  mov r12, rsi
+.loc 1 732 0
+  mov r13, rdx
+.loc 1 737 0
+  mov r14, rcx
+.loc 1 741 0
+  mov r8, r8
+.loc 1 117 0
+.loc 1 118 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r9, r15
+  mov rax, r9
+  mov DWORD PTR [rbp-108], eax
+  lea r12, [rbp-108]
+  mov r9, r12
+  add r9, 4
+.loc 1 119 0
+.loc 1 118 0
+  mov rax, r13
+  mov r15, r9
+  mov QWORD PTR [r15], rax
+.loc 1 119 0
+  lea r12, [rbp-108]
+  mov r13, r12
+  add r13, 12
+.loc 1 120 0
+  mov r15, r14
+  movsxd r15, r15d
+  mov r12, r15
+.loc 1 119 0
+  mov rax, r12
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+.loc 1 120 0
+  lea r12, [rbp-108]
+  mov r13, r12
+  add r13, 16
+.loc 1 121 0
+  mov r15, r8
+  movsxd r15, r15d
+  mov r12, r15
+.loc 1 120 0
+  mov rax, r12
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+.loc 1 121 0
+  lea r12, [rbp-108]
+  mov r13, r12
+  add r13, 20
+  mov r12, 0
+  mov rax, r12
+  mov r15, r13
+  mov QWORD PTR [r15], rax
+  lea r12, [rbp-108]
+  mov r13, r12
+  add r13, 28
+.loc 1 122 0
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+.loc 1 121 0
+  mov rax, r14
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+.loc 1 122 0
+  lea r12, [rbp-108]
+.loc 1 123 0
+  mov r13, r12
+  add r13, 32
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+  mov rax, r14
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+  lea r12, [rbp-108]
+  mov r13, r12
+  add r13, 36
+  mov r12, 0
+  mov rax, r12
+  mov r15, r13
+  mov DWORD PTR [r15], eax
+.loc 1 124 0
+  lea r12, [rbp-108]
+  mov rdi, rbx
+  mov rsi, r12
+  mov rcx, 40
+  cld
+  rep movsb
+  mov rax, rbx
+  add rsp, 120
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 120
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_init_char_tab:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 88
+.loc 1 129 0
+  mov rbx, 0
+.loc 1 128 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-52], eax
+.L44:
+.loc 1 129 0
+  movsxd r15, DWORD PTR [rbp-52]
+  mov rbx, r15
+  mov r15, rbx
+  cmp r15, 256
+  jge .L45
+.loc 1 130 0
+  lea r13, [rip+_caustic_assembler_lexer_cst_char_tab]
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r14, r15
+  mov r15, r13
+  add r15, r14
+  mov QWORD PTR [rbp-60], r15
+.loc 1 131 0
+  mov r9, 0
+.loc 1 130 0
+  mov rax, r9
+  mov r15, QWORD PTR [rbp-60]
+  mov BYTE PTR [r15], al
+.loc 1 131 0
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r10, r15
+.loc 1 132 0
+.loc 1 131 0
+  mov r8, r10
+  add r8, 1
+  mov rax, r8
+  mov DWORD PTR [rbp-52], eax
+.loc 1 129 0
+  jmp .L44
+.L45:
+.loc 1 132 0
+.loc 1 133 0
+  mov rbx, 65
+.loc 1 132 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-52], eax
+.L46:
+.loc 1 133 0
+  movsxd r15, DWORD PTR [rbp-52]
+  mov rbx, r15
+.loc 1 134 0
+.loc 1 133 0
+  mov r15, rbx
+  cmp r15, 90
+  jg .L47
+.loc 1 134 0
+  lea r13, [rip+_caustic_assembler_lexer_cst_char_tab]
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r14, r15
+  mov r15, r13
+  add r15, r14
+  mov QWORD PTR [rbp-68], r15
+  mov r9, 1
+  mov rax, r9
+  mov r15, QWORD PTR [rbp-68]
+  mov BYTE PTR [r15], al
+.loc 1 135 0
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r10, r15
+.loc 1 139 0
+.loc 1 135 0
+  mov r8, r10
+  add r8, 1
+  mov rax, r8
+  mov DWORD PTR [rbp-52], eax
+.loc 1 133 0
+  jmp .L46
+.L47:
+.loc 1 139 0
+  mov rbx, 97
+  mov rax, rbx
+  mov DWORD PTR [rbp-52], eax
+.L48:
+  movsxd r15, DWORD PTR [rbp-52]
+  mov rbx, r15
+  mov r15, rbx
+  cmp r15, 122
+  jg .L49
+  lea r13, [rip+_caustic_assembler_lexer_cst_char_tab]
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r14, r15
+  mov r15, r13
+  add r15, r14
+  mov QWORD PTR [rbp-76], r15
+.loc 1 140 0
+  mov r9, 1
+.loc 1 139 0
+  mov rax, r9
+  mov r15, QWORD PTR [rbp-76]
+  mov BYTE PTR [r15], al
+.loc 1 140 0
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r10, r15
+.loc 1 141 0
+.loc 1 140 0
+  mov r8, r10
+  add r8, 1
+  mov rax, r8
+  mov DWORD PTR [rbp-52], eax
+.loc 1 139 0
+  jmp .L48
+.L49:
+.loc 1 141 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_char_tab]
+  mov r12, rbx
+  add r12, 95
+.loc 1 142 0
+  mov rbx, 1
+.loc 1 141 0
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 142 0
+  mov rbx, 48
+  mov rax, rbx
+  mov DWORD PTR [rbp-52], eax
+.L50:
+.loc 1 143 0
+  movsxd r15, DWORD PTR [rbp-52]
+  mov rbx, r15
+  mov r15, rbx
+  cmp r15, 57
+  jg .L51
+.loc 1 142 0
+.loc 1 143 0
+  lea r13, [rip+_caustic_assembler_lexer_cst_char_tab]
+.loc 1 144 0
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r14, r15
+.loc 1 143 0
+  mov r15, r13
+  add r15, r14
+  mov QWORD PTR [rbp-84], r15
+.loc 1 144 0
+  mov r9, 2
+.loc 1 143 0
+  mov rax, r9
+  mov r15, QWORD PTR [rbp-84]
+  mov BYTE PTR [r15], al
+.loc 1 144 0
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r10, r15
+.loc 1 145 0
+.loc 1 144 0
+  mov r8, r10
+  add r8, 1
+  mov rax, r8
+  mov DWORD PTR [rbp-52], eax
+.loc 1 142 0
+  jmp .L50
+.L51:
+.loc 1 145 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_char_tab]
+  mov r12, rbx
+  add r12, 46
+.loc 1 146 0
+  mov rbx, 4
+.loc 1 145 0
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 146 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_char_tab_ready]
+  mov r12, 1
+  mov rax, r12
+  mov r15, rbx
+  mov DWORD PTR [r15], eax
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 88
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_is_alpha:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 56
+.loc 1 966 0
+  mov rbx, rdi
+.loc 1 148 0
+  lea r12, [rip+_caustic_assembler_lexer_cst_char_tab]
+.loc 1 149 0
+  mov r15, rbx
+  movzx r15, r15b
+  mov r13, r15
+.loc 1 148 0
+  mov r15, r13
+  movsxd r15, r15d
+  mov rbx, r15
+  mov r13, r12
+  add r13, rbx
+  mov r15, r13
+  movzx r15, BYTE PTR [r15]
+  mov rbx, r15
+.loc 1 149 0
+.loc 1 148 0
+  mov r15, rbx
+  cmp r15, 1
+  jne .L52
+.loc 1 150 0
+  mov rbx, 1
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 148 0
+  jmp .L53
+.L52:
+.L53:
+.loc 1 151 0
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_is_digit:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 56
+.loc 1 999 0
+  mov rbx, rdi
+.loc 1 153 0
+  lea r12, [rip+_caustic_assembler_lexer_cst_char_tab]
+.loc 1 154 0
+  mov r15, rbx
+  movzx r15, r15b
+  mov r13, r15
+.loc 1 153 0
+  mov r15, r13
+  movsxd r15, r15d
+  mov rbx, r15
+  mov r13, r12
+  add r13, rbx
+  mov r15, r13
+  movzx r15, BYTE PTR [r15]
+  mov rbx, r15
+.loc 1 154 0
+.loc 1 153 0
+  mov r15, rbx
+  cmp r15, 2
+  jne .L54
+.loc 1 155 0
+  mov rbx, 1
+.loc 1 154 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 153 0
+  jmp .L55
+.L54:
+.L55:
+.loc 1 155 0
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_is_alnum:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 56
+.loc 1 1032 0
+  mov rbx, rdi
+.loc 1 157 0
+  lea r12, [rip+_caustic_assembler_lexer_cst_char_tab]
+.loc 1 158 0
+  mov r15, rbx
+  movzx r15, r15b
+  mov r13, r15
+  mov r15, r13
+  movsxd r15, r15d
+  mov rbx, r15
+  mov r13, r12
+  add r13, rbx
+  mov r15, r13
+  movzx r15, BYTE PTR [r15]
+  mov rbx, r15
+.loc 1 157 0
+.loc 1 160 0
+  mov r15, rbx
+  movzx r15, r15b
+  mov r12, r15
+.loc 1 163 0
+.loc 1 160 0
+  mov r15, r12
+  cmp r15, 1
+  je .L58
+.loc 1 163 0
+  mov r15, rbx
+  movzx r15, r15b
+  mov r12, r15
+  mov r15, r12
+  cmp r15, 2
+  je .L58
+.loc 1 160 0
+  mov rbx, 0
+  jmp .L59
+.L58:
+  mov rbx, 1
+.L59:
+  mov r15, rbx
+  test r15, r15
+  jz .L56
+.loc 1 163 0
+  mov rbx, 1
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 160 0
+  jmp .L57
+.L56:
+.L57:
+.loc 1 163 0
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_is_alnum_dot:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 56
+.loc 1 1077 0
+  mov rbx, rdi
+.loc 1 164 0
+  lea r12, [rip+_caustic_assembler_lexer_cst_char_tab]
+  mov r15, rbx
+  movzx r15, r15b
+  mov r13, r15
+  mov r15, r13
+  movsxd r15, r15d
+  mov rbx, r15
+  mov r13, r12
+  add r13, rbx
+  mov r15, r13
+  movzx r15, BYTE PTR [r15]
+  mov rbx, r15
+.loc 1 165 0
+  mov r15, rbx
+  movzx r15, r15b
+  mov r12, r15
+  mov r15, r12
+  cmp r15, 0
+  je .L60
+  mov rbx, 1
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L61
+.L60:
+.L61:
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 56
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_parse_number_fast:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 536
+.loc 1 1118 0
+  mov rbx, rdi
+.loc 1 1123 0
+  mov r12, rsi
+.loc 1 1127 0
+  mov QWORD PTR [rbp-393], rdx
+.loc 1 1131 0
+  mov QWORD PTR [rbp-105], rcx
+.loc 1 169 0
+  mov rax, r12
+  mov QWORD PTR [rbp-88], rax
+  mov r8, 0
+  mov rax, r8
+  mov QWORD PTR [rbp-96], rax
+.loc 1 170 0
+  mov r8, r12
+  mov r9, r8
+  add r9, 1
+  mov r15, r9
+  cmp r15, QWORD PTR [rbp-393]
+  jge .L66
+  mov r8, r12
+  mov r12, rbx
+  add r12, r8
+  mov r15, r12
+  movzx r15, BYTE PTR [r15]
+  mov r8, r15
+  mov r15, r8
+  cmp r15, 48
+  jne .L66
+  mov r12, 1
+  jmp .L67
+.L66:
+  mov r12, 0
+.L67:
+  mov r15, r12
+  test r15, r15
+  jz .L64
+.loc 1 173 0
+  mov r15, QWORD PTR [rbp-88]
+  mov r12, r15
+  mov r8, r12
+  add r8, 1
+.loc 1 171 0
+  mov r9, rbx
+  add r9, r8
+  mov r15, r9
+  movzx r15, BYTE PTR [r15]
+  mov r8, r15
+.loc 1 173 0
+.loc 1 171 0
+  mov r15, r8
+  cmp r15, 120
+  je .L68
+.loc 1 173 0
+  mov r8, r12
+  mov r12, r8
+  add r12, 1
+  mov r8, rbx
+  add r8, r12
+  mov r15, r8
+  movzx r15, BYTE PTR [r15]
+  mov r12, r15
+  mov r15, r12
+  cmp r15, 88
+  je .L68
+.loc 1 171 0
+  mov r12, 0
+  jmp .L69
+.L68:
+  mov r12, 1
+.L69:
+.loc 1 170 0
+  mov r15, r12
+  test r15, r15
+  jz .L64
+  mov r12, 1
+  jmp .L65
+.L64:
+  mov r12, 0
+.L65:
+  mov r15, r12
+  test r15, r15
+  jz .L62
+.loc 1 173 0
+  mov r15, QWORD PTR [rbp-88]
+  mov r12, r15
+  mov r8, r12
+  add r8, 2
+  mov rax, r8
+  mov QWORD PTR [rbp-88], rax
+.L70:
+  mov r15, QWORD PTR [rbp-88]
+  mov r12, r15
+.loc 1 174 0
+.loc 1 173 0
+  mov r15, r12
+  xor eax, eax
+  cmp r15, QWORD PTR [rbp-393]
+  setl al
+  mov QWORD PTR [rbp-113], rax
+  mov r15, QWORD PTR [rbp-113]
+  test r15, r15
+  jz .L71
+.loc 1 174 0
+  mov QWORD PTR [rbp-121], r12
+  mov r15, rbx
+  add r15, QWORD PTR [rbp-121]
+  mov QWORD PTR [rbp-209], r15
+  movzx r15, BYTE PTR [r15]
+  mov r14, r15
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-129], r15
+  cmp r15, 48
+  jb .L74
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-145], r15
+  cmp r15, 57
+  ja .L74
+  mov QWORD PTR [rbp-297], 1
+  jmp .L75
+.L74:
+  mov QWORD PTR [rbp-297], 0
+.L75:
+  mov r15, QWORD PTR [rbp-297]
+  test r15, r15
+  jz .L72
+  mov r15, QWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-161], r15
+  shl r15, 4
+  mov QWORD PTR [rbp-169], r15
+.loc 1 175 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-177], r15
+.loc 1 174 0
+  mov QWORD PTR [rbp-185], r15
+  mov r15, QWORD PTR [rbp-169]
+  add r15, QWORD PTR [rbp-185]
+  mov QWORD PTR [rbp-193], r15
+.loc 1 175 0
+.loc 1 174 0
+  sub r15, 48
+  mov QWORD PTR [rbp-201], r15
+  mov rax, QWORD PTR [rbp-201]
+  mov QWORD PTR [rbp-96], rax
+  jmp .L73
+.L72:
+.loc 1 175 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-217], r15
+  cmp r15, 97
+  jb .L78
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-233], r15
+  cmp r15, 102
+  ja .L78
+  mov r9, 1
+  jmp .L79
+.L78:
+  mov r9, 0
+.L79:
+  mov r15, r9
+  test r15, r15
+  jz .L76
+  mov r15, QWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-249], r15
+  shl r15, 4
+  mov QWORD PTR [rbp-257], r15
+.loc 1 178 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-265], r15
+.loc 1 175 0
+  mov QWORD PTR [rbp-273], r15
+  mov r15, QWORD PTR [rbp-257]
+  add r15, QWORD PTR [rbp-273]
+  mov QWORD PTR [rbp-281], r15
+.loc 1 178 0
+.loc 1 175 0
+  sub r15, 87
+  mov QWORD PTR [rbp-289], r15
+  mov rax, QWORD PTR [rbp-289]
+  mov QWORD PTR [rbp-96], rax
+  jmp .L77
+.L76:
+.loc 1 178 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-305], r15
+  cmp r15, 65
+  jb .L82
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-321], r15
+  cmp r15, 70
+  ja .L82
+  mov r10, 1
+  jmp .L83
+.L82:
+  mov r10, 0
+.L83:
+  mov r15, r10
+  test r15, r15
+  jz .L80
+  mov r15, QWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-337], r15
+  shl r15, 4
+  mov QWORD PTR [rbp-345], r15
+.loc 1 179 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-353], r15
+  mov QWORD PTR [rbp-361], r15
+.loc 1 178 0
+  mov r15, QWORD PTR [rbp-345]
+  add r15, QWORD PTR [rbp-361]
+  mov QWORD PTR [rbp-369], r15
+.loc 1 179 0
+.loc 1 178 0
+  sub r15, 55
+  mov QWORD PTR [rbp-377], r15
+  mov rax, QWORD PTR [rbp-377]
+  mov QWORD PTR [rbp-96], rax
+  jmp .L81
+.L80:
+.loc 1 179 0
+  jmp .L71
+.L81:
+.L77:
+.L73:
+  mov r15, QWORD PTR [rbp-88]
+  mov QWORD PTR [rbp-385], r15
+  mov r8, QWORD PTR [rbp-385]
+  add r8, 1
+  mov rax, r8
+  mov QWORD PTR [rbp-88], rax
+.loc 1 173 0
+  jmp .L70
+.L71:
+.loc 1 179 0
+  mov r15, QWORD PTR [rbp-96]
+  mov r12, r15
+  mov rax, r12
+  mov r15, QWORD PTR [rbp-105]
+  mov QWORD PTR [r15], rax
+.loc 1 180 0
+  mov r15, QWORD PTR [rbp-88]
+  mov r12, r15
+.loc 1 179 0
+  mov rax, r12
+  add rsp, 536
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 170 0
+  jmp .L63
+.L62:
+.L63:
+.L84:
+.loc 1 180 0
+  mov r15, QWORD PTR [rbp-88]
+  mov r8, r15
+  mov r15, r8
+  cmp r15, QWORD PTR [rbp-393]
+  jge .L88
+  mov r10, r8
+  mov r15, rbx
+  add r15, r10
+  mov QWORD PTR [rbp-401], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-409], r15
+  cmp r15, 48
+  jb .L88
+  mov r14, 1
+  jmp .L89
+.L88:
+  mov r14, 0
+.L89:
+  mov r15, r14
+  test r15, r15
+  jz .L86
+  mov r15, QWORD PTR [rbp-88]
+  mov QWORD PTR [rbp-425], r15
+  mov r15, rbx
+  add r15, QWORD PTR [rbp-425]
+  mov QWORD PTR [rbp-433], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-441], r15
+  cmp r15, 57
+  ja .L86
+  mov r12, 1
+  jmp .L87
+.L86:
+  mov r12, 0
+.L87:
+  mov r15, r12
+  test r15, r15
+  jz .L85
+.loc 1 183 0
+  mov r15, QWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-457], r15
+  mov rax, 10
+  imul r15, rax
+  mov QWORD PTR [rbp-465], r15
+  mov r15, QWORD PTR [rbp-88]
+  mov r13, r15
+  mov r15, rbx
+  add r15, r13
+  mov QWORD PTR [rbp-481], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-489], r15
+  mov QWORD PTR [rbp-497], r15
+  mov r15, QWORD PTR [rbp-465]
+  add r15, QWORD PTR [rbp-497]
+  mov QWORD PTR [rbp-505], r15
+  sub r15, 48
+  mov QWORD PTR [rbp-513], r15
+  mov rax, QWORD PTR [rbp-513]
+  mov QWORD PTR [rbp-96], rax
+  mov QWORD PTR [rbp-521], r13
+  mov r9, QWORD PTR [rbp-521]
+  add r9, 1
+  mov rax, r9
+  mov QWORD PTR [rbp-88], rax
+.loc 1 180 0
+  jmp .L84
+.L85:
+.loc 1 183 0
+.loc 1 184 0
+  mov r15, QWORD PTR [rbp-96]
+  mov rbx, r15
+.loc 1 183 0
+  mov rax, rbx
+  mov r15, QWORD PTR [rbp-105]
+  mov QWORD PTR [r15], rax
+.loc 1 184 0
+  mov r15, QWORD PTR [rbp-88]
+  mov rbx, r15
+  mov rax, rbx
+  add rsp, 536
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 536
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_init_ri_first:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 72
+.loc 1 185 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-52], eax
+.L90:
+  movsxd r15, DWORD PTR [rbp-52]
+  mov rbx, r15
+  mov r15, rbx
+  cmp r15, 256
+  jge .L91
+  lea r13, [rip+_caustic_assembler_lexer_cst_ri_first]
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r14, r15
+  mov r15, r13
+  add r15, r14
+  mov QWORD PTR [rbp-60], r15
+  mov r9, 0
+  mov rax, r9
+  mov r15, QWORD PTR [rbp-60]
+  mov BYTE PTR [r15], al
+  movsxd r15, DWORD PTR [rbp-52]
+  mov r10, r15
+  mov r8, r10
+  add r8, 1
+  mov rax, r8
+  mov DWORD PTR [rbp-52], eax
+  jmp .L90
+.L91:
+.loc 1 189 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 97
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 98
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 99
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 100
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+.loc 1 190 0
+.loc 1 189 0
+  mov r12, rbx
+  add r12, 101
+.loc 1 190 0
+  mov rbx, 1
+.loc 1 189 0
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 190 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 105
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 106
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 192 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 108
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 109
+.loc 1 193 0
+  mov rbx, 1
+.loc 1 192 0
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 193 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 110
+.loc 1 194 0
+  mov rbx, 1
+.loc 1 193 0
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 194 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 111
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 195 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+.loc 1 196 0
+.loc 1 195 0
+  mov r12, rbx
+  add r12, 112
+.loc 1 197 0
+  mov rbx, 1
+.loc 1 195 0
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 197 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 114
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 198 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 115
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 199 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 116
+  mov rbx, 1
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov r12, rbx
+  add r12, 120
+.loc 1 200 0
+  mov rbx, 1
+.loc 1 199 0
+  mov rax, rbx
+  mov r15, r12
+  mov BYTE PTR [r15], al
+.loc 1 202 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first_ready]
+  mov r12, 1
+  mov rax, r12
+  mov r15, rbx
+  mov DWORD PTR [r15], eax
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 72
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_ht_hash:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 88
+.loc 1 1586 0
+  mov rbx, rdi
+.loc 1 1590 0
+  mov r12, rsi
+.loc 1 1594 0
+  mov r13, rdx
+.loc 1 1598 0
+  mov r14, rcx
+.loc 1 1602 0
+  mov r8, r8
+.loc 1 1606 0
+  mov r9, r9
+.loc 1 210 0
+  mov r15, rbx
+  movsxd r15, r15d
+  mov r10, r15
+  mov r15, r10
+  mov rax, 31
+  imul r15, rax
+  mov rbx, r15
+  mov r15, r12
+  movsxd r15, r15d
+  mov r10, r15
+  mov r15, r10
+  mov rax, 7
+  imul r15, rax
+  mov r12, r15
+  mov r10, rbx
+  add r10, r12
+.loc 1 211 0
+  mov r15, r13
+  movsxd r15, r15d
+  mov rbx, r15
+  mov r15, rbx
+  mov rax, 3
+  imul r15, rax
+  mov r12, r15
+.loc 1 210 0
+  mov rbx, r10
+  add rbx, r12
+.loc 1 211 0
+  mov r15, r14
+  movsxd r15, r15d
+  mov r12, r15
+  mov r15, r12
+  mov rax, 13
+  imul r15, rax
+  mov r13, r15
+.loc 1 210 0
+  mov r12, rbx
+  add r12, r13
+.loc 1 211 0
+  mov r15, r8
+  movsxd r15, r15d
+  mov rbx, r15
+.loc 1 212 0
+.loc 1 211 0
+  mov r15, rbx
+  mov rax, 17
+  imul r15, rax
+  mov r13, r15
+.loc 1 210 0
+  mov rbx, r12
+  add rbx, r13
+.loc 1 212 0
+  mov r15, r9
+  movsxd r15, r15d
+  mov r12, r15
+  mov r15, r12
+  mov rax, 127
+  imul r15, rax
+  mov r13, r15
+.loc 1 210 0
+  mov r12, rbx
+  add r12, r13
+.loc 1 208 0
+.loc 1 212 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov rbx, r15
+  mov r12, rbx
+  and r12, 1023
+  mov rax, r12
+  add rsp, 88
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 88
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_ht_insert:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 712
+.loc 1 1654 0
+  mov QWORD PTR [rbp-168], rdi
+.loc 1 1658 0
+  mov QWORD PTR [rbp-208], rsi
+.loc 1 1662 0
+  mov QWORD PTR [rbp-216], rdx
+.loc 1 1666 0
+  mov r14, rcx
+.loc 1 1670 0
+  mov QWORD PTR [rbp-176], r8
+.loc 1 1674 0
+  mov QWORD PTR [rbp-184], r9
+.loc 1 1678 0
+  mov r15, QWORD PTR [rbp+16]
+  mov QWORD PTR [rbp-192], r15
+.loc 1 1682 0
+  mov r15, QWORD PTR [rbp+24]
+  mov QWORD PTR [rbp-200], r15
+.loc 1 215 0
+  xor r10, r10
+.loc 1 216 0
+  mov r15, QWORD PTR [rbp-168]
+  movsxd r15, r15d
+  mov r8, r15
+  mov r15, QWORD PTR [rbp-208]
+  movsxd r15, r15d
+  mov r9, r15
+  mov r15, QWORD PTR [rbp-216]
+  movsxd r15, r15d
+  mov r10, r15
+  mov r15, r14
+  movsxd r15, r15d
+  mov rbx, r15
+.loc 1 217 0
+  mov r15, QWORD PTR [rbp-176]
+  movsxd r15, r15d
+  mov r12, r15
+  mov r15, QWORD PTR [rbp-184]
+  movsxd r15, r15d
+  mov r13, r15
+.loc 1 216 0
+  mov rdi, r8
+  mov rsi, r9
+  mov rdx, r10
+  mov rcx, rbx
+  mov r8, r12
+  mov r9, r13
+  call _caustic_assembler_lexer_cst_ht_hash
+  mov rbx, rax
+.loc 1 215 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-84], eax
+.loc 1 219 0
+  mov rbx, 0
+.loc 1 217 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-88], eax
+.L92:
+.loc 1 219 0
+  movsxd r15, DWORD PTR [rbp-88]
+  mov QWORD PTR [rbp-224], r15
+  cmp r15, 1024
+  jge .L93
+.loc 1 220 0
+  movsxd r15, DWORD PTR [rbp-84]
+  mov r13, r15
+.loc 1 219 0
+  mov r15, r13
+  mov r8, r15
+.loc 1 220 0
+.loc 1 219 0
+  mov r15, r8
+  shl r15, 5
+  mov r9, r15
+.loc 1 222 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-232], r15
+  mov r15, QWORD PTR [r15]
+  mov r10, r15
+  mov r15, r10
+  mov QWORD PTR [rbp-240], r15
+  add r15, r9
+  mov QWORD PTR [rbp-248], r15
+  add r15, 24
+  mov QWORD PTR [rbp-256], r15
+.loc 1 221 0
+  mov rbx, r15
+.loc 1 220 0
+.loc 1 222 0
+  mov r15, rbx
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-272], r15
+.loc 1 223 0
+.loc 1 222 0
+  cmp r15, 0
+  jne .L94
+.loc 1 224 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-296], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-288], r15
+  mov QWORD PTR [rbp-304], r15
+  add r15, r9
+  mov QWORD PTR [rbp-312], r15
+  mov QWORD PTR [rbp-320], r15
+.loc 1 223 0
+.loc 1 225 0
+  mov r15, QWORD PTR [rbp-168]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-328], r15
+  mov rax, QWORD PTR [rbp-328]
+  mov r15, QWORD PTR [rbp-320]
+  mov DWORD PTR [r15], eax
+.loc 1 226 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-344], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-336], r15
+  mov QWORD PTR [rbp-352], r15
+.loc 1 227 0
+.loc 1 226 0
+  add r15, r9
+  mov QWORD PTR [rbp-360], r15
+.loc 1 227 0
+.loc 1 226 0
+  add r15, 4
+  mov QWORD PTR [rbp-368], r15
+.loc 1 225 0
+  mov QWORD PTR [rbp-376], r15
+.loc 1 227 0
+  mov r15, QWORD PTR [rbp-208]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-384], r15
+  mov rax, QWORD PTR [rbp-384]
+  mov r15, QWORD PTR [rbp-376]
+  mov DWORD PTR [r15], eax
+.loc 1 231 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-400], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-392], r15
+  mov QWORD PTR [rbp-408], r15
+.loc 1 232 0
+.loc 1 231 0
+  add r15, r9
+  mov QWORD PTR [rbp-416], r15
+.loc 1 232 0
+.loc 1 231 0
+  add r15, 8
+  mov QWORD PTR [rbp-424], r15
+.loc 1 229 0
+  mov QWORD PTR [rbp-432], r15
+.loc 1 227 0
+.loc 1 232 0
+  mov r15, QWORD PTR [rbp-216]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-440], r15
+  mov rax, QWORD PTR [rbp-440]
+  mov r15, QWORD PTR [rbp-432]
+  mov DWORD PTR [r15], eax
+.loc 1 233 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-456], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-448], r15
+  mov QWORD PTR [rbp-464], r15
+.loc 1 234 0
+.loc 1 233 0
+  add r15, r9
+  mov QWORD PTR [rbp-472], r15
+.loc 1 234 0
+.loc 1 233 0
+  add r15, 12
+  mov QWORD PTR [rbp-480], r15
+.loc 1 232 0
+  mov QWORD PTR [rbp-488], r15
+.loc 1 235 0
+  mov r15, r14
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-496], r15
+.loc 1 234 0
+  mov rax, QWORD PTR [rbp-496]
+  mov r15, QWORD PTR [rbp-488]
+  mov DWORD PTR [r15], eax
+.loc 1 236 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-512], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-504], r15
+.loc 1 235 0
+  mov QWORD PTR [rbp-520], r15
+.loc 1 236 0
+.loc 1 235 0
+  add r15, r9
+  mov QWORD PTR [rbp-528], r15
+.loc 1 237 0
+.loc 1 235 0
+  add r15, 16
+  mov QWORD PTR [rbp-536], r15
+  mov QWORD PTR [rbp-544], r15
+.loc 1 237 0
+.loc 1 238 0
+  mov r15, QWORD PTR [rbp-176]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-552], r15
+.loc 1 237 0
+  mov rax, QWORD PTR [rbp-552]
+  mov r15, QWORD PTR [rbp-544]
+  mov DWORD PTR [r15], eax
+.loc 1 240 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-568], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-560], r15
+.loc 1 239 0
+  mov QWORD PTR [rbp-576], r15
+.loc 1 240 0
+.loc 1 239 0
+  add r15, r9
+  mov QWORD PTR [rbp-584], r15
+.loc 1 240 0
+.loc 1 239 0
+  add r15, 20
+  mov QWORD PTR [rbp-592], r15
+.loc 1 238 0
+  mov QWORD PTR [rbp-600], r15
+.loc 1 240 0
+  mov r15, QWORD PTR [rbp-184]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-608], r15
+  mov rax, QWORD PTR [rbp-608]
+  mov r15, QWORD PTR [rbp-600]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-192]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-616], r15
+  mov rax, QWORD PTR [rbp-616]
+  mov r15, rbx
+  mov DWORD PTR [r15], eax
+.loc 1 244 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-632], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-624], r15
+.loc 1 242 0
+  mov QWORD PTR [rbp-640], r15
+.loc 1 244 0
+.loc 1 242 0
+  add r15, r9
+  mov QWORD PTR [rbp-648], r15
+.loc 1 244 0
+.loc 1 242 0
+  add r15, 28
+  mov QWORD PTR [rbp-656], r15
+.loc 1 241 0
+  mov QWORD PTR [rbp-664], r15
+.loc 1 244 0
+  mov r15, QWORD PTR [rbp-200]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-672], r15
+  mov rax, QWORD PTR [rbp-672]
+  mov r15, QWORD PTR [rbp-664]
+  mov DWORD PTR [r15], eax
+  add rsp, 712
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 222 0
+  jmp .L95
+.L94:
+.L95:
+.loc 1 244 0
+.loc 1 245 0
+  movsxd r15, DWORD PTR [rbp-84]
+  mov QWORD PTR [rbp-680], r15
+  add r15, 1
+  mov QWORD PTR [rbp-688], r15
+  and r15, 1023
+  mov QWORD PTR [rbp-696], r15
+.loc 1 244 0
+  mov rax, QWORD PTR [rbp-696]
+  mov DWORD PTR [rbp-84], eax
+.loc 1 245 0
+  movsxd r15, DWORD PTR [rbp-88]
+  mov QWORD PTR [rbp-704], r15
+  mov r12, QWORD PTR [rbp-704]
+  add r12, 1
+  mov rax, r12
+  mov DWORD PTR [rbp-88], eax
+.loc 1 219 0
+  jmp .L92
+.L93:
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 712
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_ht_lookup:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 824
+.loc 1 2006 0
+  mov rbx, rdi
+.loc 1 2011 0
+  mov r12, rsi
+.loc 1 251 0
+  mov r15, rbx
+  movzx r15, BYTE PTR [r15]
+  mov r13, r15
+.loc 1 249 0
+  mov r15, r13
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-164], r15
+.loc 1 247 0
+.loc 1 252 0
+  mov r13, rbx
+  add r13, 1
+  mov r15, r13
+  movzx r15, BYTE PTR [r15]
+  mov r8, r15
+  mov r15, r8
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-172], r15
+.loc 1 251 0
+.loc 1 253 0
+  mov r8, 0
+  mov rax, r8
+  mov DWORD PTR [rbp-72], eax
+.loc 1 254 0
+  mov r8, 0
+.loc 1 253 0
+  mov rax, r8
+  mov DWORD PTR [rbp-76], eax
+.loc 1 255 0
+  mov r8, 0
+.loc 1 254 0
+  mov rax, r8
+  mov DWORD PTR [rbp-80], eax
+.loc 1 255 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r8, r15
+.loc 1 256 0
+.loc 1 255 0
+  mov r15, r8
+  cmp r15, 3
+  jl .L96
+.loc 1 256 0
+.loc 1 257 0
+  mov r8, rbx
+  add r8, 2
+  mov r15, r8
+  movzx r15, BYTE PTR [r15]
+  mov r9, r15
+.loc 1 256 0
+  mov r15, r9
+  movsxd r15, r15d
+  mov r8, r15
+  mov rax, r8
+  mov DWORD PTR [rbp-72], eax
+.loc 1 255 0
+  jmp .L97
+.L96:
+.L97:
+.loc 1 257 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r8, r15
+  mov r15, r8
+  cmp r15, 4
+  jl .L98
+.loc 1 258 0
+  mov r8, rbx
+  add r8, 3
+  mov r15, r8
+  movzx r15, BYTE PTR [r15]
+  mov r9, r15
+  mov r15, r9
+  movsxd r15, r15d
+  mov r8, r15
+.loc 1 257 0
+  mov rax, r8
+  mov DWORD PTR [rbp-76], eax
+  jmp .L99
+.L98:
+.L99:
+.loc 1 259 0
+  mov r15, r12
+  movsxd r15, r15d
+  mov r8, r15
+  mov r15, r8
+  cmp r15, 5
+  jl .L100
+.loc 1 260 0
+  mov r8, rbx
+  add r8, 4
+  mov r15, r8
+  movzx r15, BYTE PTR [r15]
+  mov rbx, r15
+  mov r15, rbx
+  movsxd r15, r15d
+  mov r8, r15
+  mov rax, r8
+  mov DWORD PTR [rbp-80], eax
+.loc 1 259 0
+  jmp .L101
+.L100:
+.L101:
+.loc 1 260 0
+  xor r10, r10
+.loc 1 262 0
+  mov r15, QWORD PTR [rbp-164]
+  movsxd r15, r15d
+  mov rbx, r15
+  mov r15, QWORD PTR [rbp-172]
+  movsxd r15, r15d
+  mov r8, r15
+  movsxd r15, DWORD PTR [rbp-72]
+  mov r9, r15
+  movsxd r15, DWORD PTR [rbp-76]
+  mov r10, r15
+  movsxd r15, DWORD PTR [rbp-80]
+  mov r14, r15
+  mov r15, r12
+  movsxd r15, r15d
+  mov r13, r15
+.loc 1 261 0
+  mov rdi, rbx
+  mov rsi, r8
+  mov rdx, r9
+  mov rcx, r10
+  mov r8, r14
+  mov r9, r13
+  call _caustic_assembler_lexer_cst_ht_hash
+  mov rbx, rax
+.loc 1 260 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-84], eax
+.loc 1 263 0
+  mov rbx, 0
+.loc 1 262 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-88], eax
+.L102:
+.loc 1 263 0
+  movsxd r15, DWORD PTR [rbp-88]
+  mov QWORD PTR [rbp-180], r15
+  cmp r15, 16
+  jge .L103
+.loc 1 265 0
+  movsxd r15, DWORD PTR [rbp-84]
+  mov QWORD PTR [rbp-420], r15
+.loc 1 264 0
+  mov QWORD PTR [rbp-620], r15
+.loc 1 265 0
+.loc 1 264 0
+  shl r15, 5
+  mov r9, r15
+.loc 1 263 0
+.loc 1 269 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-188], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-628], r15
+.loc 1 266 0
+  mov QWORD PTR [rbp-196], r15
+.loc 1 269 0
+.loc 1 266 0
+  add r15, r9
+  mov QWORD PTR [rbp-204], r15
+.loc 1 269 0
+.loc 1 266 0
+  add r15, 24
+  mov QWORD PTR [rbp-212], r15
+.loc 1 265 0
+  mov QWORD PTR [rbp-220], r15
+.loc 1 270 0
+  movsxd r15, DWORD PTR [r15]
+  mov rbx, r15
+.loc 1 269 0
+.loc 1 270 0
+  mov r15, rbx
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-236], r15
+  cmp r15, 0
+  jne .L104
+  mov QWORD PTR [rbp-252], 0
+  mov rax, QWORD PTR [rbp-252]
+  add rsp, 824
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L105
+.L104:
+.L105:
+.loc 1 272 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-268], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-260], r15
+  mov QWORD PTR [rbp-276], r15
+.loc 1 273 0
+.loc 1 272 0
+  add r15, r9
+  mov QWORD PTR [rbp-284], r15
+.loc 1 273 0
+.loc 1 272 0
+  add r15, 20
+  mov QWORD PTR [rbp-292], r15
+.loc 1 271 0
+  mov QWORD PTR [rbp-300], r15
+.loc 1 273 0
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-308], r15
+  mov r15, r12
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-316], r15
+  mov r15, QWORD PTR [rbp-308]
+  cmp r15, QWORD PTR [rbp-316]
+  jne .L106
+.loc 1 276 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-340], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-332], r15
+.loc 1 275 0
+  mov QWORD PTR [rbp-348], r15
+.loc 1 276 0
+.loc 1 275 0
+  add r15, r9
+  mov QWORD PTR [rbp-356], r15
+.loc 1 274 0
+  mov QWORD PTR [rbp-364], r15
+.loc 1 273 0
+.loc 1 278 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-380], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-372], r15
+  mov QWORD PTR [rbp-388], r15
+  add r15, r9
+  mov QWORD PTR [rbp-396], r15
+  add r15, 4
+  mov QWORD PTR [rbp-404], r15
+.loc 1 277 0
+  mov QWORD PTR [rbp-412], r15
+.loc 1 276 0
+.loc 1 278 0
+  mov r15, QWORD PTR [rbp-364]
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-428], r15
+  mov r15, QWORD PTR [rbp-164]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-436], r15
+  mov r15, QWORD PTR [rbp-428]
+  cmp r15, QWORD PTR [rbp-436]
+  jne .L110
+.loc 1 279 0
+  mov r15, QWORD PTR [rbp-412]
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-452], r15
+  mov r15, QWORD PTR [rbp-172]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-460], r15
+  mov r15, QWORD PTR [rbp-452]
+  cmp r15, QWORD PTR [rbp-460]
+  jne .L110
+.loc 1 278 0
+  mov r13, 1
+  jmp .L111
+.L110:
+  mov r13, 0
+.L111:
+  mov r15, r13
+  test r15, r15
+  jz .L108
+.loc 1 282 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-484], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-476], r15
+  mov QWORD PTR [rbp-492], r15
+  add r15, r9
+  mov QWORD PTR [rbp-500], r15
+  add r15, 8
+  mov QWORD PTR [rbp-508], r15
+.loc 1 281 0
+  mov QWORD PTR [rbp-516], r15
+.loc 1 279 0
+.loc 1 283 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-532], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-524], r15
+  mov QWORD PTR [rbp-540], r15
+  add r15, r9
+  mov QWORD PTR [rbp-548], r15
+.loc 1 284 0
+.loc 1 283 0
+  add r15, 12
+  mov QWORD PTR [rbp-556], r15
+  mov QWORD PTR [rbp-564], r15
+.loc 1 282 0
+.loc 1 287 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-580], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-572], r15
+.loc 1 285 0
+  mov QWORD PTR [rbp-588], r15
+.loc 1 288 0
+.loc 1 285 0
+  add r15, r9
+  mov QWORD PTR [rbp-596], r15
+.loc 1 288 0
+.loc 1 285 0
+  add r15, 16
+  mov QWORD PTR [rbp-604], r15
+  mov QWORD PTR [rbp-612], r15
+.loc 1 284 0
+.loc 1 288 0
+  mov r15, QWORD PTR [rbp-516]
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-636], r15
+  movsxd r15, DWORD PTR [rbp-72]
+  mov QWORD PTR [rbp-644], r15
+  mov r15, QWORD PTR [rbp-636]
+  cmp r15, QWORD PTR [rbp-644]
+  jne .L116
+  mov r15, QWORD PTR [rbp-564]
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-660], r15
+  movsxd r15, DWORD PTR [rbp-76]
+  mov QWORD PTR [rbp-668], r15
+  mov r15, QWORD PTR [rbp-660]
+  cmp r15, QWORD PTR [rbp-668]
+  jne .L116
+  mov r8, 1
+  jmp .L117
+.L116:
+  mov r8, 0
+.L117:
+  mov r15, r8
+  test r15, r15
+  jz .L114
+.loc 1 289 0
+  mov r15, QWORD PTR [rbp-612]
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-684], r15
+  movsxd r15, DWORD PTR [rbp-80]
+  mov QWORD PTR [rbp-692], r15
+  mov r15, QWORD PTR [rbp-684]
+  cmp r15, QWORD PTR [rbp-692]
+  jne .L114
+.loc 1 288 0
+  mov r14, 1
+  jmp .L115
+.L114:
+  mov r14, 0
+.L115:
+  mov r15, r14
+  test r15, r15
+  jz .L112
+.loc 1 290 0
+  mov r15, rbx
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-708], r15
+  shl r15, 16
+  mov QWORD PTR [rbp-716], r15
+  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov QWORD PTR [rbp-732], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-724], r15
+  mov QWORD PTR [rbp-740], r15
+.loc 1 292 0
+.loc 1 290 0
+  add r15, r9
+  mov QWORD PTR [rbp-748], r15
+.loc 1 293 0
+.loc 1 290 0
+  add r15, 28
+  mov QWORD PTR [rbp-756], r15
+  mov QWORD PTR [rbp-764], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-772], r15
+  mov r15, QWORD PTR [rbp-716]
+  add r15, QWORD PTR [rbp-772]
+  mov QWORD PTR [rbp-780], r15
+.loc 1 289 0
+  mov rax, QWORD PTR [rbp-780]
+  add rsp, 824
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 288 0
+  jmp .L113
+.L112:
+.L113:
+.loc 1 278 0
+  jmp .L109
+.L108:
+.L109:
+.loc 1 273 0
+  jmp .L107
+.L106:
+.L107:
+.loc 1 297 0
+  movsxd r15, DWORD PTR [rbp-84]
+  mov QWORD PTR [rbp-788], r15
+  add r15, 1
+  mov QWORD PTR [rbp-796], r15
+  and r15, 1023
+  mov QWORD PTR [rbp-804], r15
+  mov rax, QWORD PTR [rbp-804]
+  mov DWORD PTR [rbp-84], eax
+  movsxd r15, DWORD PTR [rbp-88]
+  mov QWORD PTR [rbp-812], r15
+  mov r10, QWORD PTR [rbp-812]
+  add r10, 1
+  mov rax, r10
+  mov DWORD PTR [rbp-88], eax
+.loc 1 263 0
+  jmp .L102
+.L103:
+.loc 1 297 0
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 824
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 824
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_init_ht:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 4632
+.loc 1 299 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov r10, rbx
+  lea r12, [rip+_caustic_assembler_lexer_cst_HT_SIZE]
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  mov r12, r15
+.loc 1 300 0
+.loc 1 299 0
+  mov r15, r12
+  shl r15, 5
+  mov r13, r15
+  mov rdi, r13
+  call _std_mem_cst_galloc
+  mov r12, rax
+  mov rax, r12
+  mov r15, rbx
+  mov QWORD PTR [r15], rax
+.loc 1 300 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ht_data]
+  mov r15, rbx
+  mov r15, QWORD PTR [r15]
+  mov r12, r15
+.loc 1 301 0
+  mov rbx, 0
+  lea r13, [rip+_caustic_assembler_lexer_cst_HT_SIZE]
+  mov r15, r13
+  movsxd r15, DWORD PTR [r15]
+  mov r14, r15
+  mov r15, r14
+  mov r13, r15
+.loc 1 302 0
+.loc 1 301 0
+  mov r15, r13
+  shl r15, 5
+  mov r14, r15
+.loc 1 300 0
+  mov rdi, r12
+  mov rsi, rbx
+  mov rdx, r14
+  call _std_mem_cst_memset
+  mov rbx, rax
+.loc 1 302 0
+  mov rbx, 97
+  mov r12, 108
+  mov QWORD PTR [rbp-80], 0
+.loc 1 304 0
+  mov QWORD PTR [rbp-56], 0
+  mov QWORD PTR [rbp-64], 0
+  mov QWORD PTR [rbp-72], 2
+.loc 1 305 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_AL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 302 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-80]
+  mov rcx, QWORD PTR [rbp-56]
+  mov r8, QWORD PTR [rbp-64]
+  mov r9, QWORD PTR [rbp-72]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 305 0
+  mov rbx, 97
+.loc 1 306 0
+  mov r12, 120
+  mov QWORD PTR [rbp-112], 0
+  mov QWORD PTR [rbp-88], 0
+.loc 1 307 0
+  mov QWORD PTR [rbp-96], 0
+  mov QWORD PTR [rbp-104], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_AX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 305 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-112]
+  mov rcx, QWORD PTR [rbp-88]
+  mov r8, QWORD PTR [rbp-96]
+  mov r9, QWORD PTR [rbp-104]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 308 0
+  mov rbx, 99
+  mov r12, 108
+  mov QWORD PTR [rbp-144], 0
+  mov QWORD PTR [rbp-120], 0
+  mov QWORD PTR [rbp-128], 0
+  mov QWORD PTR [rbp-136], 2
+  mov r14, 1
+.loc 1 309 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_CL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 308 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-144]
+  mov rcx, QWORD PTR [rbp-120]
+  mov r8, QWORD PTR [rbp-128]
+  mov r9, QWORD PTR [rbp-136]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 309 0
+  mov rbx, 99
+  mov r12, 120
+  mov QWORD PTR [rbp-176], 0
+  mov QWORD PTR [rbp-152], 0
+  mov QWORD PTR [rbp-160], 0
+  mov QWORD PTR [rbp-168], 2
+.loc 1 310 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_CX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 309 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-176]
+  mov rcx, QWORD PTR [rbp-152]
+  mov r8, QWORD PTR [rbp-160]
+  mov r9, QWORD PTR [rbp-168]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 310 0
+  mov rbx, 100
+  mov r12, 108
+  mov QWORD PTR [rbp-208], 0
+  mov QWORD PTR [rbp-184], 0
+  mov QWORD PTR [rbp-192], 0
+.loc 1 311 0
+  mov QWORD PTR [rbp-200], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_DL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 310 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-208]
+  mov rcx, QWORD PTR [rbp-184]
+  mov r8, QWORD PTR [rbp-192]
+  mov r9, QWORD PTR [rbp-200]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 311 0
+  mov rbx, 100
+  mov r12, 120
+  mov QWORD PTR [rbp-240], 0
+  mov QWORD PTR [rbp-216], 0
+.loc 1 312 0
+  mov QWORD PTR [rbp-224], 0
+  mov QWORD PTR [rbp-232], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_DX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 311 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-240]
+  mov rcx, QWORD PTR [rbp-216]
+  mov r8, QWORD PTR [rbp-224]
+  mov r9, QWORD PTR [rbp-232]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 312 0
+  mov rbx, 100
+  mov r12, 105
+  mov QWORD PTR [rbp-272], 0
+.loc 1 313 0
+  mov QWORD PTR [rbp-248], 0
+  mov QWORD PTR [rbp-256], 0
+  mov QWORD PTR [rbp-264], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_DI]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 312 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-272]
+  mov rcx, QWORD PTR [rbp-248]
+  mov r8, QWORD PTR [rbp-256]
+  mov r9, QWORD PTR [rbp-264]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 314 0
+  mov rbx, 98
+.loc 1 315 0
+  mov r12, 108
+  mov QWORD PTR [rbp-304], 0
+  mov QWORD PTR [rbp-280], 0
+  mov QWORD PTR [rbp-288], 0
+  mov QWORD PTR [rbp-296], 2
+.loc 1 317 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_BL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 314 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-304]
+  mov rcx, QWORD PTR [rbp-280]
+  mov r8, QWORD PTR [rbp-288]
+  mov r9, QWORD PTR [rbp-296]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 318 0
+  mov rbx, 98
+  mov r12, 120
+.loc 1 320 0
+  mov QWORD PTR [rbp-336], 0
+  mov QWORD PTR [rbp-312], 0
+  mov QWORD PTR [rbp-320], 0
+.loc 1 321 0
+  mov QWORD PTR [rbp-328], 2
+.loc 1 322 0
+  mov r14, 1
+.loc 1 325 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_BX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 318 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-336]
+  mov rcx, QWORD PTR [rbp-312]
+  mov r8, QWORD PTR [rbp-320]
+  mov r9, QWORD PTR [rbp-328]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 325 0
+  mov rbx, 98
+  mov r12, 112
+  mov QWORD PTR [rbp-368], 0
+  mov QWORD PTR [rbp-344], 0
+  mov QWORD PTR [rbp-352], 0
+.loc 1 326 0
+  mov QWORD PTR [rbp-360], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_BP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 325 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-368]
+  mov rcx, QWORD PTR [rbp-344]
+  mov r8, QWORD PTR [rbp-352]
+  mov r9, QWORD PTR [rbp-360]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 327 0
+  mov rbx, 115
+  mov r12, 112
+  mov QWORD PTR [rbp-400], 0
+  mov QWORD PTR [rbp-376], 0
+  mov QWORD PTR [rbp-384], 0
+.loc 1 328 0
+  mov QWORD PTR [rbp-392], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_SP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 326 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-400]
+  mov rcx, QWORD PTR [rbp-376]
+  mov r8, QWORD PTR [rbp-384]
+  mov r9, QWORD PTR [rbp-392]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 330 0
+  mov rbx, 115
+  mov r12, 105
+  mov QWORD PTR [rbp-432], 0
+  mov QWORD PTR [rbp-408], 0
+.loc 1 331 0
+  mov QWORD PTR [rbp-416], 0
+  mov QWORD PTR [rbp-424], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_SI]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 330 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-432]
+  mov rcx, QWORD PTR [rbp-408]
+  mov r8, QWORD PTR [rbp-416]
+  mov r9, QWORD PTR [rbp-424]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 331 0
+  mov rbx, 114
+  mov r12, 56
+.loc 1 334 0
+  mov QWORD PTR [rbp-464], 0
+  mov QWORD PTR [rbp-440], 0
+  mov QWORD PTR [rbp-448], 0
+  mov QWORD PTR [rbp-456], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R8]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 331 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-464]
+  mov rcx, QWORD PTR [rbp-440]
+  mov r8, QWORD PTR [rbp-448]
+  mov r9, QWORD PTR [rbp-456]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 334 0
+  mov rbx, 114
+.loc 1 335 0
+  mov r12, 57
+  mov QWORD PTR [rbp-496], 0
+  mov QWORD PTR [rbp-472], 0
+  mov QWORD PTR [rbp-480], 0
+  mov QWORD PTR [rbp-488], 2
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R9]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 334 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-496]
+  mov rcx, QWORD PTR [rbp-472]
+  mov r8, QWORD PTR [rbp-480]
+  mov r9, QWORD PTR [rbp-488]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 336 0
+  mov rbx, 114
+.loc 1 339 0
+  mov r12, 97
+  mov QWORD PTR [rbp-528], 120
+  mov QWORD PTR [rbp-504], 0
+  mov QWORD PTR [rbp-512], 0
+  mov QWORD PTR [rbp-520], 3
+  mov r14, 1
+.loc 1 340 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RAX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 336 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-528]
+  mov rcx, QWORD PTR [rbp-504]
+  mov r8, QWORD PTR [rbp-512]
+  mov r9, QWORD PTR [rbp-520]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 340 0
+  mov rbx, 114
+  mov r12, 99
+  mov QWORD PTR [rbp-560], 120
+.loc 1 341 0
+  mov QWORD PTR [rbp-536], 0
+  mov QWORD PTR [rbp-544], 0
+  mov QWORD PTR [rbp-552], 3
+.loc 1 342 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RCX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 340 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-560]
+  mov rcx, QWORD PTR [rbp-536]
+  mov r8, QWORD PTR [rbp-544]
+  mov r9, QWORD PTR [rbp-552]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 343 0
+  mov rbx, 114
+  mov r12, 100
+  mov QWORD PTR [rbp-592], 120
+.loc 1 345 0
+  mov QWORD PTR [rbp-568], 0
+  mov QWORD PTR [rbp-576], 0
+  mov QWORD PTR [rbp-584], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RDX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 343 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-592]
+  mov rcx, QWORD PTR [rbp-568]
+  mov r8, QWORD PTR [rbp-576]
+  mov r9, QWORD PTR [rbp-584]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 345 0
+  mov rbx, 114
+  mov r12, 98
+.loc 1 346 0
+  mov QWORD PTR [rbp-624], 120
+  mov QWORD PTR [rbp-600], 0
+  mov QWORD PTR [rbp-608], 0
+.loc 1 348 0
+  mov QWORD PTR [rbp-616], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RBX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 345 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-624]
+  mov rcx, QWORD PTR [rbp-600]
+  mov r8, QWORD PTR [rbp-608]
+  mov r9, QWORD PTR [rbp-616]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 349 0
+  mov rbx, 114
+  mov r12, 115
+.loc 1 350 0
+  mov QWORD PTR [rbp-656], 112
+  mov QWORD PTR [rbp-632], 0
+  mov QWORD PTR [rbp-640], 0
+  mov QWORD PTR [rbp-648], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RSP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 349 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-656]
+  mov rcx, QWORD PTR [rbp-632]
+  mov r8, QWORD PTR [rbp-640]
+  mov r9, QWORD PTR [rbp-648]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 350 0
+  mov rbx, 114
+.loc 1 351 0
+  mov r12, 98
+  mov QWORD PTR [rbp-688], 112
+  mov QWORD PTR [rbp-664], 0
+  mov QWORD PTR [rbp-672], 0
+  mov QWORD PTR [rbp-680], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RBP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 350 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-688]
+  mov rcx, QWORD PTR [rbp-664]
+  mov r8, QWORD PTR [rbp-672]
+  mov r9, QWORD PTR [rbp-680]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 351 0
+  mov rbx, 114
+.loc 1 352 0
+  mov r12, 115
+  mov QWORD PTR [rbp-720], 105
+  mov QWORD PTR [rbp-696], 0
+.loc 1 353 0
+  mov QWORD PTR [rbp-704], 0
+.loc 1 355 0
+  mov QWORD PTR [rbp-712], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RSI]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 351 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-720]
+  mov rcx, QWORD PTR [rbp-696]
+  mov r8, QWORD PTR [rbp-704]
+  mov r9, QWORD PTR [rbp-712]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 355 0
+  mov rbx, 114
+  mov r12, 100
+  mov QWORD PTR [rbp-752], 105
+  mov QWORD PTR [rbp-728], 0
+  mov QWORD PTR [rbp-736], 0
+.loc 1 356 0
+  mov QWORD PTR [rbp-744], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RDI]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 355 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-752]
+  mov rcx, QWORD PTR [rbp-728]
+  mov r8, QWORD PTR [rbp-736]
+  mov r9, QWORD PTR [rbp-744]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 358 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-784], 48
+.loc 1 360 0
+  mov QWORD PTR [rbp-760], 0
+  mov QWORD PTR [rbp-768], 0
+  mov QWORD PTR [rbp-776], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R10]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 357 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-784]
+  mov rcx, QWORD PTR [rbp-760]
+  mov r8, QWORD PTR [rbp-768]
+  mov r9, QWORD PTR [rbp-776]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 360 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-816], 49
+.loc 1 361 0
+  mov QWORD PTR [rbp-792], 0
+  mov QWORD PTR [rbp-800], 0
+  mov QWORD PTR [rbp-808], 3
+.loc 1 362 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R11]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 360 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-816]
+  mov rcx, QWORD PTR [rbp-792]
+  mov r8, QWORD PTR [rbp-800]
+  mov r9, QWORD PTR [rbp-808]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 363 0
+  mov rbx, 114
+.loc 1 365 0
+  mov r12, 49
+  mov QWORD PTR [rbp-848], 50
+  mov QWORD PTR [rbp-824], 0
+  mov QWORD PTR [rbp-832], 0
+  mov QWORD PTR [rbp-840], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R12]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 363 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-848]
+  mov rcx, QWORD PTR [rbp-824]
+  mov r8, QWORD PTR [rbp-832]
+  mov r9, QWORD PTR [rbp-840]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 365 0
+  mov rbx, 114
+.loc 1 366 0
+  mov r12, 49
+  mov QWORD PTR [rbp-880], 51
+  mov QWORD PTR [rbp-856], 0
+.loc 1 367 0
+  mov QWORD PTR [rbp-864], 0
+  mov QWORD PTR [rbp-872], 3
+.loc 1 368 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R13]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 365 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-880]
+  mov rcx, QWORD PTR [rbp-856]
+  mov r8, QWORD PTR [rbp-864]
+  mov r9, QWORD PTR [rbp-872]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 370 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-912], 52
+  mov QWORD PTR [rbp-888], 0
+  mov QWORD PTR [rbp-896], 0
+  mov QWORD PTR [rbp-904], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R14]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-912]
+  mov rcx, QWORD PTR [rbp-888]
+  mov r8, QWORD PTR [rbp-896]
+  mov r9, QWORD PTR [rbp-904]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 371 0
+  mov rbx, 114
+  mov r12, 49
+.loc 1 372 0
+  mov QWORD PTR [rbp-944], 53
+  mov QWORD PTR [rbp-920], 0
+  mov QWORD PTR [rbp-928], 0
+.loc 1 374 0
+  mov QWORD PTR [rbp-936], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R15]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 371 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-944]
+  mov rcx, QWORD PTR [rbp-920]
+  mov r8, QWORD PTR [rbp-928]
+  mov r9, QWORD PTR [rbp-936]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 374 0
+  mov rbx, 101
+  mov r12, 97
+  mov QWORD PTR [rbp-976], 120
+  mov QWORD PTR [rbp-952], 0
+.loc 1 375 0
+  mov QWORD PTR [rbp-960], 0
+  mov QWORD PTR [rbp-968], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EAX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 374 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-976]
+  mov rcx, QWORD PTR [rbp-952]
+  mov r8, QWORD PTR [rbp-960]
+  mov r9, QWORD PTR [rbp-968]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 375 0
+  mov rbx, 101
+  mov r12, 99
+  mov QWORD PTR [rbp-1008], 120
+.loc 1 376 0
+  mov QWORD PTR [rbp-984], 0
+  mov QWORD PTR [rbp-992], 0
+  mov QWORD PTR [rbp-1000], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_ECX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 375 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1008]
+  mov rcx, QWORD PTR [rbp-984]
+  mov r8, QWORD PTR [rbp-992]
+  mov r9, QWORD PTR [rbp-1000]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 376 0
+  mov rbx, 101
+  mov r12, 100
+.loc 1 377 0
+  mov QWORD PTR [rbp-1040], 120
+  mov QWORD PTR [rbp-1016], 0
+.loc 1 378 0
+  mov QWORD PTR [rbp-1024], 0
+  mov QWORD PTR [rbp-1032], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EDX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 376 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1040]
+  mov rcx, QWORD PTR [rbp-1016]
+  mov r8, QWORD PTR [rbp-1024]
+  mov r9, QWORD PTR [rbp-1032]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 378 0
+  mov rbx, 101
+  mov r12, 98
+  mov QWORD PTR [rbp-1072], 120
+  mov QWORD PTR [rbp-1048], 0
+  mov QWORD PTR [rbp-1056], 0
+.loc 1 379 0
+  mov QWORD PTR [rbp-1064], 3
+  mov r14, 1
+.loc 1 380 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EBX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 378 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1072]
+  mov rcx, QWORD PTR [rbp-1048]
+  mov r8, QWORD PTR [rbp-1056]
+  mov r9, QWORD PTR [rbp-1064]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 380 0
+  mov rbx, 101
+  mov r12, 115
+  mov QWORD PTR [rbp-1104], 112
+  mov QWORD PTR [rbp-1080], 0
+  mov QWORD PTR [rbp-1088], 0
+  mov QWORD PTR [rbp-1096], 3
+  mov r14, 1
+.loc 1 381 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_ESP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 380 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1104]
+  mov rcx, QWORD PTR [rbp-1080]
+  mov r8, QWORD PTR [rbp-1088]
+  mov r9, QWORD PTR [rbp-1096]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 382 0
+  mov rbx, 101
+  mov r12, 98
+  mov QWORD PTR [rbp-1136], 112
+  mov QWORD PTR [rbp-1112], 0
+  mov QWORD PTR [rbp-1120], 0
+  mov QWORD PTR [rbp-1128], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EBP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1136]
+  mov rcx, QWORD PTR [rbp-1112]
+  mov r8, QWORD PTR [rbp-1120]
+  mov r9, QWORD PTR [rbp-1128]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 383 0
+  mov rbx, 101
+.loc 1 384 0
+  mov r12, 115
+.loc 1 385 0
+  mov QWORD PTR [rbp-1168], 105
+  mov QWORD PTR [rbp-1144], 0
+  mov QWORD PTR [rbp-1152], 0
+.loc 1 387 0
+  mov QWORD PTR [rbp-1160], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_ESI]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 383 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1168]
+  mov rcx, QWORD PTR [rbp-1144]
+  mov r8, QWORD PTR [rbp-1152]
+  mov r9, QWORD PTR [rbp-1160]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 389 0
+  mov rbx, 101
+  mov r12, 100
+.loc 1 390 0
+  mov QWORD PTR [rbp-1200], 105
+  mov QWORD PTR [rbp-1176], 0
+  mov QWORD PTR [rbp-1184], 0
+  mov QWORD PTR [rbp-1192], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EDI]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 389 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1200]
+  mov rcx, QWORD PTR [rbp-1176]
+  mov r8, QWORD PTR [rbp-1184]
+  mov r9, QWORD PTR [rbp-1192]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 390 0
+  mov rbx, 115
+.loc 1 391 0
+  mov r12, 112
+  mov QWORD PTR [rbp-1232], 108
+  mov QWORD PTR [rbp-1208], 0
+  mov QWORD PTR [rbp-1216], 0
+  mov QWORD PTR [rbp-1224], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_SPL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 390 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1232]
+  mov rcx, QWORD PTR [rbp-1208]
+  mov r8, QWORD PTR [rbp-1216]
+  mov r9, QWORD PTR [rbp-1224]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 391 0
+  mov rbx, 98
+.loc 1 392 0
+  mov r12, 112
+  mov QWORD PTR [rbp-1264], 108
+  mov QWORD PTR [rbp-1240], 0
+.loc 1 393 0
+  mov QWORD PTR [rbp-1248], 0
+.loc 1 395 0
+  mov QWORD PTR [rbp-1256], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_BPL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 391 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1264]
+  mov rcx, QWORD PTR [rbp-1240]
+  mov r8, QWORD PTR [rbp-1248]
+  mov r9, QWORD PTR [rbp-1256]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 395 0
+  mov rbx, 115
+  mov r12, 105
+  mov QWORD PTR [rbp-1296], 108
+  mov QWORD PTR [rbp-1272], 0
+  mov QWORD PTR [rbp-1280], 0
+  mov QWORD PTR [rbp-1288], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_SIL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1296]
+  mov rcx, QWORD PTR [rbp-1272]
+  mov r8, QWORD PTR [rbp-1280]
+  mov r9, QWORD PTR [rbp-1288]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+  mov rbx, 100
+  mov r12, 105
+  mov QWORD PTR [rbp-1328], 108
+.loc 1 396 0
+  mov QWORD PTR [rbp-1304], 0
+  mov QWORD PTR [rbp-1312], 0
+  mov QWORD PTR [rbp-1320], 3
+.loc 1 397 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_DIL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 395 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1328]
+  mov rcx, QWORD PTR [rbp-1304]
+  mov r8, QWORD PTR [rbp-1312]
+  mov r9, QWORD PTR [rbp-1320]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 398 0
+  mov rbx, 114
+  mov r12, 105
+  mov QWORD PTR [rbp-1360], 112
+  mov QWORD PTR [rbp-1336], 0
+  mov QWORD PTR [rbp-1344], 0
+  mov QWORD PTR [rbp-1352], 3
+  mov r14, 1
+  mov r13, 99
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1360]
+  mov rcx, QWORD PTR [rbp-1336]
+  mov r8, QWORD PTR [rbp-1344]
+  mov r9, QWORD PTR [rbp-1352]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 399 0
+  mov rbx, 114
+  mov r12, 56
+  mov QWORD PTR [rbp-1392], 100
+  mov QWORD PTR [rbp-1368], 0
+  mov QWORD PTR [rbp-1376], 0
+  mov QWORD PTR [rbp-1384], 3
+  mov r14, 1
+.loc 1 400 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R8D]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 399 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1392]
+  mov rcx, QWORD PTR [rbp-1368]
+  mov r8, QWORD PTR [rbp-1376]
+  mov r9, QWORD PTR [rbp-1384]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 400 0
+  mov rbx, 114
+.loc 1 401 0
+  mov r12, 56
+  mov QWORD PTR [rbp-1424], 119
+  mov QWORD PTR [rbp-1400], 0
+  mov QWORD PTR [rbp-1408], 0
+.loc 1 402 0
+  mov QWORD PTR [rbp-1416], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R8W]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 400 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1424]
+  mov rcx, QWORD PTR [rbp-1400]
+  mov r8, QWORD PTR [rbp-1408]
+  mov r9, QWORD PTR [rbp-1416]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 405 0
+  mov rbx, 114
+  mov r12, 56
+  mov QWORD PTR [rbp-1456], 98
+  mov QWORD PTR [rbp-1432], 0
+  mov QWORD PTR [rbp-1440], 0
+  mov QWORD PTR [rbp-1448], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R8B]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1456]
+  mov rcx, QWORD PTR [rbp-1432]
+  mov r8, QWORD PTR [rbp-1440]
+  mov r9, QWORD PTR [rbp-1448]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 406 0
+  mov rbx, 114
+  mov r12, 57
+.loc 1 407 0
+  mov QWORD PTR [rbp-1488], 100
+  mov QWORD PTR [rbp-1464], 0
+.loc 1 408 0
+  mov QWORD PTR [rbp-1472], 0
+  mov QWORD PTR [rbp-1480], 3
+  mov r14, 1
+.loc 1 410 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R9D]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 406 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1488]
+  mov rcx, QWORD PTR [rbp-1464]
+  mov r8, QWORD PTR [rbp-1472]
+  mov r9, QWORD PTR [rbp-1480]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 410 0
+  mov rbx, 114
+  mov r12, 57
+  mov QWORD PTR [rbp-1520], 119
+  mov QWORD PTR [rbp-1496], 0
+  mov QWORD PTR [rbp-1504], 0
+  mov QWORD PTR [rbp-1512], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R9W]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1520]
+  mov rcx, QWORD PTR [rbp-1496]
+  mov r8, QWORD PTR [rbp-1504]
+  mov r9, QWORD PTR [rbp-1512]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+  mov rbx, 114
+  mov r12, 57
+  mov QWORD PTR [rbp-1552], 98
+  mov QWORD PTR [rbp-1528], 0
+  mov QWORD PTR [rbp-1536], 0
+.loc 1 411 0
+  mov QWORD PTR [rbp-1544], 3
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R9B]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 410 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1552]
+  mov rcx, QWORD PTR [rbp-1528]
+  mov r8, QWORD PTR [rbp-1536]
+  mov r9, QWORD PTR [rbp-1544]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 412 0
+  mov rbx, 114
+.loc 1 413 0
+  mov r12, 49
+  mov QWORD PTR [rbp-1584], 48
+  mov QWORD PTR [rbp-1560], 100
+.loc 1 414 0
+  mov QWORD PTR [rbp-1568], 0
+  mov QWORD PTR [rbp-1576], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R10D]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 412 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1584]
+  mov rcx, QWORD PTR [rbp-1560]
+  mov r8, QWORD PTR [rbp-1568]
+  mov r9, QWORD PTR [rbp-1576]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 414 0
+  mov rbx, 114
+  mov r12, 49
+.loc 1 415 0
+  mov QWORD PTR [rbp-1616], 48
+  mov QWORD PTR [rbp-1592], 119
+  mov QWORD PTR [rbp-1600], 0
+  mov QWORD PTR [rbp-1608], 4
+  mov r14, 1
+.loc 1 416 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R10W]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 414 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1616]
+  mov rcx, QWORD PTR [rbp-1592]
+  mov r8, QWORD PTR [rbp-1600]
+  mov r9, QWORD PTR [rbp-1608]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 416 0
+  mov rbx, 114
+.loc 1 417 0
+  mov r12, 49
+  mov QWORD PTR [rbp-1648], 48
+  mov QWORD PTR [rbp-1624], 98
+  mov QWORD PTR [rbp-1632], 0
+.loc 1 418 0
+  mov QWORD PTR [rbp-1640], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R10B]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 416 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1648]
+  mov rcx, QWORD PTR [rbp-1624]
+  mov r8, QWORD PTR [rbp-1632]
+  mov r9, QWORD PTR [rbp-1640]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 421 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-1680], 49
+  mov QWORD PTR [rbp-1656], 100
+  mov QWORD PTR [rbp-1664], 0
+  mov QWORD PTR [rbp-1672], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R11D]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1680]
+  mov rcx, QWORD PTR [rbp-1656]
+  mov r8, QWORD PTR [rbp-1664]
+  mov r9, QWORD PTR [rbp-1672]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 422 0
+  mov rbx, 114
+  mov r12, 49
+.loc 1 423 0
+  mov QWORD PTR [rbp-1712], 49
+  mov QWORD PTR [rbp-1688], 119
+  mov QWORD PTR [rbp-1696], 0
+.loc 1 424 0
+  mov QWORD PTR [rbp-1704], 4
+  mov r14, 1
+.loc 1 425 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R11W]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 422 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1712]
+  mov rcx, QWORD PTR [rbp-1688]
+  mov r8, QWORD PTR [rbp-1696]
+  mov r9, QWORD PTR [rbp-1704]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 425 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-1744], 49
+  mov QWORD PTR [rbp-1720], 98
+  mov QWORD PTR [rbp-1728], 0
+  mov QWORD PTR [rbp-1736], 4
+.loc 1 426 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R11B]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 425 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1744]
+  mov rcx, QWORD PTR [rbp-1720]
+  mov r8, QWORD PTR [rbp-1728]
+  mov r9, QWORD PTR [rbp-1736]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 426 0
+  mov rbx, 114
+.loc 1 427 0
+  mov r12, 49
+  mov QWORD PTR [rbp-1776], 50
+  mov QWORD PTR [rbp-1752], 100
+  mov QWORD PTR [rbp-1760], 0
+.loc 1 428 0
+  mov QWORD PTR [rbp-1768], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R12D]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 426 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1776]
+  mov rcx, QWORD PTR [rbp-1752]
+  mov r8, QWORD PTR [rbp-1760]
+  mov r9, QWORD PTR [rbp-1768]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 429 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-1808], 50
+  mov QWORD PTR [rbp-1784], 119
+.loc 1 430 0
+  mov QWORD PTR [rbp-1792], 0
+  mov QWORD PTR [rbp-1800], 4
+  mov r14, 1
+.loc 1 431 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R12W]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 429 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1808]
+  mov rcx, QWORD PTR [rbp-1784]
+  mov r8, QWORD PTR [rbp-1792]
+  mov r9, QWORD PTR [rbp-1800]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 431 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-1840], 50
+  mov QWORD PTR [rbp-1816], 98
+  mov QWORD PTR [rbp-1824], 0
+  mov QWORD PTR [rbp-1832], 4
+.loc 1 432 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R12B]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 431 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1840]
+  mov rcx, QWORD PTR [rbp-1816]
+  mov r8, QWORD PTR [rbp-1824]
+  mov r9, QWORD PTR [rbp-1832]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 433 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-1872], 51
+.loc 1 434 0
+  mov QWORD PTR [rbp-1848], 100
+.loc 1 436 0
+  mov QWORD PTR [rbp-1856], 0
+  mov QWORD PTR [rbp-1864], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R13D]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 432 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1872]
+  mov rcx, QWORD PTR [rbp-1848]
+  mov r8, QWORD PTR [rbp-1856]
+  mov r9, QWORD PTR [rbp-1864]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 436 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-1904], 51
+  mov QWORD PTR [rbp-1880], 119
+  mov QWORD PTR [rbp-1888], 0
+  mov QWORD PTR [rbp-1896], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R13W]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1904]
+  mov rcx, QWORD PTR [rbp-1880]
+  mov r8, QWORD PTR [rbp-1888]
+  mov r9, QWORD PTR [rbp-1896]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+  mov rbx, 114
+  mov r12, 49
+.loc 1 437 0
+  mov QWORD PTR [rbp-1936], 51
+  mov QWORD PTR [rbp-1912], 98
+  mov QWORD PTR [rbp-1920], 0
+.loc 1 438 0
+  mov QWORD PTR [rbp-1928], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R13B]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 436 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1936]
+  mov rcx, QWORD PTR [rbp-1912]
+  mov r8, QWORD PTR [rbp-1920]
+  mov r9, QWORD PTR [rbp-1928]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 439 0
+  mov rbx, 114
+.loc 1 440 0
+  mov r12, 49
+  mov QWORD PTR [rbp-1968], 52
+  mov QWORD PTR [rbp-1944], 100
+  mov QWORD PTR [rbp-1952], 0
+  mov QWORD PTR [rbp-1960], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R14D]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 439 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-1968]
+  mov rcx, QWORD PTR [rbp-1944]
+  mov r8, QWORD PTR [rbp-1952]
+  mov r9, QWORD PTR [rbp-1960]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 441 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-2000], 52
+  mov QWORD PTR [rbp-1976], 119
+  mov QWORD PTR [rbp-1984], 0
+.loc 1 442 0
+  mov QWORD PTR [rbp-1992], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R14W]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 441 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2000]
+  mov rcx, QWORD PTR [rbp-1976]
+  mov r8, QWORD PTR [rbp-1984]
+  mov r9, QWORD PTR [rbp-1992]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 443 0
+  mov rbx, 114
+.loc 1 444 0
+  mov r12, 49
+  mov QWORD PTR [rbp-2032], 52
+  mov QWORD PTR [rbp-2008], 98
+  mov QWORD PTR [rbp-2016], 0
+  mov QWORD PTR [rbp-2024], 4
+  mov r14, 1
+.loc 1 445 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R14B]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 443 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2032]
+  mov rcx, QWORD PTR [rbp-2008]
+  mov r8, QWORD PTR [rbp-2016]
+  mov r9, QWORD PTR [rbp-2024]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 446 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-2064], 53
+  mov QWORD PTR [rbp-2040], 100
+  mov QWORD PTR [rbp-2048], 0
+  mov QWORD PTR [rbp-2056], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R15D]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 445 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2064]
+  mov rcx, QWORD PTR [rbp-2040]
+  mov r8, QWORD PTR [rbp-2048]
+  mov r9, QWORD PTR [rbp-2056]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 447 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-2096], 53
+  mov QWORD PTR [rbp-2072], 119
+.loc 1 448 0
+  mov QWORD PTR [rbp-2080], 0
+  mov QWORD PTR [rbp-2088], 4
+  mov r14, 1
+.loc 1 451 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R15W]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 447 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2096]
+  mov rcx, QWORD PTR [rbp-2072]
+  mov r8, QWORD PTR [rbp-2080]
+  mov r9, QWORD PTR [rbp-2088]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 451 0
+  mov rbx, 114
+  mov r12, 49
+  mov QWORD PTR [rbp-2128], 53
+  mov QWORD PTR [rbp-2104], 98
+  mov QWORD PTR [rbp-2112], 0
+  mov QWORD PTR [rbp-2120], 4
+  mov r14, 1
+.loc 1 452 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R15B]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 451 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2128]
+  mov rcx, QWORD PTR [rbp-2104]
+  mov r8, QWORD PTR [rbp-2112]
+  mov r9, QWORD PTR [rbp-2120]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 453 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2160], 109
+.loc 1 454 0
+  mov QWORD PTR [rbp-2136], 48
+  mov QWORD PTR [rbp-2144], 0
+  mov QWORD PTR [rbp-2152], 4
+.loc 1 455 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM0]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 452 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2160]
+  mov rcx, QWORD PTR [rbp-2136]
+  mov r8, QWORD PTR [rbp-2144]
+  mov r9, QWORD PTR [rbp-2152]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 455 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2192], 109
+  mov QWORD PTR [rbp-2168], 49
+  mov QWORD PTR [rbp-2176], 0
+.loc 1 456 0
+  mov QWORD PTR [rbp-2184], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM1]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 455 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2192]
+  mov rcx, QWORD PTR [rbp-2168]
+  mov r8, QWORD PTR [rbp-2176]
+  mov r9, QWORD PTR [rbp-2184]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 457 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2224], 109
+  mov QWORD PTR [rbp-2200], 50
+.loc 1 458 0
+  mov QWORD PTR [rbp-2208], 0
+  mov QWORD PTR [rbp-2216], 4
+  mov r14, 1
+.loc 1 459 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM2]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 456 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2224]
+  mov rcx, QWORD PTR [rbp-2200]
+  mov r8, QWORD PTR [rbp-2208]
+  mov r9, QWORD PTR [rbp-2216]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 459 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2256], 109
+.loc 1 460 0
+  mov QWORD PTR [rbp-2232], 51
+  mov QWORD PTR [rbp-2240], 0
+  mov QWORD PTR [rbp-2248], 4
+.loc 1 461 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM3]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 459 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2256]
+  mov rcx, QWORD PTR [rbp-2232]
+  mov r8, QWORD PTR [rbp-2240]
+  mov r9, QWORD PTR [rbp-2248]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 461 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2288], 109
+  mov QWORD PTR [rbp-2264], 52
+.loc 1 462 0
+  mov QWORD PTR [rbp-2272], 0
+  mov QWORD PTR [rbp-2280], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM4]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 461 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2288]
+  mov rcx, QWORD PTR [rbp-2264]
+  mov r8, QWORD PTR [rbp-2272]
+  mov r9, QWORD PTR [rbp-2280]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 463 0
+  mov rbx, 120
+  mov r12, 109
+.loc 1 465 0
+  mov QWORD PTR [rbp-2320], 109
+.loc 1 466 0
+  mov QWORD PTR [rbp-2296], 53
+  mov QWORD PTR [rbp-2304], 0
+  mov QWORD PTR [rbp-2312], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM5]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 463 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2320]
+  mov rcx, QWORD PTR [rbp-2296]
+  mov r8, QWORD PTR [rbp-2304]
+  mov r9, QWORD PTR [rbp-2312]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 466 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2352], 109
+.loc 1 467 0
+  mov QWORD PTR [rbp-2328], 54
+  mov QWORD PTR [rbp-2336], 0
+  mov QWORD PTR [rbp-2344], 4
+.loc 1 468 0
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM6]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 466 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2352]
+  mov rcx, QWORD PTR [rbp-2328]
+  mov r8, QWORD PTR [rbp-2336]
+  mov r9, QWORD PTR [rbp-2344]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 469 0
+  mov rbx, 120
+.loc 1 470 0
+  mov r12, 109
+  mov QWORD PTR [rbp-2384], 109
+  mov QWORD PTR [rbp-2360], 55
+  mov QWORD PTR [rbp-2368], 0
+  mov QWORD PTR [rbp-2376], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM7]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 469 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2384]
+  mov rcx, QWORD PTR [rbp-2360]
+  mov r8, QWORD PTR [rbp-2368]
+  mov r9, QWORD PTR [rbp-2376]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 471 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2416], 109
+  mov QWORD PTR [rbp-2392], 56
+  mov QWORD PTR [rbp-2400], 0
+.loc 1 472 0
+  mov QWORD PTR [rbp-2408], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM8]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 470 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2416]
+  mov rcx, QWORD PTR [rbp-2392]
+  mov r8, QWORD PTR [rbp-2400]
+  mov r9, QWORD PTR [rbp-2408]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 473 0
+  mov rbx, 120
+  mov r12, 109
+.loc 1 474 0
+  mov QWORD PTR [rbp-2448], 109
+  mov QWORD PTR [rbp-2424], 57
+  mov QWORD PTR [rbp-2432], 0
+  mov QWORD PTR [rbp-2440], 4
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM9]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 473 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2448]
+  mov rcx, QWORD PTR [rbp-2424]
+  mov r8, QWORD PTR [rbp-2432]
+  mov r9, QWORD PTR [rbp-2440]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 475 0
+  mov rbx, 120
+.loc 1 476 0
+  mov r12, 109
+  mov QWORD PTR [rbp-2480], 109
+  mov QWORD PTR [rbp-2456], 49
+  mov QWORD PTR [rbp-2464], 48
+  mov QWORD PTR [rbp-2472], 5
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM10]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 475 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2480]
+  mov rcx, QWORD PTR [rbp-2456]
+  mov r8, QWORD PTR [rbp-2464]
+  mov r9, QWORD PTR [rbp-2472]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 477 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2512], 109
+  mov QWORD PTR [rbp-2488], 49
+.loc 1 478 0
+  mov QWORD PTR [rbp-2496], 49
+  mov QWORD PTR [rbp-2504], 5
+  mov r14, 1
+.loc 1 480 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM11]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 477 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2512]
+  mov rcx, QWORD PTR [rbp-2488]
+  mov r8, QWORD PTR [rbp-2496]
+  mov r9, QWORD PTR [rbp-2504]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 481 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2544], 109
+  mov QWORD PTR [rbp-2520], 49
+  mov QWORD PTR [rbp-2528], 50
+  mov QWORD PTR [rbp-2536], 5
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM12]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2544]
+  mov rcx, QWORD PTR [rbp-2520]
+  mov r8, QWORD PTR [rbp-2528]
+  mov r9, QWORD PTR [rbp-2536]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 482 0
+  mov rbx, 120
+.loc 1 483 0
+  mov r12, 109
+  mov QWORD PTR [rbp-2576], 109
+  mov QWORD PTR [rbp-2552], 49
+.loc 1 484 0
+  mov QWORD PTR [rbp-2560], 51
+  mov QWORD PTR [rbp-2568], 5
+  mov r14, 1
+.loc 1 485 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM13]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 482 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2576]
+  mov rcx, QWORD PTR [rbp-2552]
+  mov r8, QWORD PTR [rbp-2560]
+  mov r9, QWORD PTR [rbp-2568]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 485 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2608], 109
+  mov QWORD PTR [rbp-2584], 49
+  mov QWORD PTR [rbp-2592], 52
+.loc 1 486 0
+  mov QWORD PTR [rbp-2600], 5
+  mov r14, 1
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM14]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 485 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2608]
+  mov rcx, QWORD PTR [rbp-2584]
+  mov r8, QWORD PTR [rbp-2592]
+  mov r9, QWORD PTR [rbp-2600]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 487 0
+  mov rbx, 120
+  mov r12, 109
+  mov QWORD PTR [rbp-2640], 109
+  mov QWORD PTR [rbp-2616], 49
+.loc 1 488 0
+  mov QWORD PTR [rbp-2624], 53
+  mov QWORD PTR [rbp-2632], 5
+  mov r14, 1
+.loc 1 490 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM15]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 486 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2640]
+  mov rcx, QWORD PTR [rbp-2616]
+  mov r8, QWORD PTR [rbp-2624]
+  mov r9, QWORD PTR [rbp-2632]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 492 0
+  mov rbx, 111
+  mov r12, 114
+.loc 1 493 0
+  mov QWORD PTR [rbp-2672], 0
+  mov QWORD PTR [rbp-2648], 0
+  mov QWORD PTR [rbp-2656], 0
+.loc 1 496 0
+  mov QWORD PTR [rbp-2664], 2
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_OR]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 492 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2672]
+  mov rcx, QWORD PTR [rbp-2648]
+  mov r8, QWORD PTR [rbp-2656]
+  mov r9, QWORD PTR [rbp-2664]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 497 0
+  mov rbx, 106
+  mov r12, 122
+  mov QWORD PTR [rbp-2704], 0
+  mov QWORD PTR [rbp-2680], 0
+  mov QWORD PTR [rbp-2688], 0
+  mov QWORD PTR [rbp-2696], 2
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JZ]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2704]
+  mov rcx, QWORD PTR [rbp-2680]
+  mov r8, QWORD PTR [rbp-2688]
+  mov r9, QWORD PTR [rbp-2696]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 498 0
+  mov rbx, 106
+  mov r12, 101
+  mov QWORD PTR [rbp-2736], 0
+  mov QWORD PTR [rbp-2712], 0
+  mov QWORD PTR [rbp-2720], 0
+  mov QWORD PTR [rbp-2728], 2
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2736]
+  mov rcx, QWORD PTR [rbp-2712]
+  mov r8, QWORD PTR [rbp-2720]
+  mov r9, QWORD PTR [rbp-2728]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 499 0
+  mov rbx, 106
+.loc 1 500 0
+  mov r12, 108
+.loc 1 503 0
+  mov QWORD PTR [rbp-2768], 0
+  mov QWORD PTR [rbp-2744], 0
+  mov QWORD PTR [rbp-2752], 0
+  mov QWORD PTR [rbp-2760], 2
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 499 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2768]
+  mov rcx, QWORD PTR [rbp-2744]
+  mov r8, QWORD PTR [rbp-2752]
+  mov r9, QWORD PTR [rbp-2760]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 504 0
+  mov rbx, 106
+  mov r12, 103
+  mov QWORD PTR [rbp-2800], 0
+  mov QWORD PTR [rbp-2776], 0
+  mov QWORD PTR [rbp-2784], 0
+  mov QWORD PTR [rbp-2792], 2
+  mov r14, 2
+.loc 1 505 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JG]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 504 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2800]
+  mov rcx, QWORD PTR [rbp-2776]
+  mov r8, QWORD PTR [rbp-2784]
+  mov r9, QWORD PTR [rbp-2792]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 505 0
+  mov rbx, 106
+  mov r12, 97
+  mov QWORD PTR [rbp-2832], 0
+.loc 1 507 0
+  mov QWORD PTR [rbp-2808], 0
+  mov QWORD PTR [rbp-2816], 0
+  mov QWORD PTR [rbp-2824], 2
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JA]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 505 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2832]
+  mov rcx, QWORD PTR [rbp-2808]
+  mov r8, QWORD PTR [rbp-2816]
+  mov r9, QWORD PTR [rbp-2824]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 508 0
+  mov rbx, 106
+  mov r12, 98
+.loc 1 509 0
+  mov QWORD PTR [rbp-2864], 0
+  mov QWORD PTR [rbp-2840], 0
+  mov QWORD PTR [rbp-2848], 0
+.loc 1 510 0
+  mov QWORD PTR [rbp-2856], 2
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JB]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 508 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2864]
+  mov rcx, QWORD PTR [rbp-2840]
+  mov r8, QWORD PTR [rbp-2848]
+  mov r9, QWORD PTR [rbp-2856]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 511 0
+  mov rbx, 109
+  mov r12, 111
+.loc 1 512 0
+  mov QWORD PTR [rbp-2896], 118
+  mov QWORD PTR [rbp-2872], 0
+  mov QWORD PTR [rbp-2880], 0
+  mov QWORD PTR [rbp-2888], 3
+.loc 1 513 0
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOV]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 511 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2896]
+  mov rcx, QWORD PTR [rbp-2872]
+  mov r8, QWORD PTR [rbp-2880]
+  mov r9, QWORD PTR [rbp-2888]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 515 0
+  mov rbx, 108
+  mov r12, 101
+  mov QWORD PTR [rbp-2928], 97
+  mov QWORD PTR [rbp-2904], 0
+  mov QWORD PTR [rbp-2912], 0
+  mov QWORD PTR [rbp-2920], 3
+  mov r14, 2
+.loc 1 516 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_LEA]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 514 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2928]
+  mov rcx, QWORD PTR [rbp-2904]
+  mov r8, QWORD PTR [rbp-2912]
+  mov r9, QWORD PTR [rbp-2920]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 517 0
+  mov rbx, 97
+  mov r12, 100
+.loc 1 518 0
+  mov QWORD PTR [rbp-2960], 100
+  mov QWORD PTR [rbp-2936], 0
+  mov QWORD PTR [rbp-2944], 0
+  mov QWORD PTR [rbp-2952], 3
+.loc 1 519 0
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 517 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2960]
+  mov rcx, QWORD PTR [rbp-2936]
+  mov r8, QWORD PTR [rbp-2944]
+  mov r9, QWORD PTR [rbp-2952]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 520 0
+  mov rbx, 115
+  mov r12, 117
+  mov QWORD PTR [rbp-2992], 98
+.loc 1 523 0
+  mov QWORD PTR [rbp-2968], 0
+  mov QWORD PTR [rbp-2976], 0
+  mov QWORD PTR [rbp-2984], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 519 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-2992]
+  mov rcx, QWORD PTR [rbp-2968]
+  mov r8, QWORD PTR [rbp-2976]
+  mov r9, QWORD PTR [rbp-2984]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 527 0
+  mov rbx, 115
+  mov r12, 104
+  mov QWORD PTR [rbp-3024], 108
+  mov QWORD PTR [rbp-3000], 0
+  mov QWORD PTR [rbp-3008], 0
+  mov QWORD PTR [rbp-3016], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SHL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3024]
+  mov rcx, QWORD PTR [rbp-3000]
+  mov r8, QWORD PTR [rbp-3008]
+  mov r9, QWORD PTR [rbp-3016]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 528 0
+  mov rbx, 115
+  mov r12, 104
+  mov QWORD PTR [rbp-3056], 114
+  mov QWORD PTR [rbp-3032], 0
+  mov QWORD PTR [rbp-3040], 0
+  mov QWORD PTR [rbp-3048], 3
+  mov r14, 2
+.loc 1 529 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SHR]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 528 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3056]
+  mov rcx, QWORD PTR [rbp-3032]
+  mov r8, QWORD PTR [rbp-3040]
+  mov r9, QWORD PTR [rbp-3048]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 529 0
+  mov rbx, 115
+  mov r12, 97
+.loc 1 530 0
+  mov QWORD PTR [rbp-3088], 114
+  mov QWORD PTR [rbp-3064], 0
+  mov QWORD PTR [rbp-3072], 0
+  mov QWORD PTR [rbp-3080], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SAR]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 529 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3088]
+  mov rcx, QWORD PTR [rbp-3064]
+  mov r8, QWORD PTR [rbp-3072]
+  mov r9, QWORD PTR [rbp-3080]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 534 0
+  mov rbx, 100
+  mov r12, 105
+  mov QWORD PTR [rbp-3120], 118
+  mov QWORD PTR [rbp-3096], 0
+  mov QWORD PTR [rbp-3104], 0
+  mov QWORD PTR [rbp-3112], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_DIV]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 531 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3120]
+  mov rcx, QWORD PTR [rbp-3096]
+  mov r8, QWORD PTR [rbp-3104]
+  mov r9, QWORD PTR [rbp-3112]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 535 0
+  mov rbx, 99
+  mov r12, 113
+  mov QWORD PTR [rbp-3152], 111
+  mov QWORD PTR [rbp-3128], 0
+.loc 1 536 0
+  mov QWORD PTR [rbp-3136], 0
+  mov QWORD PTR [rbp-3144], 3
+  mov r14, 2
+.loc 1 537 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CQO]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 535 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3152]
+  mov rcx, QWORD PTR [rbp-3128]
+  mov r8, QWORD PTR [rbp-3136]
+  mov r9, QWORD PTR [rbp-3144]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 537 0
+  mov rbx, 99
+  mov r12, 100
+  mov QWORD PTR [rbp-3184], 113
+  mov QWORD PTR [rbp-3160], 0
+.loc 1 538 0
+  mov QWORD PTR [rbp-3168], 0
+  mov QWORD PTR [rbp-3176], 3
+.loc 1 540 0
+  mov r14, 2
+.loc 1 542 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CDQ]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 537 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3184]
+  mov rcx, QWORD PTR [rbp-3160]
+  mov r8, QWORD PTR [rbp-3168]
+  mov r9, QWORD PTR [rbp-3176]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 542 0
+  mov rbx, 99
+.loc 1 543 0
+  mov r12, 109
+  mov QWORD PTR [rbp-3216], 112
+  mov QWORD PTR [rbp-3192], 0
+  mov QWORD PTR [rbp-3200], 0
+  mov QWORD PTR [rbp-3208], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CMP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 542 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3216]
+  mov rcx, QWORD PTR [rbp-3192]
+  mov r8, QWORD PTR [rbp-3200]
+  mov r9, QWORD PTR [rbp-3208]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 544 0
+  mov rbx, 99
+  mov r12, 108
+  mov QWORD PTR [rbp-3248], 100
+  mov QWORD PTR [rbp-3224], 0
+  mov QWORD PTR [rbp-3232], 0
+  mov QWORD PTR [rbp-3240], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CLD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3248]
+  mov rcx, QWORD PTR [rbp-3224]
+  mov r8, QWORD PTR [rbp-3232]
+  mov r9, QWORD PTR [rbp-3240]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 545 0
+  mov rbx, 110
+  mov r12, 101
+  mov QWORD PTR [rbp-3280], 103
+.loc 1 547 0
+  mov QWORD PTR [rbp-3256], 0
+.loc 1 549 0
+  mov QWORD PTR [rbp-3264], 0
+.loc 1 551 0
+  mov QWORD PTR [rbp-3272], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_NEG]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 544 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3280]
+  mov rcx, QWORD PTR [rbp-3256]
+  mov r8, QWORD PTR [rbp-3264]
+  mov r9, QWORD PTR [rbp-3272]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 552 0
+  mov rbx, 110
+  mov r12, 111
+  mov QWORD PTR [rbp-3312], 116
+  mov QWORD PTR [rbp-3288], 0
+  mov QWORD PTR [rbp-3296], 0
+  mov QWORD PTR [rbp-3304], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_NOT]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 551 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3312]
+  mov rcx, QWORD PTR [rbp-3288]
+  mov r8, QWORD PTR [rbp-3296]
+  mov r9, QWORD PTR [rbp-3304]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 553 0
+  mov rbx, 110
+  mov r12, 111
+  mov QWORD PTR [rbp-3344], 112
+  mov QWORD PTR [rbp-3320], 0
+  mov QWORD PTR [rbp-3328], 0
+.loc 1 554 0
+  mov QWORD PTR [rbp-3336], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_NOP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 552 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3344]
+  mov rcx, QWORD PTR [rbp-3320]
+  mov r8, QWORD PTR [rbp-3328]
+  mov r9, QWORD PTR [rbp-3336]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 554 0
+  mov rbx, 97
+.loc 1 555 0
+  mov r12, 110
+  mov QWORD PTR [rbp-3376], 100
+  mov QWORD PTR [rbp-3352], 0
+.loc 1 556 0
+  mov QWORD PTR [rbp-3360], 0
+  mov QWORD PTR [rbp-3368], 3
+  mov r14, 2
+.loc 1 557 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 554 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3376]
+  mov rcx, QWORD PTR [rbp-3352]
+  mov r8, QWORD PTR [rbp-3360]
+  mov r9, QWORD PTR [rbp-3368]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 557 0
+  mov rbx, 120
+.loc 1 558 0
+  mov r12, 111
+  mov QWORD PTR [rbp-3408], 114
+  mov QWORD PTR [rbp-3384], 0
+  mov QWORD PTR [rbp-3392], 0
+.loc 1 559 0
+  mov QWORD PTR [rbp-3400], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_XOR]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 557 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3408]
+  mov rcx, QWORD PTR [rbp-3384]
+  mov r8, QWORD PTR [rbp-3392]
+  mov r9, QWORD PTR [rbp-3400]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 560 0
+  mov rbx, 114
+.loc 1 561 0
+  mov r12, 101
+  mov QWORD PTR [rbp-3440], 116
+.loc 1 563 0
+  mov QWORD PTR [rbp-3416], 0
+  mov QWORD PTR [rbp-3424], 0
+  mov QWORD PTR [rbp-3432], 3
+.loc 1 564 0
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_RET]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 560 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3440]
+  mov rcx, QWORD PTR [rbp-3416]
+  mov r8, QWORD PTR [rbp-3424]
+  mov r9, QWORD PTR [rbp-3432]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 565 0
+  mov rbx, 114
+  mov r12, 101
+  mov QWORD PTR [rbp-3472], 112
+  mov QWORD PTR [rbp-3448], 0
+  mov QWORD PTR [rbp-3456], 0
+  mov QWORD PTR [rbp-3464], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_REP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 564 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3472]
+  mov rcx, QWORD PTR [rbp-3448]
+  mov r8, QWORD PTR [rbp-3456]
+  mov r9, QWORD PTR [rbp-3464]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 566 0
+  mov rbx, 106
+  mov r12, 109
+  mov QWORD PTR [rbp-3504], 112
+  mov QWORD PTR [rbp-3480], 0
+  mov QWORD PTR [rbp-3488], 0
+  mov QWORD PTR [rbp-3496], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JMP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3504]
+  mov rcx, QWORD PTR [rbp-3480]
+  mov r8, QWORD PTR [rbp-3488]
+  mov r9, QWORD PTR [rbp-3496]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 567 0
+  mov rbx, 106
+  mov r12, 110
+.loc 1 569 0
+  mov QWORD PTR [rbp-3536], 122
+.loc 1 571 0
+  mov QWORD PTR [rbp-3512], 0
+.loc 1 573 0
+  mov QWORD PTR [rbp-3520], 0
+  mov QWORD PTR [rbp-3528], 3
+  mov r14, 2
+.loc 1 575 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JNZ]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 567 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3536]
+  mov rcx, QWORD PTR [rbp-3512]
+  mov r8, QWORD PTR [rbp-3520]
+  mov r9, QWORD PTR [rbp-3528]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 581 0
+  mov rbx, 106
+  mov r12, 110
+  mov QWORD PTR [rbp-3568], 101
+  mov QWORD PTR [rbp-3544], 0
+  mov QWORD PTR [rbp-3552], 0
+.loc 1 582 0
+  mov QWORD PTR [rbp-3560], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JNE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 578 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3568]
+  mov rcx, QWORD PTR [rbp-3544]
+  mov r8, QWORD PTR [rbp-3552]
+  mov r9, QWORD PTR [rbp-3560]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 582 0
+  mov rbx, 106
+  mov r12, 108
+.loc 1 583 0
+  mov QWORD PTR [rbp-3600], 101
+  mov QWORD PTR [rbp-3576], 0
+  mov QWORD PTR [rbp-3584], 0
+  mov QWORD PTR [rbp-3592], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JLE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 582 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3600]
+  mov rcx, QWORD PTR [rbp-3576]
+  mov r8, QWORD PTR [rbp-3584]
+  mov r9, QWORD PTR [rbp-3592]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 584 0
+  mov rbx, 106
+  mov r12, 103
+  mov QWORD PTR [rbp-3632], 101
+  mov QWORD PTR [rbp-3608], 0
+  mov QWORD PTR [rbp-3616], 0
+  mov QWORD PTR [rbp-3624], 3
+  mov r14, 2
+.loc 1 588 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JGE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 584 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3632]
+  mov rcx, QWORD PTR [rbp-3608]
+  mov r8, QWORD PTR [rbp-3616]
+  mov r9, QWORD PTR [rbp-3624]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 588 0
+  mov rbx, 106
+  mov r12, 97
+  mov QWORD PTR [rbp-3664], 101
+.loc 1 589 0
+  mov QWORD PTR [rbp-3640], 0
+  mov QWORD PTR [rbp-3648], 0
+  mov QWORD PTR [rbp-3656], 3
+  mov r14, 2
+.loc 1 591 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JAE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 588 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3664]
+  mov rcx, QWORD PTR [rbp-3640]
+  mov r8, QWORD PTR [rbp-3648]
+  mov r9, QWORD PTR [rbp-3656]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 591 0
+  mov rbx, 106
+  mov r12, 98
+.loc 1 592 0
+  mov QWORD PTR [rbp-3696], 101
+  mov QWORD PTR [rbp-3672], 0
+  mov QWORD PTR [rbp-3680], 0
+  mov QWORD PTR [rbp-3688], 3
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JBE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 591 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3696]
+  mov rcx, QWORD PTR [rbp-3672]
+  mov r8, QWORD PTR [rbp-3680]
+  mov r9, QWORD PTR [rbp-3688]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 592 0
+  mov rbx, 112
+  mov r12, 111
+.loc 1 593 0
+  mov QWORD PTR [rbp-3728], 112
+  mov QWORD PTR [rbp-3704], 0
+  mov QWORD PTR [rbp-3712], 0
+.loc 1 594 0
+  mov QWORD PTR [rbp-3720], 3
+  mov r14, 2
+.loc 1 595 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_POP]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 592 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3728]
+  mov rcx, QWORD PTR [rbp-3704]
+  mov r8, QWORD PTR [rbp-3712]
+  mov r9, QWORD PTR [rbp-3720]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 597 0
+  mov rbx, 112
+  mov r12, 117
+  mov QWORD PTR [rbp-3760], 115
+  mov QWORD PTR [rbp-3736], 104
+  mov QWORD PTR [rbp-3744], 0
+  mov QWORD PTR [rbp-3752], 4
+  mov r14, 2
+.loc 1 598 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_PUSH]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 595 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3760]
+  mov rcx, QWORD PTR [rbp-3736]
+  mov r8, QWORD PTR [rbp-3744]
+  mov r9, QWORD PTR [rbp-3752]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 598 0
+  mov rbx, 105
+  mov r12, 109
+  mov QWORD PTR [rbp-3792], 117
+.loc 1 599 0
+  mov QWORD PTR [rbp-3768], 108
+  mov QWORD PTR [rbp-3776], 0
+  mov QWORD PTR [rbp-3784], 4
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_IMUL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 598 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3792]
+  mov rcx, QWORD PTR [rbp-3768]
+  mov r8, QWORD PTR [rbp-3776]
+  mov r9, QWORD PTR [rbp-3784]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 600 0
+  mov rbx, 105
+  mov r12, 100
+  mov QWORD PTR [rbp-3824], 105
+  mov QWORD PTR [rbp-3800], 118
+  mov QWORD PTR [rbp-3808], 0
+.loc 1 601 0
+  mov QWORD PTR [rbp-3816], 4
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_IDIV]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 600 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3824]
+  mov rcx, QWORD PTR [rbp-3800]
+  mov r8, QWORD PTR [rbp-3808]
+  mov r9, QWORD PTR [rbp-3816]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 601 0
+  mov rbx, 116
+  mov r12, 101
+  mov QWORD PTR [rbp-3856], 115
+  mov QWORD PTR [rbp-3832], 116
+  mov QWORD PTR [rbp-3840], 0
+.loc 1 602 0
+  mov QWORD PTR [rbp-3848], 4
+.loc 1 603 0
+  mov r14, 2
+.loc 1 606 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_TEST]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 601 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3856]
+  mov rcx, QWORD PTR [rbp-3832]
+  mov r8, QWORD PTR [rbp-3840]
+  mov r9, QWORD PTR [rbp-3848]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 606 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-3888], 116
+  mov QWORD PTR [rbp-3864], 101
+  mov QWORD PTR [rbp-3872], 0
+.loc 1 607 0
+  mov QWORD PTR [rbp-3880], 4
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 606 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3888]
+  mov rcx, QWORD PTR [rbp-3864]
+  mov r8, QWORD PTR [rbp-3872]
+  mov r9, QWORD PTR [rbp-3880]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 608 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-3920], 116
+  mov QWORD PTR [rbp-3896], 108
+  mov QWORD PTR [rbp-3904], 0
+.loc 1 609 0
+  mov QWORD PTR [rbp-3912], 4
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 607 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3920]
+  mov rcx, QWORD PTR [rbp-3896]
+  mov r8, QWORD PTR [rbp-3904]
+  mov r9, QWORD PTR [rbp-3912]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 610 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-3952], 116
+  mov QWORD PTR [rbp-3928], 103
+.loc 1 611 0
+  mov QWORD PTR [rbp-3936], 0
+  mov QWORD PTR [rbp-3944], 4
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETG]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 610 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3952]
+  mov rcx, QWORD PTR [rbp-3928]
+  mov r8, QWORD PTR [rbp-3936]
+  mov r9, QWORD PTR [rbp-3944]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 613 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-3984], 116
+.loc 1 614 0
+  mov QWORD PTR [rbp-3960], 98
+  mov QWORD PTR [rbp-3968], 0
+  mov QWORD PTR [rbp-3976], 4
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETB]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 613 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-3984]
+  mov rcx, QWORD PTR [rbp-3960]
+  mov r8, QWORD PTR [rbp-3968]
+  mov r9, QWORD PTR [rbp-3976]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 616 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-4016], 116
+  mov QWORD PTR [rbp-3992], 97
+.loc 1 617 0
+  mov QWORD PTR [rbp-4000], 0
+  mov QWORD PTR [rbp-4008], 4
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETA]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 614 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4016]
+  mov rcx, QWORD PTR [rbp-3992]
+  mov r8, QWORD PTR [rbp-4000]
+  mov r9, QWORD PTR [rbp-4008]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 618 0
+  mov rbx, 99
+  mov r12, 97
+  mov QWORD PTR [rbp-4048], 108
+  mov QWORD PTR [rbp-4024], 108
+  mov QWORD PTR [rbp-4032], 0
+  mov QWORD PTR [rbp-4040], 4
+.loc 1 619 0
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CALL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 618 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4048]
+  mov rcx, QWORD PTR [rbp-4024]
+  mov r8, QWORD PTR [rbp-4032]
+  mov r9, QWORD PTR [rbp-4040]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 619 0
+  mov rbx, 109
+  mov r12, 111
+  mov QWORD PTR [rbp-4080], 118
+.loc 1 620 0
+  mov QWORD PTR [rbp-4056], 113
+  mov QWORD PTR [rbp-4064], 0
+  mov QWORD PTR [rbp-4072], 4
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVQ]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 619 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4080]
+  mov rcx, QWORD PTR [rbp-4056]
+  mov r8, QWORD PTR [rbp-4064]
+  mov r9, QWORD PTR [rbp-4072]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 621 0
+  mov rbx, 109
+  mov r12, 111
+  mov QWORD PTR [rbp-4112], 118
+  mov QWORD PTR [rbp-4088], 115
+  mov QWORD PTR [rbp-4096], 120
+  mov QWORD PTR [rbp-4104], 5
+  mov r14, 2
+.loc 1 622 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 620 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4112]
+  mov rcx, QWORD PTR [rbp-4088]
+  mov r8, QWORD PTR [rbp-4096]
+  mov r9, QWORD PTR [rbp-4104]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 622 0
+  mov rbx, 109
+  mov r12, 111
+  mov QWORD PTR [rbp-4144], 118
+  mov QWORD PTR [rbp-4120], 122
+  mov QWORD PTR [rbp-4128], 120
+  mov QWORD PTR [rbp-4136], 5
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVZX]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4144]
+  mov rcx, QWORD PTR [rbp-4120]
+  mov r8, QWORD PTR [rbp-4128]
+  mov r9, QWORD PTR [rbp-4136]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 624 0
+  mov rbx, 109
+  mov r12, 111
+  mov QWORD PTR [rbp-4176], 118
+.loc 1 625 0
+  mov QWORD PTR [rbp-4152], 115
+  mov QWORD PTR [rbp-4160], 98
+  mov QWORD PTR [rbp-4168], 5
+  mov r14, 2
+.loc 1 626 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSB]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 624 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4176]
+  mov rcx, QWORD PTR [rbp-4152]
+  mov r8, QWORD PTR [rbp-4160]
+  mov r9, QWORD PTR [rbp-4168]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 626 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-4208], 116
+  mov QWORD PTR [rbp-4184], 110
+  mov QWORD PTR [rbp-4192], 101
+  mov QWORD PTR [rbp-4200], 5
+  mov r14, 2
+.loc 1 627 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETNE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 626 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4208]
+  mov rcx, QWORD PTR [rbp-4184]
+  mov r8, QWORD PTR [rbp-4192]
+  mov r9, QWORD PTR [rbp-4200]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 628 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-4240], 116
+  mov QWORD PTR [rbp-4216], 108
+  mov QWORD PTR [rbp-4224], 101
+  mov QWORD PTR [rbp-4232], 5
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETLE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4240]
+  mov rcx, QWORD PTR [rbp-4216]
+  mov r8, QWORD PTR [rbp-4224]
+  mov r9, QWORD PTR [rbp-4232]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 629 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-4272], 116
+  mov QWORD PTR [rbp-4248], 103
+  mov QWORD PTR [rbp-4256], 101
+  mov QWORD PTR [rbp-4264], 5
+  mov r14, 2
+.loc 1 630 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETGE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 629 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4272]
+  mov rcx, QWORD PTR [rbp-4248]
+  mov r8, QWORD PTR [rbp-4256]
+  mov r9, QWORD PTR [rbp-4264]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 630 0
+  mov rbx, 115
+  mov r12, 101
+.loc 1 631 0
+  mov QWORD PTR [rbp-4304], 116
+  mov QWORD PTR [rbp-4280], 98
+  mov QWORD PTR [rbp-4288], 101
+.loc 1 632 0
+  mov QWORD PTR [rbp-4296], 5
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETBE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 630 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4304]
+  mov rcx, QWORD PTR [rbp-4280]
+  mov r8, QWORD PTR [rbp-4288]
+  mov r9, QWORD PTR [rbp-4296]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 632 0
+  mov rbx, 115
+  mov r12, 101
+  mov QWORD PTR [rbp-4336], 116
+  mov QWORD PTR [rbp-4312], 97
+  mov QWORD PTR [rbp-4320], 101
+  mov QWORD PTR [rbp-4328], 5
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETAE]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4336]
+  mov rcx, QWORD PTR [rbp-4312]
+  mov r8, QWORD PTR [rbp-4320]
+  mov r9, QWORD PTR [rbp-4328]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 633 0
+  mov rbx, 97
+  mov r12, 100
+  mov QWORD PTR [rbp-4368], 100
+  mov QWORD PTR [rbp-4344], 115
+  mov QWORD PTR [rbp-4352], 100
+  mov QWORD PTR [rbp-4360], 5
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_ADDSD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4368]
+  mov rcx, QWORD PTR [rbp-4344]
+  mov r8, QWORD PTR [rbp-4352]
+  mov r9, QWORD PTR [rbp-4360]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+  mov rbx, 115
+.loc 1 634 0
+  mov r12, 117
+  mov QWORD PTR [rbp-4400], 98
+  mov QWORD PTR [rbp-4376], 115
+  mov QWORD PTR [rbp-4384], 100
+  mov QWORD PTR [rbp-4392], 5
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SUBSD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 633 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4400]
+  mov rcx, QWORD PTR [rbp-4376]
+  mov r8, QWORD PTR [rbp-4384]
+  mov r9, QWORD PTR [rbp-4392]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 634 0
+  mov rbx, 109
+  mov r12, 117
+  mov QWORD PTR [rbp-4432], 108
+  mov QWORD PTR [rbp-4408], 115
+.loc 1 635 0
+  mov QWORD PTR [rbp-4416], 100
+  mov QWORD PTR [rbp-4424], 5
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MULSD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 634 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4432]
+  mov rcx, QWORD PTR [rbp-4408]
+  mov r8, QWORD PTR [rbp-4416]
+  mov r9, QWORD PTR [rbp-4424]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 635 0
+  mov rbx, 100
+  mov r12, 105
+  mov QWORD PTR [rbp-4464], 118
+  mov QWORD PTR [rbp-4440], 115
+  mov QWORD PTR [rbp-4448], 100
+  mov QWORD PTR [rbp-4456], 5
+  mov r14, 2
+.loc 1 638 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_DIVSD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 635 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4464]
+  mov rcx, QWORD PTR [rbp-4440]
+  mov r8, QWORD PTR [rbp-4448]
+  mov r9, QWORD PTR [rbp-4456]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 638 0
+  mov rbx, 120
+  mov r12, 111
+.loc 1 639 0
+  mov QWORD PTR [rbp-4496], 114
+  mov QWORD PTR [rbp-4472], 112
+  mov QWORD PTR [rbp-4480], 100
+  mov QWORD PTR [rbp-4488], 5
+  mov r14, 2
+.loc 1 640 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_XORPD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 638 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4496]
+  mov rcx, QWORD PTR [rbp-4472]
+  mov r8, QWORD PTR [rbp-4480]
+  mov r9, QWORD PTR [rbp-4488]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 641 0
+  mov rbx, 109
+  mov r12, 111
+  mov QWORD PTR [rbp-4528], 118
+.loc 1 642 0
+  mov QWORD PTR [rbp-4504], 115
+  mov QWORD PTR [rbp-4512], 120
+  mov QWORD PTR [rbp-4520], 6
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSXD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 640 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4528]
+  mov rcx, QWORD PTR [rbp-4504]
+  mov r8, QWORD PTR [rbp-4512]
+  mov r9, QWORD PTR [rbp-4520]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 644 0
+  mov rbx, 115
+  mov r12, 121
+.loc 1 646 0
+  mov QWORD PTR [rbp-4560], 115
+.loc 1 649 0
+  mov QWORD PTR [rbp-4536], 99
+  mov QWORD PTR [rbp-4544], 97
+  mov QWORD PTR [rbp-4552], 7
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SYSCALL]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 644 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4560]
+  mov rcx, QWORD PTR [rbp-4536]
+  mov r8, QWORD PTR [rbp-4544]
+  mov r9, QWORD PTR [rbp-4552]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 649 0
+  mov rbx, 99
+  mov r12, 118
+  mov QWORD PTR [rbp-4592], 116
+.loc 1 650 0
+  mov QWORD PTR [rbp-4568], 115
+  mov QWORD PTR [rbp-4576], 105
+  mov QWORD PTR [rbp-4584], 8
+  mov r14, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSI2SD]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 649 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4592]
+  mov rcx, QWORD PTR [rbp-4568]
+  mov r8, QWORD PTR [rbp-4576]
+  mov r9, QWORD PTR [rbp-4584]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 650 0
+  mov rbx, 99
+  mov r12, 118
+.loc 1 651 0
+  mov QWORD PTR [rbp-4624], 116
+  mov QWORD PTR [rbp-4600], 116
+  mov QWORD PTR [rbp-4608], 115
+  mov QWORD PTR [rbp-4616], 9
+  mov r14, 2
+.loc 1 652 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
+  mov r15, r8
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+.loc 1 650 0
+  mov r15, r13
+  push r15
+  mov r15, r14
+  push r15
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, QWORD PTR [rbp-4624]
+  mov rcx, QWORD PTR [rbp-4600]
+  mov r8, QWORD PTR [rbp-4608]
+  mov r9, QWORD PTR [rbp-4616]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 652 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ht_ready]
+  mov r12, 1
+  mov rax, r12
+  mov r15, rbx
+  mov DWORD PTR [r15], eax
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 4632
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+_caustic_assembler_lexer_cst_tokenize:
+  push rbp
+  mov rbp, rsp
+  push rbx
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp, 8728
+.loc 1 655 0
+  mov QWORD PTR [rbp-354], rdi
+.loc 1 5528 0
+  mov QWORD PTR [rbp-2714], rsi
+.loc 1 5533 0
+  mov QWORD PTR [rbp-2698], rdx
+.loc 1 657 0
+  lea r14, [rip+_caustic_assembler_lexer_cst_char_tab_ready]
+  mov r15, r14
+  movsxd r15, DWORD PTR [r15]
+  mov r8, r15
+  mov r15, r8
+  cmp r15, 0
+  jne .L118
+.loc 1 658 0
+  call _caustic_assembler_lexer_cst_init_char_tab
+  mov r14, rax
+.loc 1 657 0
+  jmp .L119
+.L118:
+.L119:
+.loc 1 658 0
+  lea r14, [rip+_caustic_assembler_lexer_cst_ri_first_ready]
+  mov r15, r14
+  movsxd r15, DWORD PTR [r15]
+  mov r8, r15
+  mov r15, r8
+  cmp r15, 0
+  jne .L120
+  call _caustic_assembler_lexer_cst_init_ri_first
+  mov r14, rax
+  jmp .L121
+.L120:
+.L121:
+.loc 1 659 0
+  lea r14, [rip+_caustic_assembler_lexer_cst_ht_ready]
+  mov r15, r14
+  movsxd r15, DWORD PTR [r15]
+  mov r8, r15
+  mov r15, r8
+  cmp r15, 0
+  jne .L122
+  call _caustic_assembler_lexer_cst_init_ht
+  mov r14, rax
+  jmp .L123
+.L122:
+.L123:
+.loc 1 664 0
+  mov rax, QWORD PTR [rbp-2698]
+  mov r15, 3
+  push rdx
+  cqo
+  idiv r15
+  mov r15, rax
+  pop rdx
+  mov r14, r15
+.loc 1 662 0
+  mov r15, r14
+  movsxd r15, r15d
+  mov r8, r15
+.loc 1 664 0
+.loc 1 662 0
+  mov r14, r8
+  add r14, 4096
+.loc 1 664 0
+  xor r10, r10
+.loc 1 665 0
+  lea rbx, [rbp-8674]
+  mov r15, r14
+  movsxd r15, r15d
+  mov r8, r15
+  mov rdi, rbx
+  mov rsi, r8
+  call _caustic_assembler_lexer_cst_tl_init
+  mov r14, rax
+.loc 1 664 0
+  lea r14, [rbp-84]
+  mov rdi, r14
+  mov rsi, rbx
+  mov rcx, 16
+  cld
+  rep movsb
+.loc 1 666 0
+  mov rbx, 0
+.loc 1 665 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-92], rax
+.loc 1 667 0
+  mov rbx, 1
+.loc 1 666 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-96], eax
+.loc 1 667 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov r14, 0
+  mov rax, r14
+  mov r15, rbx
+  mov QWORD PTR [r15], rax
+  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov r14, rbx
+  add r14, 8
+  mov rbx, 0
+  mov rax, rbx
+  mov r15, r14
+  mov QWORD PTR [r15], rax
+.loc 1 668 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov r14, rbx
+  add r14, 16
+  mov rbx, 0
+  mov rax, rbx
+  mov r15, r14
+  mov QWORD PTR [r15], rax
+.loc 1 669 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov r14, rbx
+  add r14, 24
+  mov rbx, 0
+  mov rax, rbx
+  mov r15, r14
+  mov QWORD PTR [r15], rax
+  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov r14, rbx
+  add r14, 32
+  mov rbx, 0
+  mov rax, rbx
+  mov r15, r14
+  mov QWORD PTR [r15], rax
+  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov r14, rbx
+  add r14, 40
+.loc 1 670 0
+  mov rbx, 0
+.loc 1 669 0
+  mov rax, rbx
+  mov r15, r14
+  mov QWORD PTR [r15], rax
+.loc 1 670 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov r14, rbx
+  add r14, 48
+  mov rbx, 0
+  mov rax, rbx
+  mov r15, r14
+  mov QWORD PTR [r15], rax
+.loc 1 671 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov r14, rbx
+  add r14, 56
+.loc 1 672 0
+  mov rbx, 0
+.loc 1 671 0
+  mov rax, rbx
+  mov r15, r14
+  mov QWORD PTR [r15], rax
+.loc 1 674 0
+.loc 1 672 0
+.loc 1 678 0
+.loc 1 677 0
+  mov r15, QWORD PTR [rbp-2714]
+  mov QWORD PTR [rbp-394], r15
+.loc 1 675 0
+.L124:
+.loc 1 678 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-362], r15
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L125
+  mov r15, QWORD PTR [rbp-362]
+  mov QWORD PTR [rbp-378], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-378]
+  mov QWORD PTR [rbp-386], r15
+  movzx r15, BYTE PTR [r15]
+  mov r14, r15
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-418], r15
+.loc 1 679 0
+.loc 1 678 0
+  cmp r15, 32
+  je .L130
+.loc 1 679 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-434], r15
+.loc 1 680 0
+.loc 1 679 0
+  cmp r15, 9
+  je .L130
+.loc 1 678 0
+  mov QWORD PTR [rbp-410], 0
+  jmp .L131
+.L130:
+  mov QWORD PTR [rbp-410], 1
+.L131:
+  mov r15, QWORD PTR [rbp-410]
+  test r15, r15
+  jnz .L128
+.loc 1 680 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-450], r15
+.loc 1 681 0
+.loc 1 680 0
+  cmp r15, 13
+  je .L128
+.loc 1 678 0
+  mov QWORD PTR [rbp-402], 0
+  jmp .L129
+.L128:
+  mov QWORD PTR [rbp-402], 1
+.L129:
+  mov r15, QWORD PTR [rbp-402]
+  test r15, r15
+  jz .L126
+.loc 1 681 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-466], r15
+.loc 1 683 0
+.loc 1 682 0
+.loc 1 685 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-474], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-482], r15
+  add r15, 1
+  mov QWORD PTR [rbp-490], r15
+.loc 1 682 0
+  mov rax, QWORD PTR [rbp-490]
+  mov r15, QWORD PTR [rbp-466]
+  mov QWORD PTR [r15], rax
+.loc 1 685 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-498], r15
+  add r15, 1
+  mov QWORD PTR [rbp-506], r15
+  mov rax, QWORD PTR [rbp-506]
+  mov QWORD PTR [rbp-92], rax
+.L132:
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-522], r15
+.loc 1 687 0
+.loc 1 685 0
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L134
+.loc 1 687 0
+  mov r15, QWORD PTR [rbp-522]
+  mov QWORD PTR [rbp-538], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-538]
+  mov QWORD PTR [rbp-546], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-554], r15
+  cmp r15, 32
+  jne .L134
+.loc 1 685 0
+  mov QWORD PTR [rbp-514], 1
+  jmp .L135
+.L134:
+  mov QWORD PTR [rbp-514], 0
+.L135:
+  mov r15, QWORD PTR [rbp-514]
+  test r15, r15
+  jz .L133
+.loc 1 687 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-570], r15
+  add r15, 1
+  mov QWORD PTR [rbp-578], r15
+  mov rax, QWORD PTR [rbp-578]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 685 0
+  jmp .L132
+.L133:
+.loc 1 678 0
+  jmp .L127
+.L126:
+.loc 1 688 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-586], r15
+  cmp r15, 10
+  jne .L136
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-602], r15
+.loc 1 689 0
+  add r15, 8
+  mov QWORD PTR [rbp-610], r15
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-618], r15
+  add r15, 8
+  mov QWORD PTR [rbp-626], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-634], r15
+  add r15, 1
+  mov QWORD PTR [rbp-642], r15
+  mov rax, QWORD PTR [rbp-642]
+  mov r15, QWORD PTR [rbp-610]
+  mov QWORD PTR [r15], rax
+.loc 1 690 0
+  xor r10, r10
+.loc 1 691 0
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-650], r15
+  mov rdi, QWORD PTR [rbp-650]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-658], rax
+.loc 1 690 0
+.loc 1 692 0
+.loc 1 693 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_NEWLINE]
+  mov QWORD PTR [rbp-674], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-666], r15
+.loc 1 692 0
+  mov rax, QWORD PTR [rbp-666]
+  mov r15, QWORD PTR [rbp-658]
+  mov DWORD PTR [r15], eax
+.loc 1 693 0
+  mov r15, QWORD PTR [rbp-658]
+  add r15, 4
+  mov QWORD PTR [rbp-682], r15
+.loc 1 696 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-690], r15
+  mov r15, QWORD PTR [rbp-394]
+  add r15, QWORD PTR [rbp-690]
+  mov QWORD PTR [rbp-698], r15
+.loc 1 694 0
+  mov QWORD PTR [rbp-706], r15
+.loc 1 693 0
+  mov rax, QWORD PTR [rbp-706]
+  mov r15, QWORD PTR [rbp-682]
+  mov QWORD PTR [r15], rax
+.loc 1 696 0
+  mov r15, QWORD PTR [rbp-658]
+  add r15, 12
+  mov QWORD PTR [rbp-714], r15
+  mov QWORD PTR [rbp-722], 1
+  mov rax, QWORD PTR [rbp-722]
+  mov r15, QWORD PTR [rbp-714]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-658]
+  add r15, 16
+  mov QWORD PTR [rbp-730], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-738], r15
+  mov rax, QWORD PTR [rbp-738]
+  mov r15, QWORD PTR [rbp-730]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-658]
+  add r15, 20
+  mov QWORD PTR [rbp-746], r15
+  mov QWORD PTR [rbp-754], 0
+  mov rax, QWORD PTR [rbp-754]
+  mov r15, QWORD PTR [rbp-746]
+  mov QWORD PTR [r15], rax
+.loc 1 698 0
+  mov r15, QWORD PTR [rbp-658]
+  add r15, 28
+  mov QWORD PTR [rbp-762], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-778], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-770], r15
+  mov rax, QWORD PTR [rbp-770]
+  mov r15, QWORD PTR [rbp-762]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-658]
+  add r15, 32
+  mov QWORD PTR [rbp-786], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-802], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-794], r15
+  mov rax, QWORD PTR [rbp-794]
+  mov r15, QWORD PTR [rbp-786]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-658]
+  add r15, 36
+  mov QWORD PTR [rbp-810], r15
+  mov QWORD PTR [rbp-818], 0
+  mov rax, QWORD PTR [rbp-818]
+  mov r15, QWORD PTR [rbp-810]
+  mov DWORD PTR [r15], eax
+.loc 1 700 0
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-826], r15
+  add r15, 1
+  mov QWORD PTR [rbp-834], r15
+  mov rax, QWORD PTR [rbp-834]
+  mov DWORD PTR [rbp-96], eax
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-842], r15
+  add r15, 1
+  mov QWORD PTR [rbp-850], r15
+  mov rax, QWORD PTR [rbp-850]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 688 0
+  jmp .L137
+.L136:
+.loc 1 700 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-858], r15
+.loc 1 703 0
+.loc 1 700 0
+  cmp r15, 35
+  jne .L138
+.loc 1 703 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-874], r15
+  add r15, 16
+  mov QWORD PTR [rbp-882], r15
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-890], r15
+  add r15, 16
+  mov QWORD PTR [rbp-898], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-906], r15
+  add r15, 1
+  mov QWORD PTR [rbp-914], r15
+  mov rax, QWORD PTR [rbp-914]
+  mov r15, QWORD PTR [rbp-882]
+  mov QWORD PTR [r15], rax
+.L140:
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-930], r15
+.loc 1 704 0
+.loc 1 703 0
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L142
+.loc 1 704 0
+  mov r15, QWORD PTR [rbp-930]
+  mov QWORD PTR [rbp-946], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-946]
+  mov QWORD PTR [rbp-954], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-962], r15
+  cmp r15, 10
+  je .L142
+.loc 1 703 0
+  mov QWORD PTR [rbp-922], 1
+  jmp .L143
+.L142:
+  mov QWORD PTR [rbp-922], 0
+.L143:
+  mov r15, QWORD PTR [rbp-922]
+  test r15, r15
+  jz .L141
+.loc 1 704 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-978], r15
+  add r15, 1
+  mov QWORD PTR [rbp-986], r15
+  mov rax, QWORD PTR [rbp-986]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 703 0
+  jmp .L140
+.L141:
+.loc 1 700 0
+  jmp .L139
+.L138:
+.loc 1 705 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1010], r15
+.loc 1 706 0
+.loc 1 705 0
+  cmp r15, 47
+  jne .L148
+.loc 1 706 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1026], r15
+  add r15, 1
+  mov QWORD PTR [rbp-1034], r15
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L148
+.loc 1 705 0
+  mov QWORD PTR [rbp-1002], 1
+  jmp .L149
+.L148:
+  mov QWORD PTR [rbp-1002], 0
+.L149:
+  mov r15, QWORD PTR [rbp-1002]
+  test r15, r15
+  jz .L146
+.loc 1 706 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1050], r15
+  add r15, 1
+  mov QWORD PTR [rbp-1058], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-1058]
+  mov QWORD PTR [rbp-1066], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-1074], r15
+  cmp r15, 47
+  jne .L146
+.loc 1 705 0
+  mov QWORD PTR [rbp-994], 1
+  jmp .L147
+.L146:
+  mov QWORD PTR [rbp-994], 0
+.L147:
+  mov r15, QWORD PTR [rbp-994]
+  test r15, r15
+  jz .L144
+.loc 1 706 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-1090], r15
+  add r15, 16
+  mov QWORD PTR [rbp-1098], r15
+.loc 1 707 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-1106], r15
+  add r15, 16
+  mov QWORD PTR [rbp-1114], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-1122], r15
+.loc 1 708 0
+.loc 1 707 0
+  add r15, 1
+  mov QWORD PTR [rbp-1130], r15
+.loc 1 706 0
+  mov rax, QWORD PTR [rbp-1130]
+  mov r15, QWORD PTR [rbp-1098]
+  mov QWORD PTR [r15], rax
+.L150:
+.loc 1 708 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1146], r15
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L152
+  mov r15, QWORD PTR [rbp-1146]
+  mov QWORD PTR [rbp-1162], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-1162]
+  mov QWORD PTR [rbp-1170], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-1178], r15
+  cmp r15, 10
+  je .L152
+  mov QWORD PTR [rbp-1138], 1
+  jmp .L153
+.L152:
+  mov QWORD PTR [rbp-1138], 0
+.L153:
+  mov r15, QWORD PTR [rbp-1138]
+  test r15, r15
+  jz .L151
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1194], r15
+  add r15, 1
+  mov QWORD PTR [rbp-1202], r15
+  mov rax, QWORD PTR [rbp-1202]
+  mov QWORD PTR [rbp-92], rax
+  jmp .L150
+.L151:
+.loc 1 705 0
+  jmp .L145
+.L144:
+.loc 1 712 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1210], r15
+  cmp r15, 34
+  jne .L154
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1226], r15
+  mov QWORD PTR [rbp-1234], r15
+  add r15, 1
+  mov QWORD PTR [rbp-1242], r15
+  mov rax, QWORD PTR [rbp-1242]
+  mov QWORD PTR [rbp-92], rax
+.L156:
+.loc 1 713 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1258], r15
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L158
+  mov r15, QWORD PTR [rbp-1258]
+  mov QWORD PTR [rbp-1274], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-1274]
+  mov QWORD PTR [rbp-1282], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-1290], r15
+  cmp r15, 34
+  je .L158
+  mov QWORD PTR [rbp-1250], 1
+  jmp .L159
+.L158:
+  mov QWORD PTR [rbp-1250], 0
+.L159:
+  mov r15, QWORD PTR [rbp-1250]
+  test r15, r15
+  jz .L157
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1306], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-1306]
+  mov QWORD PTR [rbp-1314], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-1322], r15
+  cmp r15, 92
+  jne .L160
+  mov r15, QWORD PTR [rbp-1306]
+  mov QWORD PTR [rbp-1338], r15
+.loc 1 715 0
+.loc 1 713 0
+  add r15, 1
+  mov QWORD PTR [rbp-1346], r15
+  mov rax, QWORD PTR [rbp-1346]
+  mov QWORD PTR [rbp-92], rax
+  jmp .L161
+.L160:
+.L161:
+.loc 1 715 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1354], r15
+  add r15, 1
+  mov QWORD PTR [rbp-1362], r15
+  mov rax, QWORD PTR [rbp-1362]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 713 0
+  jmp .L156
+.L157:
+.loc 1 715 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1370], r15
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L162
+.loc 1 716 0
+  mov r15, QWORD PTR [rbp-1370]
+  mov QWORD PTR [rbp-1386], r15
+  add r15, 1
+  mov QWORD PTR [rbp-1394], r15
+  mov rax, QWORD PTR [rbp-1394]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 715 0
+  jmp .L163
+.L162:
+.L163:
+.loc 1 717 0
+  xor r10, r10
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-1402], r15
+  mov rdi, QWORD PTR [rbp-1402]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-1410], rax
+.loc 1 718 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_STRING]
+  mov QWORD PTR [rbp-1426], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1418], r15
+  mov rax, QWORD PTR [rbp-1418]
+  mov r15, QWORD PTR [rbp-1410]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-1410]
+  add r15, 4
+  mov QWORD PTR [rbp-1434], r15
+  mov r15, QWORD PTR [rbp-394]
+  add r15, QWORD PTR [rbp-1226]
+  mov QWORD PTR [rbp-1442], r15
+  mov QWORD PTR [rbp-1450], r15
+  mov rax, QWORD PTR [rbp-1450]
+  mov r15, QWORD PTR [rbp-1434]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-1410]
+  add r15, 12
+  mov QWORD PTR [rbp-1458], r15
+.loc 1 719 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-1466], r15
+  sub r15, QWORD PTR [rbp-1226]
+  mov QWORD PTR [rbp-1474], r15
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-1482], r15
+.loc 1 718 0
+  mov rax, QWORD PTR [rbp-1482]
+  mov r15, QWORD PTR [rbp-1458]
+  mov DWORD PTR [r15], eax
+.loc 1 719 0
+  mov r15, QWORD PTR [rbp-1410]
+  add r15, 16
+  mov QWORD PTR [rbp-1490], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-1498], r15
+  mov rax, QWORD PTR [rbp-1498]
+  mov r15, QWORD PTR [rbp-1490]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-1410]
+  add r15, 20
+  mov QWORD PTR [rbp-1506], r15
+  mov QWORD PTR [rbp-1514], 0
+  mov rax, QWORD PTR [rbp-1514]
+  mov r15, QWORD PTR [rbp-1506]
+  mov QWORD PTR [r15], rax
+.loc 1 720 0
+  mov r15, QWORD PTR [rbp-1410]
+  add r15, 28
+  mov QWORD PTR [rbp-1522], r15
+.loc 1 721 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-1538], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1530], r15
+.loc 1 720 0
+  mov rax, QWORD PTR [rbp-1530]
+  mov r15, QWORD PTR [rbp-1522]
+  mov DWORD PTR [r15], eax
+.loc 1 721 0
+  mov r15, QWORD PTR [rbp-1410]
+  add r15, 32
+  mov QWORD PTR [rbp-1546], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-1562], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1554], r15
+  mov rax, QWORD PTR [rbp-1554]
+  mov r15, QWORD PTR [rbp-1546]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-1410]
+  add r15, 36
+  mov QWORD PTR [rbp-1570], r15
+  mov QWORD PTR [rbp-1578], 0
+  mov rax, QWORD PTR [rbp-1578]
+  mov r15, QWORD PTR [rbp-1570]
+  mov DWORD PTR [r15], eax
+.loc 1 712 0
+  jmp .L155
+.L154:
+.loc 1 722 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1634], r15
+.loc 1 724 0
+.loc 1 722 0
+  cmp r15, 44
+  je .L176
+.loc 1 724 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1650], r15
+  cmp r15, 58
+  je .L176
+.loc 1 722 0
+  mov QWORD PTR [rbp-1626], 0
+  jmp .L177
+.L176:
+  mov QWORD PTR [rbp-1626], 1
+.L177:
+  mov r15, QWORD PTR [rbp-1626]
+  test r15, r15
+  jnz .L174
+.loc 1 724 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1666], r15
+  cmp r15, 91
+  je .L174
+.loc 1 722 0
+  mov QWORD PTR [rbp-1618], 0
+  jmp .L175
+.L174:
+  mov QWORD PTR [rbp-1618], 1
+.L175:
+  mov r15, QWORD PTR [rbp-1618]
+  test r15, r15
+  jnz .L172
+.loc 1 725 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1682], r15
+  cmp r15, 93
+  je .L172
+.loc 1 722 0
+  mov QWORD PTR [rbp-1610], 0
+  jmp .L173
+.L172:
+  mov QWORD PTR [rbp-1610], 1
+.L173:
+  mov r15, QWORD PTR [rbp-1610]
+  test r15, r15
+  jnz .L170
+.loc 1 725 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1698], r15
+  cmp r15, 43
+  je .L170
+.loc 1 722 0
+  mov QWORD PTR [rbp-1602], 0
+  jmp .L171
+.L170:
+  mov QWORD PTR [rbp-1602], 1
+.L171:
+  mov r15, QWORD PTR [rbp-1602]
+  test r15, r15
+  jnz .L168
+.loc 1 725 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1714], r15
+  cmp r15, 42
+  je .L168
+.loc 1 722 0
+  mov QWORD PTR [rbp-1594], 0
+  jmp .L169
+.L168:
+  mov QWORD PTR [rbp-1594], 1
+.L169:
+  mov r15, QWORD PTR [rbp-1594]
+  test r15, r15
+  jnz .L166
+.loc 1 725 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1730], r15
+.loc 1 726 0
+.loc 1 725 0
+  cmp r15, 45
+  je .L166
+.loc 1 722 0
+  mov QWORD PTR [rbp-1586], 0
+  jmp .L167
+.L166:
+  mov QWORD PTR [rbp-1586], 1
+.L167:
+.loc 1 721 0
+  mov r15, QWORD PTR [rbp-1586]
+  test r15, r15
+  jz .L164
+.loc 1 726 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-1746], r15
+  add r15, 24
+  mov QWORD PTR [rbp-1754], r15
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-1762], r15
+  add r15, 24
+  mov QWORD PTR [rbp-1770], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-1778], r15
+.loc 1 727 0
+.loc 1 726 0
+  add r15, 1
+  mov QWORD PTR [rbp-1786], r15
+  mov rax, QWORD PTR [rbp-1786]
+  mov r15, QWORD PTR [rbp-1754]
+  mov QWORD PTR [r15], rax
+.loc 1 727 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_COMMA]
+  mov QWORD PTR [rbp-1802], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1794], r15
+  mov rax, QWORD PTR [rbp-1794]
+  mov DWORD PTR [rbp-141], eax
+.loc 1 729 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1810], r15
+  cmp r15, 58
+  jne .L178
+.loc 1 727 0
+.loc 1 729 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_COLON]
+  mov QWORD PTR [rbp-1834], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1826], r15
+  mov rax, QWORD PTR [rbp-1826]
+  mov DWORD PTR [rbp-141], eax
+.loc 1 727 0
+  jmp .L179
+.L178:
+.loc 1 731 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1842], r15
+  cmp r15, 91
+  jne .L180
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_LBRACKET]
+  mov QWORD PTR [rbp-1866], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1858], r15
+  mov rax, QWORD PTR [rbp-1858]
+  mov DWORD PTR [rbp-141], eax
+  jmp .L181
+.L180:
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1874], r15
+  cmp r15, 93
+  jne .L182
+.loc 1 732 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_RBRACKET]
+  mov QWORD PTR [rbp-1898], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1890], r15
+  mov rax, QWORD PTR [rbp-1890]
+  mov DWORD PTR [rbp-141], eax
+.loc 1 731 0
+  jmp .L183
+.L182:
+.loc 1 734 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1906], r15
+  cmp r15, 43
+  jne .L184
+.loc 1 732 0
+.loc 1 734 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_PLUS]
+  mov QWORD PTR [rbp-1930], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1922], r15
+  mov rax, QWORD PTR [rbp-1922]
+  mov DWORD PTR [rbp-141], eax
+.loc 1 732 0
+  jmp .L185
+.L184:
+.loc 1 735 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1938], r15
+  cmp r15, 42
+  jne .L186
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_STAR]
+  mov QWORD PTR [rbp-1962], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1954], r15
+  mov rax, QWORD PTR [rbp-1954]
+  mov DWORD PTR [rbp-141], eax
+  jmp .L187
+.L186:
+.loc 1 736 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-1970], r15
+.loc 1 737 0
+.loc 1 736 0
+  cmp r15, 45
+  jne .L188
+.loc 1 735 0
+.loc 1 737 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_MINUS]
+  mov QWORD PTR [rbp-1994], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-1986], r15
+  mov rax, QWORD PTR [rbp-1986]
+  mov DWORD PTR [rbp-141], eax
+.loc 1 735 0
+  jmp .L189
+.L188:
+.L189:
+.L187:
+.L185:
+.L183:
+.L181:
+.L179:
+.loc 1 737 0
+  xor r10, r10
+.loc 1 738 0
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-2002], r15
+  mov rdi, QWORD PTR [rbp-2002]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-2010], rax
+.loc 1 737 0
+.loc 1 738 0
+.loc 1 739 0
+  movsxd r15, DWORD PTR [rbp-141]
+  mov QWORD PTR [rbp-2018], r15
+.loc 1 738 0
+  mov rax, QWORD PTR [rbp-2018]
+  mov r15, QWORD PTR [rbp-2010]
+  mov DWORD PTR [r15], eax
+.loc 1 740 0
+  mov r15, QWORD PTR [rbp-2010]
+  add r15, 4
+  mov QWORD PTR [rbp-2026], r15
+.loc 1 741 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-2034], r15
+  mov r15, QWORD PTR [rbp-394]
+  add r15, QWORD PTR [rbp-2034]
+  mov QWORD PTR [rbp-2042], r15
+.loc 1 740 0
+  mov QWORD PTR [rbp-2050], r15
+  mov rax, QWORD PTR [rbp-2050]
+  mov r15, QWORD PTR [rbp-2026]
+  mov QWORD PTR [r15], rax
+.loc 1 741 0
+  mov r15, QWORD PTR [rbp-2010]
+  add r15, 12
+  mov QWORD PTR [rbp-2058], r15
+  mov QWORD PTR [rbp-2066], 1
+  mov rax, QWORD PTR [rbp-2066]
+  mov r15, QWORD PTR [rbp-2058]
+  mov DWORD PTR [r15], eax
+.loc 1 742 0
+.loc 1 743 0
+  mov r15, QWORD PTR [rbp-2010]
+  add r15, 16
+  mov QWORD PTR [rbp-2074], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-2082], r15
+  mov rax, QWORD PTR [rbp-2082]
+  mov r15, QWORD PTR [rbp-2074]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-2010]
+  add r15, 20
+  mov QWORD PTR [rbp-2090], r15
+  mov QWORD PTR [rbp-2098], 0
+  mov rax, QWORD PTR [rbp-2098]
+  mov r15, QWORD PTR [rbp-2090]
+  mov QWORD PTR [r15], rax
+.loc 1 744 0
+  mov r15, QWORD PTR [rbp-2010]
+  add r15, 28
+  mov QWORD PTR [rbp-2106], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-2122], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-2114], r15
+  mov rax, QWORD PTR [rbp-2114]
+  mov r15, QWORD PTR [rbp-2106]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-2010]
+  add r15, 32
+  mov QWORD PTR [rbp-2130], r15
+.loc 1 746 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-2146], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-2138], r15
+.loc 1 744 0
+  mov rax, QWORD PTR [rbp-2138]
+  mov r15, QWORD PTR [rbp-2130]
+  mov DWORD PTR [r15], eax
+.loc 1 746 0
+  mov r15, QWORD PTR [rbp-2010]
+  add r15, 36
+  mov QWORD PTR [rbp-2154], r15
+  mov QWORD PTR [rbp-2162], 0
+  mov rax, QWORD PTR [rbp-2162]
+  mov r15, QWORD PTR [rbp-2154]
+  mov DWORD PTR [r15], eax
+.loc 1 747 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-2170], r15
+  add r15, 1
+  mov QWORD PTR [rbp-2178], r15
+  mov rax, QWORD PTR [rbp-2178]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 721 0
+  jmp .L165
+.L164:
+.loc 1 748 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-2194], r15
+  cmp r15, 48
+  jb .L192
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-2210], r15
+  cmp r15, 57
+  ja .L192
+  mov QWORD PTR [rbp-2186], 1
+  jmp .L193
+.L192:
+  mov QWORD PTR [rbp-2186], 0
+.L193:
+  mov r15, QWORD PTR [rbp-2186]
+  test r15, r15
+  jz .L190
+.loc 1 749 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-2226], r15
+.loc 1 750 0
+.loc 1 749 0
+  add r15, 32
+  mov QWORD PTR [rbp-2234], r15
+.loc 1 750 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-2242], r15
+  add r15, 32
+  mov QWORD PTR [rbp-2250], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-2258], r15
+  add r15, 1
+  mov QWORD PTR [rbp-2266], r15
+.loc 1 749 0
+  mov rax, QWORD PTR [rbp-2266]
+  mov r15, QWORD PTR [rbp-2234]
+  mov QWORD PTR [r15], rax
+.loc 1 751 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-2274], r15
+.loc 1 752 0
+  mov QWORD PTR [rbp-2282], 0
+.loc 1 751 0
+  mov rax, QWORD PTR [rbp-2282]
+  mov QWORD PTR [rbp-165], rax
+.loc 1 753 0
+  xor r10, r10
+.loc 1 756 0
+.loc 1 758 0
+  mov r15, QWORD PTR [rbp-2274]
+  mov QWORD PTR [rbp-2290], r15
+  lea r15, [rbp-165]
+  mov QWORD PTR [rbp-2298], r15
+.loc 1 754 0
+  mov rdi, QWORD PTR [rbp-2714]
+  mov rsi, QWORD PTR [rbp-2290]
+  mov rdx, QWORD PTR [rbp-2698]
+  mov rcx, QWORD PTR [rbp-2298]
+  call _caustic_assembler_lexer_cst_parse_number_fast
+  mov QWORD PTR [rbp-2306], rax
+.loc 1 753 0
+.loc 1 763 0
+  xor r10, r10
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-2314], r15
+  mov rdi, QWORD PTR [rbp-2314]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-2322], rax
+.loc 1 764 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_NUMBER]
+  mov QWORD PTR [rbp-2338], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-2330], r15
+  mov rax, QWORD PTR [rbp-2330]
+  mov r15, QWORD PTR [rbp-2322]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-2322]
+  add r15, 4
+  mov QWORD PTR [rbp-2346], r15
+.loc 1 765 0
+  mov r15, QWORD PTR [rbp-394]
+  add r15, QWORD PTR [rbp-2274]
+  mov QWORD PTR [rbp-2354], r15
+  mov QWORD PTR [rbp-2362], r15
+.loc 1 764 0
+  mov rax, QWORD PTR [rbp-2362]
+  mov r15, QWORD PTR [rbp-2346]
+  mov QWORD PTR [r15], rax
+.loc 1 765 0
+  mov r15, QWORD PTR [rbp-2322]
+  add r15, 12
+  mov QWORD PTR [rbp-2370], r15
+.loc 1 767 0
+.loc 1 769 0
+.loc 1 767 0
+  mov r15, QWORD PTR [rbp-2306]
+  sub r15, QWORD PTR [rbp-2274]
+  mov QWORD PTR [rbp-2378], r15
+.loc 1 765 0
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-2386], r15
+  mov rax, QWORD PTR [rbp-2386]
+  mov r15, QWORD PTR [rbp-2370]
+  mov DWORD PTR [r15], eax
+.loc 1 769 0
+  mov r15, QWORD PTR [rbp-2322]
+  add r15, 16
+  mov QWORD PTR [rbp-2394], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-2402], r15
+  mov rax, QWORD PTR [rbp-2402]
+  mov r15, QWORD PTR [rbp-2394]
+  mov DWORD PTR [r15], eax
+.loc 1 770 0
+  mov r15, QWORD PTR [rbp-2322]
+  add r15, 20
+  mov QWORD PTR [rbp-2410], r15
+  mov r15, QWORD PTR [rbp-165]
+  mov QWORD PTR [rbp-2418], r15
+  mov rax, QWORD PTR [rbp-2418]
+  mov r15, QWORD PTR [rbp-2410]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-2322]
+  add r15, 28
+  mov QWORD PTR [rbp-2426], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-2442], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-2434], r15
+  mov rax, QWORD PTR [rbp-2434]
+  mov r15, QWORD PTR [rbp-2426]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-2322]
+  add r15, 32
+  mov QWORD PTR [rbp-2450], r15
+.loc 1 773 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-2466], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-2458], r15
+.loc 1 770 0
+  mov rax, QWORD PTR [rbp-2458]
+  mov r15, QWORD PTR [rbp-2450]
+  mov DWORD PTR [r15], eax
+.loc 1 773 0
+  mov r15, QWORD PTR [rbp-2322]
+  add r15, 36
+  mov QWORD PTR [rbp-2474], r15
+  mov QWORD PTR [rbp-2482], 0
+  mov rax, QWORD PTR [rbp-2482]
+  mov r15, QWORD PTR [rbp-2474]
+  mov DWORD PTR [r15], eax
+.loc 1 774 0
+  mov rax, QWORD PTR [rbp-2306]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 748 0
+  jmp .L191
+.L190:
+.loc 1 774 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-2490], r15
+  cmp r15, 46
+  jne .L194
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-2506], r15
+  add r15, 40
+  mov QWORD PTR [rbp-2514], r15
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-2522], r15
+  add r15, 40
+  mov QWORD PTR [rbp-2530], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-2538], r15
+.loc 1 775 0
+.loc 1 774 0
+  add r15, 1
+  mov QWORD PTR [rbp-2546], r15
+  mov rax, QWORD PTR [rbp-2546]
+  mov r15, QWORD PTR [rbp-2514]
+  mov QWORD PTR [r15], rax
+.loc 1 775 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-2554], r15
+.loc 1 776 0
+  mov QWORD PTR [rbp-2562], r15
+  add r15, 1
+  mov QWORD PTR [rbp-2570], r15
+  mov rax, QWORD PTR [rbp-2570]
+  mov QWORD PTR [rbp-92], rax
+.L196:
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-2586], r15
+.loc 1 777 0
+.loc 1 776 0
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L198
+.loc 1 777 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_char_tab]
+  mov QWORD PTR [rbp-2602], r15
+.loc 1 778 0
+  mov r15, QWORD PTR [rbp-2586]
+  mov QWORD PTR [rbp-2610], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-2610]
+  mov QWORD PTR [rbp-2618], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-2626], r15
+.loc 1 777 0
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-2634], r15
+  mov r15, QWORD PTR [rbp-2602]
+  add r15, QWORD PTR [rbp-2634]
+  mov QWORD PTR [rbp-2642], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-2650], r15
+.loc 1 778 0
+.loc 1 777 0
+  cmp r15, 0
+  je .L198
+.loc 1 776 0
+  mov QWORD PTR [rbp-2578], 1
+  jmp .L199
+.L198:
+  mov QWORD PTR [rbp-2578], 0
+.L199:
+  mov r15, QWORD PTR [rbp-2578]
+  test r15, r15
+  jz .L197
+.loc 1 778 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-2666], r15
+  add r15, 1
+  mov QWORD PTR [rbp-2674], r15
+  mov rax, QWORD PTR [rbp-2674]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 776 0
+  jmp .L196
+.L197:
+.loc 1 779 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-2682], r15
+.loc 1 780 0
+.loc 1 779 0
+  sub r15, QWORD PTR [rbp-2554]
+  mov QWORD PTR [rbp-2690], r15
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6146], r15
+.loc 1 778 0
+.loc 1 781 0
+  mov r15, QWORD PTR [rbp-394]
+  add r15, QWORD PTR [rbp-2554]
+  mov QWORD PTR [rbp-2706], r15
+  mov r13, r15
+.loc 1 780 0
+.loc 1 782 0
+  mov QWORD PTR [rbp-2722], 0
+.loc 1 781 0
+  mov rax, QWORD PTR [rbp-2722]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 783 0
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-2738], r15
+  cmp r15, 4
+  jl .L202
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-2754], r15
+.loc 1 785 0
+.loc 1 783 0
+  cmp r15, 14
+  jg .L202
+  mov QWORD PTR [rbp-2730], 1
+  jmp .L203
+.L202:
+  mov QWORD PTR [rbp-2730], 0
+.L203:
+.loc 1 782 0
+  mov r15, QWORD PTR [rbp-2730]
+  test r15, r15
+  jz .L200
+.loc 1 785 0
+  mov r15, r13
+  add r15, 1
+  mov QWORD PTR [rbp-2770], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-2778], r15
+  movzx r15, r15b
+  mov QWORD PTR [rbp-2818], r15
+  cmp r15, 116
+  jne .L212
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-2834], r15
+.loc 1 786 0
+.loc 1 785 0
+  cmp r15, 5
+  jne .L212
+  mov QWORD PTR [rbp-2810], 1
+  jmp .L213
+.L212:
+  mov QWORD PTR [rbp-2810], 0
+.L213:
+  mov r15, QWORD PTR [rbp-2810]
+  test r15, r15
+  jz .L210
+.loc 1 786 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-2850], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-2858], r15
+  cmp r15, 101
+  jne .L210
+.loc 1 785 0
+  mov QWORD PTR [rbp-2802], 1
+  jmp .L211
+.L210:
+  mov QWORD PTR [rbp-2802], 0
+.L211:
+  mov r15, QWORD PTR [rbp-2802]
+  test r15, r15
+  jz .L208
+.loc 1 786 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-2874], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-2882], r15
+.loc 1 787 0
+.loc 1 786 0
+  cmp r15, 120
+  jne .L208
+.loc 1 785 0
+  mov QWORD PTR [rbp-2794], 1
+  jmp .L209
+.L208:
+  mov QWORD PTR [rbp-2794], 0
+.L209:
+  mov r15, QWORD PTR [rbp-2794]
+  test r15, r15
+  jz .L206
+.loc 1 787 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-2898], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-2906], r15
+  cmp r15, 116
+  jne .L206
+.loc 1 785 0
+  mov QWORD PTR [rbp-2786], 1
+  jmp .L207
+.L206:
+  mov QWORD PTR [rbp-2786], 0
+.L207:
+  mov r15, QWORD PTR [rbp-2786]
+  test r15, r15
+  jz .L204
+.loc 1 787 0
+  mov QWORD PTR [rbp-2922], 1
+  mov rax, QWORD PTR [rbp-2922]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 785 0
+  jmp .L205
+.L204:
+.loc 1 787 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-2962], r15
+  cmp r15, 100
+  jne .L222
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-2978], r15
+  cmp r15, 5
+  jne .L222
+  mov QWORD PTR [rbp-2954], 1
+  jmp .L223
+.L222:
+  mov QWORD PTR [rbp-2954], 0
+.L223:
+  mov r15, QWORD PTR [rbp-2954]
+  test r15, r15
+  jz .L220
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-2994], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3002], r15
+.loc 1 790 0
+.loc 1 787 0
+  cmp r15, 97
+  jne .L220
+  mov QWORD PTR [rbp-2946], 1
+  jmp .L221
+.L220:
+  mov QWORD PTR [rbp-2946], 0
+.L221:
+  mov r15, QWORD PTR [rbp-2946]
+  test r15, r15
+  jz .L218
+.loc 1 790 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-3018], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3026], r15
+  cmp r15, 116
+  jne .L218
+.loc 1 787 0
+  mov QWORD PTR [rbp-2938], 1
+  jmp .L219
+.L218:
+  mov QWORD PTR [rbp-2938], 0
+.L219:
+  mov r15, QWORD PTR [rbp-2938]
+  test r15, r15
+  jz .L216
+.loc 1 790 0
+.loc 1 791 0
+.loc 1 790 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-3042], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3050], r15
+.loc 1 791 0
+.loc 1 790 0
+  cmp r15, 97
+  jne .L216
+.loc 1 787 0
+  mov QWORD PTR [rbp-2930], 1
+  jmp .L217
+.L216:
+  mov QWORD PTR [rbp-2930], 0
+.L217:
+  mov r15, QWORD PTR [rbp-2930]
+  test r15, r15
+  jz .L214
+.loc 1 791 0
+  mov QWORD PTR [rbp-3066], 1
+  mov rax, QWORD PTR [rbp-3066]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 787 0
+  jmp .L215
+.L214:
+.loc 1 791 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-3098], r15
+  cmp r15, 98
+  jne .L230
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-3114], r15
+.loc 1 792 0
+.loc 1 791 0
+  cmp r15, 4
+  jne .L230
+  mov QWORD PTR [rbp-3090], 1
+  jmp .L231
+.L230:
+  mov QWORD PTR [rbp-3090], 0
+.L231:
+  mov r15, QWORD PTR [rbp-3090]
+  test r15, r15
+  jz .L228
+.loc 1 792 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-3130], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3138], r15
+  cmp r15, 115
+  jne .L228
+.loc 1 791 0
+  mov QWORD PTR [rbp-3082], 1
+  jmp .L229
+.L228:
+  mov QWORD PTR [rbp-3082], 0
+.L229:
+  mov r15, QWORD PTR [rbp-3082]
+  test r15, r15
+  jz .L226
+.loc 1 792 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-3154], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3162], r15
+  cmp r15, 115
+  jne .L226
+.loc 1 791 0
+  mov QWORD PTR [rbp-3074], 1
+  jmp .L227
+.L226:
+  mov QWORD PTR [rbp-3074], 0
+.L227:
+  mov r15, QWORD PTR [rbp-3074]
+  test r15, r15
+  jz .L224
+.loc 1 793 0
+  mov QWORD PTR [rbp-3178], 1
+  mov rax, QWORD PTR [rbp-3178]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 791 0
+  jmp .L225
+.L224:
+.loc 1 793 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-3186], r15
+  cmp r15, 103
+  jne .L232
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-3234], r15
+  cmp r15, 6
+  jne .L242
+.loc 1 794 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-3250], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3258], r15
+  cmp r15, 108
+  jne .L242
+.loc 1 793 0
+  mov QWORD PTR [rbp-3226], 1
+  jmp .L243
+.L242:
+  mov QWORD PTR [rbp-3226], 0
+.L243:
+  mov r15, QWORD PTR [rbp-3226]
+  test r15, r15
+  jz .L240
+.loc 1 794 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-3274], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3282], r15
+.loc 1 795 0
+.loc 1 794 0
+  cmp r15, 111
+  jne .L240
+.loc 1 793 0
+  mov QWORD PTR [rbp-3218], 1
+  jmp .L241
+.L240:
+  mov QWORD PTR [rbp-3218], 0
+.L241:
+  mov r15, QWORD PTR [rbp-3218]
+  test r15, r15
+  jz .L238
+.loc 1 795 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-3298], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3306], r15
+  cmp r15, 98
+  jne .L238
+.loc 1 793 0
+  mov QWORD PTR [rbp-3210], 1
+  jmp .L239
+.L238:
+  mov QWORD PTR [rbp-3210], 0
+.L239:
+  mov r15, QWORD PTR [rbp-3210]
+  test r15, r15
+  jz .L236
+.loc 1 795 0
+  mov r15, r13
+  add r15, 5
+  mov QWORD PTR [rbp-3322], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3330], r15
+  cmp r15, 108
+  jne .L236
+.loc 1 793 0
+  mov QWORD PTR [rbp-3202], 1
+  jmp .L237
+.L236:
+  mov QWORD PTR [rbp-3202], 0
+.L237:
+  mov r15, QWORD PTR [rbp-3202]
+  test r15, r15
+  jz .L234
+.loc 1 795 0
+  mov QWORD PTR [rbp-3346], 1
+  mov rax, QWORD PTR [rbp-3346]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 793 0
+  jmp .L235
+.L234:
+.loc 1 796 0
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-3394], r15
+  cmp r15, 7
+  jne .L254
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-3410], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3418], r15
+  cmp r15, 108
+  jne .L254
+  mov QWORD PTR [rbp-3386], 1
+  jmp .L255
+.L254:
+  mov QWORD PTR [rbp-3386], 0
+.L255:
+  mov r15, QWORD PTR [rbp-3386]
+  test r15, r15
+  jz .L252
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-3434], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3442], r15
+.loc 1 797 0
+.loc 1 796 0
+  cmp r15, 111
+  jne .L252
+  mov QWORD PTR [rbp-3378], 1
+  jmp .L253
+.L252:
+  mov QWORD PTR [rbp-3378], 0
+.L253:
+  mov r15, QWORD PTR [rbp-3378]
+  test r15, r15
+  jz .L250
+.loc 1 797 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-3458], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3466], r15
+  cmp r15, 98
+  jne .L250
+.loc 1 796 0
+  mov QWORD PTR [rbp-3370], 1
+  jmp .L251
+.L250:
+  mov QWORD PTR [rbp-3370], 0
+.L251:
+  mov r15, QWORD PTR [rbp-3370]
+  test r15, r15
+  jz .L248
+.loc 1 797 0
+.loc 1 798 0
+  mov r15, r13
+  add r15, 5
+  mov QWORD PTR [rbp-3482], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3490], r15
+  cmp r15, 97
+  jne .L248
+.loc 1 796 0
+  mov QWORD PTR [rbp-3362], 1
+  jmp .L249
+.L248:
+  mov QWORD PTR [rbp-3362], 0
+.L249:
+  mov r15, QWORD PTR [rbp-3362]
+  test r15, r15
+  jz .L246
+.loc 1 798 0
+  mov r15, r13
+  add r15, 6
+  mov QWORD PTR [rbp-3506], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3514], r15
+  cmp r15, 108
+  jne .L246
+.loc 1 796 0
+  mov QWORD PTR [rbp-3354], 1
+  jmp .L247
+.L246:
+  mov QWORD PTR [rbp-3354], 0
+.L247:
+.loc 1 795 0
+  mov r15, QWORD PTR [rbp-3354]
+  test r15, r15
+  jz .L244
+.loc 1 799 0
+  mov QWORD PTR [rbp-3530], 1
+  mov rax, QWORD PTR [rbp-3530]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 795 0
+  jmp .L245
+.L244:
+.L245:
+.L235:
+.loc 1 793 0
+  jmp .L233
+.L232:
+.loc 1 803 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-3538], r15
+  cmp r15, 115
+  jne .L256
+.loc 1 800 0
+.loc 1 803 0
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-3594], r15
+  cmp r15, 7
+  jne .L268
+.loc 1 804 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-3610], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3618], r15
+  cmp r15, 116
+  jne .L268
+.loc 1 803 0
+  mov QWORD PTR [rbp-3586], 1
+  jmp .L269
+.L268:
+  mov QWORD PTR [rbp-3586], 0
+.L269:
+  mov r15, QWORD PTR [rbp-3586]
+  test r15, r15
+  jz .L266
+.loc 1 804 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-3634], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3642], r15
+  cmp r15, 114
+  jne .L266
+.loc 1 803 0
+  mov QWORD PTR [rbp-3578], 1
+  jmp .L267
+.L266:
+  mov QWORD PTR [rbp-3578], 0
+.L267:
+  mov r15, QWORD PTR [rbp-3578]
+  test r15, r15
+  jz .L264
+.loc 1 804 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-3658], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3666], r15
+.loc 1 805 0
+.loc 1 804 0
+  cmp r15, 105
+  jne .L264
+.loc 1 803 0
+  mov QWORD PTR [rbp-3570], 1
+  jmp .L265
+.L264:
+  mov QWORD PTR [rbp-3570], 0
+.L265:
+  mov r15, QWORD PTR [rbp-3570]
+  test r15, r15
+  jz .L262
+.loc 1 805 0
+  mov r15, r13
+  add r15, 5
+  mov QWORD PTR [rbp-3682], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3690], r15
+  cmp r15, 110
+  jne .L262
+.loc 1 803 0
+  mov QWORD PTR [rbp-3562], 1
+  jmp .L263
+.L262:
+  mov QWORD PTR [rbp-3562], 0
+.L263:
+  mov r15, QWORD PTR [rbp-3562]
+  test r15, r15
+  jz .L260
+.loc 1 805 0
+.loc 1 806 0
+.loc 1 805 0
+  mov r15, r13
+  add r15, 6
+  mov QWORD PTR [rbp-3706], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3714], r15
+.loc 1 806 0
+.loc 1 805 0
+  cmp r15, 103
+  jne .L260
+.loc 1 803 0
+  mov QWORD PTR [rbp-3554], 1
+  jmp .L261
+.L260:
+  mov QWORD PTR [rbp-3554], 0
+.L261:
+  mov r15, QWORD PTR [rbp-3554]
+  test r15, r15
+  jz .L258
+.loc 1 806 0
+  mov QWORD PTR [rbp-3730], 1
+  mov rax, QWORD PTR [rbp-3730]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 803 0
+  jmp .L259
+.L258:
+.loc 1 806 0
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-3786], r15
+  cmp r15, 8
+  jne .L282
+.loc 1 807 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-3802], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3810], r15
+  cmp r15, 101
+  jne .L282
+.loc 1 806 0
+  mov QWORD PTR [rbp-3778], 1
+  jmp .L283
+.L282:
+  mov QWORD PTR [rbp-3778], 0
+.L283:
+  mov r15, QWORD PTR [rbp-3778]
+  test r15, r15
+  jz .L280
+.loc 1 807 0
+.loc 1 808 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-3826], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3834], r15
+.loc 1 811 0
+.loc 1 808 0
+  cmp r15, 99
+  jne .L280
+.loc 1 806 0
+  mov QWORD PTR [rbp-3770], 1
+  jmp .L281
+.L280:
+  mov QWORD PTR [rbp-3770], 0
+.L281:
+  mov r15, QWORD PTR [rbp-3770]
+  test r15, r15
+  jz .L278
+.loc 1 811 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-3850], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3858], r15
+  cmp r15, 116
+  jne .L278
+.loc 1 806 0
+  mov QWORD PTR [rbp-3762], 1
+  jmp .L279
+.L278:
+  mov QWORD PTR [rbp-3762], 0
+.L279:
+  mov r15, QWORD PTR [rbp-3762]
+  test r15, r15
+  jz .L276
+.loc 1 811 0
+  mov r15, r13
+  add r15, 5
+  mov QWORD PTR [rbp-3874], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3882], r15
+.loc 1 812 0
+.loc 1 811 0
+  cmp r15, 105
+  jne .L276
+.loc 1 806 0
+  mov QWORD PTR [rbp-3754], 1
+  jmp .L277
+.L276:
+  mov QWORD PTR [rbp-3754], 0
+.L277:
+  mov r15, QWORD PTR [rbp-3754]
+  test r15, r15
+  jz .L274
+.loc 1 812 0
+  mov r15, r13
+  add r15, 6
+  mov QWORD PTR [rbp-3898], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3906], r15
+  cmp r15, 111
+  jne .L274
+.loc 1 806 0
+  mov QWORD PTR [rbp-3746], 1
+  jmp .L275
+.L274:
+  mov QWORD PTR [rbp-3746], 0
+.L275:
+  mov r15, QWORD PTR [rbp-3746]
+  test r15, r15
+  jz .L272
+.loc 1 813 0
+  mov r15, r13
+  add r15, 7
+  mov QWORD PTR [rbp-3922], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-3930], r15
+  cmp r15, 110
+  jne .L272
+.loc 1 806 0
+  mov QWORD PTR [rbp-3738], 1
+  jmp .L273
+.L272:
+  mov QWORD PTR [rbp-3738], 0
+.L273:
+  mov r15, QWORD PTR [rbp-3738]
+  test r15, r15
+  jz .L270
+.loc 1 813 0
+  mov QWORD PTR [rbp-3946], 1
+  mov rax, QWORD PTR [rbp-3946]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 806 0
+  jmp .L271
+.L270:
+.L271:
+.L259:
+.loc 1 800 0
+  jmp .L257
+.L256:
+.loc 1 814 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-3986], r15
+  cmp r15, 98
+  jne .L292
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-4002], r15
+  cmp r15, 5
+  jne .L292
+  mov QWORD PTR [rbp-3978], 1
+  jmp .L293
+.L292:
+  mov QWORD PTR [rbp-3978], 0
+.L293:
+  mov r15, QWORD PTR [rbp-3978]
+  test r15, r15
+  jz .L290
+.loc 1 815 0
+.loc 1 814 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-4018], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4026], r15
+.loc 1 815 0
+.loc 1 814 0
+  cmp r15, 121
+  jne .L290
+  mov QWORD PTR [rbp-3970], 1
+  jmp .L291
+.L290:
+  mov QWORD PTR [rbp-3970], 0
+.L291:
+  mov r15, QWORD PTR [rbp-3970]
+  test r15, r15
+  jz .L288
+.loc 1 815 0
+.loc 1 816 0
+.loc 1 815 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-4042], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4050], r15
+.loc 1 816 0
+.loc 1 815 0
+  cmp r15, 116
+  jne .L288
+.loc 1 814 0
+  mov QWORD PTR [rbp-3962], 1
+  jmp .L289
+.L288:
+  mov QWORD PTR [rbp-3962], 0
+.L289:
+  mov r15, QWORD PTR [rbp-3962]
+  test r15, r15
+  jz .L286
+.loc 1 816 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-4066], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4074], r15
+.loc 1 817 0
+.loc 1 816 0
+  cmp r15, 101
+  jne .L286
+.loc 1 814 0
+  mov QWORD PTR [rbp-3954], 1
+  jmp .L287
+.L286:
+  mov QWORD PTR [rbp-3954], 0
+.L287:
+.loc 1 813 0
+  mov r15, QWORD PTR [rbp-3954]
+  test r15, r15
+  jz .L284
+.loc 1 817 0
+  mov QWORD PTR [rbp-4090], 1
+  mov rax, QWORD PTR [rbp-4090]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 813 0
+  jmp .L285
+.L284:
+.loc 1 819 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-4130], r15
+.loc 1 825 0
+.loc 1 819 0
+  cmp r15, 119
+  jne .L302
+.loc 1 825 0
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-4146], r15
+  cmp r15, 5
+  jne .L302
+.loc 1 819 0
+  mov QWORD PTR [rbp-4122], 1
+  jmp .L303
+.L302:
+  mov QWORD PTR [rbp-4122], 0
+.L303:
+  mov r15, QWORD PTR [rbp-4122]
+  test r15, r15
+  jz .L300
+.loc 1 825 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-4162], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4170], r15
+.loc 1 826 0
+.loc 1 825 0
+  cmp r15, 111
+  jne .L300
+.loc 1 819 0
+  mov QWORD PTR [rbp-4114], 1
+  jmp .L301
+.L300:
+  mov QWORD PTR [rbp-4114], 0
+.L301:
+  mov r15, QWORD PTR [rbp-4114]
+  test r15, r15
+  jz .L298
+.loc 1 826 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-4186], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4194], r15
+  cmp r15, 114
+  jne .L298
+.loc 1 819 0
+  mov QWORD PTR [rbp-4106], 1
+  jmp .L299
+.L298:
+  mov QWORD PTR [rbp-4106], 0
+.L299:
+  mov r15, QWORD PTR [rbp-4106]
+  test r15, r15
+  jz .L296
+.loc 1 828 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-4210], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4218], r15
+  cmp r15, 100
+  jne .L296
+.loc 1 819 0
+  mov QWORD PTR [rbp-4098], 1
+  jmp .L297
+.L296:
+  mov QWORD PTR [rbp-4098], 0
+.L297:
+.loc 1 818 0
+  mov r15, QWORD PTR [rbp-4098]
+  test r15, r15
+  jz .L294
+.loc 1 829 0
+  mov QWORD PTR [rbp-4234], 1
+  mov rax, QWORD PTR [rbp-4234]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 818 0
+  jmp .L295
+.L294:
+.loc 1 830 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-4274], r15
+  cmp r15, 108
+  jne .L312
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-4290], r15
+  cmp r15, 5
+  jne .L312
+  mov QWORD PTR [rbp-4266], 1
+  jmp .L313
+.L312:
+  mov QWORD PTR [rbp-4266], 0
+.L313:
+  mov r15, QWORD PTR [rbp-4266]
+  test r15, r15
+  jz .L310
+.loc 1 831 0
+.loc 1 830 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-4306], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4314], r15
+.loc 1 831 0
+.loc 1 830 0
+  cmp r15, 111
+  jne .L310
+  mov QWORD PTR [rbp-4258], 1
+  jmp .L311
+.L310:
+  mov QWORD PTR [rbp-4258], 0
+.L311:
+  mov r15, QWORD PTR [rbp-4258]
+  test r15, r15
+  jz .L308
+.loc 1 831 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-4330], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4338], r15
+  cmp r15, 110
+  jne .L308
+.loc 1 830 0
+  mov QWORD PTR [rbp-4250], 1
+  jmp .L309
+.L308:
+  mov QWORD PTR [rbp-4250], 0
+.L309:
+  mov r15, QWORD PTR [rbp-4250]
+  test r15, r15
+  jz .L306
+.loc 1 831 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-4354], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4362], r15
+.loc 1 834 0
+.loc 1 831 0
+  cmp r15, 103
+  jne .L306
+.loc 1 830 0
+  mov QWORD PTR [rbp-4242], 1
+  jmp .L307
+.L306:
+  mov QWORD PTR [rbp-4242], 0
+.L307:
+.loc 1 829 0
+  mov r15, QWORD PTR [rbp-4242]
+  test r15, r15
+  jz .L304
+.loc 1 834 0
+  mov QWORD PTR [rbp-4378], 1
+  mov rax, QWORD PTR [rbp-4378]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 829 0
+  jmp .L305
+.L304:
+.loc 1 834 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-4418], r15
+  cmp r15, 113
+  jne .L322
+.loc 1 835 0
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-4434], r15
+  cmp r15, 5
+  jne .L322
+.loc 1 834 0
+  mov QWORD PTR [rbp-4410], 1
+  jmp .L323
+.L322:
+  mov QWORD PTR [rbp-4410], 0
+.L323:
+  mov r15, QWORD PTR [rbp-4410]
+  test r15, r15
+  jz .L320
+.loc 1 835 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-4450], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4458], r15
+  cmp r15, 117
+  jne .L320
+.loc 1 834 0
+  mov QWORD PTR [rbp-4402], 1
+  jmp .L321
+.L320:
+  mov QWORD PTR [rbp-4402], 0
+.L321:
+  mov r15, QWORD PTR [rbp-4402]
+  test r15, r15
+  jz .L318
+.loc 1 836 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-4474], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4482], r15
+  cmp r15, 97
+  jne .L318
+.loc 1 834 0
+  mov QWORD PTR [rbp-4394], 1
+  jmp .L319
+.L318:
+  mov QWORD PTR [rbp-4394], 0
+.L319:
+  mov r15, QWORD PTR [rbp-4394]
+  test r15, r15
+  jz .L316
+.loc 1 836 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-4498], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4506], r15
+.loc 1 837 0
+.loc 1 836 0
+  cmp r15, 100
+  jne .L316
+.loc 1 834 0
+  mov QWORD PTR [rbp-4386], 1
+  jmp .L317
+.L316:
+  mov QWORD PTR [rbp-4386], 0
+.L317:
+  mov r15, QWORD PTR [rbp-4386]
+  test r15, r15
+  jz .L314
+.loc 1 837 0
+  mov QWORD PTR [rbp-4522], 1
+  mov rax, QWORD PTR [rbp-4522]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 834 0
+  jmp .L315
+.L314:
+.loc 1 837 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-4562], r15
+.loc 1 838 0
+.loc 1 837 0
+  cmp r15, 122
+  jne .L332
+.loc 1 838 0
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-4578], r15
+.loc 1 839 0
+.loc 1 838 0
+  cmp r15, 5
+  jne .L332
+.loc 1 837 0
+  mov QWORD PTR [rbp-4554], 1
+  jmp .L333
+.L332:
+  mov QWORD PTR [rbp-4554], 0
+.L333:
+  mov r15, QWORD PTR [rbp-4554]
+  test r15, r15
+  jz .L330
+.loc 1 839 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-4594], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4602], r15
+.loc 1 840 0
+.loc 1 839 0
+  cmp r15, 101
+  jne .L330
+.loc 1 837 0
+  mov QWORD PTR [rbp-4546], 1
+  jmp .L331
+.L330:
+  mov QWORD PTR [rbp-4546], 0
+.L331:
+  mov r15, QWORD PTR [rbp-4546]
+  test r15, r15
+  jz .L328
+.loc 1 840 0
+.loc 1 841 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-4618], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4626], r15
+.loc 1 845 0
+.loc 1 841 0
+  cmp r15, 114
+  jne .L328
+.loc 1 837 0
+  mov QWORD PTR [rbp-4538], 1
+  jmp .L329
+.L328:
+  mov QWORD PTR [rbp-4538], 0
+.L329:
+  mov r15, QWORD PTR [rbp-4538]
+  test r15, r15
+  jz .L326
+.loc 1 845 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-4642], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4650], r15
+  cmp r15, 111
+  jne .L326
+.loc 1 837 0
+  mov QWORD PTR [rbp-4530], 1
+  jmp .L327
+.L326:
+  mov QWORD PTR [rbp-4530], 0
+.L327:
+  mov r15, QWORD PTR [rbp-4530]
+  test r15, r15
+  jz .L324
+.loc 1 846 0
+  mov QWORD PTR [rbp-4666], 1
+  mov rax, QWORD PTR [rbp-4666]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 837 0
+  jmp .L325
+.L324:
+.loc 1 846 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-4714], r15
+  cmp r15, 97
+  jne .L344
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-4730], r15
+  cmp r15, 6
+  jne .L344
+  mov QWORD PTR [rbp-4706], 1
+  jmp .L345
+.L344:
+  mov QWORD PTR [rbp-4706], 0
+.L345:
+  mov r15, QWORD PTR [rbp-4706]
+  test r15, r15
+  jz .L342
+.loc 1 847 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-4746], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4754], r15
+  cmp r15, 115
+  jne .L342
+.loc 1 846 0
+  mov QWORD PTR [rbp-4698], 1
+  jmp .L343
+.L342:
+  mov QWORD PTR [rbp-4698], 0
+.L343:
+  mov r15, QWORD PTR [rbp-4698]
+  test r15, r15
+  jz .L340
+.loc 1 847 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-4770], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4778], r15
+  cmp r15, 99
+  jne .L340
+.loc 1 846 0
+  mov QWORD PTR [rbp-4690], 1
+  jmp .L341
+.L340:
+  mov QWORD PTR [rbp-4690], 0
+.L341:
+  mov r15, QWORD PTR [rbp-4690]
+  test r15, r15
+  jz .L338
+.loc 1 847 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-4794], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4802], r15
+  cmp r15, 105
+  jne .L338
+.loc 1 846 0
+  mov QWORD PTR [rbp-4682], 1
+  jmp .L339
+.L338:
+  mov QWORD PTR [rbp-4682], 0
+.L339:
+  mov r15, QWORD PTR [rbp-4682]
+  test r15, r15
+  jz .L336
+.loc 1 850 0
+  mov r15, r13
+  add r15, 5
+  mov QWORD PTR [rbp-4818], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4826], r15
+  cmp r15, 105
+  jne .L336
+.loc 1 846 0
+  mov QWORD PTR [rbp-4674], 1
+  jmp .L337
+.L336:
+  mov QWORD PTR [rbp-4674], 0
+.L337:
+  mov r15, QWORD PTR [rbp-4674]
+  test r15, r15
+  jz .L334
+.loc 1 850 0
+.loc 1 851 0
+  mov QWORD PTR [rbp-4842], 1
+.loc 1 850 0
+  mov rax, QWORD PTR [rbp-4842]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 846 0
+  jmp .L335
+.L334:
+.loc 1 851 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-4890], r15
+  cmp r15, 97
+  jne .L356
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-4906], r15
+  cmp r15, 6
+  jne .L356
+  mov QWORD PTR [rbp-4882], 1
+  jmp .L357
+.L356:
+  mov QWORD PTR [rbp-4882], 0
+.L357:
+  mov r15, QWORD PTR [rbp-4882]
+  test r15, r15
+  jz .L354
+.loc 1 852 0
+.loc 1 851 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-4922], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4930], r15
+.loc 1 852 0
+.loc 1 851 0
+  cmp r15, 115
+  jne .L354
+  mov QWORD PTR [rbp-4874], 1
+  jmp .L355
+.L354:
+  mov QWORD PTR [rbp-4874], 0
+.L355:
+  mov r15, QWORD PTR [rbp-4874]
+  test r15, r15
+  jz .L352
+.loc 1 852 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-4946], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4954], r15
+  cmp r15, 99
+  jne .L352
+.loc 1 851 0
+  mov QWORD PTR [rbp-4866], 1
+  jmp .L353
+.L352:
+  mov QWORD PTR [rbp-4866], 0
+.L353:
+  mov r15, QWORD PTR [rbp-4866]
+  test r15, r15
+  jz .L350
+.loc 1 852 0
+.loc 1 853 0
+.loc 1 852 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-4970], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-4978], r15
+.loc 1 853 0
+.loc 1 852 0
+  cmp r15, 105
+  jne .L350
+.loc 1 851 0
+  mov QWORD PTR [rbp-4858], 1
+  jmp .L351
+.L350:
+  mov QWORD PTR [rbp-4858], 0
+.L351:
+  mov r15, QWORD PTR [rbp-4858]
+  test r15, r15
+  jz .L348
+.loc 1 853 0
+  mov r15, r13
+  add r15, 5
+  mov QWORD PTR [rbp-4994], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5002], r15
+  cmp r15, 122
+  jne .L348
+.loc 1 851 0
+  mov QWORD PTR [rbp-4850], 1
+  jmp .L349
+.L348:
+  mov QWORD PTR [rbp-4850], 0
+.L349:
+  mov r15, QWORD PTR [rbp-4850]
+  test r15, r15
+  jz .L346
+.loc 1 853 0
+  mov QWORD PTR [rbp-5018], 1
+  mov rax, QWORD PTR [rbp-5018]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 851 0
+  jmp .L347
+.L346:
+.loc 1 856 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5066], r15
+  cmp r15, 118
+  jne .L368
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-5082], r15
+  cmp r15, 6
+  jne .L368
+  mov QWORD PTR [rbp-5058], 1
+  jmp .L369
+.L368:
+  mov QWORD PTR [rbp-5058], 0
+.L369:
+  mov r15, QWORD PTR [rbp-5058]
+  test r15, r15
+  jz .L366
+.loc 1 857 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-5098], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5106], r15
+  cmp r15, 97
+  jne .L366
+.loc 1 856 0
+  mov QWORD PTR [rbp-5050], 1
+  jmp .L367
+.L366:
+  mov QWORD PTR [rbp-5050], 0
+.L367:
+  mov r15, QWORD PTR [rbp-5050]
+  test r15, r15
+  jz .L364
+.loc 1 857 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-5122], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5130], r15
+  cmp r15, 108
+  jne .L364
+.loc 1 856 0
+  mov QWORD PTR [rbp-5042], 1
+  jmp .L365
+.L364:
+  mov QWORD PTR [rbp-5042], 0
+.L365:
+  mov r15, QWORD PTR [rbp-5042]
+  test r15, r15
+  jz .L362
+.loc 1 858 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-5146], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5154], r15
+  cmp r15, 117
+  jne .L362
+.loc 1 856 0
+  mov QWORD PTR [rbp-5034], 1
+  jmp .L363
+.L362:
+  mov QWORD PTR [rbp-5034], 0
+.L363:
+  mov r15, QWORD PTR [rbp-5034]
+  test r15, r15
+  jz .L360
+.loc 1 858 0
+.loc 1 859 0
+.loc 1 858 0
+  mov r15, r13
+  add r15, 5
+  mov QWORD PTR [rbp-5170], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5178], r15
+.loc 1 859 0
+.loc 1 858 0
+  cmp r15, 101
+  jne .L360
+.loc 1 856 0
+  mov QWORD PTR [rbp-5026], 1
+  jmp .L361
+.L360:
+  mov QWORD PTR [rbp-5026], 0
+.L361:
+  mov r15, QWORD PTR [rbp-5026]
+  test r15, r15
+  jz .L358
+.loc 1 859 0
+  mov QWORD PTR [rbp-5194], 1
+  mov rax, QWORD PTR [rbp-5194]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 856 0
+  jmp .L359
+.L358:
+.loc 1 859 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5250], r15
+  cmp r15, 114
+  jne .L382
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-5266], r15
+.loc 1 862 0
+.loc 1 859 0
+  cmp r15, 7
+  jne .L382
+  mov QWORD PTR [rbp-5242], 1
+  jmp .L383
+.L382:
+  mov QWORD PTR [rbp-5242], 0
+.L383:
+  mov r15, QWORD PTR [rbp-5242]
+  test r15, r15
+  jz .L380
+.loc 1 862 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-5282], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5290], r15
+  cmp r15, 111
+  jne .L380
+.loc 1 859 0
+  mov QWORD PTR [rbp-5234], 1
+  jmp .L381
+.L380:
+  mov QWORD PTR [rbp-5234], 0
+.L381:
+  mov r15, QWORD PTR [rbp-5234]
+  test r15, r15
+  jz .L378
+.loc 1 863 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-5306], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5314], r15
+  cmp r15, 100
+  jne .L378
+.loc 1 859 0
+  mov QWORD PTR [rbp-5226], 1
+  jmp .L379
+.L378:
+  mov QWORD PTR [rbp-5226], 0
+.L379:
+  mov r15, QWORD PTR [rbp-5226]
+  test r15, r15
+  jz .L376
+.loc 1 863 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-5330], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5338], r15
+  cmp r15, 97
+  jne .L376
+.loc 1 859 0
+  mov QWORD PTR [rbp-5218], 1
+  jmp .L377
+.L376:
+  mov QWORD PTR [rbp-5218], 0
+.L377:
+  mov r15, QWORD PTR [rbp-5218]
+  test r15, r15
+  jz .L374
+.loc 1 863 0
+.loc 1 864 0
+  mov r15, r13
+  add r15, 5
+  mov QWORD PTR [rbp-5354], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5362], r15
+  cmp r15, 116
+  jne .L374
+.loc 1 859 0
+  mov QWORD PTR [rbp-5210], 1
+  jmp .L375
+.L374:
+  mov QWORD PTR [rbp-5210], 0
+.L375:
+  mov r15, QWORD PTR [rbp-5210]
+  test r15, r15
+  jz .L372
+.loc 1 864 0
+  mov r15, r13
+  add r15, 6
+  mov QWORD PTR [rbp-5378], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5386], r15
+  cmp r15, 97
+  jne .L372
+.loc 1 859 0
+  mov QWORD PTR [rbp-5202], 1
+  jmp .L373
+.L372:
+  mov QWORD PTR [rbp-5202], 0
+.L373:
+  mov r15, QWORD PTR [rbp-5202]
+  test r15, r15
+  jz .L370
+.loc 1 864 0
+.loc 1 865 0
+  mov QWORD PTR [rbp-5402], 1
+.loc 1 864 0
+  mov rax, QWORD PTR [rbp-5402]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 859 0
+  jmp .L371
+.L370:
+.loc 1 865 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5410], r15
+  cmp r15, 105
+  jne .L384
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-5426], r15
+.loc 1 866 0
+.loc 1 865 0
+  cmp r15, 14
+  jne .L386
+.loc 1 866 0
+  mov QWORD PTR [rbp-5442], 1
+  mov rax, QWORD PTR [rbp-5442]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 865 0
+  jmp .L387
+.L386:
+.L387:
+  jmp .L385
+.L384:
+.loc 1 867 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5450], r15
+  cmp r15, 102
+  jne .L388
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-5490], r15
+  cmp r15, 5
+  jne .L396
+.loc 1 868 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-5506], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5514], r15
+  cmp r15, 105
+  jne .L396
+.loc 1 867 0
+  mov QWORD PTR [rbp-5482], 1
+  jmp .L397
+.L396:
+  mov QWORD PTR [rbp-5482], 0
+.L397:
+  mov r15, QWORD PTR [rbp-5482]
+  test r15, r15
+  jz .L394
+.loc 1 868 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-5530], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5538], r15
+  cmp r15, 108
+  jne .L394
+.loc 1 867 0
+  mov QWORD PTR [rbp-5474], 1
+  jmp .L395
+.L394:
+  mov QWORD PTR [rbp-5474], 0
+.L395:
+  mov r15, QWORD PTR [rbp-5474]
+  test r15, r15
+  jz .L392
+.loc 1 868 0
+  mov r15, r13
+  add r15, 4
+  mov QWORD PTR [rbp-5554], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5562], r15
+  cmp r15, 101
+  jne .L392
+.loc 1 867 0
+  mov QWORD PTR [rbp-5466], 1
+  jmp .L393
+.L392:
+  mov QWORD PTR [rbp-5466], 0
+.L393:
+  mov r15, QWORD PTR [rbp-5466]
+  test r15, r15
+  jz .L390
+.loc 1 868 0
+.loc 1 869 0
+  mov QWORD PTR [rbp-5578], 1
+.loc 1 868 0
+  mov rax, QWORD PTR [rbp-5578]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 867 0
+  jmp .L391
+.L390:
+.L391:
+  jmp .L389
+.L388:
+.loc 1 869 0
+  mov r15, QWORD PTR [rbp-2778]
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5586], r15
+  cmp r15, 108
+  jne .L398
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-5618], r15
+  cmp r15, 4
+  jne .L404
+.loc 1 872 0
+  mov r15, r13
+  add r15, 2
+  mov QWORD PTR [rbp-5634], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5642], r15
+  cmp r15, 111
+  jne .L404
+.loc 1 869 0
+  mov QWORD PTR [rbp-5610], 1
+  jmp .L405
+.L404:
+  mov QWORD PTR [rbp-5610], 0
+.L405:
+  mov r15, QWORD PTR [rbp-5610]
+  test r15, r15
+  jz .L402
+.loc 1 872 0
+  mov r15, r13
+  add r15, 3
+  mov QWORD PTR [rbp-5658], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-5666], r15
+.loc 1 873 0
+.loc 1 872 0
+  cmp r15, 99
+  jne .L402
+.loc 1 869 0
+  mov QWORD PTR [rbp-5602], 1
+  jmp .L403
+.L402:
+  mov QWORD PTR [rbp-5602], 0
+.L403:
+  mov r15, QWORD PTR [rbp-5602]
+  test r15, r15
+  jz .L400
+.loc 1 873 0
+  mov QWORD PTR [rbp-5682], 1
+  mov rax, QWORD PTR [rbp-5682]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 869 0
+  jmp .L401
+.L400:
+.L401:
+  jmp .L399
+.L398:
+.L399:
+.L389:
+.L385:
+.L371:
+.L359:
+.L347:
+.L335:
+.L325:
+.L315:
+.L305:
+.L295:
+.L285:
+.L257:
+.L233:
+.L225:
+.L215:
+.L205:
+.loc 1 782 0
+  jmp .L201
+.L200:
+.L201:
+.loc 1 873 0
+  xor r10, r10
+.loc 1 874 0
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-5690], r15
+  mov rdi, QWORD PTR [rbp-5690]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-5698], rax
+.loc 1 873 0
+.loc 1 875 0
+  movsxd r15, DWORD PTR [rbp-205]
+  mov QWORD PTR [rbp-5706], r15
+  cmp r15, 1
+  jne .L406
+.loc 1 876 0
+.loc 1 877 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_DIRECTIVE]
+  mov QWORD PTR [rbp-5730], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-5722], r15
+.loc 1 876 0
+  mov rax, QWORD PTR [rbp-5722]
+  mov r15, QWORD PTR [rbp-5698]
+  mov DWORD PTR [r15], eax
+.loc 1 875 0
+  jmp .L407
+.L406:
+.loc 1 878 0
+.loc 1 880 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
+  mov QWORD PTR [rbp-5746], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-5738], r15
+.loc 1 878 0
+  mov rax, QWORD PTR [rbp-5738]
+  mov r15, QWORD PTR [rbp-5698]
+  mov DWORD PTR [r15], eax
+.L407:
+.loc 1 880 0
+  mov r15, QWORD PTR [rbp-5698]
+  add r15, 4
+  mov QWORD PTR [rbp-5754], r15
+  mov rax, r13
+  mov r15, QWORD PTR [rbp-5754]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-5698]
+  add r15, 12
+  mov QWORD PTR [rbp-5762], r15
+  mov r15, QWORD PTR [rbp-6146]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-5770], r15
+  mov rax, QWORD PTR [rbp-5770]
+  mov r15, QWORD PTR [rbp-5762]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-5698]
+  add r15, 16
+  mov QWORD PTR [rbp-5778], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-5786], r15
+  mov rax, QWORD PTR [rbp-5786]
+  mov r15, QWORD PTR [rbp-5778]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-5698]
+  add r15, 20
+  mov QWORD PTR [rbp-5794], r15
+.loc 1 881 0
+  mov QWORD PTR [rbp-5802], 0
+.loc 1 880 0
+  mov rax, QWORD PTR [rbp-5802]
+  mov r15, QWORD PTR [rbp-5794]
+  mov QWORD PTR [r15], rax
+.loc 1 881 0
+  mov r15, QWORD PTR [rbp-5698]
+  add r15, 28
+  mov QWORD PTR [rbp-5810], r15
+.loc 1 882 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-5826], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-5818], r15
+.loc 1 881 0
+  mov rax, QWORD PTR [rbp-5818]
+  mov r15, QWORD PTR [rbp-5810]
+  mov DWORD PTR [r15], eax
+.loc 1 882 0
+  mov r15, QWORD PTR [rbp-5698]
+  add r15, 32
+  mov QWORD PTR [rbp-5834], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-5850], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-5842], r15
+  mov rax, QWORD PTR [rbp-5842]
+  mov r15, QWORD PTR [rbp-5834]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-5698]
+  add r15, 36
+  mov QWORD PTR [rbp-5858], r15
+  mov QWORD PTR [rbp-5866], 0
+  mov rax, QWORD PTR [rbp-5866]
+  mov r15, QWORD PTR [rbp-5858]
+  mov DWORD PTR [r15], eax
+.loc 1 774 0
+  jmp .L195
+.L194:
+.loc 1 886 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5898], r15
+  cmp r15, 65
+  jb .L414
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5914], r15
+  cmp r15, 90
+  ja .L414
+  mov QWORD PTR [rbp-5890], 1
+  jmp .L415
+.L414:
+  mov QWORD PTR [rbp-5890], 0
+.L415:
+  mov r15, QWORD PTR [rbp-5890]
+  test r15, r15
+  jnz .L412
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5938], r15
+  cmp r15, 97
+  jb .L416
+.loc 1 887 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5954], r15
+  cmp r15, 122
+  ja .L416
+.loc 1 886 0
+  mov QWORD PTR [rbp-5930], 1
+  jmp .L417
+.L416:
+  mov QWORD PTR [rbp-5930], 0
+.L417:
+  mov r15, QWORD PTR [rbp-5930]
+  test r15, r15
+  jnz .L412
+  mov QWORD PTR [rbp-5882], 0
+  jmp .L413
+.L412:
+  mov QWORD PTR [rbp-5882], 1
+.L413:
+  mov r15, QWORD PTR [rbp-5882]
+  test r15, r15
+  jnz .L410
+.loc 1 887 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-5970], r15
+.loc 1 888 0
+.loc 1 887 0
+  cmp r15, 95
+  je .L410
+.loc 1 886 0
+  mov QWORD PTR [rbp-5874], 0
+  jmp .L411
+.L410:
+  mov QWORD PTR [rbp-5874], 1
+.L411:
+.loc 1 883 0
+  mov r15, QWORD PTR [rbp-5874]
+  test r15, r15
+  jz .L408
+.loc 1 888 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-5986], r15
+.loc 1 889 0
+  mov QWORD PTR [rbp-5994], r15
+.loc 1 890 0
+.loc 1 889 0
+  add r15, 1
+  mov QWORD PTR [rbp-6002], r15
+.loc 1 888 0
+  mov rax, QWORD PTR [rbp-6002]
+  mov QWORD PTR [rbp-92], rax
+.L418:
+.loc 1 893 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-6018], r15
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L420
+  lea r15, [rip+_caustic_assembler_lexer_cst_char_tab]
+  mov QWORD PTR [rbp-6034], r15
+.loc 1 894 0
+  mov r15, QWORD PTR [rbp-6018]
+  mov QWORD PTR [rbp-6042], r15
+.loc 1 893 0
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-6042]
+  mov QWORD PTR [rbp-6050], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6058], r15
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6066], r15
+  mov r15, QWORD PTR [rbp-6034]
+  add r15, QWORD PTR [rbp-6066]
+  mov QWORD PTR [rbp-6074], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6082], r15
+.loc 1 894 0
+.loc 1 893 0
+  cmp r15, 0
+  je .L420
+  mov QWORD PTR [rbp-6010], 1
+  jmp .L421
+.L420:
+  mov QWORD PTR [rbp-6010], 0
+.L421:
+  mov r15, QWORD PTR [rbp-6010]
+  test r15, r15
+  jz .L419
+.loc 1 894 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-6098], r15
+  add r15, 1
+  mov QWORD PTR [rbp-6106], r15
+  mov rax, QWORD PTR [rbp-6106]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 893 0
+  jmp .L418
+.L419:
+.loc 1 897 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-6114], r15
+  sub r15, QWORD PTR [rbp-5986]
+  mov QWORD PTR [rbp-6122], r15
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6130], r15
+.loc 1 894 0
+.loc 1 899 0
+  mov r15, QWORD PTR [rbp-394]
+  add r15, QWORD PTR [rbp-5986]
+  mov QWORD PTR [rbp-6138], r15
+  mov r12, r15
+.loc 1 898 0
+.loc 1 899 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6154], r15
+  cmp r15, 9
+  jg .L422
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-6170], r15
+.loc 1 900 0
+  add r15, 48
+  mov QWORD PTR [rbp-6178], r15
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-6186], r15
+  add r15, 48
+  mov QWORD PTR [rbp-6194], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-6202], r15
+  add r15, 1
+  mov QWORD PTR [rbp-6210], r15
+  mov rax, QWORD PTR [rbp-6210]
+  mov r15, QWORD PTR [rbp-6178]
+  mov QWORD PTR [r15], rax
+.loc 1 899 0
+  jmp .L423
+.L422:
+.loc 1 900 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-6218], r15
+  add r15, 56
+  mov QWORD PTR [rbp-6226], r15
+.loc 1 901 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
+  mov QWORD PTR [rbp-6234], r15
+  add r15, 56
+  mov QWORD PTR [rbp-6242], r15
+  mov r15, QWORD PTR [r15]
+  mov QWORD PTR [rbp-6250], r15
+.loc 1 902 0
+.loc 1 901 0
+  add r15, 1
+  mov QWORD PTR [rbp-6258], r15
+.loc 1 900 0
+  mov rax, QWORD PTR [rbp-6258]
+  mov r15, QWORD PTR [rbp-6226]
+  mov QWORD PTR [r15], rax
+.L423:
+.loc 1 904 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-6290], r15
+.loc 1 905 0
+.loc 1 904 0
+  cmp r15, 66
+  jb .L430
+.loc 1 905 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-6306], r15
+  cmp r15, 87
+  ja .L430
+.loc 1 904 0
+  mov QWORD PTR [rbp-6282], 1
+  jmp .L431
+.L430:
+  mov QWORD PTR [rbp-6282], 0
+.L431:
+  mov r15, QWORD PTR [rbp-6282]
+  test r15, r15
+  jz .L428
+.loc 1 909 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6322], r15
+  cmp r15, 4
+  jl .L428
+.loc 1 904 0
+  mov QWORD PTR [rbp-6274], 1
+  jmp .L429
+.L428:
+  mov QWORD PTR [rbp-6274], 0
+.L429:
+  mov r15, QWORD PTR [rbp-6274]
+  test r15, r15
+  jz .L426
+.loc 1 909 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6338], r15
+  cmp r15, 5
+  jg .L426
+.loc 1 904 0
+  mov QWORD PTR [rbp-6266], 1
+  jmp .L427
+.L426:
+  mov QWORD PTR [rbp-6266], 0
+.L427:
+.loc 1 903 0
+  mov r15, QWORD PTR [rbp-6266]
+  test r15, r15
+  jz .L424
+.loc 1 910 0
+  mov QWORD PTR [rbp-6354], 0
+.loc 1 909 0
+  mov rax, QWORD PTR [rbp-6354]
+  mov DWORD PTR [rbp-238], eax
+.loc 1 910 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-6402], r15
+  cmp r15, 81
+  jne .L442
+.loc 1 911 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6418], r15
+  cmp r15, 5
+  jne .L442
+.loc 1 910 0
+  mov QWORD PTR [rbp-6394], 1
+  jmp .L443
+.L442:
+  mov QWORD PTR [rbp-6394], 0
+.L443:
+  mov r15, QWORD PTR [rbp-6394]
+  test r15, r15
+  jz .L440
+.loc 1 911 0
+  mov r15, r12
+  add r15, 1
+  mov QWORD PTR [rbp-6434], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6442], r15
+  cmp r15, 87
+  jne .L440
+.loc 1 910 0
+  mov QWORD PTR [rbp-6386], 1
+  jmp .L441
+.L440:
+  mov QWORD PTR [rbp-6386], 0
+.L441:
+  mov r15, QWORD PTR [rbp-6386]
+  test r15, r15
+  jz .L438
+.loc 1 911 0
+.loc 1 912 0
+  mov r15, r12
+  add r15, 2
+  mov QWORD PTR [rbp-6458], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6466], r15
+  cmp r15, 79
+  jne .L438
+.loc 1 910 0
+  mov QWORD PTR [rbp-6378], 1
+  jmp .L439
+.L438:
+  mov QWORD PTR [rbp-6378], 0
+.L439:
+  mov r15, QWORD PTR [rbp-6378]
+  test r15, r15
+  jz .L436
+.loc 1 912 0
+.loc 1 914 0
+  mov r15, r12
+  add r15, 3
+  mov QWORD PTR [rbp-6482], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6490], r15
+  cmp r15, 82
+  jne .L436
+.loc 1 910 0
+  mov QWORD PTR [rbp-6370], 1
+  jmp .L437
+.L436:
+  mov QWORD PTR [rbp-6370], 0
+.L437:
+  mov r15, QWORD PTR [rbp-6370]
+  test r15, r15
+  jz .L434
+.loc 1 914 0
+  mov r15, r12
+  add r15, 4
+  mov QWORD PTR [rbp-6506], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6514], r15
+  cmp r15, 68
+  jne .L434
+.loc 1 910 0
+  mov QWORD PTR [rbp-6362], 1
+  jmp .L435
+.L434:
+  mov QWORD PTR [rbp-6362], 0
+.L435:
+  mov r15, QWORD PTR [rbp-6362]
+  test r15, r15
+  jz .L432
+.loc 1 915 0
+  mov QWORD PTR [rbp-6530], 64
+  mov rax, QWORD PTR [rbp-6530]
+  mov DWORD PTR [rbp-238], eax
+.loc 1 910 0
+  jmp .L433
+.L432:
+.loc 1 915 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-6578], r15
+.loc 1 916 0
+.loc 1 915 0
+  cmp r15, 68
+  jne .L454
+.loc 1 916 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6594], r15
+  cmp r15, 5
+  jne .L454
+.loc 1 915 0
+  mov QWORD PTR [rbp-6570], 1
+  jmp .L455
+.L454:
+  mov QWORD PTR [rbp-6570], 0
+.L455:
+  mov r15, QWORD PTR [rbp-6570]
+  test r15, r15
+  jz .L452
+.loc 1 916 0
+  mov r15, r12
+  add r15, 1
+  mov QWORD PTR [rbp-6610], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6618], r15
+  cmp r15, 87
+  jne .L452
+.loc 1 915 0
+  mov QWORD PTR [rbp-6562], 1
+  jmp .L453
+.L452:
+  mov QWORD PTR [rbp-6562], 0
+.L453:
+  mov r15, QWORD PTR [rbp-6562]
+  test r15, r15
+  jz .L450
+.loc 1 917 0
+  mov r15, r12
+  add r15, 2
+  mov QWORD PTR [rbp-6634], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6642], r15
+.loc 1 920 0
+.loc 1 917 0
+  cmp r15, 79
+  jne .L450
+.loc 1 915 0
+  mov QWORD PTR [rbp-6554], 1
+  jmp .L451
+.L450:
+  mov QWORD PTR [rbp-6554], 0
+.L451:
+  mov r15, QWORD PTR [rbp-6554]
+  test r15, r15
+  jz .L448
+.loc 1 920 0
+.loc 1 921 0
+.loc 1 920 0
+  mov r15, r12
+  add r15, 3
+  mov QWORD PTR [rbp-6658], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6666], r15
+.loc 1 921 0
+.loc 1 920 0
+  cmp r15, 82
+  jne .L448
+.loc 1 915 0
+  mov QWORD PTR [rbp-6546], 1
+  jmp .L449
+.L448:
+  mov QWORD PTR [rbp-6546], 0
+.L449:
+  mov r15, QWORD PTR [rbp-6546]
+  test r15, r15
+  jz .L446
+.loc 1 922 0
+  mov r15, r12
+  add r15, 4
+  mov QWORD PTR [rbp-6682], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6690], r15
+.loc 1 923 0
+.loc 1 922 0
+  cmp r15, 68
+  jne .L446
+.loc 1 915 0
+  mov QWORD PTR [rbp-6538], 1
+  jmp .L447
+.L446:
+  mov QWORD PTR [rbp-6538], 0
+.L447:
+  mov r15, QWORD PTR [rbp-6538]
+  test r15, r15
+  jz .L444
+.loc 1 923 0
+.loc 1 924 0
+  mov QWORD PTR [rbp-6706], 32
+.loc 1 923 0
+  mov rax, QWORD PTR [rbp-6706]
+  mov DWORD PTR [rbp-238], eax
+.loc 1 915 0
+  jmp .L445
+.L444:
+.loc 1 927 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-6746], r15
+  cmp r15, 87
+  jne .L464
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6762], r15
+  cmp r15, 4
+  jne .L464
+  mov QWORD PTR [rbp-6738], 1
+  jmp .L465
+.L464:
+  mov QWORD PTR [rbp-6738], 0
+.L465:
+  mov r15, QWORD PTR [rbp-6738]
+  test r15, r15
+  jz .L462
+.loc 1 928 0
+  mov r15, r12
+  add r15, 1
+  mov QWORD PTR [rbp-6778], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6786], r15
+  cmp r15, 79
+  jne .L462
+.loc 1 927 0
+  mov QWORD PTR [rbp-6730], 1
+  jmp .L463
+.L462:
+  mov QWORD PTR [rbp-6730], 0
+.L463:
+  mov r15, QWORD PTR [rbp-6730]
+  test r15, r15
+  jz .L460
+.loc 1 928 0
+  mov r15, r12
+  add r15, 2
+  mov QWORD PTR [rbp-6802], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6810], r15
+  cmp r15, 82
+  jne .L460
+.loc 1 927 0
+  mov QWORD PTR [rbp-6722], 1
+  jmp .L461
+.L460:
+  mov QWORD PTR [rbp-6722], 0
+.L461:
+  mov r15, QWORD PTR [rbp-6722]
+  test r15, r15
+  jz .L458
+.loc 1 928 0
+  mov r15, r12
+  add r15, 3
+  mov QWORD PTR [rbp-6826], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6834], r15
+.loc 1 929 0
+.loc 1 928 0
+  cmp r15, 68
+  jne .L458
+.loc 1 927 0
+  mov QWORD PTR [rbp-6714], 1
+  jmp .L459
+.L458:
+  mov QWORD PTR [rbp-6714], 0
+.L459:
+.loc 1 924 0
+  mov r15, QWORD PTR [rbp-6714]
+  test r15, r15
+  jz .L456
+.loc 1 929 0
+  mov QWORD PTR [rbp-6850], 16
+  mov rax, QWORD PTR [rbp-6850]
+  mov DWORD PTR [rbp-238], eax
+.loc 1 924 0
+  jmp .L457
+.L456:
+.loc 1 929 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-6890], r15
+  cmp r15, 66
+  jne .L474
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-6906], r15
+  cmp r15, 4
+  jne .L474
+  mov QWORD PTR [rbp-6882], 1
+  jmp .L475
+.L474:
+  mov QWORD PTR [rbp-6882], 0
+.L475:
+  mov r15, QWORD PTR [rbp-6882]
+  test r15, r15
+  jz .L472
+.loc 1 930 0
+  mov r15, r12
+  add r15, 1
+  mov QWORD PTR [rbp-6922], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6930], r15
+.loc 1 931 0
+.loc 1 930 0
+  cmp r15, 89
+  jne .L472
+.loc 1 929 0
+  mov QWORD PTR [rbp-6874], 1
+  jmp .L473
+.L472:
+  mov QWORD PTR [rbp-6874], 0
+.L473:
+  mov r15, QWORD PTR [rbp-6874]
+  test r15, r15
+  jz .L470
+.loc 1 931 0
+  mov r15, r12
+  add r15, 2
+  mov QWORD PTR [rbp-6946], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6954], r15
+  cmp r15, 84
+  jne .L470
+.loc 1 929 0
+  mov QWORD PTR [rbp-6866], 1
+  jmp .L471
+.L470:
+  mov QWORD PTR [rbp-6866], 0
+.L471:
+  mov r15, QWORD PTR [rbp-6866]
+  test r15, r15
+  jz .L468
+.loc 1 931 0
+.loc 1 932 0
+.loc 1 931 0
+  mov r15, r12
+  add r15, 3
+  mov QWORD PTR [rbp-6970], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-6978], r15
+.loc 1 932 0
+.loc 1 931 0
+  cmp r15, 69
+  jne .L468
+.loc 1 929 0
+  mov QWORD PTR [rbp-6858], 1
+  jmp .L469
+.L468:
+  mov QWORD PTR [rbp-6858], 0
+.L469:
+  mov r15, QWORD PTR [rbp-6858]
+  test r15, r15
+  jz .L466
+.loc 1 933 0
+  mov QWORD PTR [rbp-6994], 8
+  mov rax, QWORD PTR [rbp-6994]
+  mov DWORD PTR [rbp-238], eax
+.loc 1 929 0
+  jmp .L467
+.L466:
+.L467:
+.L457:
+.L445:
+.L433:
+.loc 1 934 0
+  movsxd r15, DWORD PTR [rbp-238]
+  mov QWORD PTR [rbp-7002], r15
+  cmp r15, 0
+  jle .L476
+.loc 1 933 0
+.loc 1 934 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-7018], r15
+.L478:
+.loc 1 935 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-7034], r15
+  cmp r15, QWORD PTR [rbp-2698]
+  jge .L480
+  mov r15, QWORD PTR [rbp-7034]
+  mov QWORD PTR [rbp-7050], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-7050]
+  mov QWORD PTR [rbp-7058], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-7066], r15
+  cmp r15, 32
+  jne .L480
+  mov QWORD PTR [rbp-7026], 1
+  jmp .L481
+.L480:
+  mov QWORD PTR [rbp-7026], 0
+.L481:
+.loc 1 934 0
+  mov r15, QWORD PTR [rbp-7026]
+  test r15, r15
+  jz .L479
+.loc 1 935 0
+.loc 1 936 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-7082], r15
+  add r15, 1
+  mov QWORD PTR [rbp-7090], r15
+.loc 1 935 0
+  mov rax, QWORD PTR [rbp-7090]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 934 0
+  jmp .L478
+.L479:
+.loc 1 936 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-7122], r15
+  add r15, 3
+  mov QWORD PTR [rbp-7130], r15
+  cmp r15, QWORD PTR [rbp-2698]
+  jg .L488
+.loc 1 937 0
+  mov r15, QWORD PTR [rbp-7122]
+  mov QWORD PTR [rbp-7146], r15
+.loc 1 936 0
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-7146]
+  mov QWORD PTR [rbp-7154], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-7162], r15
+.loc 1 937 0
+.loc 1 936 0
+  cmp r15, 80
+  jne .L488
+  mov QWORD PTR [rbp-7114], 1
+  jmp .L489
+.L488:
+  mov QWORD PTR [rbp-7114], 0
+.L489:
+  mov r15, QWORD PTR [rbp-7114]
+  test r15, r15
+  jz .L486
+.loc 1 937 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-7178], r15
+  add r15, 1
+  mov QWORD PTR [rbp-7186], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-7186]
+  mov QWORD PTR [rbp-7194], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-7202], r15
+  cmp r15, 84
+  jne .L486
+.loc 1 936 0
+  mov QWORD PTR [rbp-7106], 1
+  jmp .L487
+.L486:
+  mov QWORD PTR [rbp-7106], 0
+.L487:
+  mov r15, QWORD PTR [rbp-7106]
+  test r15, r15
+  jz .L484
+.loc 1 937 0
+.loc 1 938 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-7218], r15
+  add r15, 2
+  mov QWORD PTR [rbp-7226], r15
+  mov r15, QWORD PTR [rbp-2714]
+  add r15, QWORD PTR [rbp-7226]
+  mov QWORD PTR [rbp-7234], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-7242], r15
+  cmp r15, 82
+  jne .L484
+.loc 1 936 0
+  mov QWORD PTR [rbp-7098], 1
+  jmp .L485
+.L484:
+  mov QWORD PTR [rbp-7098], 0
+.L485:
+  mov r15, QWORD PTR [rbp-7098]
+  test r15, r15
+  jz .L482
+.loc 1 938 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-7258], r15
+  add r15, 3
+  mov QWORD PTR [rbp-7266], r15
+  mov rax, QWORD PTR [rbp-7266]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 939 0
+  xor r10, r10
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-7274], r15
+  mov rdi, QWORD PTR [rbp-7274]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-7282], rax
+.loc 1 940 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_SIZE_PREFIX]
+  mov QWORD PTR [rbp-7298], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7290], r15
+.loc 1 939 0
+  mov rax, QWORD PTR [rbp-7290]
+  mov r15, QWORD PTR [rbp-7282]
+  mov DWORD PTR [r15], eax
+.loc 1 940 0
+  mov r15, QWORD PTR [rbp-7282]
+  add r15, 4
+  mov QWORD PTR [rbp-7306], r15
+  mov rax, r12
+  mov r15, QWORD PTR [rbp-7306]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-7282]
+  add r15, 12
+  mov QWORD PTR [rbp-7314], r15
+.loc 1 941 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-7322], r15
+  sub r15, QWORD PTR [rbp-5986]
+  mov QWORD PTR [rbp-7330], r15
+.loc 1 940 0
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-7338], r15
+  mov rax, QWORD PTR [rbp-7338]
+  mov r15, QWORD PTR [rbp-7314]
+  mov DWORD PTR [r15], eax
+.loc 1 941 0
+  mov r15, QWORD PTR [rbp-7282]
+  add r15, 16
+  mov QWORD PTR [rbp-7346], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-7354], r15
+  mov rax, QWORD PTR [rbp-7354]
+  mov r15, QWORD PTR [rbp-7346]
+  mov DWORD PTR [r15], eax
+.loc 1 942 0
+  mov r15, QWORD PTR [rbp-7282]
+  add r15, 20
+  mov QWORD PTR [rbp-7362], r15
+  mov QWORD PTR [rbp-7370], 0
+  mov rax, QWORD PTR [rbp-7370]
+  mov r15, QWORD PTR [rbp-7362]
+  mov QWORD PTR [r15], rax
+.loc 1 943 0
+.loc 1 946 0
+  mov r15, QWORD PTR [rbp-7282]
+  add r15, 28
+  mov QWORD PTR [rbp-7378], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-7394], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7386], r15
+  mov rax, QWORD PTR [rbp-7386]
+  mov r15, QWORD PTR [rbp-7378]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-7282]
+  add r15, 32
+  mov QWORD PTR [rbp-7402], r15
+.loc 1 947 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-7418], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7410], r15
+.loc 1 946 0
+  mov rax, QWORD PTR [rbp-7410]
+  mov r15, QWORD PTR [rbp-7402]
+  mov DWORD PTR [r15], eax
+.loc 1 947 0
+  mov r15, QWORD PTR [rbp-7282]
+  add r15, 36
+  mov QWORD PTR [rbp-7426], r15
+  movsxd r15, DWORD PTR [rbp-238]
+  mov QWORD PTR [rbp-7434], r15
+  mov rax, QWORD PTR [rbp-7434]
+  mov r15, QWORD PTR [rbp-7426]
+  mov DWORD PTR [r15], eax
+.loc 1 936 0
+  jmp .L483
+.L482:
+.loc 1 947 0
+  mov rax, QWORD PTR [rbp-7018]
+  mov QWORD PTR [rbp-92], rax
+.loc 1 948 0
+  xor r10, r10
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-7442], r15
+  mov rdi, QWORD PTR [rbp-7442]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-7450], rax
+.loc 1 949 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
+  mov QWORD PTR [rbp-7466], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7458], r15
+  mov rax, QWORD PTR [rbp-7458]
+  mov r15, QWORD PTR [rbp-7450]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-7450]
+  add r15, 4
+  mov QWORD PTR [rbp-7474], r15
+  mov rax, r12
+  mov r15, QWORD PTR [rbp-7474]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-7450]
+  add r15, 12
+  mov QWORD PTR [rbp-7482], r15
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-7490], r15
+  mov rax, QWORD PTR [rbp-7490]
+  mov r15, QWORD PTR [rbp-7482]
+  mov DWORD PTR [r15], eax
+.loc 1 950 0
+  mov r15, QWORD PTR [rbp-7450]
+  add r15, 16
+  mov QWORD PTR [rbp-7498], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-7506], r15
+  mov rax, QWORD PTR [rbp-7506]
+  mov r15, QWORD PTR [rbp-7498]
+  mov DWORD PTR [r15], eax
+.loc 1 951 0
+  mov r15, QWORD PTR [rbp-7450]
+  add r15, 20
+  mov QWORD PTR [rbp-7514], r15
+  mov QWORD PTR [rbp-7522], 0
+  mov rax, QWORD PTR [rbp-7522]
+  mov r15, QWORD PTR [rbp-7514]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-7450]
+  add r15, 28
+  mov QWORD PTR [rbp-7530], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-7546], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7538], r15
+  mov rax, QWORD PTR [rbp-7538]
+  mov r15, QWORD PTR [rbp-7530]
+  mov DWORD PTR [r15], eax
+.loc 1 952 0
+  mov r15, QWORD PTR [rbp-7450]
+  add r15, 32
+  mov QWORD PTR [rbp-7554], r15
+.loc 1 955 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-7570], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7562], r15
+.loc 1 952 0
+  mov rax, QWORD PTR [rbp-7562]
+  mov r15, QWORD PTR [rbp-7554]
+  mov DWORD PTR [r15], eax
+.loc 1 955 0
+  mov r15, QWORD PTR [rbp-7450]
+  add r15, 36
+  mov QWORD PTR [rbp-7578], r15
+  mov QWORD PTR [rbp-7586], 0
+  mov rax, QWORD PTR [rbp-7586]
+  mov r15, QWORD PTR [rbp-7578]
+  mov DWORD PTR [r15], eax
+.L483:
+.loc 1 933 0
+  jmp .L477
+.L476:
+.loc 1 956 0
+  xor r10, r10
+.loc 1 957 0
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-7594], r15
+.loc 1 956 0
+  mov rdi, QWORD PTR [rbp-7594]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-7602], rax
+.loc 1 957 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
+  mov QWORD PTR [rbp-7618], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7610], r15
+  mov rax, QWORD PTR [rbp-7610]
+  mov r15, QWORD PTR [rbp-7602]
+  mov DWORD PTR [r15], eax
+.loc 1 958 0
+  mov r15, QWORD PTR [rbp-7602]
+  add r15, 4
+  mov QWORD PTR [rbp-7626], r15
+  mov rax, r12
+  mov r15, QWORD PTR [rbp-7626]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-7602]
+  add r15, 12
+  mov QWORD PTR [rbp-7634], r15
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-7642], r15
+  mov rax, QWORD PTR [rbp-7642]
+  mov r15, QWORD PTR [rbp-7634]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-7602]
+  add r15, 16
+  mov QWORD PTR [rbp-7650], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-7658], r15
+  mov rax, QWORD PTR [rbp-7658]
+  mov r15, QWORD PTR [rbp-7650]
+  mov DWORD PTR [r15], eax
+.loc 1 959 0
+  mov r15, QWORD PTR [rbp-7602]
+  add r15, 20
+  mov QWORD PTR [rbp-7666], r15
+  mov QWORD PTR [rbp-7674], 0
+  mov rax, QWORD PTR [rbp-7674]
+  mov r15, QWORD PTR [rbp-7666]
+  mov QWORD PTR [r15], rax
+.loc 1 960 0
+  mov r15, QWORD PTR [rbp-7602]
+  add r15, 28
+  mov QWORD PTR [rbp-7682], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-7698], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7690], r15
+  mov rax, QWORD PTR [rbp-7690]
+  mov r15, QWORD PTR [rbp-7682]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-7602]
+  add r15, 32
+  mov QWORD PTR [rbp-7706], r15
+.loc 1 961 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-7722], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7714], r15
+.loc 1 960 0
+  mov rax, QWORD PTR [rbp-7714]
+  mov r15, QWORD PTR [rbp-7706]
+  mov DWORD PTR [r15], eax
+.loc 1 964 0
+  mov r15, QWORD PTR [rbp-7602]
+  add r15, 36
+  mov QWORD PTR [rbp-7730], r15
+  mov QWORD PTR [rbp-7738], 0
+  mov rax, QWORD PTR [rbp-7738]
+  mov r15, QWORD PTR [rbp-7730]
+  mov DWORD PTR [r15], eax
+.L477:
+.loc 1 903 0
+  jmp .L425
+.L424:
+.loc 1 965 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-7754], r15
+  cmp r15, 9
+  jg .L492
+  lea r15, [rip+_caustic_assembler_lexer_cst_ri_first]
+  mov QWORD PTR [rbp-7770], r15
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-7778], r15
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-7786], r15
+  mov r15, QWORD PTR [rbp-7770]
+  add r15, QWORD PTR [rbp-7786]
+  mov QWORD PTR [rbp-7794], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-7802], r15
+.loc 1 966 0
+.loc 1 965 0
+  cmp r15, 0
+  je .L492
+  mov QWORD PTR [rbp-7746], 0
+  jmp .L493
+.L492:
+  mov QWORD PTR [rbp-7746], 1
+.L493:
+.loc 1 964 0
+  mov r15, QWORD PTR [rbp-7746]
+  test r15, r15
+  jz .L490
+.loc 1 966 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-7834], r15
+  cmp r15, 8
+  jne .L498
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-7850], r15
+  cmp r15, 110
+  jne .L498
+  mov QWORD PTR [rbp-7826], 1
+  jmp .L499
+.L498:
+  mov QWORD PTR [rbp-7826], 0
+.L499:
+  mov r15, QWORD PTR [rbp-7826]
+  test r15, r15
+  jz .L496
+.loc 1 967 0
+.loc 1 966 0
+  mov r15, r12
+  add r15, 1
+  mov QWORD PTR [rbp-7866], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-7874], r15
+.loc 1 967 0
+.loc 1 966 0
+  cmp r15, 111
+  jne .L496
+  mov QWORD PTR [rbp-7818], 1
+  jmp .L497
+.L496:
+  mov QWORD PTR [rbp-7818], 0
+.L497:
+  mov r15, QWORD PTR [rbp-7818]
+  test r15, r15
+  jz .L494
+  jmp .L495
+.L494:
+.loc 1 967 0
+  xor r10, r10
+.loc 1 968 0
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-7890], r15
+  mov rdi, QWORD PTR [rbp-7890]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-7898], rax
+.loc 1 967 0
+.loc 1 968 0
+.loc 1 969 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
+  mov QWORD PTR [rbp-7914], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7906], r15
+.loc 1 968 0
+  mov rax, QWORD PTR [rbp-7906]
+  mov r15, QWORD PTR [rbp-7898]
+  mov DWORD PTR [r15], eax
+.loc 1 969 0
+  mov r15, QWORD PTR [rbp-7898]
+  add r15, 4
+  mov QWORD PTR [rbp-7922], r15
+  mov rax, r12
+  mov r15, QWORD PTR [rbp-7922]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-7898]
+  add r15, 12
+  mov QWORD PTR [rbp-7930], r15
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-7938], r15
+  mov rax, QWORD PTR [rbp-7938]
+  mov r15, QWORD PTR [rbp-7930]
+  mov DWORD PTR [r15], eax
+.loc 1 971 0
+  mov r15, QWORD PTR [rbp-7898]
+  add r15, 16
+  mov QWORD PTR [rbp-7946], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-7954], r15
+  mov rax, QWORD PTR [rbp-7954]
+  mov r15, QWORD PTR [rbp-7946]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-7898]
+  add r15, 20
+  mov QWORD PTR [rbp-7962], r15
+  mov QWORD PTR [rbp-7970], 0
+  mov rax, QWORD PTR [rbp-7970]
+  mov r15, QWORD PTR [rbp-7962]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-7898]
+  add r15, 28
+  mov QWORD PTR [rbp-7978], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-7994], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-7986], r15
+  mov rax, QWORD PTR [rbp-7986]
+  mov r15, QWORD PTR [rbp-7978]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-7898]
+  add r15, 32
+  mov QWORD PTR [rbp-8002], r15
+.loc 1 972 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-8018], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-8010], r15
+.loc 1 971 0
+  mov rax, QWORD PTR [rbp-8010]
+  mov r15, QWORD PTR [rbp-8002]
+  mov DWORD PTR [r15], eax
+.loc 1 972 0
+  mov r15, QWORD PTR [rbp-7898]
+  add r15, 36
+  mov QWORD PTR [rbp-8026], r15
+  mov QWORD PTR [rbp-8034], 0
+  mov rax, QWORD PTR [rbp-8034]
+  mov r15, QWORD PTR [rbp-8026]
+  mov DWORD PTR [r15], eax
+.L495:
+.loc 1 964 0
+  jmp .L491
+.L490:
+.loc 1 972 0
+  xor r10, r10
+.loc 1 973 0
+.loc 1 974 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8042], r15
+.loc 1 973 0
+  mov rdi, r12
+  mov rsi, QWORD PTR [rbp-8042]
+  call _caustic_assembler_lexer_cst_ht_lookup
+  mov QWORD PTR [rbp-8050], rax
+.loc 1 972 0
+.loc 1 974 0
+  mov r15, QWORD PTR [rbp-8050]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8058], r15
+.loc 1 975 0
+.loc 1 974 0
+  cmp r15, 0
+  jne .L500
+.loc 1 976 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8098], r15
+  cmp r15, 3
+  jne .L508
+.loc 1 977 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-8114], r15
+  cmp r15, 80
+  jne .L508
+.loc 1 976 0
+  mov QWORD PTR [rbp-8090], 1
+  jmp .L509
+.L508:
+  mov QWORD PTR [rbp-8090], 0
+.L509:
+  mov r15, QWORD PTR [rbp-8090]
+  test r15, r15
+  jz .L506
+.loc 1 977 0
+  mov r15, r12
+  add r15, 1
+  mov QWORD PTR [rbp-8130], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-8138], r15
+.loc 1 978 0
+.loc 1 977 0
+  cmp r15, 84
+  jne .L506
+.loc 1 976 0
+  mov QWORD PTR [rbp-8082], 1
+  jmp .L507
+.L506:
+  mov QWORD PTR [rbp-8082], 0
+.L507:
+  mov r15, QWORD PTR [rbp-8082]
+  test r15, r15
+  jz .L504
+.loc 1 978 0
+.loc 1 979 0
+  mov r15, r12
+  add r15, 2
+  mov QWORD PTR [rbp-8154], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-8162], r15
+  cmp r15, 82
+  jne .L504
+.loc 1 976 0
+  mov QWORD PTR [rbp-8074], 1
+  jmp .L505
+.L504:
+  mov QWORD PTR [rbp-8074], 0
+.L505:
+.loc 1 975 0
+  mov r15, QWORD PTR [rbp-8074]
+  test r15, r15
+  jz .L502
+  jmp .L503
+.L502:
+.loc 1 980 0
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8194], r15
+.loc 1 981 0
+.loc 1 980 0
+  cmp r15, 8
+  jne .L514
+.loc 1 981 0
+  mov r15, r14
+  movzx r15, r15b
+  mov QWORD PTR [rbp-8210], r15
+.loc 1 982 0
+.loc 1 981 0
+  cmp r15, 110
+  jne .L514
+.loc 1 980 0
+  mov QWORD PTR [rbp-8186], 1
+  jmp .L515
+.L514:
+  mov QWORD PTR [rbp-8186], 0
+.L515:
+  mov r15, QWORD PTR [rbp-8186]
+  test r15, r15
+  jz .L512
+.loc 1 982 0
+  mov r15, r12
+  add r15, 1
+  mov QWORD PTR [rbp-8226], r15
+  movzx r15, BYTE PTR [r15]
+  mov QWORD PTR [rbp-8234], r15
+.loc 1 983 0
+.loc 1 982 0
+  cmp r15, 111
+  jne .L512
+.loc 1 980 0
+  mov QWORD PTR [rbp-8178], 1
+  jmp .L513
+.L512:
+  mov QWORD PTR [rbp-8178], 0
+.L513:
+  mov r15, QWORD PTR [rbp-8178]
+  test r15, r15
+  jz .L510
+  jmp .L511
+.L510:
+.loc 1 984 0
+  xor r10, r10
+.loc 1 986 0
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-8250], r15
+  mov rdi, QWORD PTR [rbp-8250]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-8258], rax
+.loc 1 984 0
+.loc 1 986 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
+  mov QWORD PTR [rbp-8274], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-8266], r15
+  mov rax, QWORD PTR [rbp-8266]
+  mov r15, QWORD PTR [rbp-8258]
+  mov DWORD PTR [r15], eax
+.loc 1 987 0
+  mov r15, QWORD PTR [rbp-8258]
+  add r15, 4
+  mov QWORD PTR [rbp-8282], r15
+  mov rax, r12
+  mov r15, QWORD PTR [rbp-8282]
+  mov QWORD PTR [r15], rax
+.loc 1 990 0
+  mov r15, QWORD PTR [rbp-8258]
+  add r15, 12
+  mov QWORD PTR [rbp-8290], r15
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8298], r15
+  mov rax, QWORD PTR [rbp-8298]
+  mov r15, QWORD PTR [rbp-8290]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-8258]
+  add r15, 16
+  mov QWORD PTR [rbp-8306], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-8314], r15
+  mov rax, QWORD PTR [rbp-8314]
+  mov r15, QWORD PTR [rbp-8306]
+  mov DWORD PTR [r15], eax
+.loc 1 993 0
+  mov r15, QWORD PTR [rbp-8258]
+  add r15, 20
+  mov QWORD PTR [rbp-8322], r15
+  mov QWORD PTR [rbp-8330], 0
+  mov rax, QWORD PTR [rbp-8330]
+  mov r15, QWORD PTR [rbp-8322]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-8258]
+  add r15, 28
+  mov QWORD PTR [rbp-8338], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-8354], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-8346], r15
+  mov rax, QWORD PTR [rbp-8346]
+  mov r15, QWORD PTR [rbp-8338]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-8258]
+  add r15, 32
+  mov QWORD PTR [rbp-8362], r15
+.loc 1 994 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-8378], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-8370], r15
+.loc 1 993 0
+  mov rax, QWORD PTR [rbp-8370]
+  mov r15, QWORD PTR [rbp-8362]
+  mov DWORD PTR [r15], eax
+.loc 1 994 0
+.loc 1 995 0
+  mov r15, QWORD PTR [rbp-8258]
+  add r15, 36
+  mov QWORD PTR [rbp-8386], r15
+  mov QWORD PTR [rbp-8394], 0
+  mov rax, QWORD PTR [rbp-8394]
+  mov r15, QWORD PTR [rbp-8386]
+  mov DWORD PTR [r15], eax
+.L511:
+.L503:
+.loc 1 974 0
+  jmp .L501
+.L500:
+.loc 1 996 0
+  mov r15, QWORD PTR [rbp-8050]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8402], r15
+.loc 1 1000 0
+.loc 1 996 0
+  sar r15, 16
+  mov QWORD PTR [rbp-8410], r15
+.loc 1 995 0
+.loc 1 1000 0
+  mov r15, QWORD PTR [rbp-8050]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8418], r15
+.loc 1 1001 0
+.loc 1 1000 0
+  and r15, 65535
+  mov QWORD PTR [rbp-8426], r15
+.loc 1 1001 0
+  xor r10, r10
+  lea r15, [rbp-84]
+  mov QWORD PTR [rbp-8434], r15
+  mov rdi, QWORD PTR [rbp-8434]
+  call _caustic_assembler_lexer_cst_tl_next
+  mov QWORD PTR [rbp-8442], rax
+  mov r15, QWORD PTR [rbp-8410]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8450], r15
+  cmp r15, 1
+  jne .L516
+.loc 1 1002 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_REGISTER]
+  mov QWORD PTR [rbp-8474], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-8466], r15
+.loc 1 1001 0
+  mov rax, QWORD PTR [rbp-8466]
+  mov r15, QWORD PTR [rbp-8442]
+  mov DWORD PTR [r15], eax
+.loc 1 1002 0
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 28
+  mov QWORD PTR [rbp-8482], r15
+.loc 1 1003 0
+  mov r15, QWORD PTR [rbp-8426]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8490], r15
+.loc 1 1002 0
+  mov rax, QWORD PTR [rbp-8490]
+  mov r15, QWORD PTR [rbp-8482]
+  mov DWORD PTR [r15], eax
+.loc 1 1003 0
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 32
+  mov QWORD PTR [rbp-8498], r15
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
+  mov QWORD PTR [rbp-8514], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-8506], r15
+  mov rax, QWORD PTR [rbp-8506]
+  mov r15, QWORD PTR [rbp-8498]
+  mov DWORD PTR [r15], eax
+.loc 1 1001 0
+  jmp .L517
+.L516:
+.loc 1 1003 0
+  lea r15, [rip+_caustic_assembler_lexer_cst_TK_INSTRUCTION]
+  mov QWORD PTR [rbp-8530], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-8522], r15
+  mov rax, QWORD PTR [rbp-8522]
+  mov r15, QWORD PTR [rbp-8442]
+  mov DWORD PTR [r15], eax
+.loc 1 1005 0
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 28
+  mov QWORD PTR [rbp-8538], r15
+.loc 1 1006 0
+  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov QWORD PTR [rbp-8554], r15
+  movsxd r15, DWORD PTR [r15]
+  mov QWORD PTR [rbp-8546], r15
+.loc 1 1005 0
+  mov rax, QWORD PTR [rbp-8546]
+  mov r15, QWORD PTR [rbp-8538]
+  mov DWORD PTR [r15], eax
+.loc 1 1006 0
+.loc 1 1007 0
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 32
+  mov QWORD PTR [rbp-8562], r15
+  mov r15, QWORD PTR [rbp-8426]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8570], r15
+  mov rax, QWORD PTR [rbp-8570]
+  mov r15, QWORD PTR [rbp-8562]
+  mov DWORD PTR [r15], eax
+.L517:
+.loc 1 1009 0
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 4
+  mov QWORD PTR [rbp-8578], r15
+  mov rax, r12
+  mov r15, QWORD PTR [rbp-8578]
+  mov QWORD PTR [r15], rax
+.loc 1 1010 0
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 12
+  mov QWORD PTR [rbp-8586], r15
+  mov r15, QWORD PTR [rbp-6130]
+  movsxd r15, r15d
+  mov QWORD PTR [rbp-8594], r15
+  mov rax, QWORD PTR [rbp-8594]
+  mov r15, QWORD PTR [rbp-8586]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 16
+  mov QWORD PTR [rbp-8602], r15
+  movsxd r15, DWORD PTR [rbp-96]
+  mov QWORD PTR [rbp-8610], r15
+  mov rax, QWORD PTR [rbp-8610]
+  mov r15, QWORD PTR [rbp-8602]
+  mov DWORD PTR [r15], eax
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 20
+  mov QWORD PTR [rbp-8618], r15
+  mov QWORD PTR [rbp-8626], 0
+  mov rax, QWORD PTR [rbp-8626]
+  mov r15, QWORD PTR [rbp-8618]
+  mov QWORD PTR [r15], rax
+  mov r15, QWORD PTR [rbp-8442]
+  add r15, 36
+  mov QWORD PTR [rbp-8634], r15
+  mov QWORD PTR [rbp-8642], 0
+  mov rax, QWORD PTR [rbp-8642]
+  mov r15, QWORD PTR [rbp-8634]
+  mov DWORD PTR [r15], eax
+.L501:
+.L491:
+.L425:
+.loc 1 883 0
+  jmp .L409
+.L408:
+.loc 1 1010 0
+.loc 1 1011 0
+  mov r15, QWORD PTR [rbp-92]
+  mov QWORD PTR [rbp-8650], r15
+  mov rbx, QWORD PTR [rbp-8650]
+  add rbx, 1
+.loc 1 1010 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-92], rax
+.L409:
+.L195:
+.L191:
+.L165:
+.L155:
+.L145:
+.L139:
+.L137:
+.L127:
+.loc 1 678 0
+  jmp .L124
+.L125:
+.loc 1 1012 0
+  xor r10, r10
+  lea r15, [rbp-8714]
+  mov QWORD PTR [rbp-8658], r15
+  lea r12, [rip+_caustic_assembler_lexer_cst_TK_EOF]
+  mov r15, r12
+  movsxd r15, DWORD PTR [r15]
+  mov r13, r15
+  mov r12, 0
+  mov r15, r12
+  mov r14, r15
+  mov r12, 0
+.loc 1 1013 0
+  movsxd r15, DWORD PTR [rbp-96]
+  mov rbx, r15
+.loc 1 1012 0
+  mov rdi, QWORD PTR [rbp-8658]
+  mov rsi, r13
+  mov rdx, r14
+  mov rcx, r12
+  mov r8, rbx
+  call _caustic_assembler_lexer_cst_make_tok
+  mov rbx, rax
+  lea rbx, [rbp-346]
+  mov rdi, rbx
+  mov rsi, QWORD PTR [rbp-8658]
+  mov rcx, 40
+  cld
+  rep movsb
+.loc 1 1013 0
+  lea rbx, [rbp-84]
+  lea r12, [rbp-346]
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_lexer_cst_tl_push
+  mov rbx, rax
+  lea rbx, [rbp-84]
+  mov rdi, QWORD PTR [rbp-354]
+  mov rsi, rbx
+  mov rcx, 16
+  cld
+  rep movsb
+  mov rax, QWORD PTR [rbp-354]
+  add rsp, 8728
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 8728
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
 _caustic_assembler_buf_cst_buf_init:
   push rbp
   mov rbp, rsp
@@ -3513,7 +14827,7 @@ _caustic_assembler_buf_cst_buf_ensure:
 .loc 1 14 0
   mov r15, r13
   cmp r15, r8
-  jle .L38
+  jle .L518
 .loc 1 18 0
   mov r13, rbx
   add r13, 16
@@ -3541,7 +14855,7 @@ _caustic_assembler_buf_cst_buf_ensure:
   add r13, r12
   mov r15, r14
   cmp r15, r13
-  jge .L40
+  jge .L520
 .loc 1 20 0
   mov r13, rbx
   add r13, 8
@@ -3557,9 +14871,9 @@ _caustic_assembler_buf_cst_buf_ensure:
   mov rax, r12
   mov QWORD PTR [rbp-72], rax
 .loc 1 19 0
-  jmp .L41
-.L40:
-.L41:
+  jmp .L521
+.L520:
+.L521:
 .loc 1 23 0
   xor r10, r10
 .loc 1 24 0
@@ -3605,9 +14919,9 @@ _caustic_assembler_buf_cst_buf_ensure:
   mov r15, r12
   mov QWORD PTR [r15], rax
 .loc 1 14 0
-  jmp .L39
-.L38:
-.L39:
+  jmp .L519
+.L518:
+.L519:
   mov rbx, 0
   mov rax, rbx
   add rsp, 88
@@ -4554,7 +15868,7 @@ _caustic_assembler_buf_cst_buf_align:
   mov rbx, rdi
 .loc 1 823 0
   mov QWORD PTR [rbp-72], rsi
-.L42:
+.L522:
 .loc 1 127 0
   mov r13, rbx
   add r13, 8
@@ -4574,7 +15888,7 @@ _caustic_assembler_buf_cst_buf_align:
 .loc 1 128 0
 .loc 1 127 0
   cmp r15, 0
-  je .L43
+  je .L523
 .loc 1 129 0
   mov QWORD PTR [rbp-96], 0
   mov rdi, rbx
@@ -4582,8 +15896,8 @@ _caustic_assembler_buf_cst_buf_align:
   call _caustic_assembler_buf_cst_buf_emit8
   mov r12, rax
 .loc 1 127 0
-  jmp .L42
-.L43:
+  jmp .L522
+.L523:
   mov rbx, 0
   mov rax, rbx
   add rsp, 104
@@ -4611,7 +15925,7 @@ _caustic_assembler_encoder_cst_reg_code:
   mov r12, r15
   mov r15, r12
   cmp r15, 64
-  jl .L44
+  jl .L524
 .loc 1 10 0
   mov r15, rbx
   movsxd r15, r15d
@@ -4637,9 +15951,9 @@ _caustic_assembler_encoder_cst_reg_code:
   pop rbp
   ret
 .loc 1 7 0
-  jmp .L45
-.L44:
-.L45:
+  jmp .L525
+.L524:
+.L525:
 .loc 1 11 0
   mov r15, rbx
   movsxd r15, r15d
@@ -4689,7 +16003,7 @@ _caustic_assembler_encoder_cst_reg_ext:
   mov r12, r15
   mov r15, r12
   cmp r15, 0
-  jge .L46
+  jge .L526
 .loc 1 12 0
 .loc 1 13 0
   mov r12, 0
@@ -4703,16 +16017,16 @@ _caustic_assembler_encoder_cst_reg_ext:
   pop rbp
   ret
 .loc 1 12 0
-  jmp .L47
-.L46:
-.L47:
+  jmp .L527
+.L526:
+.L527:
 .loc 1 14 0
   mov r15, rbx
   movsxd r15, r15d
   mov r12, r15
   mov r15, r12
   cmp r15, 64
-  jl .L48
+  jl .L528
 .loc 1 13 0
 .loc 1 14 0
   mov r15, rbx
@@ -4726,7 +16040,7 @@ _caustic_assembler_encoder_cst_reg_ext:
 .loc 1 14 0
   mov r15, r13
   cmp r15, 8
-  jl .L50
+  jl .L530
 .loc 1 17 0
   mov r12, 1
   mov rax, r12
@@ -4739,9 +16053,9 @@ _caustic_assembler_encoder_cst_reg_ext:
   pop rbp
   ret
 .loc 1 14 0
-  jmp .L51
-.L50:
-.L51:
+  jmp .L531
+.L530:
+.L531:
 .loc 1 18 0
   mov r12, 0
   mov rax, r12
@@ -4754,9 +16068,9 @@ _caustic_assembler_encoder_cst_reg_ext:
   pop rbp
   ret
 .loc 1 13 0
-  jmp .L49
-.L48:
-.L49:
+  jmp .L529
+.L528:
+.L529:
 .loc 1 18 0
   mov r15, rbx
   movsxd r15, r15d
@@ -4776,7 +16090,7 @@ _caustic_assembler_encoder_cst_reg_ext:
 .loc 1 18 0
   mov r15, rbx
   cmp r15, 8
-  jl .L52
+  jl .L532
 .loc 1 19 0
   mov rbx, 1
   mov rax, rbx
@@ -4789,9 +16103,9 @@ _caustic_assembler_encoder_cst_reg_ext:
   pop rbp
   ret
 .loc 1 18 0
-  jmp .L53
-.L52:
-.L53:
+  jmp .L533
+.L532:
+.L533:
 .loc 1 20 0
   mov rbx, 0
   mov rax, rbx
@@ -4830,7 +16144,7 @@ _caustic_assembler_encoder_cst_reg_size:
   mov r12, r15
   mov r15, r12
   cmp r15, 0
-  jge .L54
+  jge .L534
 .loc 1 24 0
   mov r12, 0
   mov rax, r12
@@ -4843,16 +16157,16 @@ _caustic_assembler_encoder_cst_reg_size:
   pop rbp
   ret
 .loc 1 23 0
-  jmp .L55
-.L54:
-.L55:
+  jmp .L535
+.L534:
+.L535:
 .loc 1 24 0
   mov r15, rbx
   movsxd r15, r15d
   mov r12, r15
   mov r15, r12
   cmp r15, 16
-  jge .L56
+  jge .L536
 .loc 1 25 0
   mov r12, 64
   mov rax, r12
@@ -4865,9 +16179,9 @@ _caustic_assembler_encoder_cst_reg_size:
   pop rbp
   ret
 .loc 1 24 0
-  jmp .L57
-.L56:
-.L57:
+  jmp .L537
+.L536:
+.L537:
 .loc 1 25 0
   mov r15, rbx
   movsxd r15, r15d
@@ -4876,7 +16190,7 @@ _caustic_assembler_encoder_cst_reg_size:
 .loc 1 25 0
   mov r15, r12
   cmp r15, 32
-  jge .L58
+  jge .L538
 .loc 1 26 0
   mov r12, 32
   mov rax, r12
@@ -4889,9 +16203,9 @@ _caustic_assembler_encoder_cst_reg_size:
   pop rbp
   ret
 .loc 1 25 0
-  jmp .L59
-.L58:
-.L59:
+  jmp .L539
+.L538:
+.L539:
 .loc 1 26 0
   mov r15, rbx
   movsxd r15, r15d
@@ -4900,7 +16214,7 @@ _caustic_assembler_encoder_cst_reg_size:
 .loc 1 26 0
   mov r15, r12
   cmp r15, 48
-  jge .L60
+  jge .L540
 .loc 1 27 0
   mov r12, 16
   mov rax, r12
@@ -4913,16 +16227,16 @@ _caustic_assembler_encoder_cst_reg_size:
   pop rbp
   ret
 .loc 1 26 0
-  jmp .L61
-.L60:
-.L61:
+  jmp .L541
+.L540:
+.L541:
 .loc 1 28 0
   mov r15, rbx
   movsxd r15, r15d
   mov r12, r15
   mov r15, r12
   cmp r15, 64
-  jge .L62
+  jge .L542
 .loc 1 27 0
 .loc 1 28 0
   mov rbx, 8
@@ -4936,9 +16250,9 @@ _caustic_assembler_encoder_cst_reg_size:
   pop rbp
   ret
 .loc 1 27 0
-  jmp .L63
-.L62:
-.L63:
+  jmp .L543
+.L542:
+.L543:
 .loc 1 29 0
   mov rbx, 128
 .loc 1 28 0
@@ -4978,7 +16292,7 @@ _caustic_assembler_encoder_cst_reg_base:
   mov r12, r15
   mov r15, r12
   cmp r15, 0
-  jge .L64
+  jge .L544
 .loc 1 31 0
   mov r15, rbx
   movsxd r15, r15d
@@ -4993,16 +16307,16 @@ _caustic_assembler_encoder_cst_reg_base:
   pop rbp
   ret
 .loc 1 30 0
-  jmp .L65
-.L64:
-.L65:
+  jmp .L545
+.L544:
+.L545:
 .loc 1 31 0
   mov r15, rbx
   movsxd r15, r15d
   mov r12, r15
   mov r15, r12
   cmp r15, 64
-  jl .L66
+  jl .L546
 .loc 1 32 0
   mov r15, rbx
   movsxd r15, r15d
@@ -5017,9 +16331,9 @@ _caustic_assembler_encoder_cst_reg_base:
   pop rbp
   ret
 .loc 1 31 0
-  jmp .L67
-.L66:
-.L67:
+  jmp .L547
+.L546:
+.L547:
 .loc 1 32 0
   mov r15, rbx
   movsxd r15, r15d
@@ -5069,21 +16383,21 @@ _caustic_assembler_encoder_cst_needs_rex_for_8bit:
   mov r12, r15
   mov r15, r12
   cmp r15, 52
-  jl .L70
+  jl .L550
   mov r15, rbx
   movsxd r15, r15d
   mov r12, r15
   mov r15, r12
   cmp r15, 55
-  jg .L70
+  jg .L550
   mov rbx, 1
-  jmp .L71
-.L70:
+  jmp .L551
+.L550:
   mov rbx, 0
-.L71:
+.L551:
   mov r15, rbx
   test r15, r15
-  jz .L68
+  jz .L548
 .loc 1 35 0
   mov rbx, 1
   mov rax, rbx
@@ -5096,9 +16410,9 @@ _caustic_assembler_encoder_cst_needs_rex_for_8bit:
   pop rbp
   ret
 .loc 1 34 0
-  jmp .L69
-.L68:
-.L69:
+  jmp .L549
+.L548:
+.L549:
 .loc 1 35 0
   mov rbx, 0
   mov rax, rbx
@@ -5146,7 +16460,7 @@ _caustic_assembler_encoder_cst_streq:
   mov r9, r15
   mov r15, r8
   cmp r15, r9
-  je .L72
+  je .L552
 .loc 1 41 0
 .loc 1 44 0
   mov r14, 0
@@ -5160,15 +16474,15 @@ _caustic_assembler_encoder_cst_streq:
   pop rbp
   ret
 .loc 1 41 0
-  jmp .L73
-.L72:
-.L73:
+  jmp .L553
+.L552:
+.L553:
 .loc 1 47 0
   mov r14, 0
 .loc 1 45 0
   mov rax, r14
   mov DWORD PTR [rbp-76], eax
-.L74:
+.L554:
 .loc 1 48 0
   movsxd r15, DWORD PTR [rbp-76]
   mov r14, r15
@@ -5179,7 +16493,7 @@ _caustic_assembler_encoder_cst_streq:
 .loc 1 48 0
   mov r15, r14
   cmp r15, r8
-  jge .L75
+  jge .L555
 .loc 1 50 0
   movsxd r15, DWORD PTR [rbp-76]
   mov r10, r15
@@ -5199,7 +16513,7 @@ _caustic_assembler_encoder_cst_streq:
 .loc 1 50 0
   mov r15, r13
   cmp r15, QWORD PTR [rbp-124]
-  je .L76
+  je .L556
 .loc 1 49 0
 .loc 1 54 0
   mov QWORD PTR [rbp-140], 0
@@ -5214,9 +16528,9 @@ _caustic_assembler_encoder_cst_streq:
   pop rbp
   ret
 .loc 1 49 0
-  jmp .L77
-.L76:
-.L77:
+  jmp .L557
+.L556:
+.L557:
 .loc 1 54 0
 .loc 1 55 0
   movsxd r15, DWORD PTR [rbp-76]
@@ -5227,8 +16541,8 @@ _caustic_assembler_encoder_cst_streq:
   mov rax, rbx
   mov DWORD PTR [rbp-76], eax
 .loc 1 48 0
-  jmp .L74
-.L75:
+  jmp .L554
+.L555:
 .loc 1 56 0
   mov rbx, 1
   mov rax, rbx
@@ -5270,7 +16584,7 @@ _caustic_assembler_encoder_cst_streq_lit:
 .loc 1 63 0
   mov rax, r14
   mov DWORD PTR [rbp-72], eax
-.L78:
+.L558:
 .loc 1 65 0
 .loc 1 66 0
   movsxd r15, DWORD PTR [rbp-72]
@@ -5284,7 +16598,7 @@ _caustic_assembler_encoder_cst_streq_lit:
 .loc 1 66 0
   mov r15, r9
   cmp r15, 0
-  je .L79
+  je .L559
 .loc 1 65 0
 .loc 1 68 0
   movsxd r15, DWORD PTR [rbp-72]
@@ -5294,7 +16608,7 @@ _caustic_assembler_encoder_cst_streq_lit:
   mov QWORD PTR [rbp-96], r15
   mov r15, QWORD PTR [rbp-88]
   cmp r15, QWORD PTR [rbp-96]
-  jl .L80
+  jl .L560
 .loc 1 67 0
 .loc 1 69 0
   mov QWORD PTR [rbp-112], 0
@@ -5308,9 +16622,9 @@ _caustic_assembler_encoder_cst_streq_lit:
   pop rbp
   ret
 .loc 1 67 0
-  jmp .L81
-.L80:
-.L81:
+  jmp .L561
+.L560:
+.L561:
 .loc 1 70 0
 .loc 1 71 0
   movsxd r15, DWORD PTR [rbp-72]
@@ -5332,7 +16646,7 @@ _caustic_assembler_encoder_cst_streq_lit:
 .loc 1 71 0
   mov r15, QWORD PTR [rbp-136]
   cmp r15, QWORD PTR [rbp-160]
-  je .L82
+  je .L562
 .loc 1 70 0
 .loc 1 75 0
   mov QWORD PTR [rbp-176], 0
@@ -5346,9 +16660,9 @@ _caustic_assembler_encoder_cst_streq_lit:
   pop rbp
   ret
 .loc 1 70 0
-  jmp .L83
-.L82:
-.L83:
+  jmp .L563
+.L562:
+.L563:
 .loc 1 76 0
   movsxd r15, DWORD PTR [rbp-72]
   mov QWORD PTR [rbp-184], r15
@@ -5359,8 +16673,8 @@ _caustic_assembler_encoder_cst_streq_lit:
   mov rax, rbx
   mov DWORD PTR [rbp-72], eax
 .loc 1 65 0
-  jmp .L78
-.L79:
+  jmp .L558
+.L559:
 .loc 1 80 0
   movsxd r15, DWORD PTR [rbp-72]
   mov rbx, r15
@@ -5427,13 +16741,13 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r14, r15
   mov r15, r14
   cmp r15, 2
-  jne .L84
+  jne .L564
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L86
+  jne .L566
 .loc 1 85 0
   mov r15, r8
   movzx r15, r15b
@@ -5442,7 +16756,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 85 0
   mov r15, r14
   cmp r15, 108
-  jne .L88
+  jne .L568
 .loc 1 86 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_AL]
   mov r15, r14
@@ -5458,16 +16772,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 85 0
-  jmp .L89
-.L88:
-.L89:
+  jmp .L569
+.L568:
+.L569:
 .loc 1 90 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L90
+  jne .L570
 .loc 1 88 0
 .loc 1 90 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_AX]
@@ -5484,9 +16798,9 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 88 0
-  jmp .L91
-.L90:
-.L91:
+  jmp .L571
+.L570:
+.L571:
 .loc 1 90 0
   mov r15, r8
   movzx r15, r15b
@@ -5495,7 +16809,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 90 0
   mov r15, r14
   cmp r15, 104
-  jne .L92
+  jne .L572
 .loc 1 91 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_AL]
   mov r15, r14
@@ -5511,25 +16825,25 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 90 0
-  jmp .L93
-.L92:
-.L93:
+  jmp .L573
+.L572:
+.L573:
 .loc 1 84 0
-  jmp .L87
-.L86:
+  jmp .L567
+.L566:
 .loc 1 91 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 99
-  jne .L94
+  jne .L574
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L96
+  jne .L576
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_CL]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -5543,16 +16857,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L97
-.L96:
-.L97:
+  jmp .L577
+.L576:
+.L577:
 .loc 1 94 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L98
+  jne .L578
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_CX]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -5566,26 +16880,26 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L99
-.L98:
-.L99:
+  jmp .L579
+.L578:
+.L579:
 .loc 1 91 0
-  jmp .L95
-.L94:
+  jmp .L575
+.L574:
 .loc 1 95 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L100
+  jne .L580
 .loc 1 96 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L102
+  jne .L582
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_DL]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -5599,16 +16913,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L103
-.L102:
-.L103:
+  jmp .L583
+.L582:
+.L583:
 .loc 1 97 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L104
+  jne .L584
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_DX]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -5622,15 +16936,15 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L105
-.L104:
-.L105:
+  jmp .L585
+.L584:
+.L585:
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L106
+  jne .L586
 .loc 1 98 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_DI]
   mov r15, r14
@@ -5646,25 +16960,25 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L107
-.L106:
-.L107:
+  jmp .L587
+.L586:
+.L587:
 .loc 1 95 0
-  jmp .L101
-.L100:
+  jmp .L581
+.L580:
 .loc 1 98 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L108
+  jne .L588
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L110
+  jne .L590
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_BL]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -5678,16 +16992,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L111
-.L110:
-.L111:
+  jmp .L591
+.L590:
+.L591:
 .loc 1 99 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L112
+  jne .L592
 .loc 1 100 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_BX]
   mov r15, r14
@@ -5703,16 +17017,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L113
-.L112:
-.L113:
+  jmp .L593
+.L592:
+.L593:
 .loc 1 101 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L114
+  jne .L594
 .loc 1 100 0
 .loc 1 103 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_BP]
@@ -5730,26 +17044,26 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 100 0
-  jmp .L115
-.L114:
-.L115:
+  jmp .L595
+.L594:
+.L595:
 .loc 1 98 0
-  jmp .L109
-.L108:
+  jmp .L589
+.L588:
 .loc 1 103 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L116
+  jne .L596
 .loc 1 104 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L118
+  jne .L598
 .loc 1 103 0
 .loc 1 105 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_SP]
@@ -5767,16 +17081,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 103 0
-  jmp .L119
-.L118:
-.L119:
+  jmp .L599
+.L598:
+.L599:
 .loc 1 106 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L120
+  jne .L600
 .loc 1 105 0
 .loc 1 107 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_SI]
@@ -5794,19 +17108,19 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 105 0
-  jmp .L121
-.L120:
-.L121:
+  jmp .L601
+.L600:
+.L601:
 .loc 1 103 0
-  jmp .L117
-.L116:
+  jmp .L597
+.L596:
 .loc 1 108 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 114
-  jne .L122
+  jne .L602
 .loc 1 107 0
 .loc 1 108 0
   mov r15, r8
@@ -5816,7 +17130,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 108 0
   mov r15, r14
   cmp r15, 56
-  jne .L124
+  jne .L604
 .loc 1 110 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R8]
   mov r15, r14
@@ -5833,9 +17147,9 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 108 0
-  jmp .L125
-.L124:
-.L125:
+  jmp .L605
+.L604:
+.L605:
 .loc 1 110 0
   mov r15, r8
   movzx r15, r15b
@@ -5844,7 +17158,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 110 0
   mov r15, r14
   cmp r15, 57
-  jne .L126
+  jne .L606
 .loc 1 111 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R9]
   mov r15, r14
@@ -5860,28 +17174,28 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 110 0
-  jmp .L127
-.L126:
-.L127:
+  jmp .L607
+.L606:
+.L607:
 .loc 1 107 0
-  jmp .L123
-.L122:
-.L123:
-.L117:
-.L109:
-.L101:
-.L95:
-.L87:
+  jmp .L603
+.L602:
+.L603:
+.L597:
+.L589:
+.L581:
+.L575:
+.L567:
 .loc 1 84 0
-  jmp .L85
-.L84:
+  jmp .L565
+.L564:
 .loc 1 113 0
   mov r15, QWORD PTR [rbp-75]
   movsxd r15, r15d
   mov r14, r15
   mov r15, r14
   cmp r15, 3
-  jne .L128
+  jne .L608
 .loc 1 114 0
   mov r14, rbx
   add r14, 2
@@ -5895,29 +17209,29 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r14, r15
   mov r15, r14
   cmp r15, 114
-  jne .L130
+  jne .L610
 .loc 1 116 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L134
+  jne .L614
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L134
+  jne .L614
   mov r14, 1
-  jmp .L135
-.L134:
+  jmp .L615
+.L614:
   mov r14, 0
-.L135:
+.L615:
 .loc 1 115 0
   mov r15, r14
   test r15, r15
-  jz .L132
+  jz .L612
 .loc 1 117 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_RAX]
   mov r15, r14
@@ -5933,32 +17247,32 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 115 0
-  jmp .L133
-.L132:
-.L133:
+  jmp .L613
+.L612:
+.L613:
 .loc 1 118 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 99
-  jne .L138
+  jne .L618
 .loc 1 119 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L138
+  jne .L618
 .loc 1 118 0
   mov r14, 1
-  jmp .L139
-.L138:
+  jmp .L619
+.L618:
   mov r14, 0
-.L139:
+.L619:
   mov r15, r14
   test r15, r15
-  jz .L136
+  jz .L616
 .loc 1 120 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_RCX]
   mov r15, r14
@@ -5975,31 +17289,31 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 118 0
-  jmp .L137
-.L136:
-.L137:
+  jmp .L617
+.L616:
+.L617:
 .loc 1 121 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L142
+  jne .L622
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L142
+  jne .L622
   mov r14, 1
-  jmp .L143
-.L142:
+  jmp .L623
+.L622:
   mov r14, 0
-.L143:
+.L623:
 .loc 1 120 0
   mov r15, r14
   test r15, r15
-  jz .L140
+  jz .L620
 .loc 1 122 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_RDX]
   mov r15, r14
@@ -6016,31 +17330,31 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 120 0
-  jmp .L141
-.L140:
-.L141:
+  jmp .L621
+.L620:
+.L621:
 .loc 1 123 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L146
+  jne .L626
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L146
+  jne .L626
   mov r14, 1
-  jmp .L147
-.L146:
+  jmp .L627
+.L626:
   mov r14, 0
-.L147:
+.L627:
 .loc 1 122 0
   mov r15, r14
   test r15, r15
-  jz .L144
+  jz .L624
 .loc 1 123 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_RBX]
   mov r15, r14
@@ -6056,9 +17370,9 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 122 0
-  jmp .L145
-.L144:
-.L145:
+  jmp .L625
+.L624:
+.L625:
 .loc 1 124 0
   mov r15, r8
   movzx r15, r15b
@@ -6067,23 +17381,23 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 124 0
   mov r15, r14
   cmp r15, 115
-  jne .L150
+  jne .L630
 .loc 1 125 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L150
+  jne .L630
 .loc 1 124 0
   mov r14, 1
-  jmp .L151
-.L150:
+  jmp .L631
+.L630:
   mov r14, 0
-.L151:
+.L631:
   mov r15, r14
   test r15, r15
-  jz .L148
+  jz .L628
 .loc 1 126 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_RSP]
   mov r15, r14
@@ -6099,9 +17413,9 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 124 0
-  jmp .L149
-.L148:
-.L149:
+  jmp .L629
+.L628:
+.L629:
 .loc 1 126 0
   mov r15, r8
   movzx r15, r15b
@@ -6110,23 +17424,23 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 126 0
   mov r15, r14
   cmp r15, 98
-  jne .L154
+  jne .L634
 .loc 1 127 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L154
+  jne .L634
 .loc 1 126 0
   mov r14, 1
-  jmp .L155
-.L154:
+  jmp .L635
+.L634:
   mov r14, 0
-.L155:
+.L635:
   mov r15, r14
   test r15, r15
-  jz .L152
+  jz .L632
 .loc 1 128 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_RBP]
   mov r15, r14
@@ -6142,30 +17456,30 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 126 0
-  jmp .L153
-.L152:
-.L153:
+  jmp .L633
+.L632:
+.L633:
 .loc 1 129 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L158
+  jne .L638
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L158
+  jne .L638
   mov r14, 1
-  jmp .L159
-.L158:
+  jmp .L639
+.L638:
   mov r14, 0
-.L159:
+.L639:
   mov r15, r14
   test r15, r15
-  jz .L156
+  jz .L636
 .loc 1 130 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_RSI]
   mov r15, r14
@@ -6181,32 +17495,32 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 129 0
-  jmp .L157
-.L156:
-.L157:
+  jmp .L637
+.L636:
+.L637:
 .loc 1 131 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L162
+  jne .L642
 .loc 1 132 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L162
+  jne .L642
 .loc 1 131 0
   mov r14, 1
-  jmp .L163
-.L162:
+  jmp .L643
+.L642:
   mov r14, 0
-.L163:
+.L643:
   mov r15, r14
   test r15, r15
-  jz .L160
+  jz .L640
 .loc 1 133 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_RDI]
   mov r15, r14
@@ -6223,31 +17537,31 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 131 0
-  jmp .L161
-.L160:
-.L161:
+  jmp .L641
+.L640:
+.L641:
 .loc 1 134 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L166
+  jne .L646
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L166
+  jne .L646
   mov r14, 1
-  jmp .L167
-.L166:
+  jmp .L647
+.L646:
   mov r14, 0
-.L167:
+.L647:
 .loc 1 133 0
   mov r15, r14
   test r15, r15
-  jz .L164
+  jz .L644
 .loc 1 135 0
   mov r14, 99
   mov rax, r14
@@ -6260,22 +17574,22 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 133 0
-  jmp .L165
-.L164:
-.L165:
+  jmp .L645
+.L644:
+.L645:
 .loc 1 139 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 49
-  jne .L168
+  jne .L648
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 48
-  jne .L170
+  jne .L650
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R10]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -6289,16 +17603,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L171
-.L170:
-.L171:
+  jmp .L651
+.L650:
+.L651:
 .loc 1 140 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 49
-  jne .L172
+  jne .L652
 .loc 1 141 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R11]
   mov r15, r14
@@ -6314,16 +17628,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 140 0
-  jmp .L173
-.L172:
-.L173:
+  jmp .L653
+.L652:
+.L653:
 .loc 1 142 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 50
-  jne .L174
+  jne .L654
 .loc 1 143 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R12]
   mov r15, r14
@@ -6339,16 +17653,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 142 0
-  jmp .L175
-.L174:
-.L175:
+  jmp .L655
+.L654:
+.L655:
 .loc 1 144 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 51
-  jne .L176
+  jne .L656
 .loc 1 143 0
 .loc 1 144 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R13]
@@ -6365,16 +17679,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 143 0
-  jmp .L177
-.L176:
-.L177:
+  jmp .L657
+.L656:
+.L657:
 .loc 1 145 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 52
-  jne .L178
+  jne .L658
 .loc 1 146 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R14]
   mov r15, r14
@@ -6390,16 +17704,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 145 0
-  jmp .L179
-.L178:
-.L179:
+  jmp .L659
+.L658:
+.L659:
 .loc 1 147 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 53
-  jne .L180
+  jne .L660
 .loc 1 148 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R15]
   mov r15, r14
@@ -6415,20 +17729,20 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L181
-.L180:
-.L181:
+  jmp .L661
+.L660:
+.L661:
 .loc 1 139 0
-  jmp .L169
-.L168:
-.L169:
+  jmp .L649
+.L648:
+.L649:
 .loc 1 149 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 56
-  jne .L182
+  jne .L662
 .loc 1 148 0
 .loc 1 149 0
   mov r15, r9
@@ -6438,7 +17752,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 149 0
   mov r15, r14
   cmp r15, 100
-  jne .L184
+  jne .L664
 .loc 1 151 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R8D]
   mov r15, r14
@@ -6454,16 +17768,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 149 0
-  jmp .L185
-.L184:
-.L185:
+  jmp .L665
+.L664:
+.L665:
 .loc 1 152 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 119
-  jne .L186
+  jne .L666
 .loc 1 151 0
 .loc 1 153 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R8W]
@@ -6481,9 +17795,9 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 151 0
-  jmp .L187
-.L186:
-.L187:
+  jmp .L667
+.L666:
+.L667:
 .loc 1 153 0
   mov r15, r9
   movzx r15, r15b
@@ -6492,7 +17806,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 153 0
   mov r15, r14
   cmp r15, 98
-  jne .L188
+  jne .L668
 .loc 1 154 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R8B]
   mov r15, r14
@@ -6508,27 +17822,27 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 153 0
-  jmp .L189
-.L188:
-.L189:
+  jmp .L669
+.L668:
+.L669:
 .loc 1 148 0
-  jmp .L183
-.L182:
-.L183:
+  jmp .L663
+.L662:
+.L663:
 .loc 1 155 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 57
-  jne .L190
+  jne .L670
 .loc 1 156 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L192
+  jne .L672
 .loc 1 157 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R9D]
   mov r15, r14
@@ -6544,16 +17858,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 156 0
-  jmp .L193
-.L192:
-.L193:
+  jmp .L673
+.L672:
+.L673:
 .loc 1 158 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 119
-  jne .L194
+  jne .L674
 .loc 1 157 0
 .loc 1 158 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R9W]
@@ -6570,16 +17884,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 157 0
-  jmp .L195
-.L194:
-.L195:
+  jmp .L675
+.L674:
+.L675:
 .loc 1 163 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L196
+  jne .L676
 .loc 1 160 0
 .loc 1 163 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_R9B]
@@ -6596,44 +17910,44 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 160 0
-  jmp .L197
-.L196:
-.L197:
+  jmp .L677
+.L676:
+.L677:
 .loc 1 155 0
-  jmp .L191
-.L190:
-.L191:
+  jmp .L671
+.L670:
+.L671:
 .loc 1 115 0
-  jmp .L131
-.L130:
+  jmp .L611
+.L610:
 .loc 1 163 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L198
+  jne .L678
 .loc 1 164 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L202
+  jne .L682
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L202
+  jne .L682
   mov r14, 1
-  jmp .L203
-.L202:
+  jmp .L683
+.L682:
   mov r14, 0
-.L203:
+.L683:
   mov r15, r14
   test r15, r15
-  jz .L200
+  jz .L680
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_EAX]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -6647,9 +17961,9 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L201
-.L200:
-.L201:
+  jmp .L681
+.L680:
+.L681:
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
@@ -6657,23 +17971,23 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 164 0
   mov r15, r14
   cmp r15, 99
-  jne .L206
+  jne .L686
 .loc 1 165 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L206
+  jne .L686
 .loc 1 164 0
   mov r14, 1
-  jmp .L207
-.L206:
+  jmp .L687
+.L686:
   mov r14, 0
-.L207:
+.L687:
   mov r15, r14
   test r15, r15
-  jz .L204
+  jz .L684
 .loc 1 165 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_ECX]
   mov r15, r14
@@ -6689,9 +18003,9 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 164 0
-  jmp .L205
-.L204:
-.L205:
+  jmp .L685
+.L684:
+.L685:
 .loc 1 165 0
   mov r15, r8
   movzx r15, r15b
@@ -6700,23 +18014,23 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 165 0
   mov r15, r14
   cmp r15, 100
-  jne .L210
+  jne .L690
 .loc 1 168 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L210
+  jne .L690
 .loc 1 165 0
   mov r14, 1
-  jmp .L211
-.L210:
+  jmp .L691
+.L690:
   mov r14, 0
-.L211:
+.L691:
   mov r15, r14
   test r15, r15
-  jz .L208
+  jz .L688
 .loc 1 168 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_EDX]
   mov r15, r14
@@ -6732,32 +18046,32 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 165 0
-  jmp .L209
-.L208:
-.L209:
+  jmp .L689
+.L688:
+.L689:
 .loc 1 168 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L214
+  jne .L694
 .loc 1 169 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L214
+  jne .L694
 .loc 1 168 0
   mov r14, 1
-  jmp .L215
-.L214:
+  jmp .L695
+.L694:
   mov r14, 0
-.L215:
+.L695:
   mov r15, r14
   test r15, r15
-  jz .L212
+  jz .L692
 .loc 1 169 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_EBX]
   mov r15, r14
@@ -6773,30 +18087,30 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 168 0
-  jmp .L213
-.L212:
-.L213:
+  jmp .L693
+.L692:
+.L693:
 .loc 1 169 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L218
+  jne .L698
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L218
+  jne .L698
   mov r14, 1
-  jmp .L219
-.L218:
+  jmp .L699
+.L698:
   mov r14, 0
-.L219:
+.L699:
   mov r15, r14
   test r15, r15
-  jz .L216
+  jz .L696
 .loc 1 170 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_ESP]
   mov r15, r14
@@ -6812,30 +18126,30 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 169 0
-  jmp .L217
-.L216:
-.L217:
+  jmp .L697
+.L696:
+.L697:
 .loc 1 170 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L222
+  jne .L702
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L222
+  jne .L702
   mov r14, 1
-  jmp .L223
-.L222:
+  jmp .L703
+.L702:
   mov r14, 0
-.L223:
+.L703:
   mov r15, r14
   test r15, r15
-  jz .L220
+  jz .L700
 .loc 1 173 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_EBP]
   mov r15, r14
@@ -6852,30 +18166,30 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 170 0
-  jmp .L221
-.L220:
-.L221:
+  jmp .L701
+.L700:
+.L701:
 .loc 1 173 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L226
+  jne .L706
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L226
+  jne .L706
   mov r14, 1
-  jmp .L227
-.L226:
+  jmp .L707
+.L706:
   mov r14, 0
-.L227:
+.L707:
   mov r15, r14
   test r15, r15
-  jz .L224
+  jz .L704
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_ESI]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -6889,31 +18203,31 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L225
-.L224:
-.L225:
+  jmp .L705
+.L704:
+.L705:
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L230
+  jne .L710
 .loc 1 174 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L230
+  jne .L710
 .loc 1 173 0
   mov r14, 1
-  jmp .L231
-.L230:
+  jmp .L711
+.L710:
   mov r14, 0
-.L231:
+.L711:
   mov r15, r14
   test r15, r15
-  jz .L228
+  jz .L708
 .loc 1 174 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_EDI]
   mov r15, r14
@@ -6929,47 +18243,47 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 173 0
-  jmp .L229
-.L228:
-.L229:
+  jmp .L709
+.L708:
+.L709:
 .loc 1 163 0
-  jmp .L199
-.L198:
+  jmp .L679
+.L678:
 .loc 1 174 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L236
+  jne .L716
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L236
+  jne .L716
   mov r14, 1
-  jmp .L237
-.L236:
+  jmp .L717
+.L716:
   mov r14, 0
-.L237:
+.L717:
   mov r15, r14
   test r15, r15
-  jz .L234
+  jz .L714
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L234
+  jne .L714
   mov r14, 1
-  jmp .L235
-.L234:
+  jmp .L715
+.L714:
   mov r14, 0
-.L235:
+.L715:
   mov r15, r14
   test r15, r15
-  jz .L232
+  jz .L712
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_SPL]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -6983,43 +18297,43 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L233
-.L232:
+  jmp .L713
+.L712:
 .loc 1 175 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L242
+  jne .L722
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L242
+  jne .L722
   mov r14, 1
-  jmp .L243
-.L242:
+  jmp .L723
+.L722:
   mov r14, 0
-.L243:
+.L723:
   mov r15, r14
   test r15, r15
-  jz .L240
+  jz .L720
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L240
+  jne .L720
   mov r14, 1
-  jmp .L241
-.L240:
+  jmp .L721
+.L720:
   mov r14, 0
-.L241:
+.L721:
   mov r15, r14
   test r15, r15
-  jz .L238
+  jz .L718
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_BPL]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -7033,46 +18347,46 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L239
-.L238:
+  jmp .L719
+.L718:
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L248
+  jne .L728
 .loc 1 178 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L248
+  jne .L728
 .loc 1 175 0
   mov r14, 1
-  jmp .L249
-.L248:
+  jmp .L729
+.L728:
   mov r14, 0
-.L249:
+.L729:
   mov r15, r14
   test r15, r15
-  jz .L246
+  jz .L726
 .loc 1 178 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L246
+  jne .L726
 .loc 1 175 0
   mov r14, 1
-  jmp .L247
-.L246:
+  jmp .L727
+.L726:
   mov r14, 0
-.L247:
+.L727:
   mov r15, r14
   test r15, r15
-  jz .L244
+  jz .L724
 .loc 1 178 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_SIL]
   mov r15, r14
@@ -7088,15 +18402,15 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 175 0
-  jmp .L245
-.L244:
+  jmp .L725
+.L724:
 .loc 1 178 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L254
+  jne .L734
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
@@ -7104,31 +18418,31 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 178 0
   mov r15, r14
   cmp r15, 105
-  jne .L254
+  jne .L734
   mov r14, 1
-  jmp .L255
-.L254:
+  jmp .L735
+.L734:
   mov r14, 0
-.L255:
+.L735:
   mov r15, r14
   test r15, r15
-  jz .L252
+  jz .L732
 .loc 1 179 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L252
+  jne .L732
 .loc 1 178 0
   mov r14, 1
-  jmp .L253
-.L252:
+  jmp .L733
+.L732:
   mov r14, 0
-.L253:
+.L733:
   mov r15, r14
   test r15, r15
-  jz .L250
+  jz .L730
 .loc 1 179 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_REG_DIL]
   mov r15, r14
@@ -7144,46 +18458,46 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 178 0
-  jmp .L251
-.L250:
-.L251:
-.L245:
-.L239:
-.L233:
-.L199:
-.L131:
+  jmp .L731
+.L730:
+.L731:
+.L725:
+.L719:
+.L713:
+.L679:
+.L611:
 .loc 1 113 0
-  jmp .L129
-.L128:
+  jmp .L609
+.L608:
 .loc 1 179 0
   mov r15, QWORD PTR [rbp-75]
   movsxd r15, r15d
   mov r14, r15
   mov r15, r14
   cmp r15, 4
-  jne .L256
+  jne .L736
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 114
-  jne .L260
+  jne .L740
 .loc 1 180 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 49
-  jne .L260
+  jne .L740
 .loc 1 179 0
   mov r14, 1
-  jmp .L261
-.L260:
+  jmp .L741
+.L740:
   mov r14, 0
-.L261:
+.L741:
   mov r15, r14
   test r15, r15
-  jz .L258
+  jz .L738
 .loc 1 180 0
   mov r14, rbx
   add r14, 2
@@ -7204,13 +18518,13 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L262
+  jne .L742
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 48
-  jne .L264
+  jne .L744
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R10D]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7224,15 +18538,15 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L265
-.L264:
-.L265:
+  jmp .L745
+.L744:
+.L745:
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 49
-  jne .L266
+  jne .L746
 .loc 1 184 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R11D]
   mov r15, r12
@@ -7248,16 +18562,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 183 0
-  jmp .L267
-.L266:
-.L267:
+  jmp .L747
+.L746:
+.L747:
 .loc 1 184 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 50
-  jne .L268
+  jne .L748
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R12D]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7271,15 +18585,15 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L269
-.L268:
-.L269:
+  jmp .L749
+.L748:
+.L749:
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 51
-  jne .L270
+  jne .L750
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R13D]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7293,16 +18607,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L271
-.L270:
-.L271:
+  jmp .L751
+.L750:
+.L751:
 .loc 1 185 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 52
-  jne .L272
+  jne .L752
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R14D]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7316,15 +18630,15 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L273
-.L272:
-.L273:
+  jmp .L753
+.L752:
+.L753:
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 53
-  jne .L274
+  jne .L754
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R15D]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7338,19 +18652,19 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L275
-.L274:
-.L275:
+  jmp .L755
+.L754:
+.L755:
 .loc 1 183 0
-  jmp .L263
-.L262:
+  jmp .L743
+.L742:
 .loc 1 189 0
   mov r15, r10
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 119
-  jne .L276
+  jne .L756
 .loc 1 185 0
 .loc 1 189 0
   mov r15, r9
@@ -7358,7 +18672,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, r15
   mov r15, r12
   cmp r15, 48
-  jne .L278
+  jne .L758
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R10W]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7372,15 +18686,15 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L279
-.L278:
-.L279:
+  jmp .L759
+.L758:
+.L759:
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 49
-  jne .L280
+  jne .L760
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R11W]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7394,16 +18708,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L281
-.L280:
-.L281:
+  jmp .L761
+.L760:
+.L761:
 .loc 1 190 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 50
-  jne .L282
+  jne .L762
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R12W]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7417,15 +18731,15 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L283
-.L282:
-.L283:
+  jmp .L763
+.L762:
+.L763:
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 51
-  jne .L284
+  jne .L764
 .loc 1 192 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R13W]
   mov r15, r12
@@ -7441,9 +18755,9 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 190 0
-  jmp .L285
-.L284:
-.L285:
+  jmp .L765
+.L764:
+.L765:
 .loc 1 192 0
   mov r15, r9
   movzx r15, r15b
@@ -7452,7 +18766,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 192 0
   mov r15, r12
   cmp r15, 52
-  jne .L286
+  jne .L766
 .loc 1 193 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R14W]
   mov r15, r12
@@ -7468,16 +18782,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 192 0
-  jmp .L287
-.L286:
-.L287:
+  jmp .L767
+.L766:
+.L767:
 .loc 1 194 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 53
-  jne .L288
+  jne .L768
 .loc 1 195 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R15W]
   mov r15, r12
@@ -7493,26 +18807,26 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L289
-.L288:
-.L289:
+  jmp .L769
+.L768:
+.L769:
 .loc 1 185 0
-  jmp .L277
-.L276:
+  jmp .L757
+.L756:
 .loc 1 197 0
   mov r15, r10
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 98
-  jne .L290
+  jne .L770
 .loc 1 198 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 48
-  jne .L292
+  jne .L772
 .loc 1 199 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R10B]
   mov r15, r12
@@ -7528,16 +18842,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 198 0
-  jmp .L293
-.L292:
-.L293:
+  jmp .L773
+.L772:
+.L773:
 .loc 1 199 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 49
-  jne .L294
+  jne .L774
 .loc 1 202 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R11B]
   mov r15, r12
@@ -7554,16 +18868,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 199 0
-  jmp .L295
-.L294:
-.L295:
+  jmp .L775
+.L774:
+.L775:
 .loc 1 202 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 50
-  jne .L296
+  jne .L776
 .loc 1 203 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R12B]
   mov r15, r12
@@ -7579,16 +18893,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 202 0
-  jmp .L297
-.L296:
-.L297:
+  jmp .L777
+.L776:
+.L777:
 .loc 1 203 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 51
-  jne .L298
+  jne .L778
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R13B]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7602,16 +18916,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L299
-.L298:
-.L299:
+  jmp .L779
+.L778:
+.L779:
 .loc 1 204 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 52
-  jne .L300
+  jne .L780
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R14B]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7625,16 +18939,16 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L301
-.L300:
-.L301:
+  jmp .L781
+.L780:
+.L781:
 .loc 1 205 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 53
-  jne .L302
+  jne .L782
 .loc 1 206 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_R15B]
   mov r15, r12
@@ -7650,18 +18964,18 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 205 0
-  jmp .L303
-.L302:
-.L303:
+  jmp .L783
+.L782:
+.L783:
 .loc 1 197 0
-  jmp .L291
-.L290:
-.L291:
-.L277:
-.L263:
+  jmp .L771
+.L770:
+.L771:
+.L757:
+.L743:
 .loc 1 179 0
-  jmp .L259
-.L258:
+  jmp .L739
+.L738:
 .loc 1 207 0
   mov r15, r13
   movzx r15, r15b
@@ -7670,24 +18984,24 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 207 0
   mov r15, r12
   cmp r15, 120
-  jne .L306
+  jne .L786
 .loc 1 210 0
   mov r15, r8
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 109
-  jne .L306
+  jne .L786
 .loc 1 207 0
   mov r12, 1
-  jmp .L307
-.L306:
+  jmp .L787
+.L786:
   mov r12, 0
-.L307:
+.L787:
 .loc 1 206 0
   mov r15, r12
   test r15, r15
-  jz .L304
+  jz .L784
 .loc 1 210 0
   mov r12, rbx
   add r12, 2
@@ -7698,7 +19012,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 210 0
   mov r15, r14
   cmp r15, 109
-  jne .L308
+  jne .L788
 .loc 1 212 0
   mov r12, rbx
   add r12, 3
@@ -7712,21 +19026,21 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, r15
   mov r15, r12
   cmp r15, 48
-  jb .L312
+  jb .L792
   mov r15, r14
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 57
-  ja .L312
+  ja .L792
   mov r12, 1
-  jmp .L313
-.L312:
+  jmp .L793
+.L792:
   mov r12, 0
-.L313:
+.L793:
   mov r15, r12
   test r15, r15
-  jz .L310
+  jz .L790
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_XMM0]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -7754,49 +19068,49 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbx
   pop rbp
   ret
-  jmp .L311
-.L310:
-.L311:
+  jmp .L791
+.L790:
+.L791:
 .loc 1 210 0
-  jmp .L309
-.L308:
-.L309:
+  jmp .L789
+.L788:
+.L789:
 .loc 1 206 0
-  jmp .L305
-.L304:
-.L305:
-.L259:
+  jmp .L785
+.L784:
+.L785:
+.L739:
 .loc 1 179 0
-  jmp .L257
-.L256:
+  jmp .L737
+.L736:
 .loc 1 214 0
   mov r15, QWORD PTR [rbp-75]
   movsxd r15, r15d
   mov r12, r15
   mov r15, r12
   cmp r15, 5
-  jne .L314
+  jne .L794
 .loc 1 215 0
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 120
-  jne .L322
+  jne .L802
   mov r15, r8
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 109
-  jne .L322
+  jne .L802
   mov r12, 1
-  jmp .L323
-.L322:
+  jmp .L803
+.L802:
   mov r12, 0
-.L323:
+.L803:
   mov r15, r12
   test r15, r15
-  jz .L320
+  jz .L800
   mov r12, rbx
   add r12, 2
   mov r15, r12
@@ -7804,15 +19118,15 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r13, r15
   mov r15, r13
   cmp r15, 109
-  jne .L320
+  jne .L800
   mov r12, 1
-  jmp .L321
-.L320:
+  jmp .L801
+.L800:
   mov r12, 0
-.L321:
+.L801:
   mov r15, r12
   test r15, r15
-  jz .L318
+  jz .L798
 .loc 1 216 0
 .loc 1 215 0
   mov r12, rbx
@@ -7824,16 +19138,16 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 215 0
   mov r15, r13
   cmp r15, 49
-  jne .L318
+  jne .L798
   mov r12, 1
-  jmp .L319
-.L318:
+  jmp .L799
+.L798:
   mov r12, 0
-.L319:
+.L799:
 .loc 1 214 0
   mov r15, r12
   test r15, r15
-  jz .L316
+  jz .L796
 .loc 1 217 0
   mov r12, rbx
   add r12, 4
@@ -7847,23 +19161,23 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, r15
   mov r15, r12
   cmp r15, 48
-  jb .L326
+  jb .L806
 .loc 1 219 0
   mov r15, rbx
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 53
-  ja .L326
+  ja .L806
 .loc 1 218 0
   mov r12, 1
-  jmp .L327
-.L326:
+  jmp .L807
+.L806:
   mov r12, 0
-.L327:
+.L807:
   mov r15, r12
   test r15, r15
-  jz .L324
+  jz .L804
 .loc 1 219 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_XMM10]
   mov r15, r12
@@ -7889,19 +19203,19 @@ _caustic_assembler_encoder_cst_lookup_register:
   pop rbp
   ret
 .loc 1 218 0
-  jmp .L325
-.L324:
-.L325:
+  jmp .L805
+.L804:
+.L805:
 .loc 1 214 0
-  jmp .L317
-.L316:
-.L317:
-  jmp .L315
-.L314:
-.L315:
-.L257:
-.L129:
-.L85:
+  jmp .L797
+.L796:
+.L797:
+  jmp .L795
+.L794:
+.L795:
+.L737:
+.L609:
+.L565:
 .loc 1 220 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov r15, rbx
@@ -7949,14 +19263,14 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 2
-  jne .L328
+  jne .L808
 .loc 1 224 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L332
+  jne .L812
   mov r14, rbx
   add r14, 1
   mov r15, r14
@@ -7964,15 +19278,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r8, r15
   mov r15, r8
   cmp r15, 114
-  jne .L332
+  jne .L812
   mov r14, 1
-  jmp .L333
-.L332:
+  jmp .L813
+.L812:
   mov r14, 0
-.L333:
+.L813:
   mov r15, r14
   test r15, r15
-  jz .L330
+  jz .L810
 .loc 1 225 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_OR]
   mov r15, r14
@@ -7988,16 +19302,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L331
-.L330:
-.L331:
+  jmp .L811
+.L810:
+.L811:
 .loc 1 225 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 106
-  jne .L334
+  jne .L814
 .loc 1 226 0
   mov r14, rbx
   add r14, 1
@@ -8011,7 +19325,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 122
-  jne .L336
+  jne .L816
 .loc 1 226 0
 .loc 1 227 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JZ]
@@ -8028,16 +19342,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 226 0
-  jmp .L337
-.L336:
-.L337:
+  jmp .L817
+.L816:
+.L817:
 .loc 1 227 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L338
+  jne .L818
 .loc 1 231 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JE]
   mov r15, r14
@@ -8054,16 +19368,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 227 0
-  jmp .L339
-.L338:
-.L339:
+  jmp .L819
+.L818:
+.L819:
 .loc 1 231 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L340
+  jne .L820
 .loc 1 232 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JL]
   mov r15, r14
@@ -8079,16 +19393,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 231 0
-  jmp .L341
-.L340:
-.L341:
+  jmp .L821
+.L820:
+.L821:
 .loc 1 232 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 103
-  jne .L342
+  jne .L822
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JG]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -8102,16 +19416,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L343
-.L342:
-.L343:
+  jmp .L823
+.L822:
+.L823:
 .loc 1 233 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L344
+  jne .L824
 .loc 1 234 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JA]
   mov r15, r14
@@ -8127,16 +19441,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L345
-.L344:
-.L345:
+  jmp .L825
+.L824:
+.L825:
 .loc 1 235 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L346
+  jne .L826
 .loc 1 234 0
 .loc 1 235 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JB]
@@ -8153,16 +19467,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 234 0
-  jmp .L347
-.L346:
-.L347:
+  jmp .L827
+.L826:
+.L827:
 .loc 1 225 0
-  jmp .L335
-.L334:
-.L335:
+  jmp .L815
+.L814:
+.L815:
 .loc 1 223 0
-  jmp .L329
-.L328:
+  jmp .L809
+.L808:
 .loc 1 235 0
   mov r15, QWORD PTR [rbp-77]
   movsxd r15, r15d
@@ -8171,7 +19485,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 235 0
   mov r15, r14
   cmp r15, 3
-  jne .L348
+  jne .L828
 .loc 1 237 0
   mov r14, rbx
   add r14, 1
@@ -8191,28 +19505,28 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 109
-  jne .L350
+  jne .L830
 .loc 1 240 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L354
+  jne .L834
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 118
-  jne .L354
+  jne .L834
   mov r14, 1
-  jmp .L355
-.L354:
+  jmp .L835
+.L834:
   mov r14, 0
-.L355:
+.L835:
   mov r15, r14
   test r15, r15
-  jz .L352
+  jz .L832
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_MOV]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -8226,35 +19540,35 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L353
-.L352:
-.L353:
+  jmp .L833
+.L832:
+.L833:
 .loc 1 239 0
-  jmp .L351
-.L350:
+  jmp .L831
+.L830:
 .loc 1 241 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L360
+  jne .L840
 .loc 1 242 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L360
+  jne .L840
 .loc 1 241 0
   mov r14, 1
-  jmp .L361
-.L360:
+  jmp .L841
+.L840:
   mov r14, 0
-.L361:
+.L841:
   mov r15, r14
   test r15, r15
-  jz .L358
+  jz .L838
 .loc 1 242 0
   mov r15, r9
   movzx r15, r15b
@@ -8263,16 +19577,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 242 0
   mov r15, r14
   cmp r15, 97
-  jne .L358
+  jne .L838
 .loc 1 241 0
   mov r14, 1
-  jmp .L359
-.L358:
+  jmp .L839
+.L838:
   mov r14, 0
-.L359:
+.L839:
   mov r15, r14
   test r15, r15
-  jz .L356
+  jz .L836
 .loc 1 244 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_LEA]
   mov r15, r14
@@ -8288,45 +19602,45 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 241 0
-  jmp .L357
-.L356:
+  jmp .L837
+.L836:
 .loc 1 244 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L366
+  jne .L846
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L366
+  jne .L846
   mov r14, 1
-  jmp .L367
-.L366:
+  jmp .L847
+.L846:
   mov r14, 0
-.L367:
+.L847:
   mov r15, r14
   test r15, r15
-  jz .L364
+  jz .L844
 .loc 1 245 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L364
+  jne .L844
 .loc 1 244 0
   mov r14, 1
-  jmp .L365
-.L364:
+  jmp .L845
+.L844:
   mov r14, 0
-.L365:
+.L845:
   mov r15, r14
   test r15, r15
-  jz .L362
+  jz .L842
 .loc 1 245 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
   mov r15, r14
@@ -8342,15 +19656,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 244 0
-  jmp .L363
-.L362:
+  jmp .L843
+.L842:
 .loc 1 245 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L368
+  jne .L848
 .loc 1 246 0
   mov r15, r8
   movzx r15, r15b
@@ -8359,23 +19673,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 246 0
   mov r15, r14
   cmp r15, 117
-  jne .L372
+  jne .L852
 .loc 1 247 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L372
+  jne .L852
 .loc 1 246 0
   mov r14, 1
-  jmp .L373
-.L372:
+  jmp .L853
+.L852:
   mov r14, 0
-.L373:
+.L853:
   mov r15, r14
   test r15, r15
-  jz .L370
+  jz .L850
 .loc 1 247 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
   mov r15, r14
@@ -8391,9 +19705,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 246 0
-  jmp .L371
-.L370:
-.L371:
+  jmp .L851
+.L850:
+.L851:
 .loc 1 250 0
   mov r15, r8
   movzx r15, r15b
@@ -8402,7 +19716,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 250 0
   mov r15, r14
   cmp r15, 104
-  jne .L374
+  jne .L854
 .loc 1 248 0
 .loc 1 251 0
   mov r15, r9
@@ -8410,7 +19724,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L376
+  jne .L856
 .loc 1 252 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SHL]
   mov r15, r14
@@ -8426,16 +19740,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 251 0
-  jmp .L377
-.L376:
-.L377:
+  jmp .L857
+.L856:
+.L857:
 .loc 1 252 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 114
-  jne .L378
+  jne .L858
 .loc 1 253 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SHR]
   mov r15, r14
@@ -8451,34 +19765,34 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 252 0
-  jmp .L379
-.L378:
-.L379:
+  jmp .L859
+.L858:
+.L859:
 .loc 1 248 0
-  jmp .L375
-.L374:
-.L375:
+  jmp .L855
+.L854:
+.L855:
 .loc 1 253 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L382
+  jne .L862
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 114
-  jne .L382
+  jne .L862
   mov r14, 1
-  jmp .L383
-.L382:
+  jmp .L863
+.L862:
   mov r14, 0
-.L383:
+.L863:
   mov r15, r14
   test r15, r15
-  jz .L380
+  jz .L860
 .loc 1 254 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SAR]
   mov r15, r14
@@ -8494,19 +19808,19 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 253 0
-  jmp .L381
-.L380:
-.L381:
+  jmp .L861
+.L860:
+.L861:
 .loc 1 245 0
-  jmp .L369
-.L368:
+  jmp .L849
+.L848:
 .loc 1 255 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L388
+  jne .L868
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
@@ -8514,32 +19828,32 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 255 0
   mov r15, r14
   cmp r15, 105
-  jne .L388
+  jne .L868
   mov r14, 1
-  jmp .L389
-.L388:
+  jmp .L869
+.L868:
   mov r14, 0
-.L389:
+.L869:
   mov r15, r14
   test r15, r15
-  jz .L386
+  jz .L866
 .loc 1 256 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 118
-  jne .L386
+  jne .L866
 .loc 1 255 0
   mov r14, 1
-  jmp .L387
-.L386:
+  jmp .L867
+.L866:
   mov r14, 0
-.L387:
+.L867:
 .loc 1 254 0
   mov r15, r14
   test r15, r15
-  jz .L384
+  jz .L864
 .loc 1 257 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_DIV]
   mov r15, r14
@@ -8555,15 +19869,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 254 0
-  jmp .L385
-.L384:
+  jmp .L865
+.L864:
 .loc 1 257 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 99
-  jne .L390
+  jne .L870
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
@@ -8571,23 +19885,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 257 0
   mov r15, r14
   cmp r15, 113
-  jne .L394
+  jne .L874
 .loc 1 258 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L394
+  jne .L874
 .loc 1 257 0
   mov r14, 1
-  jmp .L395
-.L394:
+  jmp .L875
+.L874:
   mov r14, 0
-.L395:
+.L875:
   mov r15, r14
   test r15, r15
-  jz .L392
+  jz .L872
 .loc 1 258 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_CQO]
   mov r15, r14
@@ -8603,9 +19917,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 257 0
-  jmp .L393
-.L392:
-.L393:
+  jmp .L873
+.L872:
+.L873:
 .loc 1 259 0
   mov r15, r8
   movzx r15, r15b
@@ -8614,23 +19928,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 259 0
   mov r15, r14
   cmp r15, 100
-  jne .L398
+  jne .L878
 .loc 1 260 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 113
-  jne .L398
+  jne .L878
 .loc 1 259 0
   mov r14, 1
-  jmp .L399
-.L398:
+  jmp .L879
+.L878:
   mov r14, 0
-.L399:
+.L879:
   mov r15, r14
   test r15, r15
-  jz .L396
+  jz .L876
 .loc 1 260 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_CDQ]
   mov r15, r14
@@ -8646,9 +19960,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 259 0
-  jmp .L397
-.L396:
-.L397:
+  jmp .L877
+.L876:
+.L877:
 .loc 1 260 0
   mov r15, r8
   movzx r15, r15b
@@ -8657,23 +19971,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 260 0
   mov r15, r14
   cmp r15, 109
-  jne .L402
+  jne .L882
 .loc 1 261 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L402
+  jne .L882
 .loc 1 260 0
   mov r14, 1
-  jmp .L403
-.L402:
+  jmp .L883
+.L882:
   mov r14, 0
-.L403:
+.L883:
   mov r15, r14
   test r15, r15
-  jz .L400
+  jz .L880
 .loc 1 262 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_CMP]
   mov r15, r14
@@ -8689,30 +20003,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 260 0
-  jmp .L401
-.L400:
-.L401:
+  jmp .L881
+.L880:
+.L881:
 .loc 1 262 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L406
+  jne .L886
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L406
+  jne .L886
   mov r14, 1
-  jmp .L407
-.L406:
+  jmp .L887
+.L886:
   mov r14, 0
-.L407:
+.L887:
   mov r15, r14
   test r15, r15
-  jz .L404
+  jz .L884
 .loc 1 263 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_CLD]
   mov r15, r14
@@ -8728,19 +20042,19 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 262 0
-  jmp .L405
-.L404:
-.L405:
+  jmp .L885
+.L884:
+.L885:
 .loc 1 257 0
-  jmp .L391
-.L390:
+  jmp .L871
+.L870:
 .loc 1 263 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 110
-  jne .L408
+  jne .L888
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
@@ -8748,7 +20062,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 263 0
   mov r15, r14
   cmp r15, 101
-  jne .L412
+  jne .L892
 .loc 1 264 0
   mov r15, r9
   movzx r15, r15b
@@ -8757,16 +20071,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 264 0
   mov r15, r14
   cmp r15, 103
-  jne .L412
+  jne .L892
 .loc 1 263 0
   mov r14, 1
-  jmp .L413
-.L412:
+  jmp .L893
+.L892:
   mov r14, 0
-.L413:
+.L893:
   mov r15, r14
   test r15, r15
-  jz .L410
+  jz .L890
 .loc 1 265 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_NEG]
   mov r15, r14
@@ -8782,16 +20096,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 263 0
-  jmp .L411
-.L410:
-.L411:
+  jmp .L891
+.L890:
+.L891:
 .loc 1 265 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L416
+  jne .L896
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
@@ -8799,15 +20113,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 265 0
   mov r15, r14
   cmp r15, 116
-  jne .L416
+  jne .L896
   mov r14, 1
-  jmp .L417
-.L416:
+  jmp .L897
+.L896:
   mov r14, 0
-.L417:
+.L897:
   mov r15, r14
   test r15, r15
-  jz .L414
+  jz .L894
 .loc 1 269 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_NOT]
   mov r15, r14
@@ -8824,32 +20138,32 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 265 0
-  jmp .L415
-.L414:
-.L415:
+  jmp .L895
+.L894:
+.L895:
 .loc 1 269 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L420
+  jne .L900
 .loc 1 270 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L420
+  jne .L900
 .loc 1 269 0
   mov r14, 1
-  jmp .L421
-.L420:
+  jmp .L901
+.L900:
   mov r14, 0
-.L421:
+.L901:
   mov r15, r14
   test r15, r15
-  jz .L418
+  jz .L898
 .loc 1 270 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_NOP]
   mov r15, r14
@@ -8865,12 +20179,12 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 269 0
-  jmp .L419
-.L418:
-.L419:
+  jmp .L899
+.L898:
+.L899:
 .loc 1 263 0
-  jmp .L409
-.L408:
+  jmp .L889
+.L888:
 .loc 1 270 0
   mov r15, r13
   movzx r15, r15b
@@ -8879,39 +20193,39 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 270 0
   mov r15, r14
   cmp r15, 97
-  jne .L426
+  jne .L906
 .loc 1 271 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 110
-  jne .L426
+  jne .L906
 .loc 1 270 0
   mov r14, 1
-  jmp .L427
-.L426:
+  jmp .L907
+.L906:
   mov r14, 0
-.L427:
+.L907:
   mov r15, r14
   test r15, r15
-  jz .L424
+  jz .L904
 .loc 1 271 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L424
+  jne .L904
 .loc 1 270 0
   mov r14, 1
-  jmp .L425
-.L424:
+  jmp .L905
+.L904:
   mov r14, 0
-.L425:
+.L905:
   mov r15, r14
   test r15, r15
-  jz .L422
+  jz .L902
 .loc 1 272 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
   mov r15, r14
@@ -8927,43 +20241,43 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 270 0
-  jmp .L423
-.L422:
+  jmp .L903
+.L902:
 .loc 1 273 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 120
-  jne .L432
+  jne .L912
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L432
+  jne .L912
   mov r14, 1
-  jmp .L433
-.L432:
+  jmp .L913
+.L912:
   mov r14, 0
-.L433:
+.L913:
   mov r15, r14
   test r15, r15
-  jz .L430
+  jz .L910
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 114
-  jne .L430
+  jne .L910
   mov r14, 1
-  jmp .L431
-.L430:
+  jmp .L911
+.L910:
   mov r14, 0
-.L431:
+.L911:
   mov r15, r14
   test r15, r15
-  jz .L428
+  jz .L908
 .loc 1 274 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_XOR]
   mov r15, r14
@@ -8979,15 +20293,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L429
-.L428:
+  jmp .L909
+.L908:
 .loc 1 275 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 114
-  jne .L436
+  jne .L916
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
@@ -8995,23 +20309,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 275 0
   mov r15, r14
   cmp r15, 101
-  jne .L436
+  jne .L916
   mov r14, 1
-  jmp .L437
-.L436:
+  jmp .L917
+.L916:
   mov r14, 0
-.L437:
+.L917:
 .loc 1 274 0
   mov r15, r14
   test r15, r15
-  jz .L434
+  jz .L914
 .loc 1 276 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 116
-  jne .L438
+  jne .L918
 .loc 1 277 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_RET]
   mov r15, r14
@@ -9027,16 +20341,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L439
-.L438:
-.L439:
+  jmp .L919
+.L918:
+.L919:
 .loc 1 278 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L440
+  jne .L920
 .loc 1 277 0
 .loc 1 278 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_REP]
@@ -9053,42 +20367,42 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 277 0
-  jmp .L441
-.L440:
-.L441:
+  jmp .L921
+.L920:
+.L921:
 .loc 1 274 0
-  jmp .L435
-.L434:
+  jmp .L915
+.L914:
 .loc 1 278 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 106
-  jne .L442
+  jne .L922
 .loc 1 279 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 109
-  jne .L446
+  jne .L926
 .loc 1 280 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L446
+  jne .L926
 .loc 1 279 0
   mov r14, 1
-  jmp .L447
-.L446:
+  jmp .L927
+.L926:
   mov r14, 0
-.L447:
+.L927:
   mov r15, r14
   test r15, r15
-  jz .L444
+  jz .L924
 .loc 1 282 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JMP]
   mov r15, r14
@@ -9105,22 +20419,22 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 279 0
-  jmp .L445
-.L444:
-.L445:
+  jmp .L925
+.L924:
+.L925:
 .loc 1 282 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 110
-  jne .L448
+  jne .L928
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 122
-  jne .L450
+  jne .L930
 .loc 1 283 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JNZ]
   mov r15, r14
@@ -9136,16 +20450,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 282 0
-  jmp .L451
-.L450:
-.L451:
+  jmp .L931
+.L930:
+.L931:
 .loc 1 283 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L452
+  jne .L932
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JNE]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -9159,13 +20473,13 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L453
-.L452:
-.L453:
+  jmp .L933
+.L932:
+.L933:
 .loc 1 282 0
-  jmp .L449
-.L448:
-.L449:
+  jmp .L929
+.L928:
+.L929:
 .loc 1 284 0
   mov r15, r8
   movzx r15, r15b
@@ -9174,23 +20488,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 284 0
   mov r15, r14
   cmp r15, 108
-  jne .L456
+  jne .L936
 .loc 1 285 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L456
+  jne .L936
 .loc 1 284 0
   mov r14, 1
-  jmp .L457
-.L456:
+  jmp .L937
+.L936:
   mov r14, 0
-.L457:
+.L937:
   mov r15, r14
   test r15, r15
-  jz .L454
+  jz .L934
 .loc 1 285 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JLE]
   mov r15, r14
@@ -9206,31 +20520,31 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 284 0
-  jmp .L455
-.L454:
-.L455:
+  jmp .L935
+.L934:
+.L935:
 .loc 1 288 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 103
-  jne .L460
+  jne .L940
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L460
+  jne .L940
   mov r14, 1
-  jmp .L461
-.L460:
+  jmp .L941
+.L940:
   mov r14, 0
-.L461:
+.L941:
 .loc 1 286 0
   mov r15, r14
   test r15, r15
-  jz .L458
+  jz .L938
 .loc 1 288 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JGE]
   mov r15, r14
@@ -9246,9 +20560,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 286 0
-  jmp .L459
-.L458:
-.L459:
+  jmp .L939
+.L938:
+.L939:
 .loc 1 288 0
   mov r15, r8
   movzx r15, r15b
@@ -9257,23 +20571,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 288 0
   mov r15, r14
   cmp r15, 97
-  jne .L464
+  jne .L944
 .loc 1 289 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L464
+  jne .L944
 .loc 1 288 0
   mov r14, 1
-  jmp .L465
-.L464:
+  jmp .L945
+.L944:
   mov r14, 0
-.L465:
+.L945:
   mov r15, r14
   test r15, r15
-  jz .L462
+  jz .L942
 .loc 1 290 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JAE]
   mov r15, r14
@@ -9289,30 +20603,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 288 0
-  jmp .L463
-.L462:
-.L463:
+  jmp .L943
+.L942:
+.L943:
 .loc 1 290 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L468
+  jne .L948
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L468
+  jne .L948
   mov r14, 1
-  jmp .L469
-.L468:
+  jmp .L949
+.L948:
   mov r14, 0
-.L469:
+.L949:
   mov r15, r14
   test r15, r15
-  jz .L466
+  jz .L946
 .loc 1 293 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_JBE]
   mov r15, r14
@@ -9329,47 +20643,47 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 290 0
-  jmp .L467
-.L466:
-.L467:
+  jmp .L947
+.L946:
+.L947:
 .loc 1 278 0
-  jmp .L443
-.L442:
+  jmp .L923
+.L922:
 .loc 1 297 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L474
+  jne .L954
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L474
+  jne .L954
   mov r14, 1
-  jmp .L475
-.L474:
+  jmp .L955
+.L954:
   mov r14, 0
-.L475:
+.L955:
   mov r15, r14
   test r15, r15
-  jz .L472
+  jz .L952
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L472
+  jne .L952
   mov r14, 1
-  jmp .L473
-.L472:
+  jmp .L953
+.L952:
   mov r14, 0
-.L473:
+.L953:
   mov r15, r14
   test r15, r15
-  jz .L470
+  jz .L950
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_POP]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -9383,30 +20697,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L471
-.L470:
-.L471:
-.L443:
-.L435:
-.L429:
-.L423:
-.L409:
-.L391:
-.L385:
-.L369:
-.L363:
-.L357:
-.L351:
+  jmp .L951
+.L950:
+.L951:
+.L923:
+.L915:
+.L909:
+.L903:
+.L889:
+.L871:
+.L865:
+.L849:
+.L843:
+.L837:
+.L831:
 .loc 1 235 0
-  jmp .L349
-.L348:
+  jmp .L829
+.L828:
 .loc 1 299 0
   mov r15, QWORD PTR [rbp-77]
   movsxd r15, r15d
   mov r14, r15
   mov r15, r14
   cmp r15, 4
-  jne .L476
+  jne .L956
   mov r14, rbx
   add r14, 1
   mov r15, r14
@@ -9418,7 +20732,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L484
+  jne .L964
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
@@ -9426,15 +20740,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 300 0
   mov r15, r14
   cmp r15, 117
-  jne .L484
+  jne .L964
   mov r14, 1
-  jmp .L485
-.L484:
+  jmp .L965
+.L964:
   mov r14, 0
-.L485:
+.L965:
   mov r15, r14
   test r15, r15
-  jz .L482
+  jz .L962
 .loc 1 301 0
   mov r14, rbx
   add r14, 2
@@ -9443,16 +20757,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 115
-  jne .L482
+  jne .L962
 .loc 1 300 0
   mov r14, 1
-  jmp .L483
-.L482:
+  jmp .L963
+.L962:
   mov r14, 0
-.L483:
+.L963:
   mov r15, r14
   test r15, r15
-  jz .L480
+  jz .L960
 .loc 1 301 0
 .loc 1 302 0
   mov r14, rbx
@@ -9462,16 +20776,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 104
-  jne .L480
+  jne .L960
 .loc 1 300 0
   mov r14, 1
-  jmp .L481
-.L480:
+  jmp .L961
+.L960:
   mov r14, 0
-.L481:
+.L961:
   mov r15, r14
   test r15, r15
-  jz .L478
+  jz .L958
 .loc 1 302 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_PUSH]
   mov r15, r14
@@ -9487,9 +20801,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 300 0
-  jmp .L479
-.L478:
-.L479:
+  jmp .L959
+.L958:
+.L959:
 .loc 1 304 0
   mov r15, r13
   movzx r15, r15b
@@ -9498,14 +20812,14 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 304 0
   mov r15, r14
   cmp r15, 105
-  jne .L486
+  jne .L966
 .loc 1 305 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 109
-  jne .L492
+  jne .L972
 .loc 1 306 0
   mov r14, rbx
   add r14, 2
@@ -9514,16 +20828,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 117
-  jne .L492
+  jne .L972
 .loc 1 305 0
   mov r14, 1
-  jmp .L493
-.L492:
+  jmp .L973
+.L972:
   mov r14, 0
-.L493:
+.L973:
   mov r15, r14
   test r15, r15
-  jz .L490
+  jz .L970
 .loc 1 307 0
   mov r14, rbx
   add r14, 3
@@ -9532,16 +20846,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 108
-  jne .L490
+  jne .L970
 .loc 1 305 0
   mov r14, 1
-  jmp .L491
-.L490:
+  jmp .L971
+.L970:
   mov r14, 0
-.L491:
+.L971:
   mov r15, r14
   test r15, r15
-  jz .L488
+  jz .L968
 .loc 1 308 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_IMUL]
   mov r15, r14
@@ -9558,16 +20872,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 305 0
-  jmp .L489
-.L488:
-.L489:
+  jmp .L969
+.L968:
+.L969:
 .loc 1 308 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L498
+  jne .L978
   mov r14, rbx
   add r14, 2
   mov r15, r14
@@ -9575,15 +20889,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 105
-  jne .L498
+  jne .L978
   mov r14, 1
-  jmp .L499
-.L498:
+  jmp .L979
+.L978:
   mov r14, 0
-.L499:
+.L979:
   mov r15, r14
   test r15, r15
-  jz .L496
+  jz .L976
 .loc 1 309 0
   mov r14, rbx
   add r14, 3
@@ -9592,16 +20906,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 118
-  jne .L496
+  jne .L976
 .loc 1 308 0
   mov r14, 1
-  jmp .L497
-.L496:
+  jmp .L977
+.L976:
   mov r14, 0
-.L497:
+.L977:
   mov r15, r14
   test r15, r15
-  jz .L494
+  jz .L974
 .loc 1 309 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_IDIV]
   mov r15, r14
@@ -9617,36 +20931,36 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 308 0
-  jmp .L495
-.L494:
-.L495:
+  jmp .L975
+.L974:
+.L975:
 .loc 1 304 0
-  jmp .L487
-.L486:
-.L487:
+  jmp .L967
+.L966:
+.L967:
 .loc 1 309 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 116
-  jne .L506
+  jne .L986
 .loc 1 310 0
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L506
+  jne .L986
 .loc 1 309 0
   mov r14, 1
-  jmp .L507
-.L506:
+  jmp .L987
+.L986:
   mov r14, 0
-.L507:
+.L987:
   mov r15, r14
   test r15, r15
-  jz .L504
+  jz .L984
 .loc 1 310 0
   mov r14, rbx
   add r14, 2
@@ -9655,16 +20969,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 115
-  jne .L504
+  jne .L984
 .loc 1 309 0
   mov r14, 1
-  jmp .L505
-.L504:
+  jmp .L985
+.L984:
   mov r14, 0
-.L505:
+.L985:
   mov r15, r14
   test r15, r15
-  jz .L502
+  jz .L982
 .loc 1 310 0
   mov r14, rbx
   add r14, 3
@@ -9673,16 +20987,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 116
-  jne .L502
+  jne .L982
 .loc 1 309 0
   mov r14, 1
-  jmp .L503
-.L502:
+  jmp .L983
+.L982:
   mov r14, 0
-.L503:
+.L983:
   mov r15, r14
   test r15, r15
-  jz .L500
+  jz .L980
 .loc 1 311 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_TEST]
   mov r15, r14
@@ -9698,30 +21012,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 309 0
-  jmp .L501
-.L500:
-.L501:
+  jmp .L981
+.L980:
+.L981:
 .loc 1 311 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L512
+  jne .L992
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L512
+  jne .L992
   mov r14, 1
-  jmp .L513
-.L512:
+  jmp .L993
+.L992:
   mov r14, 0
-.L513:
+.L993:
   mov r15, r14
   test r15, r15
-  jz .L510
+  jz .L990
 .loc 1 312 0
 .loc 1 311 0
   mov r14, rbx
@@ -9733,15 +21047,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 311 0
   mov r15, r9
   cmp r15, 116
-  jne .L510
+  jne .L990
   mov r14, 1
-  jmp .L511
-.L510:
+  jmp .L991
+.L990:
   mov r14, 0
-.L511:
+.L991:
   mov r15, r14
   test r15, r15
-  jz .L508
+  jz .L988
 .loc 1 312 0
   mov r14, rbx
   add r14, 3
@@ -9754,7 +21068,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L514
+  jne .L994
 .loc 1 312 0
 .loc 1 313 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SETE]
@@ -9771,16 +21085,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 312 0
-  jmp .L515
-.L514:
-.L515:
+  jmp .L995
+.L994:
+.L995:
 .loc 1 314 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L516
+  jne .L996
 .loc 1 313 0
 .loc 1 315 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SETL]
@@ -9797,9 +21111,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 313 0
-  jmp .L517
-.L516:
-.L517:
+  jmp .L997
+.L996:
+.L997:
 .loc 1 316 0
   mov r15, r9
   movzx r15, r15b
@@ -9808,7 +21122,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 316 0
   mov r15, r14
   cmp r15, 103
-  jne .L518
+  jne .L998
 .loc 1 315 0
 .loc 1 318 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SETG]
@@ -9826,9 +21140,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 315 0
-  jmp .L519
-.L518:
-.L519:
+  jmp .L999
+.L998:
+.L999:
 .loc 1 319 0
   mov r15, r9
   movzx r15, r15b
@@ -9837,7 +21151,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 319 0
   mov r15, r14
   cmp r15, 98
-  jne .L520
+  jne .L1000
 .loc 1 318 0
 .loc 1 321 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SETB]
@@ -9855,16 +21169,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 318 0
-  jmp .L521
-.L520:
-.L521:
+  jmp .L1001
+.L1000:
+.L1001:
 .loc 1 325 0
   mov r15, r9
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L522
+  jne .L1002
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_SETA]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -9878,34 +21192,34 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L523
-.L522:
-.L523:
+  jmp .L1003
+.L1002:
+.L1003:
 .loc 1 311 0
-  jmp .L509
-.L508:
-.L509:
+  jmp .L989
+.L988:
+.L989:
 .loc 1 326 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 99
-  jne .L530
+  jne .L1010
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L530
+  jne .L1010
   mov r14, 1
-  jmp .L531
-.L530:
+  jmp .L1011
+.L1010:
   mov r14, 0
-.L531:
+.L1011:
   mov r15, r14
   test r15, r15
-  jz .L528
+  jz .L1008
   mov r14, rbx
   add r14, 2
   mov r15, r14
@@ -9915,15 +21229,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 326 0
   mov r15, r9
   cmp r15, 108
-  jne .L528
+  jne .L1008
   mov r14, 1
-  jmp .L529
-.L528:
+  jmp .L1009
+.L1008:
   mov r14, 0
-.L529:
+.L1009:
   mov r15, r14
   test r15, r15
-  jz .L526
+  jz .L1006
 .loc 1 327 0
   mov r14, rbx
   add r14, 3
@@ -9932,17 +21246,17 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 108
-  jne .L526
+  jne .L1006
 .loc 1 326 0
   mov r14, 1
-  jmp .L527
-.L526:
+  jmp .L1007
+.L1006:
   mov r14, 0
-.L527:
+.L1007:
 .loc 1 325 0
   mov r15, r14
   test r15, r15
-  jz .L524
+  jz .L1004
 .loc 1 328 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_CALL]
   mov r15, r14
@@ -9958,30 +21272,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 325 0
-  jmp .L525
-.L524:
-.L525:
+  jmp .L1005
+.L1004:
+.L1005:
 .loc 1 330 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 109
-  jne .L536
+  jne .L1016
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L536
+  jne .L1016
   mov r14, 1
-  jmp .L537
-.L536:
+  jmp .L1017
+.L1016:
   mov r14, 0
-.L537:
+.L1017:
   mov r15, r14
   test r15, r15
-  jz .L534
+  jz .L1014
 .loc 1 331 0
   mov r14, rbx
   add r14, 2
@@ -9990,17 +21304,17 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r8, r15
   mov r15, r8
   cmp r15, 118
-  jne .L534
+  jne .L1014
 .loc 1 330 0
   mov r14, 1
-  jmp .L535
-.L534:
+  jmp .L1015
+.L1014:
   mov r14, 0
-.L535:
+.L1015:
 .loc 1 328 0
   mov r15, r14
   test r15, r15
-  jz .L532
+  jz .L1012
 .loc 1 331 0
   mov r14, rbx
   add r14, 3
@@ -10009,7 +21323,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r8, r15
   mov r15, r8
   cmp r15, 113
-  jne .L538
+  jne .L1018
 .loc 1 334 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_MOVQ]
   mov r15, r14
@@ -10025,9 +21339,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L539
-.L538:
-.L539:
+  jmp .L1019
+.L1018:
+.L1019:
 .loc 1 334 0
   mov r14, rbx
   add r14, 3
@@ -10036,7 +21350,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r8, r15
   mov r15, r8
   cmp r15, 115
-  jne .L540
+  jne .L1020
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSB]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -10050,23 +21364,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L541
-.L540:
-.L541:
+  jmp .L1021
+.L1020:
+.L1021:
 .loc 1 328 0
-  jmp .L533
-.L532:
-.L533:
+  jmp .L1013
+.L1012:
+.L1013:
 .loc 1 299 0
-  jmp .L477
-.L476:
+  jmp .L957
+.L956:
 .loc 1 335 0
   mov r15, QWORD PTR [rbp-77]
   movsxd r15, r15d
   mov r14, r15
   mov r15, r14
   cmp r15, 5
-  jne .L542
+  jne .L1022
 .loc 1 336 0
 .loc 1 337 0
 .loc 1 336 0
@@ -10082,21 +21396,21 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 109
-  jne .L548
+  jne .L1028
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 111
-  jne .L548
+  jne .L1028
   mov r14, 1
-  jmp .L549
-.L548:
+  jmp .L1029
+.L1028:
   mov r14, 0
-.L549:
+.L1029:
   mov r15, r14
   test r15, r15
-  jz .L546
+  jz .L1026
 .loc 1 340 0
   mov r14, rbx
   add r14, 2
@@ -10105,16 +21419,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 118
-  jne .L546
+  jne .L1026
 .loc 1 339 0
   mov r14, 1
-  jmp .L547
-.L546:
+  jmp .L1027
+.L1026:
   mov r14, 0
-.L547:
+.L1027:
   mov r15, r14
   test r15, r15
-  jz .L544
+  jz .L1024
 .loc 1 340 0
   mov r14, rbx
   add r14, 3
@@ -10125,7 +21439,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 340 0
   mov r15, r9
   cmp r15, 115
-  jne .L550
+  jne .L1030
 .loc 1 342 0
   mov r14, rbx
   add r14, 4
@@ -10136,7 +21450,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 342 0
   mov r15, r9
   cmp r15, 98
-  jne .L552
+  jne .L1032
 .loc 1 341 0
 .loc 1 343 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSB]
@@ -10153,9 +21467,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 341 0
-  jmp .L553
-.L552:
-.L553:
+  jmp .L1033
+.L1032:
+.L1033:
 .loc 1 345 0
   mov r14, rbx
   add r14, 4
@@ -10164,7 +21478,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 120
-  jne .L554
+  jne .L1034
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSX]
   mov r15, r14
   movsxd r15, DWORD PTR [r15]
@@ -10178,13 +21492,13 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L555
-.L554:
-.L555:
+  jmp .L1035
+.L1034:
+.L1035:
 .loc 1 340 0
-  jmp .L551
-.L550:
-.L551:
+  jmp .L1031
+.L1030:
+.L1031:
 .loc 1 346 0
   mov r14, rbx
   add r14, 3
@@ -10193,7 +21507,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 122
-  jne .L558
+  jne .L1038
 .loc 1 348 0
   mov r14, rbx
   add r14, 4
@@ -10204,17 +21518,17 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 348 0
   mov r15, r9
   cmp r15, 120
-  jne .L558
+  jne .L1038
 .loc 1 346 0
   mov r14, 1
-  jmp .L559
-.L558:
+  jmp .L1039
+.L1038:
   mov r14, 0
-.L559:
+.L1039:
 .loc 1 345 0
   mov r15, r14
   test r15, r15
-  jz .L556
+  jz .L1036
 .loc 1 349 0
   lea r14, [rip+_caustic_assembler_asm_defs_cst_INST_MOVZX]
   mov r15, r14
@@ -10230,34 +21544,34 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 345 0
-  jmp .L557
-.L556:
-.L557:
+  jmp .L1037
+.L1036:
+.L1037:
 .loc 1 339 0
-  jmp .L545
-.L544:
-.L545:
+  jmp .L1025
+.L1024:
+.L1025:
 .loc 1 350 0
   mov r15, r13
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L564
+  jne .L1044
   mov r15, r8
   movzx r15, r15b
   mov r14, r15
   mov r15, r14
   cmp r15, 101
-  jne .L564
+  jne .L1044
   mov r14, 1
-  jmp .L565
-.L564:
+  jmp .L1045
+.L1044:
   mov r14, 0
-.L565:
+.L1045:
   mov r15, r14
   test r15, r15
-  jz .L562
+  jz .L1042
   mov r14, rbx
   add r14, 2
   mov r15, r14
@@ -10265,15 +21579,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r9, r15
   mov r15, r9
   cmp r15, 116
-  jne .L562
+  jne .L1042
   mov r14, 1
-  jmp .L563
-.L562:
+  jmp .L1043
+.L1042:
   mov r14, 0
-.L563:
+.L1043:
   mov r15, r14
   test r15, r15
-  jz .L560
+  jz .L1040
 .loc 1 351 0
   mov r14, rbx
   add r14, 3
@@ -10291,7 +21605,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 110
-  jne .L568
+  jne .L1048
 .loc 1 354 0
   mov r15, r10
   movzx r15, r15b
@@ -10300,16 +21614,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 354 0
   mov r15, r12
   cmp r15, 101
-  jne .L568
+  jne .L1048
 .loc 1 352 0
   mov r12, 1
-  jmp .L569
-.L568:
+  jmp .L1049
+.L1048:
   mov r12, 0
-.L569:
+.L1049:
   mov r15, r12
   test r15, r15
-  jz .L566
+  jz .L1046
 .loc 1 355 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETNE]
   mov r15, r12
@@ -10325,30 +21639,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 352 0
-  jmp .L567
-.L566:
-.L567:
+  jmp .L1047
+.L1046:
+.L1047:
 .loc 1 355 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 108
-  jne .L572
+  jne .L1052
   mov r15, r10
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 101
-  jne .L572
+  jne .L1052
   mov r12, 1
-  jmp .L573
-.L572:
+  jmp .L1053
+.L1052:
   mov r12, 0
-.L573:
+.L1053:
   mov r15, r12
   test r15, r15
-  jz .L570
+  jz .L1050
 .loc 1 356 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETLE]
   mov r15, r12
@@ -10364,9 +21678,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 355 0
-  jmp .L571
-.L570:
-.L571:
+  jmp .L1051
+.L1050:
+.L1051:
 .loc 1 357 0
   mov r15, r9
   movzx r15, r15b
@@ -10375,23 +21689,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 357 0
   mov r15, r12
   cmp r15, 103
-  jne .L576
+  jne .L1056
 .loc 1 358 0
   mov r15, r10
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 101
-  jne .L576
+  jne .L1056
 .loc 1 357 0
   mov r12, 1
-  jmp .L577
-.L576:
+  jmp .L1057
+.L1056:
   mov r12, 0
-.L577:
+.L1057:
   mov r15, r12
   test r15, r15
-  jz .L574
+  jz .L1054
 .loc 1 360 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETGE]
   mov r15, r12
@@ -10407,30 +21721,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 357 0
-  jmp .L575
-.L574:
-.L575:
+  jmp .L1055
+.L1054:
+.L1055:
 .loc 1 360 0
   mov r15, r9
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 98
-  jne .L580
+  jne .L1060
   mov r15, r10
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 101
-  jne .L580
+  jne .L1060
   mov r12, 1
-  jmp .L581
-.L580:
+  jmp .L1061
+.L1060:
   mov r12, 0
-.L581:
+.L1061:
   mov r15, r12
   test r15, r15
-  jz .L578
+  jz .L1058
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETBE]
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
@@ -10444,9 +21758,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbx
   pop rbp
   ret
-  jmp .L579
-.L578:
-.L579:
+  jmp .L1059
+.L1058:
+.L1059:
 .loc 1 361 0
   mov r15, r9
   movzx r15, r15b
@@ -10455,7 +21769,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 361 0
   mov r15, r12
   cmp r15, 97
-  jne .L584
+  jne .L1064
 .loc 1 362 0
   mov r15, r10
   movzx r15, r15b
@@ -10464,16 +21778,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 362 0
   mov r15, r12
   cmp r15, 101
-  jne .L584
+  jne .L1064
 .loc 1 361 0
   mov r12, 1
-  jmp .L585
-.L584:
+  jmp .L1065
+.L1064:
   mov r12, 0
-.L585:
+.L1065:
   mov r15, r12
   test r15, r15
-  jz .L582
+  jz .L1062
 .loc 1 363 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETAE]
   mov r15, r12
@@ -10489,34 +21803,34 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 361 0
-  jmp .L583
-.L582:
-.L583:
+  jmp .L1063
+.L1062:
+.L1063:
 .loc 1 350 0
-  jmp .L561
-.L560:
-.L561:
+  jmp .L1041
+.L1040:
+.L1041:
 .loc 1 365 0
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 97
-  jne .L594
+  jne .L1074
   mov r15, r8
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 100
-  jne .L594
+  jne .L1074
   mov r12, 1
-  jmp .L595
-.L594:
+  jmp .L1075
+.L1074:
   mov r12, 0
-.L595:
+.L1075:
   mov r15, r12
   test r15, r15
-  jz .L592
+  jz .L1072
   mov r12, rbx
   add r12, 2
   mov r15, r12
@@ -10524,15 +21838,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L592
+  jne .L1072
   mov r12, 1
-  jmp .L593
-.L592:
+  jmp .L1073
+.L1072:
   mov r12, 0
-.L593:
+.L1073:
   mov r15, r12
   test r15, r15
-  jz .L590
+  jz .L1070
 .loc 1 366 0
   mov r12, rbx
   add r12, 3
@@ -10541,16 +21855,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L590
+  jne .L1070
 .loc 1 365 0
   mov r12, 1
-  jmp .L591
-.L590:
+  jmp .L1071
+.L1070:
   mov r12, 0
-.L591:
+.L1071:
   mov r15, r12
   test r15, r15
-  jz .L588
+  jz .L1068
 .loc 1 367 0
   mov r12, rbx
   add r12, 4
@@ -10561,16 +21875,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 367 0
   mov r15, r14
   cmp r15, 100
-  jne .L588
+  jne .L1068
 .loc 1 365 0
   mov r12, 1
-  jmp .L589
-.L588:
+  jmp .L1069
+.L1068:
   mov r12, 0
-.L589:
+.L1069:
   mov r15, r12
   test r15, r15
-  jz .L586
+  jz .L1066
 .loc 1 369 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADDSD]
   mov r15, r12
@@ -10587,30 +21901,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 365 0
-  jmp .L587
-.L586:
-.L587:
+  jmp .L1067
+.L1066:
+.L1067:
 .loc 1 370 0
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 115
-  jne .L604
+  jne .L1084
   mov r15, r8
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 117
-  jne .L604
+  jne .L1084
   mov r12, 1
-  jmp .L605
-.L604:
+  jmp .L1085
+.L1084:
   mov r12, 0
-.L605:
+.L1085:
   mov r15, r12
   test r15, r15
-  jz .L602
+  jz .L1082
   mov r12, rbx
   add r12, 2
   mov r15, r12
@@ -10618,15 +21932,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 98
-  jne .L602
+  jne .L1082
   mov r12, 1
-  jmp .L603
-.L602:
+  jmp .L1083
+.L1082:
   mov r12, 0
-.L603:
+.L1083:
   mov r15, r12
   test r15, r15
-  jz .L600
+  jz .L1080
 .loc 1 371 0
   mov r12, rbx
   add r12, 3
@@ -10635,16 +21949,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L600
+  jne .L1080
 .loc 1 370 0
   mov r12, 1
-  jmp .L601
-.L600:
+  jmp .L1081
+.L1080:
   mov r12, 0
-.L601:
+.L1081:
   mov r15, r12
   test r15, r15
-  jz .L598
+  jz .L1078
 .loc 1 372 0
   mov r12, rbx
   add r12, 4
@@ -10653,16 +21967,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L598
+  jne .L1078
 .loc 1 370 0
   mov r12, 1
-  jmp .L599
-.L598:
+  jmp .L1079
+.L1078:
   mov r12, 0
-.L599:
+.L1079:
   mov r15, r12
   test r15, r15
-  jz .L596
+  jz .L1076
 .loc 1 374 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUBSD]
   mov r15, r12
@@ -10678,30 +21992,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 370 0
-  jmp .L597
-.L596:
-.L597:
+  jmp .L1077
+.L1076:
+.L1077:
 .loc 1 374 0
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 109
-  jne .L614
+  jne .L1094
   mov r15, r8
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 117
-  jne .L614
+  jne .L1094
   mov r12, 1
-  jmp .L615
-.L614:
+  jmp .L1095
+.L1094:
   mov r12, 0
-.L615:
+.L1095:
   mov r15, r12
   test r15, r15
-  jz .L612
+  jz .L1092
 .loc 1 375 0
   mov r12, rbx
   add r12, 2
@@ -10710,16 +22024,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L612
+  jne .L1092
 .loc 1 374 0
   mov r12, 1
-  jmp .L613
-.L612:
+  jmp .L1093
+.L1092:
   mov r12, 0
-.L613:
+.L1093:
   mov r15, r12
   test r15, r15
-  jz .L610
+  jz .L1090
 .loc 1 375 0
   mov r12, rbx
   add r12, 3
@@ -10728,16 +22042,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L610
+  jne .L1090
 .loc 1 374 0
   mov r12, 1
-  jmp .L611
-.L610:
+  jmp .L1091
+.L1090:
   mov r12, 0
-.L611:
+.L1091:
   mov r15, r12
   test r15, r15
-  jz .L608
+  jz .L1088
 .loc 1 375 0
   mov r12, rbx
   add r12, 4
@@ -10748,16 +22062,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 375 0
   mov r15, r14
   cmp r15, 100
-  jne .L608
+  jne .L1088
 .loc 1 374 0
   mov r12, 1
-  jmp .L609
-.L608:
+  jmp .L1089
+.L1088:
   mov r12, 0
-.L609:
+.L1089:
   mov r15, r12
   test r15, r15
-  jz .L606
+  jz .L1086
 .loc 1 376 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MULSD]
   mov r15, r12
@@ -10773,30 +22087,30 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 374 0
-  jmp .L607
-.L606:
-.L607:
+  jmp .L1087
+.L1086:
+.L1087:
 .loc 1 376 0
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 100
-  jne .L624
+  jne .L1104
   mov r15, r8
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 105
-  jne .L624
+  jne .L1104
   mov r12, 1
-  jmp .L625
-.L624:
+  jmp .L1105
+.L1104:
   mov r12, 0
-.L625:
+.L1105:
   mov r15, r12
   test r15, r15
-  jz .L622
+  jz .L1102
 .loc 1 377 0
   mov r12, rbx
   add r12, 2
@@ -10807,16 +22121,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 377 0
   mov r15, r14
   cmp r15, 118
-  jne .L622
+  jne .L1102
 .loc 1 376 0
   mov r12, 1
-  jmp .L623
-.L622:
+  jmp .L1103
+.L1102:
   mov r12, 0
-.L623:
+.L1103:
   mov r15, r12
   test r15, r15
-  jz .L620
+  jz .L1100
 .loc 1 378 0
   mov r12, rbx
   add r12, 3
@@ -10825,16 +22139,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L620
+  jne .L1100
 .loc 1 376 0
   mov r12, 1
-  jmp .L621
-.L620:
+  jmp .L1101
+.L1100:
   mov r12, 0
-.L621:
+.L1101:
   mov r15, r12
   test r15, r15
-  jz .L618
+  jz .L1098
 .loc 1 378 0
   mov r12, rbx
   add r12, 4
@@ -10843,16 +22157,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L618
+  jne .L1098
 .loc 1 376 0
   mov r12, 1
-  jmp .L619
-.L618:
+  jmp .L1099
+.L1098:
   mov r12, 0
-.L619:
+.L1099:
   mov r15, r12
   test r15, r15
-  jz .L616
+  jz .L1096
 .loc 1 378 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_DIVSD]
   mov r15, r12
@@ -10868,9 +22182,9 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 376 0
-  jmp .L617
-.L616:
-.L617:
+  jmp .L1097
+.L1096:
+.L1097:
 .loc 1 379 0
   mov r15, r13
   movzx r15, r15b
@@ -10879,23 +22193,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 379 0
   mov r15, r12
   cmp r15, 120
-  jne .L634
+  jne .L1114
 .loc 1 380 0
   mov r15, r8
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 111
-  jne .L634
+  jne .L1114
 .loc 1 379 0
   mov r12, 1
-  jmp .L635
-.L634:
+  jmp .L1115
+.L1114:
   mov r12, 0
-.L635:
+.L1115:
   mov r15, r12
   test r15, r15
-  jz .L632
+  jz .L1112
 .loc 1 380 0
   mov r12, rbx
   add r12, 2
@@ -10904,16 +22218,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 114
-  jne .L632
+  jne .L1112
 .loc 1 379 0
   mov r12, 1
-  jmp .L633
-.L632:
+  jmp .L1113
+.L1112:
   mov r12, 0
-.L633:
+.L1113:
   mov r15, r12
   test r15, r15
-  jz .L630
+  jz .L1110
 .loc 1 380 0
   mov r12, rbx
   add r12, 3
@@ -10922,16 +22236,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 112
-  jne .L630
+  jne .L1110
 .loc 1 379 0
   mov r12, 1
-  jmp .L631
-.L630:
+  jmp .L1111
+.L1110:
   mov r12, 0
-.L631:
+.L1111:
   mov r15, r12
   test r15, r15
-  jz .L628
+  jz .L1108
 .loc 1 380 0
 .loc 1 381 0
   mov r12, rbx
@@ -10943,16 +22257,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 381 0
   mov r15, r14
   cmp r15, 100
-  jne .L628
+  jne .L1108
 .loc 1 379 0
   mov r12, 1
-  jmp .L629
-.L628:
+  jmp .L1109
+.L1108:
   mov r12, 0
-.L629:
+.L1109:
   mov r15, r12
   test r15, r15
-  jz .L626
+  jz .L1106
 .loc 1 382 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_XORPD]
   mov r15, r12
@@ -10968,33 +22282,33 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 379 0
-  jmp .L627
-.L626:
-.L627:
+  jmp .L1107
+.L1106:
+.L1107:
 .loc 1 335 0
-  jmp .L543
-.L542:
+  jmp .L1023
+.L1022:
 .loc 1 382 0
   mov r15, QWORD PTR [rbp-77]
   movsxd r15, r15d
   mov r12, r15
   mov r15, r12
   cmp r15, 6
-  jne .L638
+  jne .L1118
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 109
-  jne .L638
+  jne .L1118
   mov r12, 1
-  jmp .L639
-.L638:
+  jmp .L1119
+.L1118:
   mov r12, 0
-.L639:
+.L1119:
   mov r15, r12
   test r15, r15
-  jz .L636
+  jz .L1116
 .loc 1 383 0
 .loc 1 384 0
 .loc 1 383 0
@@ -11007,7 +22321,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 383 0
   mov r15, r14
   cmp r15, 111
-  jne .L648
+  jne .L1128
 .loc 1 385 0
 .loc 1 386 0
 .loc 1 385 0
@@ -11020,16 +22334,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 385 0
   mov r15, r14
   cmp r15, 118
-  jne .L648
+  jne .L1128
 .loc 1 383 0
   mov r12, 1
-  jmp .L649
-.L648:
+  jmp .L1129
+.L1128:
   mov r12, 0
-.L649:
+.L1129:
   mov r15, r12
   test r15, r15
-  jz .L646
+  jz .L1126
 .loc 1 387 0
 .loc 1 389 0
 .loc 1 387 0
@@ -11042,16 +22356,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 387 0
   mov r15, r14
   cmp r15, 115
-  jne .L646
+  jne .L1126
 .loc 1 383 0
   mov r12, 1
-  jmp .L647
-.L646:
+  jmp .L1127
+.L1126:
   mov r12, 0
-.L647:
+.L1127:
   mov r15, r12
   test r15, r15
-  jz .L644
+  jz .L1124
 .loc 1 389 0
   mov r12, rbx
   add r12, 4
@@ -11062,16 +22376,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 389 0
   mov r15, r14
   cmp r15, 120
-  jne .L644
+  jne .L1124
 .loc 1 383 0
   mov r12, 1
-  jmp .L645
-.L644:
+  jmp .L1125
+.L1124:
   mov r12, 0
-.L645:
+.L1125:
   mov r15, r12
   test r15, r15
-  jz .L642
+  jz .L1122
 .loc 1 390 0
   mov r12, rbx
   add r12, 5
@@ -11080,16 +22394,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 100
-  jne .L642
+  jne .L1122
 .loc 1 383 0
   mov r12, 1
-  jmp .L643
-.L642:
+  jmp .L1123
+.L1122:
   mov r12, 0
-.L643:
+.L1123:
   mov r15, r12
   test r15, r15
-  jz .L640
+  jz .L1120
 .loc 1 390 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSXD]
   mov r15, r12
@@ -11105,33 +22419,33 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 383 0
-  jmp .L641
-.L640:
-.L641:
+  jmp .L1121
+.L1120:
+.L1121:
 .loc 1 382 0
-  jmp .L637
-.L636:
+  jmp .L1117
+.L1116:
 .loc 1 391 0
   mov r15, QWORD PTR [rbp-77]
   movsxd r15, r15d
   mov r12, r15
   mov r15, r12
   cmp r15, 7
-  jne .L652
+  jne .L1132
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 115
-  jne .L652
+  jne .L1132
   mov r12, 1
-  jmp .L653
-.L652:
+  jmp .L1133
+.L1132:
   mov r12, 0
-.L653:
+.L1133:
   mov r15, r12
   test r15, r15
-  jz .L650
+  jz .L1130
   mov r12, rbx
   add r12, 1
   mov r15, r12
@@ -11139,7 +22453,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 121
-  jne .L664
+  jne .L1144
 .loc 1 392 0
   mov r12, rbx
   add r12, 2
@@ -11148,16 +22462,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L664
+  jne .L1144
 .loc 1 391 0
   mov r12, 1
-  jmp .L665
-.L664:
+  jmp .L1145
+.L1144:
   mov r12, 0
-.L665:
+.L1145:
   mov r15, r12
   test r15, r15
-  jz .L662
+  jz .L1142
 .loc 1 393 0
 .loc 1 395 0
 .loc 1 394 0
@@ -11170,16 +22484,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 394 0
   mov r15, r14
   cmp r15, 99
-  jne .L662
+  jne .L1142
 .loc 1 391 0
   mov r12, 1
-  jmp .L663
-.L662:
+  jmp .L1143
+.L1142:
   mov r12, 0
-.L663:
+.L1143:
   mov r15, r12
   test r15, r15
-  jz .L660
+  jz .L1140
 .loc 1 395 0
   mov r12, rbx
   add r12, 4
@@ -11188,16 +22502,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 97
-  jne .L660
+  jne .L1140
 .loc 1 391 0
   mov r12, 1
-  jmp .L661
-.L660:
+  jmp .L1141
+.L1140:
   mov r12, 0
-.L661:
+.L1141:
   mov r15, r12
   test r15, r15
-  jz .L658
+  jz .L1138
 .loc 1 395 0
   mov r12, rbx
   add r12, 5
@@ -11206,16 +22520,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L658
+  jne .L1138
 .loc 1 391 0
   mov r12, 1
-  jmp .L659
-.L658:
+  jmp .L1139
+.L1138:
   mov r12, 0
-.L659:
+.L1139:
   mov r15, r12
   test r15, r15
-  jz .L656
+  jz .L1136
 .loc 1 395 0
   mov r12, rbx
   add r12, 6
@@ -11224,16 +22538,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 108
-  jne .L656
+  jne .L1136
 .loc 1 391 0
   mov r12, 1
-  jmp .L657
-.L656:
+  jmp .L1137
+.L1136:
   mov r12, 0
-.L657:
+.L1137:
   mov r15, r12
   test r15, r15
-  jz .L654
+  jz .L1134
 .loc 1 395 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SYSCALL]
   mov r15, r12
@@ -11249,11 +22563,11 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 391 0
-  jmp .L655
-.L654:
-.L655:
-  jmp .L651
-.L650:
+  jmp .L1135
+.L1134:
+.L1135:
+  jmp .L1131
+.L1130:
 .loc 1 395 0
   mov r15, QWORD PTR [rbp-77]
   movsxd r15, r15d
@@ -11262,23 +22576,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 395 0
   mov r15, r12
   cmp r15, 8
-  jne .L668
+  jne .L1148
 .loc 1 396 0
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 99
-  jne .L668
+  jne .L1148
 .loc 1 395 0
   mov r12, 1
-  jmp .L669
-.L668:
+  jmp .L1149
+.L1148:
   mov r12, 0
-.L669:
+.L1149:
   mov r15, r12
   test r15, r15
-  jz .L666
+  jz .L1146
 .loc 1 397 0
 .loc 1 398 0
 .loc 1 397 0
@@ -11291,7 +22605,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 397 0
   mov r15, r14
   cmp r15, 118
-  jne .L682
+  jne .L1162
 .loc 1 398 0
   mov r12, rbx
   add r12, 2
@@ -11300,16 +22614,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 116
-  jne .L682
+  jne .L1162
 .loc 1 397 0
   mov r12, 1
-  jmp .L683
-.L682:
+  jmp .L1163
+.L1162:
   mov r12, 0
-.L683:
+.L1163:
   mov r15, r12
   test r15, r15
-  jz .L680
+  jz .L1160
 .loc 1 398 0
   mov r12, rbx
   add r12, 3
@@ -11318,16 +22632,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 115
-  jne .L680
+  jne .L1160
 .loc 1 397 0
   mov r12, 1
-  jmp .L681
-.L680:
+  jmp .L1161
+.L1160:
   mov r12, 0
-.L681:
+.L1161:
   mov r15, r12
   test r15, r15
-  jz .L678
+  jz .L1158
 .loc 1 399 0
   mov r12, rbx
   add r12, 4
@@ -11336,16 +22650,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 105
-  jne .L678
+  jne .L1158
 .loc 1 397 0
   mov r12, 1
-  jmp .L679
-.L678:
+  jmp .L1159
+.L1158:
   mov r12, 0
-.L679:
+.L1159:
   mov r15, r12
   test r15, r15
-  jz .L676
+  jz .L1156
 .loc 1 399 0
   mov r12, rbx
   add r12, 5
@@ -11354,16 +22668,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r14, r15
   mov r15, r14
   cmp r15, 50
-  jne .L676
+  jne .L1156
 .loc 1 397 0
   mov r12, 1
-  jmp .L677
-.L676:
+  jmp .L1157
+.L1156:
   mov r12, 0
-.L677:
+.L1157:
   mov r15, r12
   test r15, r15
-  jz .L674
+  jz .L1154
 .loc 1 399 0
   mov r12, rbx
   add r12, 6
@@ -11374,16 +22688,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 399 0
   mov r15, r14
   cmp r15, 115
-  jne .L674
+  jne .L1154
 .loc 1 397 0
   mov r12, 1
-  jmp .L675
-.L674:
+  jmp .L1155
+.L1154:
   mov r12, 0
-.L675:
+.L1155:
   mov r15, r12
   test r15, r15
-  jz .L672
+  jz .L1152
 .loc 1 400 0
   mov r12, rbx
   add r12, 7
@@ -11394,16 +22708,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 400 0
   mov r15, r14
   cmp r15, 100
-  jne .L672
+  jne .L1152
 .loc 1 397 0
   mov r12, 1
-  jmp .L673
-.L672:
+  jmp .L1153
+.L1152:
   mov r12, 0
-.L673:
+.L1153:
   mov r15, r12
   test r15, r15
-  jz .L670
+  jz .L1150
 .loc 1 401 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSI2SD]
   mov r15, r12
@@ -11419,12 +22733,12 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 397 0
-  jmp .L671
-.L670:
-.L671:
+  jmp .L1151
+.L1150:
+.L1151:
 .loc 1 395 0
-  jmp .L667
-.L666:
+  jmp .L1147
+.L1146:
 .loc 1 402 0
   mov r15, QWORD PTR [rbp-77]
   movsxd r15, r15d
@@ -11433,23 +22747,23 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 402 0
   mov r15, r12
   cmp r15, 9
-  jne .L686
+  jne .L1166
 .loc 1 405 0
   mov r15, r13
   movzx r15, r15b
   mov r12, r15
   mov r15, r12
   cmp r15, 99
-  jne .L686
+  jne .L1166
 .loc 1 402 0
   mov r12, 1
-  jmp .L687
-.L686:
+  jmp .L1167
+.L1166:
   mov r12, 0
-.L687:
+.L1167:
   mov r15, r12
   test r15, r15
-  jz .L684
+  jz .L1164
 .loc 1 405 0
   mov r12, rbx
   add r12, 1
@@ -11458,7 +22772,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r13, r15
   mov r15, r13
   cmp r15, 118
-  jne .L702
+  jne .L1182
   mov r12, rbx
   add r12, 2
   mov r15, r12
@@ -11466,15 +22780,15 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r13, r15
   mov r15, r13
   cmp r15, 116
-  jne .L702
+  jne .L1182
   mov r12, 1
-  jmp .L703
-.L702:
+  jmp .L1183
+.L1182:
   mov r12, 0
-.L703:
+.L1183:
   mov r15, r12
   test r15, r15
-  jz .L700
+  jz .L1180
 .loc 1 406 0
   mov r12, rbx
   add r12, 3
@@ -11485,16 +22799,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 406 0
   mov r15, r13
   cmp r15, 116
-  jne .L700
+  jne .L1180
 .loc 1 405 0
   mov r12, 1
-  jmp .L701
-.L700:
+  jmp .L1181
+.L1180:
   mov r12, 0
-.L701:
+.L1181:
   mov r15, r12
   test r15, r15
-  jz .L698
+  jz .L1178
 .loc 1 407 0
 .loc 1 408 0
 .loc 1 407 0
@@ -11507,16 +22821,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 407 0
   mov r15, r13
   cmp r15, 115
-  jne .L698
+  jne .L1178
 .loc 1 405 0
   mov r12, 1
-  jmp .L699
-.L698:
+  jmp .L1179
+.L1178:
   mov r12, 0
-.L699:
+.L1179:
   mov r15, r12
   test r15, r15
-  jz .L696
+  jz .L1176
 .loc 1 408 0
 .loc 1 410 0
 .loc 1 409 0
@@ -11529,16 +22843,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .loc 1 409 0
   mov r15, r13
   cmp r15, 100
-  jne .L696
+  jne .L1176
 .loc 1 405 0
   mov r12, 1
-  jmp .L697
-.L696:
+  jmp .L1177
+.L1176:
   mov r12, 0
-.L697:
+.L1177:
   mov r15, r12
   test r15, r15
-  jz .L694
+  jz .L1174
 .loc 1 410 0
   mov r12, rbx
   add r12, 6
@@ -11547,16 +22861,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r13, r15
   mov r15, r13
   cmp r15, 50
-  jne .L694
+  jne .L1174
 .loc 1 405 0
   mov r12, 1
-  jmp .L695
-.L694:
+  jmp .L1175
+.L1174:
   mov r12, 0
-.L695:
+.L1175:
   mov r15, r12
   test r15, r15
-  jz .L692
+  jz .L1172
 .loc 1 410 0
   mov r12, rbx
   add r12, 7
@@ -11565,16 +22879,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r13, r15
   mov r15, r13
   cmp r15, 115
-  jne .L692
+  jne .L1172
 .loc 1 405 0
   mov r12, 1
-  jmp .L693
-.L692:
+  jmp .L1173
+.L1172:
   mov r12, 0
-.L693:
+.L1173:
   mov r15, r12
   test r15, r15
-  jz .L690
+  jz .L1170
 .loc 1 410 0
   mov r12, rbx
   add r12, 8
@@ -11583,16 +22897,16 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 105
-  jne .L690
+  jne .L1170
 .loc 1 405 0
   mov rbx, 1
-  jmp .L691
-.L690:
+  jmp .L1171
+.L1170:
   mov rbx, 0
-.L691:
+.L1171:
   mov r15, rbx
   test r15, r15
-  jz .L688
+  jz .L1168
 .loc 1 410 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
   mov r15, rbx
@@ -11608,20 +22922,20 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   pop rbp
   ret
 .loc 1 405 0
-  jmp .L689
-.L688:
-.L689:
+  jmp .L1169
+.L1168:
+.L1169:
 .loc 1 402 0
-  jmp .L685
-.L684:
-.L685:
-.L667:
-.L651:
-.L637:
-.L543:
-.L477:
-.L349:
-.L329:
+  jmp .L1165
+.L1164:
+.L1165:
+.L1147:
+.L1131:
+.L1117:
+.L1023:
+.L957:
+.L829:
+.L809:
 .loc 1 410 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
   mov r15, rbx
@@ -11908,20 +23222,20 @@ _caustic_assembler_encoder_cst_disp_is8:
 .loc 1 427 0
   mov r15, rbx
   cmp r15, -128
-  jl .L706
+  jl .L1186
 .loc 1 429 0
   mov r15, rbx
   cmp r15, 127
-  jg .L706
+  jg .L1186
 .loc 1 427 0
   mov rbx, 1
-  jmp .L707
-.L706:
+  jmp .L1187
+.L1186:
   mov rbx, 0
-.L707:
+.L1187:
   mov r15, rbx
   test r15, r15
-  jz .L704
+  jz .L1184
 .loc 1 429 0
   mov rbx, 1
   mov rax, rbx
@@ -11934,9 +23248,9 @@ _caustic_assembler_encoder_cst_disp_is8:
   pop rbp
   ret
 .loc 1 427 0
-  jmp .L705
-.L704:
-.L705:
+  jmp .L1185
+.L1184:
+.L1185:
 .loc 1 429 0
   mov rbx, 0
   mov rax, rbx
@@ -11972,18 +23286,18 @@ _caustic_assembler_encoder_cst_imm_is8:
 .loc 1 431 0
   mov r15, rbx
   cmp r15, -128
-  jl .L710
+  jl .L1190
   mov r15, rbx
   cmp r15, 127
-  jg .L710
+  jg .L1190
   mov rbx, 1
-  jmp .L711
-.L710:
+  jmp .L1191
+.L1190:
   mov rbx, 0
-.L711:
+.L1191:
   mov r15, rbx
   test r15, r15
-  jz .L708
+  jz .L1188
 .loc 1 432 0
   mov rbx, 1
   mov rax, rbx
@@ -11996,9 +23310,9 @@ _caustic_assembler_encoder_cst_imm_is8:
   pop rbp
   ret
 .loc 1 431 0
-  jmp .L709
-.L708:
-.L709:
+  jmp .L1189
+.L1188:
+.L1189:
 .loc 1 432 0
   mov rbx, 0
   mov rax, rbx
@@ -12035,18 +23349,18 @@ _caustic_assembler_encoder_cst_imm_is32:
   mov r12, -2147483648
   mov r15, rbx
   cmp r15, r12
-  jl .L714
+  jl .L1194
   mov r15, rbx
   cmp r15, 2147483647
-  jg .L714
+  jg .L1194
   mov rbx, 1
-  jmp .L715
-.L714:
+  jmp .L1195
+.L1194:
   mov rbx, 0
-.L715:
+.L1195:
   mov r15, rbx
   test r15, r15
-  jz .L712
+  jz .L1192
   mov rbx, 1
   mov rax, rbx
   add rsp, 56
@@ -12057,9 +23371,9 @@ _caustic_assembler_encoder_cst_imm_is32:
   pop rbx
   pop rbp
   ret
-  jmp .L713
-.L712:
-.L713:
+  jmp .L1193
+.L1192:
+.L1193:
   mov rbx, 0
   mov rax, rbx
   add rsp, 56
@@ -12118,34 +23432,34 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
 .loc 1 440 0
   mov r15, r8
   cmp r15, 4
-  jne .L716
+  jne .L1196
 .loc 1 441 0
   mov r8, 1
   mov rax, r8
   mov DWORD PTR [rbp-80], eax
 .loc 1 440 0
-  jmp .L717
-.L716:
-.L717:
+  jmp .L1197
+.L1196:
+.L1197:
 .loc 1 442 0
   mov r15, r14
   cmp r15, 0
-  jne .L720
+  jne .L1200
   mov r15, r13
   movsxd r15, r15d
   mov r8, r15
   mov r15, r8
   cmp r15, 5
-  je .L720
+  je .L1200
   mov r8, 1
-  jmp .L721
-.L720:
+  jmp .L1201
+.L1200:
   mov r8, 0
-.L721:
+.L1201:
 .loc 1 441 0
   mov r15, r8
   test r15, r15
-  jz .L718
+  jz .L1198
 .loc 1 443 0
 .loc 1 444 0
   mov r8, 0
@@ -12170,7 +23484,7 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   mov r12, r15
   mov r15, r12
   cmp r15, 1
-  jne .L722
+  jne .L1202
 .loc 1 444 0
 .loc 1 446 0
   mov r12, 0
@@ -12188,19 +23502,19 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   call _caustic_assembler_buf_cst_buf_emit8
   mov r12, rax
 .loc 1 444 0
-  jmp .L723
-.L722:
-.L723:
+  jmp .L1203
+.L1202:
+.L1203:
 .loc 1 441 0
-  jmp .L719
-.L718:
+  jmp .L1199
+.L1198:
 .loc 1 447 0
   mov rdi, r14
   call _caustic_assembler_encoder_cst_disp_is8
   mov r12, rax
   mov r15, r12
   cmp r15, 1
-  jne .L724
+  jne .L1204
 .loc 1 448 0
 .loc 1 451 0
   mov r12, 1
@@ -12226,7 +23540,7 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   mov r12, r15
   mov r15, r12
   cmp r15, 1
-  jne .L726
+  jne .L1206
 .loc 1 452 0
   mov r12, 0
   mov r8, 4
@@ -12245,9 +23559,9 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov r12, rax
-  jmp .L727
-.L726:
-.L727:
+  jmp .L1207
+.L1206:
+.L1207:
 .loc 1 454 0
 .loc 1 455 0
 .loc 1 454 0
@@ -12259,8 +23573,8 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   call _caustic_assembler_buf_cst_buf_emit8
   mov r12, rax
 .loc 1 447 0
-  jmp .L725
-.L724:
+  jmp .L1205
+.L1204:
 .loc 1 455 0
 .loc 1 456 0
   mov r12, 2
@@ -12287,7 +23601,7 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
 .loc 1 456 0
   mov r15, r12
   cmp r15, 1
-  jne .L728
+  jne .L1208
 .loc 1 458 0
   mov r12, 0
 .loc 1 459 0
@@ -12307,9 +23621,9 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   call _caustic_assembler_buf_cst_buf_emit8
   mov r12, rax
 .loc 1 456 0
-  jmp .L729
-.L728:
-.L729:
+  jmp .L1209
+.L1208:
+.L1209:
 .loc 1 459 0
 .loc 1 460 0
 .loc 1 459 0
@@ -12317,8 +23631,8 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.L725:
-.L719:
+.L1205:
+.L1199:
   mov rbx, 0
   mov rax, rbx
   add rsp, 88
@@ -12363,34 +23677,34 @@ _caustic_assembler_encoder_cst_mem_modrm_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 4
-  jne .L730
+  jne .L1210
 .loc 1 464 0
 .loc 1 466 0
   mov r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-68], eax
 .loc 1 464 0
-  jmp .L731
-.L730:
-.L731:
+  jmp .L1211
+.L1210:
+.L1211:
 .loc 1 466 0
   mov r15, r12
   cmp r15, 0
-  jne .L734
+  jne .L1214
   mov r15, rbx
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 5
-  je .L734
+  je .L1214
   mov rbx, 1
-  jmp .L735
-.L734:
+  jmp .L1215
+.L1214:
   mov rbx, 0
-.L735:
+.L1215:
   mov r15, rbx
   test r15, r15
-  jz .L732
+  jz .L1212
 .loc 1 467 0
   mov rbx, 1
   movsxd r15, DWORD PTR [rbp-68]
@@ -12407,8 +23721,8 @@ _caustic_assembler_encoder_cst_mem_modrm_size:
   pop rbp
   ret
 .loc 1 466 0
-  jmp .L733
-.L732:
+  jmp .L1213
+.L1212:
 .loc 1 468 0
   mov rdi, r12
   call _caustic_assembler_encoder_cst_disp_is8
@@ -12417,7 +23731,7 @@ _caustic_assembler_encoder_cst_mem_modrm_size:
 .loc 1 468 0
   mov r15, rbx
   cmp r15, 1
-  jne .L736
+  jne .L1216
 .loc 1 470 0
   mov rbx, 2
   movsxd r15, DWORD PTR [rbp-68]
@@ -12435,8 +23749,8 @@ _caustic_assembler_encoder_cst_mem_modrm_size:
   pop rbp
   ret
 .loc 1 468 0
-  jmp .L737
-.L736:
+  jmp .L1217
+.L1216:
 .loc 1 470 0
   mov rbx, 5
   movsxd r15, DWORD PTR [rbp-68]
@@ -12452,8 +23766,8 @@ _caustic_assembler_encoder_cst_mem_modrm_size:
   pop rbx
   pop rbp
   ret
-.L737:
-.L733:
+.L1217:
+.L1213:
   mov rbx, 0
   mov rax, rbx
   add rsp, 72
@@ -12502,7 +23816,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r10, r15
   mov r15, r8
   cmp r15, r10
-  jne .L738
+  jne .L1218
   mov r8, 195
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, r8
@@ -12520,9 +23834,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 476 0
-  jmp .L739
-.L738:
-.L739:
+  jmp .L1219
+.L1218:
+.L1219:
 .loc 1 477 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12535,7 +23849,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 477 0
   mov r15, r12
   cmp r15, r9
-  jne .L740
+  jne .L1220
 .loc 1 481 0
   mov r12, 15
 .loc 1 478 0
@@ -12560,9 +23874,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 477 0
-  jmp .L741
-.L740:
-.L741:
+  jmp .L1221
+.L1220:
+.L1221:
 .loc 1 481 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12575,7 +23889,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 481 0
   mov r15, r12
   cmp r15, r9
-  jne .L742
+  jne .L1222
 .loc 1 483 0
 .loc 1 484 0
   mov r12, 252
@@ -12596,9 +23910,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 481 0
-  jmp .L743
-.L742:
-.L743:
+  jmp .L1223
+.L1222:
+.L1223:
 .loc 1 485 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12609,7 +23923,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r9, r15
   mov r15, r12
   cmp r15, r9
-  jne .L744
+  jne .L1224
   mov r12, 144
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, r12
@@ -12627,9 +23941,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 485 0
-  jmp .L745
-.L744:
-.L745:
+  jmp .L1225
+.L1224:
+.L1225:
 .loc 1 486 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12640,7 +23954,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r9, r15
   mov r15, r12
   cmp r15, r9
-  jne .L746
+  jne .L1226
 .loc 1 487 0
 .loc 1 488 0
   mov r12, 1
@@ -12681,9 +23995,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 486 0
-  jmp .L747
-.L746:
-.L747:
+  jmp .L1227
+.L1226:
+.L1227:
 .loc 1 496 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12694,7 +24008,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r9, r15
   mov r15, r12
   cmp r15, r9
-  jne .L748
+  jne .L1228
 .loc 1 497 0
   mov r12, 153
   mov rdi, QWORD PTR [rbp-468]
@@ -12712,9 +24026,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 496 0
-  jmp .L749
-.L748:
-.L749:
+  jmp .L1229
+.L1228:
+.L1229:
 .loc 1 498 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12725,7 +24039,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r9, r15
   mov r15, r12
   cmp r15, r9
-  jne .L750
+  jne .L1230
 .loc 1 497 0
 .loc 1 498 0
   mov r12, 164
@@ -12744,9 +24058,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 497 0
-  jmp .L751
-.L750:
-.L751:
+  jmp .L1231
+.L1230:
+.L1231:
 .loc 1 499 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12757,7 +24071,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r9, r15
   mov r15, r12
   cmp r15, r9
-  jne .L752
+  jne .L1232
 .loc 1 498 0
 .loc 1 503 0
   mov r12, 243
@@ -12776,9 +24090,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 498 0
-  jmp .L753
-.L752:
-.L753:
+  jmp .L1233
+.L1232:
+.L1233:
 .loc 1 504 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12789,7 +24103,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r9, r15
   mov r15, r12
   cmp r15, r9
-  jne .L756
+  jne .L1236
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov r12, r15
@@ -12799,15 +24113,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r9, r15
   mov r15, r12
   cmp r15, r9
-  jne .L756
+  jne .L1236
   mov r12, 1
-  jmp .L757
-.L756:
+  jmp .L1237
+.L1236:
   mov r12, 0
-.L757:
+.L1237:
   mov r15, r12
   test r15, r15
-  jz .L754
+  jz .L1234
   xor r10, r10
 .loc 1 505 0
   mov r12, QWORD PTR [rbp-460]
@@ -12830,7 +24144,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  jne .L758
+  jne .L1238
 .loc 1 505 0
 .loc 1 508 0
 .loc 1 509 0
@@ -12852,9 +24166,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov r14, rax
 .loc 1 505 0
-  jmp .L759
-.L758:
-.L759:
+  jmp .L1239
+.L1238:
+.L1239:
 .loc 1 511 0
   mov r14, 80
   mov r15, r12
@@ -12890,9 +24204,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 504 0
-  jmp .L755
-.L754:
-.L755:
+  jmp .L1235
+.L1234:
+.L1235:
 .loc 1 514 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -12905,7 +24219,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 514 0
   mov r15, r12
   cmp r15, r8
-  jne .L762
+  jne .L1242
 .loc 1 515 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -12916,17 +24230,17 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L762
+  jne .L1242
 .loc 1 514 0
   mov r12, 1
-  jmp .L763
-.L762:
+  jmp .L1243
+.L1242:
   mov r12, 0
-.L763:
+.L1243:
 .loc 1 513 0
   mov r15, r12
   test r15, r15
-  jz .L760
+  jz .L1240
 .loc 1 516 0
   xor r10, r10
 .loc 1 517 0
@@ -12952,7 +24266,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 518 0
   mov r15, r14
   cmp r15, 1
-  jne .L764
+  jne .L1244
 .loc 1 520 0
   mov r14, 0
 .loc 1 523 0
@@ -12972,9 +24286,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov r14, rax
 .loc 1 518 0
-  jmp .L765
-.L764:
-.L765:
+  jmp .L1245
+.L1244:
+.L1245:
 .loc 1 527 0
   mov r14, 88
   mov r15, r12
@@ -13008,9 +24322,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 513 0
-  jmp .L761
-.L760:
-.L761:
+  jmp .L1241
+.L1240:
+.L1241:
 .loc 1 528 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13021,7 +24335,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L768
+  jne .L1248
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov r12, r15
@@ -13031,15 +24345,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L768
+  jne .L1248
   mov r12, 1
-  jmp .L769
-.L768:
+  jmp .L1249
+.L1248:
   mov r12, 0
-.L769:
+.L1249:
   mov r15, r12
   test r15, r15
-  jz .L766
+  jz .L1246
 .loc 1 529 0
   mov r12, 232
   mov rdi, QWORD PTR [rbp-468]
@@ -13071,9 +24385,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 528 0
-  jmp .L767
-.L766:
-.L767:
+  jmp .L1247
+.L1246:
+.L1247:
 .loc 1 534 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13084,7 +24398,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L772
+  jne .L1252
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov r12, r15
@@ -13096,15 +24410,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 534 0
   mov r15, r12
   cmp r15, r8
-  jne .L772
+  jne .L1252
   mov r12, 1
-  jmp .L773
-.L772:
+  jmp .L1253
+.L1252:
   mov r12, 0
-.L773:
+.L1253:
   mov r15, r12
   test r15, r15
-  jz .L770
+  jz .L1250
 .loc 1 536 0
   mov r12, 233
 .loc 1 535 0
@@ -13137,9 +24451,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 534 0
-  jmp .L771
-.L770:
-.L771:
+  jmp .L1251
+.L1250:
+.L1251:
 .loc 1 542 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13152,7 +24466,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 542 0
   mov r15, r12
   cmp r15, r8
-  jl .L778
+  jl .L1258
 .loc 1 543 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13163,16 +24477,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jg .L778
+  jg .L1258
 .loc 1 542 0
   mov r12, 1
-  jmp .L779
-.L778:
+  jmp .L1259
+.L1258:
   mov r12, 0
-.L779:
+.L1259:
   mov r15, r12
   test r15, r15
-  jz .L776
+  jz .L1256
 .loc 1 543 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -13183,16 +24497,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L776
+  jne .L1256
 .loc 1 542 0
   mov r12, 1
-  jmp .L777
-.L776:
+  jmp .L1257
+.L1256:
   mov r12, 0
-.L777:
+.L1257:
   mov r15, r12
   test r15, r15
-  jz .L774
+  jz .L1254
 .loc 1 544 0
   mov r12, 15
   mov rdi, QWORD PTR [rbp-468]
@@ -13212,7 +24526,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  je .L782
+  je .L1262
 .loc 1 547 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13225,25 +24539,25 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 547 0
   mov r15, r12
   cmp r15, r8
-  je .L782
+  je .L1262
 .loc 1 545 0
   mov r12, 0
-  jmp .L783
-.L782:
+  jmp .L1263
+.L1262:
   mov r12, 1
-.L783:
+.L1263:
 .loc 1 544 0
   mov r15, r12
   test r15, r15
-  jz .L780
+  jz .L1260
 .loc 1 551 0
   mov r12, 132
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 544 0
-  jmp .L781
-.L780:
-.L781:
+  jmp .L1261
+.L1260:
+.L1261:
 .loc 1 551 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13256,7 +24570,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 551 0
   mov r15, r12
   cmp r15, r8
-  je .L786
+  je .L1266
 .loc 1 552 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13267,24 +24581,24 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  je .L786
+  je .L1266
 .loc 1 551 0
   mov r12, 0
-  jmp .L787
-.L786:
+  jmp .L1267
+.L1266:
   mov r12, 1
-.L787:
+.L1267:
   mov r15, r12
   test r15, r15
-  jz .L784
+  jz .L1264
 .loc 1 552 0
   mov r12, 133
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 551 0
-  jmp .L785
-.L784:
-.L785:
+  jmp .L1265
+.L1264:
+.L1265:
 .loc 1 552 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13297,15 +24611,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 552 0
   mov r15, r12
   cmp r15, r8
-  jne .L788
+  jne .L1268
 .loc 1 553 0
   mov r12, 140
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 552 0
-  jmp .L789
-.L788:
-.L789:
+  jmp .L1269
+.L1268:
+.L1269:
 .loc 1 554 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13316,13 +24630,13 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L790
+  jne .L1270
   mov r12, 142
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
-  jmp .L791
-.L790:
-.L791:
+  jmp .L1271
+.L1270:
+.L1271:
 .loc 1 555 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13335,7 +24649,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 555 0
   mov r15, r12
   cmp r15, r8
-  jne .L792
+  jne .L1272
 .loc 1 556 0
 .loc 1 557 0
   mov r12, 143
@@ -13343,9 +24657,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 555 0
-  jmp .L793
-.L792:
-.L793:
+  jmp .L1273
+.L1272:
+.L1273:
 .loc 1 557 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13358,15 +24672,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 557 0
   mov r15, r12
   cmp r15, r8
-  jne .L794
+  jne .L1274
 .loc 1 558 0
   mov r12, 141
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 557 0
-  jmp .L795
-.L794:
-.L795:
+  jmp .L1275
+.L1274:
+.L1275:
 .loc 1 559 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13377,15 +24691,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L796
+  jne .L1276
 .loc 1 560 0
   mov r12, 135
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 559 0
-  jmp .L797
-.L796:
-.L797:
+  jmp .L1277
+.L1276:
+.L1277:
 .loc 1 563 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13396,16 +24710,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L798
+  jne .L1278
 .loc 1 561 0
 .loc 1 564 0
   mov r12, 131
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 561 0
-  jmp .L799
-.L798:
-.L799:
+  jmp .L1279
+.L1278:
+.L1279:
 .loc 1 564 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13418,15 +24732,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 564 0
   mov r15, r12
   cmp r15, r8
-  jne .L800
+  jne .L1280
 .loc 1 565 0
   mov r12, 130
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 564 0
-  jmp .L801
-.L800:
-.L801:
+  jmp .L1281
+.L1280:
+.L1281:
 .loc 1 565 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13437,15 +24751,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L802
+  jne .L1282
 .loc 1 566 0
   mov r12, 134
   mov rax, r12
   mov DWORD PTR [rbp-128], eax
 .loc 1 565 0
-  jmp .L803
-.L802:
-.L803:
+  jmp .L1283
+.L1282:
+.L1283:
 .loc 1 566 0
   movsxd r15, DWORD PTR [rbp-128]
   mov r12, r15
@@ -13478,9 +24792,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 542 0
-  jmp .L775
-.L774:
-.L775:
+  jmp .L1255
+.L1254:
+.L1255:
 .loc 1 581 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13491,7 +24805,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jl .L808
+  jl .L1288
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov r12, r15
@@ -13501,15 +24815,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jg .L808
+  jg .L1288
   mov r12, 1
-  jmp .L809
-.L808:
+  jmp .L1289
+.L1288:
   mov r12, 0
-.L809:
+.L1289:
   mov r15, r12
   test r15, r15
-  jz .L806
+  jz .L1286
 .loc 1 582 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -13520,17 +24834,17 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L806
+  jne .L1286
 .loc 1 581 0
   mov r12, 1
-  jmp .L807
-.L806:
+  jmp .L1287
+.L1286:
   mov r12, 0
-.L807:
+.L1287:
 .loc 1 577 0
   mov r15, r12
   test r15, r15
-  jz .L804
+  jz .L1284
 .loc 1 583 0
   mov r12, 0
 .loc 1 582 0
@@ -13546,15 +24860,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L810
+  jne .L1290
 .loc 1 584 0
   mov r12, 148
 .loc 1 583 0
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
-  jmp .L811
-.L810:
-.L811:
+  jmp .L1291
+.L1290:
+.L1291:
 .loc 1 584 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13565,13 +24879,13 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L812
+  jne .L1292
   mov r12, 149
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
-  jmp .L813
-.L812:
-.L813:
+  jmp .L1293
+.L1292:
+.L1293:
 .loc 1 588 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13582,15 +24896,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L814
+  jne .L1294
 .loc 1 589 0
   mov r12, 156
 .loc 1 588 0
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
-  jmp .L815
-.L814:
-.L815:
+  jmp .L1295
+.L1294:
+.L1295:
 .loc 1 589 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13603,15 +24917,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 589 0
   mov r15, r12
   cmp r15, r8
-  jne .L816
+  jne .L1296
 .loc 1 591 0
   mov r12, 158
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
 .loc 1 589 0
-  jmp .L817
-.L816:
-.L817:
+  jmp .L1297
+.L1296:
+.L1297:
 .loc 1 592 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13622,16 +24936,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L818
+  jne .L1298
 .loc 1 591 0
 .loc 1 592 0
   mov r12, 159
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
 .loc 1 591 0
-  jmp .L819
-.L818:
-.L819:
+  jmp .L1299
+.L1298:
+.L1299:
 .loc 1 592 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13642,15 +24956,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L820
+  jne .L1300
 .loc 1 593 0
   mov r12, 157
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
 .loc 1 592 0
-  jmp .L821
-.L820:
-.L821:
+  jmp .L1301
+.L1300:
+.L1301:
 .loc 1 594 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13661,7 +24975,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L822
+  jne .L1302
 .loc 1 595 0
 .loc 1 596 0
   mov r12, 146
@@ -13669,9 +24983,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
 .loc 1 594 0
-  jmp .L823
-.L822:
-.L823:
+  jmp .L1303
+.L1302:
+.L1303:
 .loc 1 597 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13682,15 +24996,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L824
+  jne .L1304
 .loc 1 598 0
   mov r12, 150
 .loc 1 597 0
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
-  jmp .L825
-.L824:
-.L825:
+  jmp .L1305
+.L1304:
+.L1305:
 .loc 1 598 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13701,15 +25015,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L826
+  jne .L1306
 .loc 1 599 0
   mov r12, 151
 .loc 1 598 0
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
-  jmp .L827
-.L826:
-.L827:
+  jmp .L1307
+.L1306:
+.L1307:
 .loc 1 599 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13720,15 +25034,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r8, r15
   mov r15, r12
   cmp r15, r8
-  jne .L828
+  jne .L1308
 .loc 1 600 0
   mov r12, 147
   mov rax, r12
   mov DWORD PTR [rbp-140], eax
 .loc 1 599 0
-  jmp .L829
-.L828:
-.L829:
+  jmp .L1309
+.L1308:
+.L1309:
 .loc 1 600 0
   xor r10, r10
 .loc 1 601 0
@@ -13752,7 +25066,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  je .L832
+  je .L1312
   mov r14, QWORD PTR [rbp-460]
   add r14, 4
   mov r15, r14
@@ -13765,15 +25079,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 601 0
   mov r15, r14
   cmp r15, 1
-  je .L832
+  je .L1312
   mov r14, 0
-  jmp .L833
-.L832:
+  jmp .L1313
+.L1312:
   mov r14, 1
-.L833:
+.L1313:
   mov r15, r14
   test r15, r15
-  jz .L830
+  jz .L1310
 .loc 1 606 0
   mov r14, 0
   mov r12, 0
@@ -13799,9 +25113,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 601 0
-  jmp .L831
-.L830:
-.L831:
+  jmp .L1311
+.L1310:
+.L1311:
 .loc 1 608 0
   mov rbx, 15
 .loc 1 607 0
@@ -13856,9 +25170,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 577 0
-  jmp .L805
-.L804:
-.L805:
+  jmp .L1285
+.L1284:
+.L1285:
 .loc 1 613 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13871,7 +25185,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 613 0
   mov r15, rbx
   cmp r15, r13
-  je .L842
+  je .L1322
 .loc 1 614 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13882,16 +25196,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L842
+  je .L1322
 .loc 1 613 0
   mov rbx, 0
-  jmp .L843
-.L842:
+  jmp .L1323
+.L1322:
   mov rbx, 1
-.L843:
+.L1323:
   mov r15, rbx
   test r15, r15
-  jnz .L840
+  jnz .L1320
 .loc 1 614 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13904,16 +25218,16 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 614 0
   mov r15, rbx
   cmp r15, r13
-  je .L840
+  je .L1320
 .loc 1 613 0
   mov rbx, 0
-  jmp .L841
-.L840:
+  jmp .L1321
+.L1320:
   mov rbx, 1
-.L841:
+.L1321:
   mov r15, rbx
   test r15, r15
-  jnz .L838
+  jnz .L1318
 .loc 1 616 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -13924,16 +25238,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L838
+  je .L1318
 .loc 1 613 0
   mov rbx, 0
-  jmp .L839
-.L838:
+  jmp .L1319
+.L1318:
   mov rbx, 1
-.L839:
+.L1319:
   mov r15, rbx
   test r15, r15
-  jz .L836
+  jz .L1316
 .loc 1 617 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -13944,16 +25258,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L836
+  jne .L1316
 .loc 1 613 0
   mov rbx, 1
-  jmp .L837
-.L836:
+  jmp .L1317
+.L1316:
   mov rbx, 0
-.L837:
+.L1317:
   mov r15, rbx
   test r15, r15
-  jz .L834
+  jz .L1314
 .loc 1 618 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
@@ -13986,15 +25300,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L844
+  jne .L1324
 .loc 1 621 0
   mov rbx, 1
 .loc 1 620 0
   mov rax, rbx
   mov DWORD PTR [rbp-156], eax
-  jmp .L845
-.L844:
-.L845:
+  jmp .L1325
+.L1324:
+.L1325:
 .loc 1 621 0
   movsxd r15, DWORD PTR [rbp-156]
   mov rbx, r15
@@ -14043,15 +25357,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 624 0
   mov r15, rbx
   cmp r15, r13
-  jne .L846
+  jne .L1326
 .loc 1 625 0
   mov rbx, 6
   mov rax, rbx
   mov DWORD PTR [rbp-160], eax
 .loc 1 624 0
-  jmp .L847
-.L846:
-.L847:
+  jmp .L1327
+.L1326:
+.L1327:
 .loc 1 626 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -14062,13 +25376,13 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L848
+  jne .L1328
   mov rbx, 3
   mov rax, rbx
   mov DWORD PTR [rbp-160], eax
-  jmp .L849
-.L848:
-.L849:
+  jmp .L1329
+.L1328:
+.L1329:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -14080,15 +25394,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 626 0
   mov r15, rbx
   cmp r15, r13
-  jne .L850
+  jne .L1330
 .loc 1 628 0
   mov rbx, 2
   mov rax, rbx
   mov DWORD PTR [rbp-160], eax
 .loc 1 626 0
-  jmp .L851
-.L850:
-.L851:
+  jmp .L1331
+.L1330:
+.L1331:
 .loc 1 628 0
   mov rbx, 3
   movsxd r15, DWORD PTR [rbp-160]
@@ -14126,9 +25440,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 613 0
-  jmp .L835
-.L834:
-.L835:
+  jmp .L1315
+.L1314:
+.L1315:
 .loc 1 629 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -14141,7 +25455,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 629 0
   mov r15, rbx
   cmp r15, r13
-  jne .L852
+  jne .L1332
 .loc 1 630 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -14154,7 +25468,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 630 0
   mov r15, rbx
   cmp r15, r13
-  jne .L856
+  jne .L1336
 .loc 1 631 0
 .loc 1 632 0
   mov r15, QWORD PTR [rbp-444]
@@ -14166,16 +25480,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L856
+  jne .L1336
 .loc 1 630 0
   mov rbx, 1
-  jmp .L857
-.L856:
+  jmp .L1337
+.L1336:
   mov rbx, 0
-.L857:
+.L1337:
   mov r15, rbx
   test r15, r15
-  jz .L854
+  jz .L1334
 .loc 1 632 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
@@ -14212,7 +25526,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, r14
   cmp r15, 16
-  jne .L858
+  jne .L1338
 .loc 1 634 0
   mov r14, 102
   mov rdi, QWORD PTR [rbp-468]
@@ -14220,9 +25534,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov r14, rax
 .loc 1 633 0
-  jmp .L859
-.L858:
-.L859:
+  jmp .L1339
+.L1338:
+.L1339:
 .loc 1 634 0
   mov r14, 0
   mov rax, r14
@@ -14238,16 +25552,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, r14
   cmp r15, 64
-  jne .L860
+  jne .L1340
   mov r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-180], eax
   mov r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-176], eax
-  jmp .L861
-.L860:
-.L861:
+  jmp .L1341
+.L1340:
+.L1341:
   mov r14, QWORD PTR [rbp-444]
   add r14, 4
   mov r15, r14
@@ -14260,7 +25574,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 635 0
   mov r15, r14
   cmp r15, 1
-  je .L864
+  je .L1344
 .loc 1 638 0
   mov r14, QWORD PTR [rbp-460]
   add r14, 4
@@ -14272,31 +25586,31 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  je .L864
+  je .L1344
 .loc 1 635 0
   mov r14, 0
-  jmp .L865
-.L864:
+  jmp .L1345
+.L1344:
   mov r14, 1
-.L865:
+.L1345:
   mov r15, r14
   test r15, r15
-  jz .L862
+  jz .L1342
 .loc 1 639 0
   mov r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-176], eax
 .loc 1 635 0
-  jmp .L863
-.L862:
-.L863:
+  jmp .L1343
+.L1342:
+.L1343:
 .loc 1 639 0
   mov r15, QWORD PTR [rbp-500]
   movsxd r15, r15d
   mov r14, r15
   mov r15, r14
   cmp r15, 8
-  jne .L868
+  jne .L1348
 .loc 1 640 0
   mov r14, QWORD PTR [rbp-460]
   add r14, 4
@@ -14310,7 +25624,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 640 0
   mov r15, r14
   cmp r15, 1
-  je .L870
+  je .L1350
 .loc 1 642 0
   mov r14, QWORD PTR [rbp-444]
   add r14, 4
@@ -14325,25 +25639,25 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 641 0
   mov r15, r14
   cmp r15, 1
-  je .L870
+  je .L1350
 .loc 1 640 0
   mov r14, 0
-  jmp .L871
-.L870:
+  jmp .L1351
+.L1350:
   mov r14, 1
-.L871:
+.L1351:
 .loc 1 639 0
   mov r15, r14
   test r15, r15
-  jz .L868
+  jz .L1348
   mov r14, 1
-  jmp .L869
-.L868:
+  jmp .L1349
+.L1348:
   mov r14, 0
-.L869:
+.L1349:
   mov r15, r14
   test r15, r15
-  jz .L866
+  jz .L1346
 .loc 1 642 0
 .loc 1 644 0
   mov r14, 1
@@ -14351,9 +25665,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r14
   mov DWORD PTR [rbp-176], eax
 .loc 1 639 0
-  jmp .L867
-.L866:
-.L867:
+  jmp .L1347
+.L1346:
+.L1347:
 .loc 1 644 0
   movsxd r15, DWORD PTR [rbp-176]
   mov r14, r15
@@ -14361,7 +25675,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 644 0
   mov r15, r14
   cmp r15, 1
-  jne .L872
+  jne .L1352
 .loc 1 649 0
   movsxd r15, DWORD PTR [rbp-180]
   mov r14, r15
@@ -14395,16 +25709,16 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 644 0
-  jmp .L873
-.L872:
-.L873:
+  jmp .L1353
+.L1352:
+.L1353:
 .loc 1 650 0
   mov r15, QWORD PTR [rbp-500]
   movsxd r15, r15d
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L874
+  jne .L1354
 .loc 1 651 0
   mov rbx, 136
 .loc 1 650 0
@@ -14412,15 +25726,15 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L875
-.L874:
+  jmp .L1355
+.L1354:
 .loc 1 652 0
   mov rbx, 137
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L875:
+.L1355:
 .loc 1 654 0
   mov rbx, 3
 .loc 1 655 0
@@ -14463,9 +25777,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 630 0
-  jmp .L855
-.L854:
-.L855:
+  jmp .L1335
+.L1334:
+.L1335:
 .loc 1 657 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -14478,7 +25792,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 657 0
   mov r15, rbx
   cmp r15, r13
-  jne .L878
+  jne .L1358
 .loc 1 658 0
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
@@ -14489,16 +25803,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L878
+  jne .L1358
 .loc 1 657 0
   mov rbx, 1
-  jmp .L879
-.L878:
+  jmp .L1359
+.L1358:
   mov rbx, 0
-.L879:
+.L1359:
   mov r15, rbx
   test r15, r15
-  jz .L876
+  jz .L1356
 .loc 1 659 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
@@ -14526,7 +25840,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L880
+  jne .L1360
 .loc 1 665 0
   mov r13, QWORD PTR [rbp-444]
   add r13, 8
@@ -14538,7 +25852,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, rax
   mov r15, r13
   cmp r15, 1
-  jne .L882
+  jne .L1362
 .loc 1 664 0
 .loc 1 666 0
   mov r13, 1
@@ -14598,8 +25912,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
 .loc 1 664 0
-  jmp .L883
-.L882:
+  jmp .L1363
+.L1362:
 .loc 1 671 0
   mov rbx, 1
 .loc 1 672 0
@@ -14651,17 +25965,17 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit64_le
   mov rbx, rax
-.L883:
+.L1363:
 .loc 1 664 0
-  jmp .L881
-.L880:
+  jmp .L1361
+.L1360:
 .loc 1 678 0
   mov r15, QWORD PTR [rbp-508]
   movsxd r15, r15d
   mov rbx, r15
   mov r15, rbx
   cmp r15, 32
-  jne .L884
+  jne .L1364
 .loc 1 679 0
 .loc 1 680 0
   mov rbx, QWORD PTR [rbp-460]
@@ -14677,7 +25991,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 679 0
   mov r15, rbx
   cmp r15, 1
-  jne .L886
+  jne .L1366
 .loc 1 678 0
 .loc 1 685 0
   mov rbx, 0
@@ -14696,9 +26010,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 678 0
-  jmp .L887
-.L886:
-.L887:
+  jmp .L1367
+.L1366:
+.L1367:
 .loc 1 687 0
   mov rbx, 184
   mov r15, QWORD PTR [rbp-516]
@@ -14722,15 +26036,15 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
 .loc 1 678 0
-  jmp .L885
-.L884:
+  jmp .L1365
+.L1364:
 .loc 1 688 0
   mov r15, QWORD PTR [rbp-508]
   movsxd r15, r15d
   mov rbx, r15
   mov r15, rbx
   cmp r15, 16
-  jne .L888
+  jne .L1368
 .loc 1 689 0
   mov rbx, 102
   mov rdi, QWORD PTR [rbp-468]
@@ -14750,7 +26064,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 690 0
   mov r15, rbx
   cmp r15, 1
-  jne .L890
+  jne .L1370
 .loc 1 689 0
 .loc 1 693 0
   mov rbx, 0
@@ -14771,9 +26085,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 689 0
-  jmp .L891
-.L890:
-.L891:
+  jmp .L1371
+.L1370:
+.L1371:
 .loc 1 696 0
   mov rbx, 184
   mov r15, QWORD PTR [rbp-516]
@@ -14800,8 +26114,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit16_le
   mov rbx, rax
 .loc 1 688 0
-  jmp .L889
-.L888:
+  jmp .L1369
+.L1368:
 .loc 1 698 0
   mov rbx, QWORD PTR [rbp-460]
   add rbx, 4
@@ -14813,7 +26127,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L894
+  je .L1374
 .loc 1 700 0
   mov rbx, QWORD PTR [rbp-460]
   add rbx, 4
@@ -14828,15 +26142,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 698 0
   mov r15, rbx
   cmp r15, 1
-  je .L894
+  je .L1374
   mov rbx, 0
-  jmp .L895
-.L894:
+  jmp .L1375
+.L1374:
   mov rbx, 1
-.L895:
+.L1375:
   mov r15, rbx
   test r15, r15
-  jz .L892
+  jz .L1372
 .loc 1 700 0
   mov rbx, 0
 .loc 1 703 0
@@ -14862,9 +26176,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 698 0
-  jmp .L893
-.L892:
-.L893:
+  jmp .L1373
+.L1372:
+.L1373:
 .loc 1 704 0
   mov rbx, 176
   mov r15, QWORD PTR [rbp-516]
@@ -14892,9 +26206,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L889:
-.L885:
-.L881:
+.L1369:
+.L1365:
+.L1361:
 .loc 1 706 0
   mov rbx, QWORD PTR [rbp-468]
   add rbx, 8
@@ -14916,9 +26230,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 657 0
-  jmp .L877
-.L876:
-.L877:
+  jmp .L1357
+.L1356:
+.L1357:
 .loc 1 706 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -14929,7 +26243,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L898
+  jne .L1378
 .loc 1 707 0
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
@@ -14942,16 +26256,16 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 707 0
   mov r15, rbx
   cmp r15, r13
-  jne .L898
+  jne .L1378
 .loc 1 706 0
   mov rbx, 1
-  jmp .L899
-.L898:
+  jmp .L1379
+.L1378:
   mov rbx, 0
-.L899:
+.L1379:
   mov r15, rbx
   test r15, r15
-  jz .L896
+  jz .L1376
 .loc 1 708 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-444]
@@ -14983,7 +26297,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, r13
   cmp r15, 0
-  jle .L902
+  jle .L1382
   mov r12, QWORD PTR [rbp-460]
   add r12, 28
   mov r15, r12
@@ -14993,15 +26307,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r15
   mov r15, r13
   cmp r15, r12
-  jge .L902
+  jge .L1382
   mov r12, 1
-  jmp .L903
-.L902:
+  jmp .L1383
+.L1382:
   mov r12, 0
-.L903:
+.L1383:
   mov r15, r12
   test r15, r15
-  jz .L900
+  jz .L1380
 .loc 1 713 0
   mov r12, QWORD PTR [rbp-460]
   add r12, 28
@@ -15011,23 +26325,23 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r13
   mov DWORD PTR [rbp-192], eax
 .loc 1 712 0
-  jmp .L901
-.L900:
-.L901:
+  jmp .L1381
+.L1380:
+.L1381:
 .loc 1 713 0
   movsxd r15, DWORD PTR [rbp-192]
   mov r12, r15
   mov r15, r12
   cmp r15, 16
-  jne .L904
+  jne .L1384
   mov r12, 102
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov r12, rax
-  jmp .L905
-.L904:
-.L905:
+  jmp .L1385
+.L1384:
+.L1385:
 .loc 1 715 0
   mov r12, 0
 .loc 1 713 0
@@ -15042,7 +26356,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r15
   mov r15, r12
   cmp r15, 64
-  jne .L906
+  jne .L1386
 .loc 1 717 0
   mov r12, 1
   mov rax, r12
@@ -15051,9 +26365,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r12
   mov DWORD PTR [rbp-200], eax
 .loc 1 716 0
-  jmp .L907
-.L906:
-.L907:
+  jmp .L1387
+.L1386:
+.L1387:
 .loc 1 718 0
   mov r12, QWORD PTR [rbp-444]
   add r12, 4
@@ -15065,7 +26379,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, rax
   mov r15, r12
   cmp r15, 1
-  je .L910
+  je .L1390
   mov r12, QWORD PTR [rbp-460]
   add r12, 16
   mov r15, r12
@@ -15076,30 +26390,30 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, rax
   mov r15, r12
   cmp r15, 1
-  je .L910
+  je .L1390
   mov r12, 0
-  jmp .L911
-.L910:
+  jmp .L1391
+.L1390:
   mov r12, 1
-.L911:
+.L1391:
 .loc 1 717 0
   mov r15, r12
   test r15, r15
-  jz .L908
+  jz .L1388
 .loc 1 718 0
   mov r12, 1
   mov rax, r12
   mov DWORD PTR [rbp-200], eax
 .loc 1 717 0
-  jmp .L909
-.L908:
-.L909:
+  jmp .L1389
+.L1388:
+.L1389:
 .loc 1 719 0
   movsxd r15, DWORD PTR [rbp-192]
   mov r12, r15
   mov r15, r12
   cmp r15, 8
-  jne .L914
+  jne .L1394
   mov r12, QWORD PTR [rbp-444]
   add r12, 4
   mov r15, r12
@@ -15110,27 +26424,27 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, rax
   mov r15, r12
   cmp r15, 1
-  jne .L914
+  jne .L1394
   mov r12, 1
-  jmp .L915
-.L914:
+  jmp .L1395
+.L1394:
   mov r12, 0
-.L915:
+.L1395:
   mov r15, r12
   test r15, r15
-  jz .L912
+  jz .L1392
   mov r12, 1
   mov rax, r12
   mov DWORD PTR [rbp-200], eax
-  jmp .L913
-.L912:
-.L913:
+  jmp .L1393
+.L1392:
+.L1393:
 .loc 1 720 0
   movsxd r15, DWORD PTR [rbp-200]
   mov r12, r15
   mov r15, r12
   cmp r15, 1
-  jne .L916
+  jne .L1396
 .loc 1 719 0
 .loc 1 721 0
   movsxd r15, DWORD PTR [rbp-204]
@@ -15166,9 +26480,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 719 0
-  jmp .L917
-.L916:
-.L917:
+  jmp .L1397
+.L1396:
+.L1397:
 .loc 1 724 0
   movsxd r15, DWORD PTR [rbp-192]
   mov rbx, r15
@@ -15176,7 +26490,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 724 0
   mov r15, rbx
   cmp r15, 8
-  jne .L918
+  jne .L1398
 .loc 1 725 0
   mov rbx, 136
   mov rdi, QWORD PTR [rbp-468]
@@ -15184,15 +26498,15 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 724 0
-  jmp .L919
-.L918:
+  jmp .L1399
+.L1398:
 .loc 1 726 0
   mov rbx, 137
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L919:
+.L1399:
 .loc 1 727 0
   mov r15, QWORD PTR [rbp-524]
   movsxd r15, r15d
@@ -15236,9 +26550,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 706 0
-  jmp .L897
-.L896:
-.L897:
+  jmp .L1377
+.L1376:
+.L1377:
 .loc 1 731 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -15249,7 +26563,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L922
+  jne .L1402
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -15259,15 +26573,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L922
+  jne .L1402
   mov rbx, 1
-  jmp .L923
-.L922:
+  jmp .L1403
+.L1402:
   mov rbx, 0
-.L923:
+.L1403:
   mov r15, rbx
   test r15, r15
-  jz .L920
+  jz .L1400
 .loc 1 732 0
   xor r10, r10
 .loc 1 734 0
@@ -15298,7 +26612,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L924
+  jne .L1404
 .loc 1 737 0
   mov r13, 102
 .loc 1 736 0
@@ -15307,9 +26621,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov r13, rax
 .loc 1 735 0
-  jmp .L925
-.L924:
-.L925:
+  jmp .L1405
+.L1404:
+.L1405:
 .loc 1 738 0
   mov r13, 0
 .loc 1 737 0
@@ -15326,7 +26640,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L926
+  jne .L1406
 .loc 1 741 0
   mov r13, 1
 .loc 1 740 0
@@ -15337,9 +26651,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r13
   mov DWORD PTR [rbp-216], eax
 .loc 1 740 0
-  jmp .L927
-.L926:
-.L927:
+  jmp .L1407
+.L1406:
+.L1407:
 .loc 1 742 0
 .loc 1 743 0
   mov r13, QWORD PTR [rbp-460]
@@ -15355,7 +26669,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 741 0
   mov r15, r13
   cmp r15, 1
-  je .L930
+  je .L1410
 .loc 1 743 0
   mov r13, QWORD PTR [rbp-444]
   add r13, 16
@@ -15369,31 +26683,31 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 743 0
   mov r15, r13
   cmp r15, 1
-  je .L930
+  je .L1410
 .loc 1 741 0
   mov r13, 0
-  jmp .L931
-.L930:
+  jmp .L1411
+.L1410:
   mov r13, 1
-.L931:
+.L1411:
   mov r15, r13
   test r15, r15
-  jz .L928
+  jz .L1408
 .loc 1 744 0
   mov r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-216], eax
 .loc 1 741 0
-  jmp .L929
-.L928:
-.L929:
+  jmp .L1409
+.L1408:
+.L1409:
 .loc 1 746 0
   mov r15, QWORD PTR [rbp-540]
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 8
-  jne .L934
+  jne .L1414
   mov r13, QWORD PTR [rbp-460]
   add r13, 4
   mov r15, r13
@@ -15406,30 +26720,30 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 746 0
   mov r15, r13
   cmp r15, 1
-  jne .L934
+  jne .L1414
   mov r13, 1
-  jmp .L935
-.L934:
+  jmp .L1415
+.L1414:
   mov r13, 0
-.L935:
+.L1415:
 .loc 1 745 0
   mov r15, r13
   test r15, r15
-  jz .L932
+  jz .L1412
 .loc 1 747 0
   mov r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-216], eax
 .loc 1 745 0
-  jmp .L933
-.L932:
-.L933:
+  jmp .L1413
+.L1412:
+.L1413:
 .loc 1 748 0
   movsxd r15, DWORD PTR [rbp-216]
   mov r13, r15
   mov r15, r13
   cmp r15, 1
-  jne .L936
+  jne .L1416
 .loc 1 749 0
 .loc 1 750 0
   movsxd r15, DWORD PTR [rbp-220]
@@ -15464,9 +26778,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L937
-.L936:
-.L937:
+  jmp .L1417
+.L1416:
+.L1417:
 .loc 1 752 0
   mov r15, QWORD PTR [rbp-540]
   movsxd r15, r15d
@@ -15475,7 +26789,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 752 0
   mov r15, rbx
   cmp r15, 8
-  jne .L938
+  jne .L1418
 .loc 1 755 0
 .loc 1 757 0
   mov rbx, 138
@@ -15485,8 +26799,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 752 0
-  jmp .L939
-.L938:
+  jmp .L1419
+.L1418:
 .loc 1 763 0
   mov rbx, 139
 .loc 1 759 0
@@ -15494,7 +26808,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L939:
+.L1419:
 .loc 1 763 0
 .loc 1 764 0
   mov r15, QWORD PTR [rbp-532]
@@ -15538,9 +26852,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 731 0
-  jmp .L921
-.L920:
-.L921:
+  jmp .L1401
+.L1400:
+.L1401:
 .loc 1 765 0
 .loc 1 766 0
   mov r15, QWORD PTR [rbp-460]
@@ -15554,7 +26868,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 766 0
   mov r15, rbx
   cmp r15, r13
-  jne .L942
+  jne .L1422
 .loc 1 769 0
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
@@ -15565,17 +26879,17 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L942
+  jne .L1422
 .loc 1 766 0
   mov rbx, 1
-  jmp .L943
-.L942:
+  jmp .L1423
+.L1422:
   mov rbx, 0
-.L943:
+.L1423:
 .loc 1 765 0
   mov r15, rbx
   test r15, r15
-  jz .L940
+  jz .L1420
 .loc 1 770 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
@@ -15684,9 +26998,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 765 0
-  jmp .L941
-.L940:
-.L941:
+  jmp .L1421
+.L1420:
+.L1421:
 .loc 1 780 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -15699,7 +27013,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 780 0
   mov r15, rbx
   cmp r15, r13
-  jne .L946
+  jne .L1426
 .loc 1 781 0
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
@@ -15710,16 +27024,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L946
+  jne .L1426
 .loc 1 780 0
   mov rbx, 1
-  jmp .L947
-.L946:
+  jmp .L1427
+.L1426:
   mov rbx, 0
-.L947:
+.L1427:
   mov r15, rbx
   test r15, r15
-  jz .L944
+  jz .L1424
 .loc 1 782 0
   mov rbx, QWORD PTR [rbp-460]
   add rbx, 28
@@ -15736,29 +27050,29 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 783 0
   mov r15, rbx
   cmp r15, 0
-  jne .L948
+  jne .L1428
 .loc 1 785 0
   mov rbx, 64
   mov rax, rbx
   mov DWORD PTR [rbp-236], eax
 .loc 1 783 0
-  jmp .L949
-.L948:
-.L949:
+  jmp .L1429
+.L1428:
+.L1429:
 .loc 1 785 0
   movsxd r15, DWORD PTR [rbp-236]
   mov rbx, r15
   mov r15, rbx
   cmp r15, 16
-  jne .L950
+  jne .L1430
   mov rbx, 102
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L951
-.L950:
-.L951:
+  jmp .L1431
+.L1430:
+.L1431:
 .loc 1 786 0
   mov rbx, 0
   mov rax, rbx
@@ -15773,16 +27087,16 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 64
-  jne .L952
+  jne .L1432
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-244], eax
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-240], eax
-  jmp .L953
-.L952:
-.L953:
+  jmp .L1433
+.L1432:
+.L1433:
 .loc 1 788 0
   mov rbx, QWORD PTR [rbp-460]
   add rbx, 16
@@ -15797,21 +27111,21 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 787 0
   mov r15, rbx
   cmp r15, 1
-  jne .L954
+  jne .L1434
 .loc 1 790 0
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-240], eax
 .loc 1 787 0
-  jmp .L955
-.L954:
-.L955:
+  jmp .L1435
+.L1434:
+.L1435:
 .loc 1 791 0
   movsxd r15, DWORD PTR [rbp-240]
   mov rbx, r15
   mov r15, rbx
   cmp r15, 1
-  jne .L956
+  jne .L1436
 .loc 1 790 0
 .loc 1 791 0
   movsxd r15, DWORD PTR [rbp-244]
@@ -15839,15 +27153,15 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 790 0
-  jmp .L957
-.L956:
-.L957:
+  jmp .L1437
+.L1436:
+.L1437:
 .loc 1 792 0
   movsxd r15, DWORD PTR [rbp-236]
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L958
+  jne .L1438
 .loc 1 793 0
   mov rbx, 198
   mov rdi, QWORD PTR [rbp-468]
@@ -15855,8 +27169,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 792 0
-  jmp .L959
-.L958:
+  jmp .L1439
+.L1438:
 .loc 1 793 0
 .loc 1 794 0
   mov rbx, 199
@@ -15865,7 +27179,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L959:
+.L1439:
 .loc 1 794 0
   mov rbx, 0
   mov r12, QWORD PTR [rbp-460]
@@ -15891,7 +27205,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L960
+  jne .L1440
 .loc 1 796 0
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 8
@@ -15906,14 +27220,14 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L961
-.L960:
+  jmp .L1441
+.L1440:
 .loc 1 796 0
   movsxd r15, DWORD PTR [rbp-236]
   mov rbx, r15
   mov r15, rbx
   cmp r15, 16
-  jne .L962
+  jne .L1442
 .loc 1 797 0
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 8
@@ -15928,8 +27242,8 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit16_le
   mov rbx, rax
-  jmp .L963
-.L962:
+  jmp .L1443
+.L1442:
 .loc 1 798 0
 .loc 1 799 0
   mov rbx, QWORD PTR [rbp-444]
@@ -15942,8 +27256,8 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.L963:
-.L961:
+.L1443:
+.L1441:
 .loc 1 803 0
   mov rbx, QWORD PTR [rbp-468]
   add rbx, 8
@@ -15967,13 +27281,13 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 780 0
-  jmp .L945
-.L944:
-.L945:
+  jmp .L1425
+.L1424:
+.L1425:
 .loc 1 629 0
-  jmp .L853
-.L852:
-.L853:
+  jmp .L1333
+.L1332:
+.L1333:
 .loc 1 804 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -15984,7 +27298,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L964
+  jne .L1444
 .loc 1 803 0
 .loc 1 804 0
   mov r15, QWORD PTR [rbp-460]
@@ -15996,7 +27310,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L968
+  jne .L1448
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -16008,15 +27322,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 804 0
   mov r15, rbx
   cmp r15, r13
-  jne .L968
+  jne .L1448
   mov rbx, 1
-  jmp .L969
-.L968:
+  jmp .L1449
+.L1448:
   mov rbx, 0
-.L969:
+.L1449:
   mov r15, rbx
   test r15, r15
-  jz .L966
+  jz .L1446
 .loc 1 805 0
   xor r10, r10
 .loc 1 806 0
@@ -16116,9 +27430,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 804 0
-  jmp .L967
-.L966:
-.L967:
+  jmp .L1447
+.L1446:
+.L1447:
 .loc 1 814 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -16131,7 +27445,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 814 0
   mov r15, rbx
   cmp r15, r13
-  jne .L972
+  jne .L1452
 .loc 1 815 0
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
@@ -16144,16 +27458,16 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 815 0
   mov r15, rbx
   cmp r15, r13
-  jne .L972
+  jne .L1452
 .loc 1 814 0
   mov rbx, 1
-  jmp .L973
-.L972:
+  jmp .L1453
+.L1452:
   mov rbx, 0
-.L973:
+.L1453:
   mov r15, rbx
   test r15, r15
-  jz .L970
+  jz .L1450
 .loc 1 816 0
   xor r10, r10
 .loc 1 817 0
@@ -16261,13 +27575,13 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 814 0
-  jmp .L971
-.L970:
-.L971:
+  jmp .L1451
+.L1450:
+.L1451:
 .loc 1 803 0
-  jmp .L965
-.L964:
-.L965:
+  jmp .L1445
+.L1444:
+.L1445:
 .loc 1 836 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16278,7 +27592,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L984
+  je .L1464
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -16290,15 +27604,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 836 0
   mov r15, rbx
   cmp r15, r13
-  je .L984
+  je .L1464
   mov rbx, 0
-  jmp .L985
-.L984:
+  jmp .L1465
+.L1464:
   mov rbx, 1
-.L985:
+.L1465:
   mov r15, rbx
   test r15, r15
-  jnz .L982
+  jnz .L1462
 .loc 1 837 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16309,16 +27623,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L982
+  je .L1462
 .loc 1 836 0
   mov rbx, 0
-  jmp .L983
-.L982:
+  jmp .L1463
+.L1462:
   mov rbx, 1
-.L983:
+.L1463:
   mov r15, rbx
   test r15, r15
-  jnz .L980
+  jnz .L1460
 .loc 1 837 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16331,16 +27645,16 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 837 0
   mov r15, rbx
   cmp r15, r13
-  je .L980
+  je .L1460
 .loc 1 836 0
   mov rbx, 0
-  jmp .L981
-.L980:
+  jmp .L1461
+.L1460:
   mov rbx, 1
-.L981:
+.L1461:
   mov r15, rbx
   test r15, r15
-  jnz .L978
+  jnz .L1458
 .loc 1 839 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16351,16 +27665,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L978
+  je .L1458
 .loc 1 836 0
   mov rbx, 0
-  jmp .L979
-.L978:
+  jmp .L1459
+.L1458:
   mov rbx, 1
-.L979:
+.L1459:
   mov r15, rbx
   test r15, r15
-  jnz .L976
+  jnz .L1456
 .loc 1 840 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16371,16 +27685,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L976
+  je .L1456
 .loc 1 836 0
   mov rbx, 0
-  jmp .L977
-.L976:
+  jmp .L1457
+.L1456:
   mov rbx, 1
-.L977:
+.L1457:
   mov r15, rbx
   test r15, r15
-  jz .L974
+  jz .L1454
 .loc 1 845 0
   mov rbx, 0
 .loc 1 842 0
@@ -16401,7 +27715,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L986
+  jne .L1466
 .loc 1 847 0
   mov rbx, 1
   mov rax, rbx
@@ -16410,9 +27724,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   mov DWORD PTR [rbp-268], eax
 .loc 1 846 0
-  jmp .L987
-.L986:
-.L987:
+  jmp .L1467
+.L1466:
+.L1467:
 .loc 1 847 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16423,7 +27737,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L988
+  jne .L1468
 .loc 1 850 0
   mov rbx, 41
   mov rax, rbx
@@ -16432,9 +27746,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   mov DWORD PTR [rbp-268], eax
 .loc 1 847 0
-  jmp .L989
-.L988:
-.L989:
+  jmp .L1469
+.L1468:
+.L1469:
 .loc 1 851 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16445,7 +27759,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L990
+  jne .L1470
 .loc 1 850 0
 .loc 1 851 0
   mov rbx, 33
@@ -16455,9 +27769,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   mov DWORD PTR [rbp-268], eax
 .loc 1 850 0
-  jmp .L991
-.L990:
-.L991:
+  jmp .L1471
+.L1470:
+.L1471:
 .loc 1 852 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16468,7 +27782,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L992
+  jne .L1472
   mov rbx, 9
   mov rax, rbx
   mov DWORD PTR [rbp-264], eax
@@ -16477,9 +27791,9 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 852 0
   mov rax, rbx
   mov DWORD PTR [rbp-268], eax
-  jmp .L993
-.L992:
-.L993:
+  jmp .L1473
+.L1472:
+.L1473:
 .loc 1 853 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16490,7 +27804,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L994
+  jne .L1474
   mov rbx, 49
   mov rax, rbx
   mov DWORD PTR [rbp-264], eax
@@ -16499,9 +27813,9 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 853 0
   mov rax, rbx
   mov DWORD PTR [rbp-268], eax
-  jmp .L995
-.L994:
-.L995:
+  jmp .L1475
+.L1474:
+.L1475:
 .loc 1 856 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -16512,7 +27826,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L996
+  jne .L1476
 .loc 1 857 0
   mov rbx, 57
   mov rax, rbx
@@ -16521,9 +27835,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   mov DWORD PTR [rbp-268], eax
 .loc 1 856 0
-  jmp .L997
-.L996:
-.L997:
+  jmp .L1477
+.L1476:
+.L1477:
 .loc 1 857 0
 .loc 1 858 0
   mov r15, QWORD PTR [rbp-460]
@@ -16535,7 +27849,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1000
+  jne .L1480
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -16547,16 +27861,16 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 858 0
   mov r15, rbx
   cmp r15, r13
-  jne .L1000
+  jne .L1480
   mov rbx, 1
-  jmp .L1001
-.L1000:
+  jmp .L1481
+.L1480:
   mov rbx, 0
-.L1001:
+.L1481:
 .loc 1 857 0
   mov r15, rbx
   test r15, r15
-  jz .L998
+  jz .L1478
 .loc 1 859 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
@@ -16595,7 +27909,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, r14
   cmp r15, 16
-  jne .L1002
+  jne .L1482
 .loc 1 865 0
   mov r14, 102
 .loc 1 864 0
@@ -16603,9 +27917,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov r14, rax
-  jmp .L1003
-.L1002:
-.L1003:
+  jmp .L1483
+.L1482:
+.L1483:
 .loc 1 865 0
   mov r14, 0
   mov rax, r14
@@ -16621,7 +27935,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, r14
   cmp r15, 64
-  jne .L1004
+  jne .L1484
 .loc 1 866 0
 .loc 1 867 0
   mov r14, 1
@@ -16631,9 +27945,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r14
   mov DWORD PTR [rbp-284], eax
 .loc 1 866 0
-  jmp .L1005
-.L1004:
-.L1005:
+  jmp .L1485
+.L1484:
+.L1485:
 .loc 1 868 0
   mov r14, QWORD PTR [rbp-460]
   add r14, 4
@@ -16645,7 +27959,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  je .L1008
+  je .L1488
   mov r14, QWORD PTR [rbp-444]
   add r14, 4
   mov r15, r14
@@ -16656,29 +27970,29 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  je .L1008
+  je .L1488
   mov r14, 0
-  jmp .L1009
-.L1008:
+  jmp .L1489
+.L1488:
   mov r14, 1
-.L1009:
+.L1489:
   mov r15, r14
   test r15, r15
-  jz .L1006
+  jz .L1486
 .loc 1 869 0
   mov r14, 1
 .loc 1 868 0
   mov rax, r14
   mov DWORD PTR [rbp-284], eax
-  jmp .L1007
-.L1006:
-.L1007:
+  jmp .L1487
+.L1486:
+.L1487:
 .loc 1 869 0
   movsxd r15, DWORD PTR [rbp-284]
   mov r14, r15
   mov r15, r14
   cmp r15, 1
-  jne .L1010
+  jne .L1490
   movsxd r15, DWORD PTR [rbp-288]
   mov r14, r15
 .loc 1 872 0
@@ -16711,16 +28025,16 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1011
-.L1010:
-.L1011:
+  jmp .L1491
+.L1490:
+.L1491:
 .loc 1 873 0
   mov r15, QWORD PTR [rbp-572]
   movsxd r15, r15d
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L1012
+  jne .L1492
 .loc 1 874 0
   movsxd r15, DWORD PTR [rbp-264]
   mov rbx, r15
@@ -16733,8 +28047,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 873 0
-  jmp .L1013
-.L1012:
+  jmp .L1493
+.L1492:
 .loc 1 877 0
   movsxd r15, DWORD PTR [rbp-264]
   mov rbx, r15
@@ -16743,7 +28057,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1013:
+.L1493:
 .loc 1 880 0
   mov rbx, 3
   mov r15, QWORD PTR [rbp-564]
@@ -16783,9 +28097,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 857 0
-  jmp .L999
-.L998:
-.L999:
+  jmp .L1479
+.L1478:
+.L1479:
 .loc 1 881 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -16798,7 +28112,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 881 0
   mov r15, rbx
   cmp r15, r13
-  jne .L1016
+  jne .L1496
 .loc 1 882 0
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
@@ -16809,16 +28123,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1016
+  jne .L1496
 .loc 1 881 0
   mov rbx, 1
-  jmp .L1017
-.L1016:
+  jmp .L1497
+.L1496:
   mov rbx, 0
-.L1017:
+.L1497:
   mov r15, rbx
   test r15, r15
-  jz .L1014
+  jz .L1494
 .loc 1 882 0
   xor r10, r10
 .loc 1 886 0
@@ -16855,7 +28169,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L1018
+  jne .L1498
 .loc 1 889 0
 .loc 1 890 0
   mov r13, 1
@@ -16863,16 +28177,16 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r13
   mov DWORD PTR [rbp-300], eax
 .loc 1 888 0
-  jmp .L1019
-.L1018:
-.L1019:
+  jmp .L1499
+.L1498:
+.L1499:
 .loc 1 893 0
   mov r15, QWORD PTR [rbp-588]
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1020
+  jne .L1500
 .loc 1 894 0
   mov r13, 102
 .loc 1 893 0
@@ -16880,15 +28194,15 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r13
   call _caustic_assembler_buf_cst_buf_emit8
   mov r13, rax
-  jmp .L1021
-.L1020:
-.L1021:
+  jmp .L1501
+.L1500:
+.L1501:
 .loc 1 894 0
   movsxd r15, DWORD PTR [rbp-300]
   mov r13, r15
   mov r15, r13
   cmp r15, 1
-  je .L1024
+  je .L1504
   mov r13, QWORD PTR [rbp-460]
   add r13, 4
   mov r15, r13
@@ -16899,15 +28213,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, rax
   mov r15, r13
   cmp r15, 1
-  je .L1024
+  je .L1504
   mov r13, 0
-  jmp .L1025
-.L1024:
+  jmp .L1505
+.L1504:
   mov r13, 1
-.L1025:
+.L1505:
   mov r15, r13
   test r15, r15
-  jz .L1022
+  jz .L1502
 .loc 1 897 0
   movsxd r15, DWORD PTR [rbp-300]
   mov r13, r15
@@ -16936,9 +28250,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 894 0
-  jmp .L1023
-.L1022:
-.L1023:
+  jmp .L1503
+.L1502:
+.L1503:
 .loc 1 899 0
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 8
@@ -16950,23 +28264,23 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  jne .L1028
+  jne .L1508
 .loc 1 900 0
   mov r15, QWORD PTR [rbp-588]
   movsxd r15, r15d
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  je .L1028
+  je .L1508
 .loc 1 899 0
   mov rbx, 1
-  jmp .L1029
-.L1028:
+  jmp .L1509
+.L1508:
   mov rbx, 0
-.L1029:
+.L1509:
   mov r15, rbx
   test r15, r15
-  jz .L1026
+  jz .L1506
 .loc 1 900 0
   mov rbx, 131
   mov rdi, QWORD PTR [rbp-468]
@@ -17010,15 +28324,15 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 899 0
-  jmp .L1027
-.L1026:
+  jmp .L1507
+.L1506:
 .loc 1 910 0
   mov r15, QWORD PTR [rbp-588]
   movsxd r15, r15d
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L1030
+  jne .L1510
 .loc 1 911 0
   mov rbx, 128
 .loc 1 910 0
@@ -17058,8 +28372,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 910 0
-  jmp .L1031
-.L1030:
+  jmp .L1511
+.L1510:
 .loc 1 915 0
 .loc 1 916 0
   mov rbx, 129
@@ -17093,7 +28407,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 16
-  jne .L1032
+  jne .L1512
 .loc 1 920 0
 .loc 1 922 0
 .loc 1 924 0
@@ -17112,8 +28426,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit16_le
   mov rbx, rax
 .loc 1 920 0
-  jmp .L1033
-.L1032:
+  jmp .L1513
+.L1512:
 .loc 1 927 0
 .loc 1 928 0
   mov rbx, QWORD PTR [rbp-444]
@@ -17126,9 +28440,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.L1033:
-.L1031:
-.L1027:
+.L1513:
+.L1511:
+.L1507:
 .loc 1 928 0
   mov rbx, QWORD PTR [rbp-468]
   add rbx, 8
@@ -17152,9 +28466,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 881 0
-  jmp .L1015
-.L1014:
-.L1015:
+  jmp .L1495
+.L1494:
+.L1495:
 .loc 1 929 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -17165,7 +28479,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1036
+  jne .L1516
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -17177,15 +28491,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 929 0
   mov r15, rbx
   cmp r15, r13
-  jne .L1036
+  jne .L1516
   mov rbx, 1
-  jmp .L1037
-.L1036:
+  jmp .L1517
+.L1516:
   mov rbx, 0
-.L1037:
+.L1517:
   mov r15, rbx
   test r15, r15
-  jz .L1034
+  jz .L1514
 .loc 1 930 0
   xor r10, r10
 .loc 1 931 0
@@ -17221,22 +28535,22 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 934 0
   mov r15, r13
   cmp r15, 64
-  jne .L1038
+  jne .L1518
 .loc 1 935 0
   mov r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-312], eax
 .loc 1 934 0
-  jmp .L1039
-.L1038:
-.L1039:
+  jmp .L1519
+.L1518:
+.L1519:
 .loc 1 935 0
   mov r15, rbx
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1040
+  jne .L1520
 .loc 1 936 0
   mov rbx, 102
   mov rdi, QWORD PTR [rbp-468]
@@ -17244,9 +28558,9 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 935 0
-  jmp .L1041
-.L1040:
-.L1041:
+  jmp .L1521
+.L1520:
+.L1521:
 .loc 1 936 0
 .loc 1 937 0
   movsxd r15, DWORD PTR [rbp-312]
@@ -17335,13 +28649,13 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 929 0
-  jmp .L1035
-.L1034:
-.L1035:
+  jmp .L1515
+.L1514:
+.L1515:
 .loc 1 836 0
-  jmp .L975
-.L974:
-.L975:
+  jmp .L1455
+.L1454:
+.L1455:
 .loc 1 941 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -17352,7 +28666,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1046
+  jne .L1526
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -17364,15 +28678,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 941 0
   mov r15, rbx
   cmp r15, r13
-  jne .L1046
+  jne .L1526
   mov rbx, 1
-  jmp .L1047
-.L1046:
+  jmp .L1527
+.L1526:
   mov rbx, 0
-.L1047:
+.L1527:
   mov r15, rbx
   test r15, r15
-  jz .L1044
+  jz .L1524
 .loc 1 942 0
 .loc 1 943 0
   mov r15, QWORD PTR [rbp-444]
@@ -17386,16 +28700,16 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 943 0
   mov r15, rbx
   cmp r15, r13
-  jne .L1044
+  jne .L1524
 .loc 1 941 0
   mov rbx, 1
-  jmp .L1045
-.L1044:
+  jmp .L1525
+.L1524:
   mov rbx, 0
-.L1045:
+.L1525:
   mov r15, rbx
   test r15, r15
-  jz .L1042
+  jz .L1522
 .loc 1 946 0
   xor r10, r10
 .loc 1 947 0
@@ -17443,7 +28757,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 949 0
   mov r15, r14
   cmp r15, 64
-  jne .L1048
+  jne .L1528
 .loc 1 950 0
 .loc 1 951 0
   mov r14, 1
@@ -17451,16 +28765,16 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r14
   mov DWORD PTR [rbp-328], eax
 .loc 1 949 0
-  jmp .L1049
-.L1048:
-.L1049:
+  jmp .L1529
+.L1528:
+.L1529:
 .loc 1 951 0
   mov r15, QWORD PTR [rbp-620]
   movsxd r15, r15d
   mov r14, r15
   mov r15, r14
   cmp r15, 16
-  jne .L1050
+  jne .L1530
 .loc 1 952 0
   mov r14, 102
 .loc 1 951 0
@@ -17468,9 +28782,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov r14, rax
-  jmp .L1051
-.L1050:
-.L1051:
+  jmp .L1531
+.L1530:
+.L1531:
 .loc 1 956 0
   mov r14, 0
 .loc 1 955 0
@@ -17481,13 +28795,13 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, r14
   cmp r15, 1
-  jne .L1052
+  jne .L1532
   mov r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-332], eax
-  jmp .L1053
-.L1052:
-.L1053:
+  jmp .L1533
+.L1532:
+.L1533:
 .loc 1 957 0
   mov r14, QWORD PTR [rbp-460]
   add r14, 4
@@ -17501,7 +28815,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 957 0
   mov r15, r14
   cmp r15, 1
-  je .L1056
+  je .L1536
 .loc 1 958 0
   mov r14, QWORD PTR [rbp-444]
   add r14, 4
@@ -17513,30 +28827,30 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  je .L1056
+  je .L1536
 .loc 1 957 0
   mov r14, 0
-  jmp .L1057
-.L1056:
+  jmp .L1537
+.L1536:
   mov r14, 1
-.L1057:
+.L1537:
   mov r15, r14
   test r15, r15
-  jz .L1054
+  jz .L1534
 .loc 1 958 0
   mov r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-332], eax
 .loc 1 957 0
-  jmp .L1055
-.L1054:
-.L1055:
+  jmp .L1535
+.L1534:
+.L1535:
 .loc 1 959 0
   movsxd r15, DWORD PTR [rbp-332]
   mov r14, r15
   mov r15, r14
   cmp r15, 1
-  jne .L1058
+  jne .L1538
 .loc 1 958 0
 .loc 1 960 0
   movsxd r15, DWORD PTR [rbp-328]
@@ -17573,16 +28887,16 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 958 0
-  jmp .L1059
-.L1058:
-.L1059:
+  jmp .L1539
+.L1538:
+.L1539:
 .loc 1 965 0
   mov r15, QWORD PTR [rbp-620]
   movsxd r15, r15d
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L1060
+  jne .L1540
 .loc 1 966 0
   mov rbx, 132
 .loc 1 965 0
@@ -17590,15 +28904,15 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1061
-.L1060:
+  jmp .L1541
+.L1540:
 .loc 1 966 0
   mov rbx, 133
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1061:
+.L1541:
 .loc 1 967 0
   mov rbx, 3
   mov r15, QWORD PTR [rbp-612]
@@ -17639,9 +28953,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 941 0
-  jmp .L1043
-.L1042:
-.L1043:
+  jmp .L1523
+.L1522:
+.L1523:
 .loc 1 969 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -17652,7 +28966,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1066
+  jne .L1546
 .loc 1 971 0
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
@@ -17663,16 +28977,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1066
+  jne .L1546
 .loc 1 969 0
   mov rbx, 1
-  jmp .L1067
-.L1066:
+  jmp .L1547
+.L1546:
   mov rbx, 0
-.L1067:
+.L1547:
   mov r15, rbx
   test r15, r15
-  jz .L1064
+  jz .L1544
 .loc 1 971 0
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
@@ -17683,16 +28997,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1064
+  jne .L1544
 .loc 1 969 0
   mov rbx, 1
-  jmp .L1065
-.L1064:
+  jmp .L1545
+.L1544:
   mov rbx, 0
-.L1065:
+.L1545:
   mov r15, rbx
   test r15, r15
-  jz .L1062
+  jz .L1542
 .loc 1 971 0
   xor r10, r10
 .loc 1 972 0
@@ -17716,7 +29030,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 972 0
   mov r15, r12
   cmp r15, 64
-  jne .L1068
+  jne .L1548
 .loc 1 973 0
 .loc 1 974 0
   mov rbx, 1
@@ -17724,9 +29038,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   mov DWORD PTR [rbp-340], eax
 .loc 1 972 0
-  jmp .L1069
-.L1068:
-.L1069:
+  jmp .L1549
+.L1548:
+.L1549:
 .loc 1 975 0
 .loc 1 976 0
   movsxd r15, DWORD PTR [rbp-340]
@@ -17837,9 +29151,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 969 0
-  jmp .L1063
-.L1062:
-.L1063:
+  jmp .L1543
+.L1542:
+.L1543:
 .loc 1 990 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -17852,7 +29166,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 990 0
   mov r15, rbx
   cmp r15, r13
-  je .L1076
+  je .L1556
 .loc 1 993 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -17863,16 +29177,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L1076
+  je .L1556
 .loc 1 990 0
   mov rbx, 0
-  jmp .L1077
-.L1076:
+  jmp .L1557
+.L1556:
   mov rbx, 1
-.L1077:
+.L1557:
   mov r15, rbx
   test r15, r15
-  jnz .L1074
+  jnz .L1554
 .loc 1 993 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -17883,16 +29197,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L1074
+  je .L1554
 .loc 1 990 0
   mov rbx, 0
-  jmp .L1075
-.L1074:
+  jmp .L1555
+.L1554:
   mov rbx, 1
-.L1075:
+.L1555:
   mov r15, rbx
   test r15, r15
-  jz .L1072
+  jz .L1552
 .loc 1 993 0
 .loc 1 994 0
   mov r15, QWORD PTR [rbp-460]
@@ -17904,16 +29218,16 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1072
+  jne .L1552
 .loc 1 990 0
   mov rbx, 1
-  jmp .L1073
-.L1072:
+  jmp .L1553
+.L1552:
   mov rbx, 0
-.L1073:
+.L1553:
   mov r15, rbx
   test r15, r15
-  jz .L1070
+  jz .L1550
 .loc 1 995 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
@@ -17945,13 +29259,13 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L1078
+  jne .L1558
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-352], eax
-  jmp .L1079
-.L1078:
-.L1079:
+  jmp .L1559
+.L1558:
+.L1559:
 .loc 1 1002 0
   mov rbx, 4
 .loc 1 1001 0
@@ -17967,13 +29281,13 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1080
+  jne .L1560
   mov rbx, 5
   mov rax, rbx
   mov DWORD PTR [rbp-356], eax
-  jmp .L1081
-.L1080:
-.L1081:
+  jmp .L1561
+.L1560:
+.L1561:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -17985,15 +29299,15 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 1003 0
   mov r15, rbx
   cmp r15, r14
-  jne .L1082
+  jne .L1562
 .loc 1 1006 0
   mov rbx, 7
   mov rax, rbx
   mov DWORD PTR [rbp-356], eax
 .loc 1 1003 0
-  jmp .L1083
-.L1082:
-.L1083:
+  jmp .L1563
+.L1562:
+.L1563:
 .loc 1 1007 0
 .loc 1 1009 0
   movsxd r15, DWORD PTR [rbp-352]
@@ -18031,7 +29345,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1084
+  jne .L1564
   mov rbx, 211
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -18056,8 +29370,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 1010 0
-  jmp .L1085
-.L1084:
+  jmp .L1565
+.L1564:
 .loc 1 1012 0
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
@@ -18070,7 +29384,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 1012 0
   mov r15, rbx
   cmp r15, r13
-  jne .L1086
+  jne .L1566
 .loc 1 1013 0
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 8
@@ -18079,7 +29393,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r15
   mov r15, r12
   cmp r15, 1
-  jne .L1088
+  jne .L1568
   mov rbx, 209
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -18102,8 +29416,8 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 1013 0
-  jmp .L1089
-.L1088:
+  jmp .L1569
+.L1568:
 .loc 1 1015 0
   mov rbx, 193
   mov rdi, QWORD PTR [rbp-468]
@@ -18140,12 +29454,12 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1089:
+.L1569:
 .loc 1 1012 0
-  jmp .L1087
-.L1086:
-.L1087:
-.L1085:
+  jmp .L1567
+.L1566:
+.L1567:
+.L1565:
 .loc 1 1017 0
   mov rbx, QWORD PTR [rbp-468]
   add rbx, 8
@@ -18167,9 +29481,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbp
   ret
 .loc 1 990 0
-  jmp .L1071
-.L1070:
-.L1071:
+  jmp .L1551
+.L1550:
+.L1551:
 .loc 1 1019 0
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
@@ -18182,7 +29496,7 @@ _caustic_assembler_encoder_cst_encode:
 .loc 1 1019 0
   mov r15, rbx
   cmp r15, r13
-  jne .L1090
+  jne .L1570
 .loc 1 1018 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
@@ -18223,7 +29537,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, r12
   cmp r15, r14
-  jne .L1092
+  jne .L1572
   mov r12, QWORD PTR [rbp-468]
   add r12, 8
   mov r15, r12
@@ -18291,8 +29605,8 @@ _caustic_assembler_encoder_cst_encode:
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-  jmp .L1093
-.L1092:
+  jmp .L1573
+.L1572:
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -18302,7 +29616,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1094
+  jne .L1574
   mov r15, QWORD PTR [rbp-468]
   mov r15, QWORD PTR [r15]
   mov rbx, r15
@@ -18372,10 +29686,10 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1095
-.L1094:
-.L1095:
-.L1093:
+  jmp .L1575
+.L1574:
+.L1575:
+.L1573:
   mov rbx, QWORD PTR [rbp-468]
   add rbx, 8
   mov r15, rbx
@@ -18395,9 +29709,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1091
-.L1090:
-.L1091:
+  jmp .L1571
+.L1570:
+.L1571:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -18407,7 +29721,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1096
+  jne .L1576
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
   add rbx, 4
@@ -18426,7 +29740,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, r12
   cmp r15, r14
-  jne .L1098
+  jne .L1578
   mov r12, 1
   mov r15, r12
   movsxd r15, r15d
@@ -18470,20 +29784,20 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r15
   mov r15, r12
   cmp r15, 8
-  jne .L1100
+  jne .L1580
   mov rbx, 190
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1101
-.L1100:
+  jmp .L1581
+.L1580:
   mov rbx, 191
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1101:
+.L1581:
   mov r15, QWORD PTR [rbp-660]
   movsxd r15, r15d
   mov rbx, r15
@@ -18503,8 +29817,8 @@ _caustic_assembler_encoder_cst_encode:
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-  jmp .L1099
-.L1098:
+  jmp .L1579
+.L1578:
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -18514,7 +29828,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1102
+  jne .L1582
   xor r10, r10
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 4
@@ -18562,20 +29876,20 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L1104
+  jne .L1584
   mov rbx, 190
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1105
-.L1104:
+  jmp .L1585
+.L1584:
   mov rbx, 191
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1105:
+.L1585:
   mov rbx, 3
   mov r15, QWORD PTR [rbp-660]
   movsxd r15, r15d
@@ -18597,10 +29911,10 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1103
-.L1102:
-.L1103:
-.L1099:
+  jmp .L1583
+.L1582:
+.L1583:
+.L1579:
   mov rbx, QWORD PTR [rbp-468]
   add rbx, 8
   mov r15, rbx
@@ -18620,9 +29934,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1097
-.L1096:
-.L1097:
+  jmp .L1577
+.L1576:
+.L1577:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -18632,7 +29946,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1106
+  jne .L1586
   xor r10, r10
   mov rbx, QWORD PTR [rbp-460]
   add rbx, 4
@@ -18651,7 +29965,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r14, r15
   mov r15, r12
   cmp r15, r14
-  jne .L1108
+  jne .L1588
   mov r12, 0
   mov rax, r12
   mov DWORD PTR [rbp-388], eax
@@ -18665,13 +29979,13 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, rax
   mov r15, r12
   cmp r15, 64
-  jne .L1110
+  jne .L1590
   mov r12, 1
   mov rax, r12
   mov DWORD PTR [rbp-388], eax
-  jmp .L1111
-.L1110:
-.L1111:
+  jmp .L1591
+.L1590:
+.L1591:
   movsxd r15, DWORD PTR [rbp-388]
   mov r12, r15
   mov r13, QWORD PTR [rbp-460]
@@ -18713,20 +30027,20 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r15
   mov r15, r12
   cmp r15, 8
-  jne .L1112
+  jne .L1592
   mov rbx, 182
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1113
-.L1112:
+  jmp .L1593
+.L1592:
   mov rbx, 183
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1113:
+.L1593:
   mov r15, QWORD PTR [rbp-676]
   movsxd r15, r15d
   mov rbx, r15
@@ -18746,8 +30060,8 @@ _caustic_assembler_encoder_cst_encode:
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-  jmp .L1109
-.L1108:
+  jmp .L1589
+.L1588:
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -18757,7 +30071,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1114
+  jne .L1594
   xor r10, r10
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 4
@@ -18780,13 +30094,13 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, rax
   mov r15, r12
   cmp r15, 64
-  jne .L1116
+  jne .L1596
   mov r12, 1
   mov rax, r12
   mov DWORD PTR [rbp-396], eax
-  jmp .L1117
-.L1116:
-.L1117:
+  jmp .L1597
+.L1596:
+.L1597:
   movsxd r15, DWORD PTR [rbp-396]
   mov r12, r15
   mov r13, QWORD PTR [rbp-460]
@@ -18826,20 +30140,20 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L1118
+  jne .L1598
   mov rbx, 182
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1119
-.L1118:
+  jmp .L1599
+.L1598:
   mov rbx, 183
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1119:
+.L1599:
   mov rbx, 3
   mov r15, QWORD PTR [rbp-676]
   movsxd r15, r15d
@@ -18861,10 +30175,10 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1115
-.L1114:
-.L1115:
-.L1109:
+  jmp .L1595
+.L1594:
+.L1595:
+.L1589:
   mov rbx, QWORD PTR [rbp-468]
   add rbx, 8
   mov r15, rbx
@@ -18884,9 +30198,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1107
-.L1106:
-.L1107:
+  jmp .L1587
+.L1586:
+.L1587:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -18896,7 +30210,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1120
+  jne .L1600
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -18906,7 +30220,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1126
+  jne .L1606
   mov rbx, QWORD PTR [rbp-460]
   add rbx, 4
   mov r15, rbx
@@ -18917,15 +30231,15 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 128
-  jne .L1126
+  jne .L1606
   mov rbx, 1
-  jmp .L1127
-.L1126:
+  jmp .L1607
+.L1606:
   mov rbx, 0
-.L1127:
+.L1607:
   mov r15, rbx
   test r15, r15
-  jz .L1124
+  jz .L1604
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -18935,15 +30249,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1124
+  jne .L1604
   mov rbx, 1
-  jmp .L1125
-.L1124:
+  jmp .L1605
+.L1604:
   mov rbx, 0
-.L1125:
+.L1605:
   mov r15, rbx
   test r15, r15
-  jz .L1122
+  jz .L1602
   mov rbx, 102
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -19032,9 +30346,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1123
-.L1122:
-.L1123:
+  jmp .L1603
+.L1602:
+.L1603:
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19044,7 +30358,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1132
+  jne .L1612
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19054,15 +30368,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1132
+  jne .L1612
   mov rbx, 1
-  jmp .L1133
-.L1132:
+  jmp .L1613
+.L1612:
   mov rbx, 0
-.L1133:
+.L1613:
   mov r15, rbx
   test r15, r15
-  jz .L1130
+  jz .L1610
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 4
   mov r15, rbx
@@ -19073,15 +30387,15 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 128
-  jne .L1130
+  jne .L1610
   mov rbx, 1
-  jmp .L1131
-.L1130:
+  jmp .L1611
+.L1610:
   mov rbx, 0
-.L1131:
+.L1611:
   mov r15, rbx
   test r15, r15
-  jz .L1128
+  jz .L1608
   mov rbx, 102
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -19170,12 +30484,12 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1129
-.L1128:
-.L1129:
-  jmp .L1121
-.L1120:
-.L1121:
+  jmp .L1609
+.L1608:
+.L1609:
+  jmp .L1601
+.L1600:
+.L1601:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19185,7 +30499,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L1140
+  je .L1620
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19195,15 +30509,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L1140
+  je .L1620
   mov rbx, 0
-  jmp .L1141
-.L1140:
+  jmp .L1621
+.L1620:
   mov rbx, 1
-.L1141:
+.L1621:
   mov r15, rbx
   test r15, r15
-  jnz .L1138
+  jnz .L1618
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19213,15 +30527,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L1138
+  je .L1618
   mov rbx, 0
-  jmp .L1139
-.L1138:
+  jmp .L1619
+.L1618:
   mov rbx, 1
-.L1139:
+.L1619:
   mov r15, rbx
   test r15, r15
-  jnz .L1136
+  jnz .L1616
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19231,15 +30545,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  je .L1136
+  je .L1616
   mov rbx, 0
-  jmp .L1137
-.L1136:
+  jmp .L1617
+.L1616:
   mov rbx, 1
-.L1137:
+.L1617:
   mov r15, rbx
   test r15, r15
-  jz .L1134
+  jz .L1614
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19249,7 +30563,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1144
+  jne .L1624
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19259,15 +30573,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1144
+  jne .L1624
   mov rbx, 1
-  jmp .L1145
-.L1144:
+  jmp .L1625
+.L1624:
   mov rbx, 0
-.L1145:
+.L1625:
   mov r15, rbx
   test r15, r15
-  jz .L1142
+  jz .L1622
   mov rbx, 242
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -19286,7 +30600,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1148
+  je .L1628
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 4
   mov r15, rbx
@@ -19297,26 +30611,26 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1148
+  je .L1628
   mov rbx, 0
-  jmp .L1149
-.L1148:
+  jmp .L1629
+.L1628:
   mov rbx, 1
-.L1149:
+.L1629:
   mov r15, rbx
   test r15, r15
-  jz .L1146
+  jz .L1626
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-400], eax
-  jmp .L1147
-.L1146:
-.L1147:
+  jmp .L1627
+.L1626:
+.L1627:
   movsxd r15, DWORD PTR [rbp-400]
   mov rbx, r15
   mov r15, rbx
   cmp r15, 1
-  jne .L1150
+  jne .L1630
   mov rbx, 0
   mov r12, QWORD PTR [rbp-460]
   add r12, 4
@@ -19345,9 +30659,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1151
-.L1150:
-.L1151:
+  jmp .L1631
+.L1630:
+.L1631:
   mov rbx, 15
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -19362,15 +30676,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1152
+  jne .L1632
   mov rbx, 88
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1153
-.L1152:
-.L1153:
+  jmp .L1633
+.L1632:
+.L1633:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19380,15 +30694,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1154
+  jne .L1634
   mov rbx, 92
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1155
-.L1154:
-.L1155:
+  jmp .L1635
+.L1634:
+.L1635:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19398,15 +30712,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1156
+  jne .L1636
   mov rbx, 89
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1157
-.L1156:
-.L1157:
+  jmp .L1637
+.L1636:
+.L1637:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19416,15 +30730,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1158
+  jne .L1638
   mov rbx, 94
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1159
-.L1158:
-.L1159:
+  jmp .L1639
+.L1638:
+.L1639:
   mov rbx, 3
   mov r12, QWORD PTR [rbp-460]
   add r12, 4
@@ -19470,12 +30784,12 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1143
-.L1142:
-.L1143:
-  jmp .L1135
-.L1134:
-.L1135:
+  jmp .L1623
+.L1622:
+.L1623:
+  jmp .L1615
+.L1614:
+.L1615:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19485,7 +30799,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1164
+  jne .L1644
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19495,15 +30809,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1164
+  jne .L1644
   mov rbx, 1
-  jmp .L1165
-.L1164:
+  jmp .L1645
+.L1644:
   mov rbx, 0
-.L1165:
+.L1645:
   mov r15, rbx
   test r15, r15
-  jz .L1162
+  jz .L1642
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19513,15 +30827,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1162
+  jne .L1642
   mov rbx, 1
-  jmp .L1163
-.L1162:
+  jmp .L1643
+.L1642:
   mov rbx, 0
-.L1163:
+.L1643:
   mov r15, rbx
   test r15, r15
-  jz .L1160
+  jz .L1640
   mov rbx, 102
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -19540,7 +30854,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1168
+  je .L1648
   mov rbx, QWORD PTR [rbp-444]
   add rbx, 4
   mov r15, rbx
@@ -19551,26 +30865,26 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1168
+  je .L1648
   mov rbx, 0
-  jmp .L1169
-.L1168:
+  jmp .L1649
+.L1648:
   mov rbx, 1
-.L1169:
+.L1649:
   mov r15, rbx
   test r15, r15
-  jz .L1166
+  jz .L1646
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-404], eax
-  jmp .L1167
-.L1166:
-.L1167:
+  jmp .L1647
+.L1646:
+.L1647:
   movsxd r15, DWORD PTR [rbp-404]
   mov rbx, r15
   mov r15, rbx
   cmp r15, 1
-  jne .L1170
+  jne .L1650
   mov rbx, 0
   mov r12, QWORD PTR [rbp-460]
   add r12, 4
@@ -19599,9 +30913,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, rbx
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1171
-.L1170:
-.L1171:
+  jmp .L1651
+.L1650:
+.L1651:
   mov rbx, 15
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -19657,9 +30971,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1161
-.L1160:
-.L1161:
+  jmp .L1641
+.L1640:
+.L1641:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19669,7 +30983,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1176
+  jne .L1656
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19679,15 +30993,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1176
+  jne .L1656
   mov rbx, 1
-  jmp .L1177
-.L1176:
+  jmp .L1657
+.L1656:
   mov rbx, 0
-.L1177:
+.L1657:
   mov r15, rbx
   test r15, r15
-  jz .L1174
+  jz .L1654
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19697,15 +31011,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1174
+  jne .L1654
   mov rbx, 1
-  jmp .L1175
-.L1174:
+  jmp .L1655
+.L1654:
   mov rbx, 0
-.L1175:
+.L1655:
   mov r15, rbx
   test r15, r15
-  jz .L1172
+  jz .L1652
   mov rbx, 242
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -19794,9 +31108,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1173
-.L1172:
-.L1173:
+  jmp .L1653
+.L1652:
+.L1653:
   mov r15, QWORD PTR [rbp-412]
   movsxd r15, r15d
   mov rbx, r15
@@ -19806,7 +31120,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1182
+  jne .L1662
   mov r15, QWORD PTR [rbp-460]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19816,15 +31130,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1182
+  jne .L1662
   mov rbx, 1
-  jmp .L1183
-.L1182:
+  jmp .L1663
+.L1662:
   mov rbx, 0
-.L1183:
+.L1663:
   mov r15, rbx
   test r15, r15
-  jz .L1180
+  jz .L1660
   mov r15, QWORD PTR [rbp-444]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -19834,15 +31148,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1180
+  jne .L1660
   mov rbx, 1
-  jmp .L1181
-.L1180:
+  jmp .L1661
+.L1660:
   mov rbx, 0
-.L1181:
+.L1661:
   mov r15, rbx
   test r15, r15
-  jz .L1178
+  jz .L1658
   mov rbx, 242
   mov rdi, QWORD PTR [rbp-468]
   mov rsi, rbx
@@ -19931,9 +31245,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1179
-.L1178:
-.L1179:
+  jmp .L1659
+.L1658:
+.L1659:
   lea rbx, [rip+_std_linux_cst_STDERR]
   mov r15, rbx
   mov r15, QWORD PTR [r15]
@@ -19989,7 +31303,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1184
+  jne .L1664
   mov r14, 1
   mov rax, r14
   add rsp, 200
@@ -20000,9 +31314,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1185
-.L1184:
-.L1185:
+  jmp .L1665
+.L1664:
+.L1665:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov r14, r15
@@ -20012,7 +31326,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1186
+  jne .L1666
   mov r14, 2
   mov rax, r14
   add rsp, 200
@@ -20023,9 +31337,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1187
-.L1186:
-.L1187:
+  jmp .L1667
+.L1666:
+.L1667:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov r14, r15
@@ -20035,7 +31349,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1188
+  jne .L1668
   mov r14, 1
   mov rax, r14
   add rsp, 200
@@ -20046,9 +31360,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1189
-.L1188:
-.L1189:
+  jmp .L1669
+.L1668:
+.L1669:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov r14, r15
@@ -20058,7 +31372,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1190
+  jne .L1670
   mov r14, 1
   mov rax, r14
   add rsp, 200
@@ -20069,9 +31383,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1191
-.L1190:
-.L1191:
+  jmp .L1671
+.L1670:
+.L1671:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov r14, r15
@@ -20081,7 +31395,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1192
+  jne .L1672
   mov r14, 2
   mov rax, r14
   add rsp, 200
@@ -20092,9 +31406,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1193
-.L1192:
-.L1193:
+  jmp .L1673
+.L1672:
+.L1673:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov r14, r15
@@ -20104,7 +31418,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1194
+  jne .L1674
   mov r14, 1
   mov rax, r14
   add rsp, 200
@@ -20115,9 +31429,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1195
-.L1194:
-.L1195:
+  jmp .L1675
+.L1674:
+.L1675:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov r14, r15
@@ -20127,7 +31441,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1196
+  jne .L1676
   mov r14, 1
   mov rax, r14
   add rsp, 200
@@ -20138,9 +31452,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1197
-.L1196:
-.L1197:
+  jmp .L1677
+.L1676:
+.L1677:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov r14, r15
@@ -20150,7 +31464,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1198
+  jne .L1678
   mov r14, 1
   mov rax, r14
   add rsp, 200
@@ -20161,9 +31475,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1199
-.L1198:
-.L1199:
+  jmp .L1679
+.L1678:
+.L1679:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov r14, r15
@@ -20173,7 +31487,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1202
+  jne .L1682
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov r14, r15
@@ -20183,15 +31497,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r9, r15
   mov r15, r14
   cmp r15, r9
-  jne .L1202
+  jne .L1682
   mov r14, 1
-  jmp .L1203
-.L1202:
+  jmp .L1683
+.L1682:
   mov r14, 0
-.L1203:
+.L1683:
   mov r15, r14
   test r15, r15
-  jz .L1200
+  jz .L1680
   mov r14, 1
   mov r8, r12
   add r8, 4
@@ -20212,9 +31526,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1201
-.L1200:
-.L1201:
+  jmp .L1681
+.L1680:
+.L1681:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20224,7 +31538,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1206
+  jne .L1686
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20234,15 +31548,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1206
+  jne .L1686
   mov rbx, 1
-  jmp .L1207
-.L1206:
+  jmp .L1687
+.L1686:
   mov rbx, 0
-.L1207:
+.L1687:
   mov r15, rbx
   test r15, r15
-  jz .L1204
+  jz .L1684
   mov rbx, 1
   mov r14, r12
   add r14, 4
@@ -20263,9 +31577,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1205
-.L1204:
-.L1205:
+  jmp .L1685
+.L1684:
+.L1685:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20275,7 +31589,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1210
+  jne .L1690
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20285,15 +31599,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1210
+  jne .L1690
   mov rbx, 1
-  jmp .L1211
-.L1210:
+  jmp .L1691
+.L1690:
   mov rbx, 0
-.L1211:
+.L1691:
   mov r15, rbx
   test r15, r15
-  jz .L1208
+  jz .L1688
   mov rbx, 5
   mov rax, rbx
   add rsp, 200
@@ -20304,9 +31618,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1209
-.L1208:
-.L1209:
+  jmp .L1689
+.L1688:
+.L1689:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20316,7 +31630,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1214
+  jne .L1694
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20326,15 +31640,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1214
+  jne .L1694
   mov rbx, 1
-  jmp .L1215
-.L1214:
+  jmp .L1695
+.L1694:
   mov rbx, 0
-.L1215:
+.L1695:
   mov r15, rbx
   test r15, r15
-  jz .L1212
+  jz .L1692
   mov rbx, 5
   mov rax, rbx
   add rsp, 200
@@ -20345,9 +31659,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1213
-.L1212:
-.L1213:
+  jmp .L1693
+.L1692:
+.L1693:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20357,7 +31671,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jl .L1220
+  jl .L1700
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20367,15 +31681,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jg .L1220
+  jg .L1700
   mov rbx, 1
-  jmp .L1221
-.L1220:
+  jmp .L1701
+.L1700:
   mov rbx, 0
-.L1221:
+.L1701:
   mov r15, rbx
   test r15, r15
-  jz .L1218
+  jz .L1698
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20385,15 +31699,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1218
+  jne .L1698
   mov rbx, 1
-  jmp .L1219
-.L1218:
+  jmp .L1699
+.L1698:
   mov rbx, 0
-.L1219:
+.L1699:
   mov r15, rbx
   test r15, r15
-  jz .L1216
+  jz .L1696
   mov rbx, 6
   mov rax, rbx
   add rsp, 200
@@ -20404,9 +31718,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1217
-.L1216:
-.L1217:
+  jmp .L1697
+.L1696:
+.L1697:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20416,7 +31730,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jl .L1226
+  jl .L1706
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20426,15 +31740,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jg .L1226
+  jg .L1706
   mov rbx, 1
-  jmp .L1227
-.L1226:
+  jmp .L1707
+.L1706:
   mov rbx, 0
-.L1227:
+.L1707:
   mov r15, rbx
   test r15, r15
-  jz .L1224
+  jz .L1704
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20444,15 +31758,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1224
+  jne .L1704
   mov rbx, 1
-  jmp .L1225
-.L1224:
+  jmp .L1705
+.L1704:
   mov rbx, 0
-.L1225:
+.L1705:
   mov r15, rbx
   test r15, r15
-  jz .L1222
+  jz .L1702
   mov rbx, 0
   mov rax, rbx
   mov DWORD PTR [rbp-72], eax
@@ -20466,7 +31780,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1230
+  je .L1710
   mov rbx, r12
   add rbx, 4
   mov r15, rbx
@@ -20477,21 +31791,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1230
+  je .L1710
   mov rbx, 0
-  jmp .L1231
-.L1230:
+  jmp .L1711
+.L1710:
   mov rbx, 1
-.L1231:
+.L1711:
   mov r15, rbx
   test r15, r15
-  jz .L1228
+  jz .L1708
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-72], eax
-  jmp .L1229
-.L1228:
-.L1229:
+  jmp .L1709
+.L1708:
+.L1709:
   mov rbx, 3
   movsxd r15, DWORD PTR [rbp-72]
   mov r14, r15
@@ -20506,9 +31820,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1223
-.L1222:
-.L1223:
+  jmp .L1703
+.L1702:
+.L1703:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20518,7 +31832,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  je .L1240
+  je .L1720
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20528,15 +31842,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  je .L1240
+  je .L1720
   mov rbx, 0
-  jmp .L1241
-.L1240:
+  jmp .L1721
+.L1720:
   mov rbx, 1
-.L1241:
+.L1721:
   mov r15, rbx
   test r15, r15
-  jnz .L1238
+  jnz .L1718
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20546,15 +31860,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  je .L1238
+  je .L1718
   mov rbx, 0
-  jmp .L1239
-.L1238:
+  jmp .L1719
+.L1718:
   mov rbx, 1
-.L1239:
+.L1719:
   mov r15, rbx
   test r15, r15
-  jnz .L1236
+  jnz .L1716
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20564,15 +31878,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  je .L1236
+  je .L1716
   mov rbx, 0
-  jmp .L1237
-.L1236:
+  jmp .L1717
+.L1716:
   mov rbx, 1
-.L1237:
+.L1717:
   mov r15, rbx
   test r15, r15
-  jz .L1234
+  jz .L1714
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20582,15 +31896,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1234
+  jne .L1714
   mov rbx, 1
-  jmp .L1235
-.L1234:
+  jmp .L1715
+.L1714:
   mov rbx, 0
-.L1235:
+.L1715:
   mov r15, rbx
   test r15, r15
-  jz .L1232
+  jz .L1712
   mov rbx, 3
   mov rax, rbx
   add rsp, 200
@@ -20601,9 +31915,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1233
-.L1232:
-.L1233:
+  jmp .L1713
+.L1712:
+.L1713:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -20613,7 +31927,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1242
+  jne .L1722
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20623,7 +31937,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1246
+  jne .L1726
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20633,15 +31947,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1246
+  jne .L1726
   mov rbx, 1
-  jmp .L1247
-.L1246:
+  jmp .L1727
+.L1726:
   mov rbx, 0
-.L1247:
+.L1727:
   mov r15, rbx
   test r15, r15
-  jz .L1244
+  jz .L1724
   xor r10, r10
   mov rbx, r12
   add rbx, 4
@@ -20659,16 +31973,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, r14
   cmp r15, 16
-  jne .L1248
+  jne .L1728
   movsxd r15, DWORD PTR [rbp-80]
   mov r14, r15
   mov r8, r14
   add r8, 1
   mov rax, r8
   mov DWORD PTR [rbp-80], eax
-  jmp .L1249
-.L1248:
-.L1249:
+  jmp .L1729
+.L1728:
+.L1729:
   mov r14, 0
   mov rax, r14
   mov DWORD PTR [rbp-84], eax
@@ -20677,13 +31991,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, r14
   cmp r15, 64
-  jne .L1250
+  jne .L1730
   mov r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-84], eax
-  jmp .L1251
-.L1250:
-.L1251:
+  jmp .L1731
+.L1730:
+.L1731:
   mov r14, QWORD PTR [rbp-196]
   add r14, 4
   mov r15, r14
@@ -20694,7 +32008,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  je .L1254
+  je .L1734
   mov r14, r12
   add r14, 4
   mov r15, r14
@@ -20705,27 +32019,27 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  je .L1254
+  je .L1734
   mov r14, 0
-  jmp .L1255
-.L1254:
+  jmp .L1735
+.L1734:
   mov r14, 1
-.L1255:
+.L1735:
   mov r15, r14
   test r15, r15
-  jz .L1252
+  jz .L1732
   mov r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-84], eax
-  jmp .L1253
-.L1252:
-.L1253:
+  jmp .L1733
+.L1732:
+.L1733:
   mov r15, rbx
   movsxd r15, r15d
   mov r14, r15
   mov r15, r14
   cmp r15, 8
-  jne .L1258
+  jne .L1738
   mov rbx, r12
   add rbx, 4
   mov r15, rbx
@@ -20736,7 +32050,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1260
+  je .L1740
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 4
   mov r15, rbx
@@ -20747,29 +32061,29 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1260
+  je .L1740
   mov rbx, 0
-  jmp .L1261
-.L1260:
+  jmp .L1741
+.L1740:
   mov rbx, 1
-.L1261:
+.L1741:
   mov r15, rbx
   test r15, r15
-  jz .L1258
+  jz .L1738
   mov rbx, 1
-  jmp .L1259
-.L1258:
+  jmp .L1739
+.L1738:
   mov rbx, 0
-.L1259:
+.L1739:
   mov r15, rbx
   test r15, r15
-  jz .L1256
+  jz .L1736
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-84], eax
-  jmp .L1257
-.L1256:
-.L1257:
+  jmp .L1737
+.L1736:
+.L1737:
   movsxd r15, DWORD PTR [rbp-80]
   mov rbx, r15
   movsxd r15, DWORD PTR [rbp-84]
@@ -20787,9 +32101,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1245
-.L1244:
-.L1245:
+  jmp .L1725
+.L1724:
+.L1725:
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20799,7 +32113,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1264
+  jne .L1744
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20809,15 +32123,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r8, r15
   mov r15, rbx
   cmp r15, r8
-  jne .L1264
+  jne .L1744
   mov rbx, 1
-  jmp .L1265
-.L1264:
+  jmp .L1745
+.L1744:
   mov rbx, 0
-.L1265:
+.L1745:
   mov r15, rbx
   test r15, r15
-  jz .L1262
+  jz .L1742
   xor r10, r10
   mov rbx, r12
   add rbx, 4
@@ -20832,7 +32146,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, r14
   cmp r15, 64
-  jne .L1266
+  jne .L1746
   mov r14, QWORD PTR [rbp-196]
   add r14, 8
   mov r15, r14
@@ -20843,7 +32157,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, rax
   mov r15, r14
   cmp r15, 1
-  jne .L1268
+  jne .L1748
   mov r14, 7
   mov rax, r14
   add rsp, 200
@@ -20854,9 +32168,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1269
-.L1268:
-.L1269:
+  jmp .L1749
+.L1748:
+.L1749:
   mov r14, 10
   mov rax, r14
   add rsp, 200
@@ -20867,15 +32181,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1267
-.L1266:
-.L1267:
+  jmp .L1747
+.L1746:
+.L1747:
   mov r15, rbx
   movsxd r15, r15d
   mov r14, r15
   mov r15, r14
   cmp r15, 32
-  jne .L1270
+  jne .L1750
   mov r14, 5
   mov r8, r12
   add r8, 4
@@ -20896,15 +32210,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1271
-.L1270:
-.L1271:
+  jmp .L1751
+.L1750:
+.L1751:
   mov r15, rbx
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1272
+  jne .L1752
   mov rbx, 4
   mov r13, r12
   add r13, 4
@@ -20925,9 +32239,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1273
-.L1272:
-.L1273:
+  jmp .L1753
+.L1752:
+.L1753:
   mov rbx, 0
   mov rax, rbx
   mov DWORD PTR [rbp-92], eax
@@ -20941,7 +32255,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1276
+  je .L1756
   mov rbx, r12
   add rbx, 4
   mov r15, rbx
@@ -20952,21 +32266,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1276
+  je .L1756
   mov rbx, 0
-  jmp .L1277
-.L1276:
+  jmp .L1757
+.L1756:
   mov rbx, 1
-.L1277:
+.L1757:
   mov r15, rbx
   test r15, r15
-  jz .L1274
+  jz .L1754
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-92], eax
-  jmp .L1275
-.L1274:
-.L1275:
+  jmp .L1755
+.L1754:
+.L1755:
   mov rbx, 2
   movsxd r15, DWORD PTR [rbp-92]
   mov r13, r15
@@ -20981,9 +32295,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1263
-.L1262:
-.L1263:
+  jmp .L1743
+.L1742:
+.L1743:
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -20993,7 +32307,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1280
+  jne .L1760
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21003,15 +32317,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1280
+  jne .L1760
   mov rbx, 1
-  jmp .L1281
-.L1280:
+  jmp .L1761
+.L1760:
   mov rbx, 0
-.L1281:
+.L1761:
   mov r15, rbx
   test r15, r15
-  jz .L1278
+  jz .L1758
   xor r10, r10
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 4
@@ -21030,7 +32344,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 0
-  jle .L1284
+  jle .L1764
   mov rbx, r12
   add rbx, 28
   mov r15, rbx
@@ -21040,15 +32354,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, r15
   mov r15, r13
   cmp r15, rbx
-  jge .L1284
+  jge .L1764
   mov rbx, 1
-  jmp .L1285
-.L1284:
+  jmp .L1765
+.L1764:
   mov rbx, 0
-.L1285:
+.L1765:
   mov r15, rbx
   test r15, r15
-  jz .L1282
+  jz .L1762
   mov rbx, r12
   add rbx, 28
   mov r15, rbx
@@ -21056,9 +32370,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov rax, r13
   mov DWORD PTR [rbp-96], eax
-  jmp .L1283
-.L1282:
-.L1283:
+  jmp .L1763
+.L1762:
+.L1763:
   mov rbx, 0
   mov rax, rbx
   mov DWORD PTR [rbp-100], eax
@@ -21066,16 +32380,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 16
-  jne .L1286
+  jne .L1766
   movsxd r15, DWORD PTR [rbp-100]
   mov rbx, r15
   mov r13, rbx
   add r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-100], eax
-  jmp .L1287
-.L1286:
-.L1287:
+  jmp .L1767
+.L1766:
+.L1767:
   mov rbx, 0
   mov rax, rbx
   mov DWORD PTR [rbp-104], eax
@@ -21083,13 +32397,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 64
-  jne .L1288
+  jne .L1768
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-104], eax
-  jmp .L1289
-.L1288:
-.L1289:
+  jmp .L1769
+.L1768:
+.L1769:
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 4
   mov r15, rbx
@@ -21100,7 +32414,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1292
+  je .L1772
   mov rbx, r12
   add rbx, 16
   mov r15, rbx
@@ -21111,26 +32425,26 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1292
+  je .L1772
   mov rbx, 0
-  jmp .L1293
-.L1292:
+  jmp .L1773
+.L1772:
   mov rbx, 1
-.L1293:
+.L1773:
   mov r15, rbx
   test r15, r15
-  jz .L1290
+  jz .L1770
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-104], eax
-  jmp .L1291
-.L1290:
-.L1291:
+  jmp .L1771
+.L1770:
+.L1771:
   movsxd r15, DWORD PTR [rbp-96]
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L1296
+  jne .L1776
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 4
   mov r15, rbx
@@ -21141,21 +32455,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  jne .L1296
+  jne .L1776
   mov rbx, 1
-  jmp .L1297
-.L1296:
+  jmp .L1777
+.L1776:
   mov rbx, 0
-.L1297:
+.L1777:
   mov r15, rbx
   test r15, r15
-  jz .L1294
+  jz .L1774
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-104], eax
-  jmp .L1295
-.L1294:
-.L1295:
+  jmp .L1775
+.L1774:
+.L1775:
   movsxd r15, DWORD PTR [rbp-100]
   mov rbx, r15
   movsxd r15, DWORD PTR [rbp-104]
@@ -21189,9 +32503,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1279
-.L1278:
-.L1279:
+  jmp .L1759
+.L1758:
+.L1759:
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21201,7 +32515,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1300
+  jne .L1780
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21211,15 +32525,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1300
+  jne .L1780
   mov rbx, 1
-  jmp .L1301
-.L1300:
+  jmp .L1781
+.L1780:
   mov rbx, 0
-.L1301:
+.L1781:
   mov r15, rbx
   test r15, r15
-  jz .L1298
+  jz .L1778
   xor r10, r10
   mov rbx, r12
   add rbx, 4
@@ -21237,16 +32551,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1302
+  jne .L1782
   movsxd r15, DWORD PTR [rbp-112]
   mov r13, r15
   mov r14, r13
   add r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-112], eax
-  jmp .L1303
-.L1302:
-.L1303:
+  jmp .L1783
+.L1782:
+.L1783:
   mov r13, 0
   mov rax, r13
   mov DWORD PTR [rbp-116], eax
@@ -21255,13 +32569,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L1304
+  jne .L1784
   mov r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-116], eax
-  jmp .L1305
-.L1304:
-.L1305:
+  jmp .L1785
+.L1784:
+.L1785:
   mov r13, r12
   add r13, 4
   mov r15, r13
@@ -21272,7 +32586,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, rax
   mov r15, r13
   cmp r15, 1
-  je .L1308
+  je .L1788
   mov r13, QWORD PTR [rbp-196]
   add r13, 16
   mov r15, r13
@@ -21283,27 +32597,27 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, rax
   mov r15, r13
   cmp r15, 1
-  je .L1308
+  je .L1788
   mov r13, 0
-  jmp .L1309
-.L1308:
+  jmp .L1789
+.L1788:
   mov r13, 1
-.L1309:
+.L1789:
   mov r15, r13
   test r15, r15
-  jz .L1306
+  jz .L1786
   mov r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-116], eax
-  jmp .L1307
-.L1306:
-.L1307:
+  jmp .L1787
+.L1786:
+.L1787:
   mov r15, rbx
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 8
-  jne .L1312
+  jne .L1792
   mov rbx, r12
   add rbx, 4
   mov r15, rbx
@@ -21314,21 +32628,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  jne .L1312
+  jne .L1792
   mov rbx, 1
-  jmp .L1313
-.L1312:
+  jmp .L1793
+.L1792:
   mov rbx, 0
-.L1313:
+.L1793:
   mov r15, rbx
   test r15, r15
-  jz .L1310
+  jz .L1790
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-116], eax
-  jmp .L1311
-.L1310:
-.L1311:
+  jmp .L1791
+.L1790:
+.L1791:
   movsxd r15, DWORD PTR [rbp-112]
   mov rbx, r15
   movsxd r15, DWORD PTR [rbp-116]
@@ -21362,9 +32676,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1299
-.L1298:
-.L1299:
+  jmp .L1779
+.L1778:
+.L1779:
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21374,7 +32688,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1316
+  jne .L1796
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21384,15 +32698,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1316
+  jne .L1796
   mov rbx, 1
-  jmp .L1317
-.L1316:
+  jmp .L1797
+.L1796:
   mov rbx, 0
-.L1317:
+.L1797:
   mov r15, rbx
   test r15, r15
-  jz .L1314
+  jz .L1794
   mov rbx, 7
   mov rax, rbx
   add rsp, 200
@@ -21403,9 +32717,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1315
-.L1314:
-.L1315:
+  jmp .L1795
+.L1794:
+.L1795:
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21415,7 +32729,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1320
+  jne .L1800
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21425,15 +32739,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1320
+  jne .L1800
   mov rbx, 1
-  jmp .L1321
-.L1320:
+  jmp .L1801
+.L1800:
   mov rbx, 0
-.L1321:
+.L1801:
   mov r15, rbx
   test r15, r15
-  jz .L1318
+  jz .L1798
   mov rbx, r12
   add rbx, 28
   mov r15, rbx
@@ -21445,13 +32759,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 0
-  jne .L1322
+  jne .L1802
   mov rbx, 64
   mov rax, rbx
   mov DWORD PTR [rbp-120], eax
-  jmp .L1323
-.L1322:
-.L1323:
+  jmp .L1803
+.L1802:
+.L1803:
   mov rbx, 0
   mov rax, rbx
   mov DWORD PTR [rbp-124], eax
@@ -21459,16 +32773,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 16
-  jne .L1324
+  jne .L1804
   movsxd r15, DWORD PTR [rbp-124]
   mov rbx, r15
   mov r13, rbx
   add r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-124], eax
-  jmp .L1325
-.L1324:
-.L1325:
+  jmp .L1805
+.L1804:
+.L1805:
   mov rbx, 0
   mov rax, rbx
   mov DWORD PTR [rbp-128], eax
@@ -21476,13 +32790,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 64
-  jne .L1326
+  jne .L1806
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-128], eax
-  jmp .L1327
-.L1326:
-.L1327:
+  jmp .L1807
+.L1806:
+.L1807:
   mov rbx, r12
   add rbx, 16
   mov r15, rbx
@@ -21493,13 +32807,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  jne .L1328
+  jne .L1808
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-128], eax
-  jmp .L1329
-.L1328:
-.L1329:
+  jmp .L1809
+.L1808:
+.L1809:
   movsxd r15, DWORD PTR [rbp-124]
   mov rbx, r15
   movsxd r15, DWORD PTR [rbp-128]
@@ -21530,7 +32844,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, r15
   mov r15, rbx
   cmp r15, 8
-  jne .L1330
+  jne .L1810
   movsxd r15, DWORD PTR [rbp-124]
   mov rbx, r15
   mov r13, rbx
@@ -21544,14 +32858,14 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1331
-.L1330:
-.L1331:
+  jmp .L1811
+.L1810:
+.L1811:
   movsxd r15, DWORD PTR [rbp-120]
   mov rbx, r15
   mov r15, rbx
   cmp r15, 16
-  jne .L1332
+  jne .L1812
   movsxd r15, DWORD PTR [rbp-124]
   mov rbx, r15
   mov r13, rbx
@@ -21565,9 +32879,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1333
-.L1332:
-.L1333:
+  jmp .L1813
+.L1812:
+.L1813:
   movsxd r15, DWORD PTR [rbp-124]
   mov rbx, r15
   mov r13, rbx
@@ -21581,12 +32895,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1319
-.L1318:
-.L1319:
-  jmp .L1243
-.L1242:
-.L1243:
+  jmp .L1799
+.L1798:
+.L1799:
+  jmp .L1723
+.L1722:
+.L1723:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -21596,7 +32910,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1334
+  jne .L1814
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21606,7 +32920,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1338
+  jne .L1818
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21616,15 +32930,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1338
+  jne .L1818
   mov rbx, 1
-  jmp .L1339
-.L1338:
+  jmp .L1819
+.L1818:
   mov rbx, 0
-.L1339:
+.L1819:
   mov r15, rbx
   test r15, r15
-  jz .L1336
+  jz .L1816
   mov rbx, 2
   mov r13, QWORD PTR [rbp-196]
   add r13, 16
@@ -21651,9 +32965,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1337
-.L1336:
-.L1337:
+  jmp .L1817
+.L1816:
+.L1817:
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21663,7 +32977,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1342
+  jne .L1822
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21673,15 +32987,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1342
+  jne .L1822
   mov rbx, 1
-  jmp .L1343
-.L1342:
+  jmp .L1823
+.L1822:
   mov rbx, 0
-.L1343:
+.L1823:
   mov r15, rbx
   test r15, r15
-  jz .L1340
+  jz .L1820
   mov rbx, 7
   mov rax, rbx
   add rsp, 200
@@ -21692,12 +33006,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1341
-.L1340:
-.L1341:
-  jmp .L1335
-.L1334:
-.L1335:
+  jmp .L1821
+.L1820:
+.L1821:
+  jmp .L1815
+.L1814:
+.L1815:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -21707,7 +33021,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1354
+  je .L1834
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -21717,15 +33031,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1354
+  je .L1834
   mov rbx, 0
-  jmp .L1355
-.L1354:
+  jmp .L1835
+.L1834:
   mov rbx, 1
-.L1355:
+.L1835:
   mov r15, rbx
   test r15, r15
-  jnz .L1352
+  jnz .L1832
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -21735,15 +33049,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1352
+  je .L1832
   mov rbx, 0
-  jmp .L1353
-.L1352:
+  jmp .L1833
+.L1832:
   mov rbx, 1
-.L1353:
+.L1833:
   mov r15, rbx
   test r15, r15
-  jnz .L1350
+  jnz .L1830
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -21753,15 +33067,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1350
+  je .L1830
   mov rbx, 0
-  jmp .L1351
-.L1350:
+  jmp .L1831
+.L1830:
   mov rbx, 1
-.L1351:
+.L1831:
   mov r15, rbx
   test r15, r15
-  jnz .L1348
+  jnz .L1828
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -21771,15 +33085,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1348
+  je .L1828
   mov rbx, 0
-  jmp .L1349
-.L1348:
+  jmp .L1829
+.L1828:
   mov rbx, 1
-.L1349:
+.L1829:
   mov r15, rbx
   test r15, r15
-  jnz .L1346
+  jnz .L1826
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -21789,15 +33103,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1346
+  je .L1826
   mov rbx, 0
-  jmp .L1347
-.L1346:
+  jmp .L1827
+.L1826:
   mov rbx, 1
-.L1347:
+.L1827:
   mov r15, rbx
   test r15, r15
-  jz .L1344
+  jz .L1824
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21807,7 +33121,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1358
+  jne .L1838
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21817,15 +33131,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1358
+  jne .L1838
   mov rbx, 1
-  jmp .L1359
-.L1358:
+  jmp .L1839
+.L1838:
   mov rbx, 0
-.L1359:
+.L1839:
   mov r15, rbx
   test r15, r15
-  jz .L1356
+  jz .L1836
   xor r10, r10
   mov rbx, r12
   add rbx, 4
@@ -21843,16 +33157,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1360
+  jne .L1840
   movsxd r15, DWORD PTR [rbp-136]
   mov r13, r15
   mov r14, r13
   add r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-136], eax
-  jmp .L1361
-.L1360:
-.L1361:
+  jmp .L1841
+.L1840:
+.L1841:
   mov r13, 0
   mov rax, r13
   mov DWORD PTR [rbp-140], eax
@@ -21861,13 +33175,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L1362
+  jne .L1842
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-140], eax
-  jmp .L1363
-.L1362:
-.L1363:
+  jmp .L1843
+.L1842:
+.L1843:
   mov rbx, r12
   add rbx, 4
   mov r15, rbx
@@ -21878,7 +33192,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1366
+  je .L1846
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 4
   mov r15, rbx
@@ -21889,21 +33203,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1366
+  je .L1846
   mov rbx, 0
-  jmp .L1367
-.L1366:
+  jmp .L1847
+.L1846:
   mov rbx, 1
-.L1367:
+.L1847:
   mov r15, rbx
   test r15, r15
-  jz .L1364
+  jz .L1844
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-140], eax
-  jmp .L1365
-.L1364:
-.L1365:
+  jmp .L1845
+.L1844:
+.L1845:
   movsxd r15, DWORD PTR [rbp-136]
   mov rbx, r15
   movsxd r15, DWORD PTR [rbp-140]
@@ -21921,9 +33235,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1357
-.L1356:
-.L1357:
+  jmp .L1837
+.L1836:
+.L1837:
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21933,7 +33247,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1370
+  jne .L1850
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -21943,15 +33257,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1370
+  jne .L1850
   mov rbx, 1
-  jmp .L1371
-.L1370:
+  jmp .L1851
+.L1850:
   mov rbx, 0
-.L1371:
+.L1851:
   mov r15, rbx
   test r15, r15
-  jz .L1368
+  jz .L1848
   xor r10, r10
   mov rbx, r12
   add rbx, 4
@@ -21969,16 +33283,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1372
+  jne .L1852
   movsxd r15, DWORD PTR [rbp-148]
   mov r13, r15
   mov r14, r13
   add r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-148], eax
-  jmp .L1373
-.L1372:
-.L1373:
+  jmp .L1853
+.L1852:
+.L1853:
   mov r13, 0
   mov rax, r13
   mov DWORD PTR [rbp-152], eax
@@ -21987,13 +33301,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L1374
+  jne .L1854
   mov r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-152], eax
-  jmp .L1375
-.L1374:
-.L1375:
+  jmp .L1855
+.L1854:
+.L1855:
   mov r13, r12
   add r13, 4
   mov r15, r13
@@ -22004,13 +33318,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, rax
   mov r15, r13
   cmp r15, 1
-  jne .L1376
+  jne .L1856
   mov r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-152], eax
-  jmp .L1377
-.L1376:
-.L1377:
+  jmp .L1857
+.L1856:
+.L1857:
   movsxd r15, DWORD PTR [rbp-148]
   mov r13, r15
   movsxd r15, DWORD PTR [rbp-152]
@@ -22029,21 +33343,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, rax
   mov r15, r13
   cmp r15, 1
-  jne .L1380
+  jne .L1860
   mov r15, rbx
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 8
-  je .L1380
+  je .L1860
   mov r13, 1
-  jmp .L1381
-.L1380:
+  jmp .L1861
+.L1860:
   mov r13, 0
-.L1381:
+.L1861:
   mov r15, r13
   test r15, r15
-  jz .L1378
+  jz .L1858
   movsxd r15, DWORD PTR [rbp-148]
   mov r13, r15
   mov r14, r13
@@ -22057,15 +33371,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1379
-.L1378:
-.L1379:
+  jmp .L1859
+.L1858:
+.L1859:
   mov r15, rbx
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 8
-  jne .L1382
+  jne .L1862
   movsxd r15, DWORD PTR [rbp-148]
   mov r13, r15
   mov r14, r13
@@ -22079,15 +33393,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1383
-.L1382:
-.L1383:
+  jmp .L1863
+.L1862:
+.L1863:
   mov r15, rbx
   movsxd r15, r15d
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1384
+  jne .L1864
   movsxd r15, DWORD PTR [rbp-148]
   mov rbx, r15
   mov r13, rbx
@@ -22101,9 +33415,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1385
-.L1384:
-.L1385:
+  jmp .L1865
+.L1864:
+.L1865:
   movsxd r15, DWORD PTR [rbp-148]
   mov rbx, r15
   mov r13, rbx
@@ -22117,9 +33431,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1369
-.L1368:
-.L1369:
+  jmp .L1849
+.L1848:
+.L1849:
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22129,7 +33443,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1388
+  jne .L1868
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22139,15 +33453,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1388
+  jne .L1868
   mov rbx, 1
-  jmp .L1389
-.L1388:
+  jmp .L1869
+.L1868:
   mov rbx, 0
-.L1389:
+.L1869:
   mov r15, rbx
   test r15, r15
-  jz .L1386
+  jz .L1866
   xor r10, r10
   mov rbx, r12
   add rbx, 4
@@ -22165,16 +33479,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1390
+  jne .L1870
   movsxd r15, DWORD PTR [rbp-160]
   mov rbx, r15
   mov r13, rbx
   add r13, 1
   mov rax, r13
   mov DWORD PTR [rbp-160], eax
-  jmp .L1391
-.L1390:
-.L1391:
+  jmp .L1871
+.L1870:
+.L1871:
   movsxd r15, DWORD PTR [rbp-160]
   mov rbx, r15
   mov r13, rbx
@@ -22206,12 +33520,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1387
-.L1386:
-.L1387:
-  jmp .L1345
-.L1344:
-.L1345:
+  jmp .L1867
+.L1866:
+.L1867:
+  jmp .L1825
+.L1824:
+.L1825:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22221,7 +33535,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1396
+  jne .L1876
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22231,15 +33545,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1396
+  jne .L1876
   mov rbx, 1
-  jmp .L1397
-.L1396:
+  jmp .L1877
+.L1876:
   mov rbx, 0
-.L1397:
+.L1877:
   mov r15, rbx
   test r15, r15
-  jz .L1394
+  jz .L1874
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22249,15 +33563,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1394
+  jne .L1874
   mov rbx, 1
-  jmp .L1395
-.L1394:
+  jmp .L1875
+.L1874:
   mov rbx, 0
-.L1395:
+.L1875:
   mov r15, rbx
   test r15, r15
-  jz .L1392
+  jz .L1872
   xor r10, r10
   mov rbx, r12
   add rbx, 4
@@ -22275,16 +33589,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 16
-  jne .L1398
+  jne .L1878
   movsxd r15, DWORD PTR [rbp-168]
   mov r13, r15
   mov r14, r13
   add r14, 1
   mov rax, r14
   mov DWORD PTR [rbp-168], eax
-  jmp .L1399
-.L1398:
-.L1399:
+  jmp .L1879
+.L1878:
+.L1879:
   mov r13, 0
   mov rax, r13
   mov DWORD PTR [rbp-172], eax
@@ -22293,13 +33607,13 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 64
-  jne .L1400
+  jne .L1880
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-172], eax
-  jmp .L1401
-.L1400:
-.L1401:
+  jmp .L1881
+.L1880:
+.L1881:
   mov rbx, r12
   add rbx, 4
   mov r15, rbx
@@ -22310,7 +33624,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1404
+  je .L1884
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 4
   mov r15, rbx
@@ -22321,21 +33635,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1404
+  je .L1884
   mov rbx, 0
-  jmp .L1405
-.L1404:
+  jmp .L1885
+.L1884:
   mov rbx, 1
-.L1405:
+.L1885:
   mov r15, rbx
   test r15, r15
-  jz .L1402
+  jz .L1882
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-172], eax
-  jmp .L1403
-.L1402:
-.L1403:
+  jmp .L1883
+.L1882:
+.L1883:
   movsxd r15, DWORD PTR [rbp-168]
   mov rbx, r15
   movsxd r15, DWORD PTR [rbp-172]
@@ -22353,9 +33667,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1393
-.L1392:
-.L1393:
+  jmp .L1873
+.L1872:
+.L1873:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22365,7 +33679,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1410
+  jne .L1890
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22375,15 +33689,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1410
+  jne .L1890
   mov rbx, 1
-  jmp .L1411
-.L1410:
+  jmp .L1891
+.L1890:
   mov rbx, 0
-.L1411:
+.L1891:
   mov r15, rbx
   test r15, r15
-  jz .L1408
+  jz .L1888
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22393,15 +33707,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1408
+  jne .L1888
   mov rbx, 1
-  jmp .L1409
-.L1408:
+  jmp .L1889
+.L1888:
   mov rbx, 0
-.L1409:
+.L1889:
   mov r15, rbx
   test r15, r15
-  jz .L1406
+  jz .L1886
   mov rbx, 4
   mov rax, rbx
   add rsp, 200
@@ -22412,9 +33726,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1407
-.L1406:
-.L1407:
+  jmp .L1887
+.L1886:
+.L1887:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22424,7 +33738,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1418
+  je .L1898
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22434,15 +33748,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1418
+  je .L1898
   mov rbx, 0
-  jmp .L1419
-.L1418:
+  jmp .L1899
+.L1898:
   mov rbx, 1
-.L1419:
+.L1899:
   mov r15, rbx
   test r15, r15
-  jnz .L1416
+  jnz .L1896
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22452,15 +33766,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1416
+  je .L1896
   mov rbx, 0
-  jmp .L1417
-.L1416:
+  jmp .L1897
+.L1896:
   mov rbx, 1
-.L1417:
+.L1897:
   mov r15, rbx
   test r15, r15
-  jz .L1414
+  jz .L1894
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22470,15 +33784,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1414
+  jne .L1894
   mov rbx, 1
-  jmp .L1415
-.L1414:
+  jmp .L1895
+.L1894:
   mov rbx, 0
-.L1415:
+.L1895:
   mov r15, rbx
   test r15, r15
-  jz .L1412
+  jz .L1892
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22488,7 +33802,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1420
+  jne .L1900
   mov rbx, 3
   mov rax, rbx
   add rsp, 200
@@ -22499,9 +33813,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1421
-.L1420:
-.L1421:
+  jmp .L1901
+.L1900:
+.L1901:
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22511,7 +33825,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1422
+  jne .L1902
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 8
   mov r15, rbx
@@ -22519,7 +33833,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, r13
   cmp r15, 1
-  jne .L1424
+  jne .L1904
   mov rbx, 3
   mov rax, rbx
   add rsp, 200
@@ -22530,9 +33844,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1425
-.L1424:
-.L1425:
+  jmp .L1905
+.L1904:
+.L1905:
   mov rbx, 4
   mov rax, rbx
   add rsp, 200
@@ -22543,12 +33857,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1423
-.L1422:
-.L1423:
-  jmp .L1413
-.L1412:
-.L1413:
+  jmp .L1903
+.L1902:
+.L1903:
+  jmp .L1893
+.L1892:
+.L1893:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22558,7 +33872,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1426
+  jne .L1906
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22568,7 +33882,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1428
+  jne .L1908
   mov rbx, 2
   mov r13, QWORD PTR [rbp-196]
   add r13, 16
@@ -22595,9 +33909,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1429
-.L1428:
-.L1429:
+  jmp .L1909
+.L1908:
+.L1909:
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22607,7 +33921,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1430
+  jne .L1910
   mov rbx, 3
   mov rax, rbx
   add rsp, 200
@@ -22618,12 +33932,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1431
-.L1430:
-.L1431:
-  jmp .L1427
-.L1426:
-.L1427:
+  jmp .L1911
+.L1910:
+.L1911:
+  jmp .L1907
+.L1906:
+.L1907:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22633,7 +33947,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1432
+  jne .L1912
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22643,7 +33957,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1434
+  jne .L1914
   mov rbx, 3
   mov r13, QWORD PTR [rbp-196]
   add r13, 16
@@ -22670,9 +33984,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1435
-.L1434:
-.L1435:
+  jmp .L1915
+.L1914:
+.L1915:
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22682,7 +33996,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1436
+  jne .L1916
   mov rbx, 4
   mov rax, rbx
   add rsp, 200
@@ -22693,12 +34007,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1437
-.L1436:
-.L1437:
-  jmp .L1433
-.L1432:
-.L1433:
+  jmp .L1917
+.L1916:
+.L1917:
+  jmp .L1913
+.L1912:
+.L1913:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22708,7 +34022,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1438
+  jne .L1918
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22718,7 +34032,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1440
+  jne .L1920
   mov rbx, 3
   mov r13, QWORD PTR [rbp-196]
   add r13, 16
@@ -22745,9 +34059,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1441
-.L1440:
-.L1441:
+  jmp .L1921
+.L1920:
+.L1921:
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22757,7 +34071,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1442
+  jne .L1922
   mov rbx, 4
   mov rax, rbx
   add rsp, 200
@@ -22768,12 +34082,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1443
-.L1442:
-.L1443:
-  jmp .L1439
-.L1438:
-.L1439:
+  jmp .L1923
+.L1922:
+.L1923:
+  jmp .L1919
+.L1918:
+.L1919:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22783,7 +34097,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1444
+  jne .L1924
   mov rbx, 5
   mov rax, rbx
   add rsp, 200
@@ -22794,9 +34108,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1445
-.L1444:
-.L1445:
+  jmp .L1925
+.L1924:
+.L1925:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22806,7 +34120,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1452
+  je .L1932
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22816,15 +34130,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1452
+  je .L1932
   mov rbx, 0
-  jmp .L1453
-.L1452:
+  jmp .L1933
+.L1932:
   mov rbx, 1
-.L1453:
+.L1933:
   mov r15, rbx
   test r15, r15
-  jnz .L1450
+  jnz .L1930
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22834,15 +34148,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1450
+  je .L1930
   mov rbx, 0
-  jmp .L1451
-.L1450:
+  jmp .L1931
+.L1930:
   mov rbx, 1
-.L1451:
+.L1931:
   mov r15, rbx
   test r15, r15
-  jnz .L1448
+  jnz .L1928
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22852,15 +34166,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  je .L1448
+  je .L1928
   mov rbx, 0
-  jmp .L1449
-.L1448:
+  jmp .L1929
+.L1928:
   mov rbx, 1
-.L1449:
+.L1929:
   mov r15, rbx
   test r15, r15
-  jz .L1446
+  jz .L1926
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22870,7 +34184,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1456
+  jne .L1936
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22880,15 +34194,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1456
+  jne .L1936
   mov rbx, 1
-  jmp .L1457
-.L1456:
+  jmp .L1937
+.L1936:
   mov rbx, 0
-.L1457:
+.L1937:
   mov r15, rbx
   test r15, r15
-  jz .L1454
+  jz .L1934
   mov rbx, 0
   mov rax, rbx
   mov DWORD PTR [rbp-176], eax
@@ -22902,7 +34216,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1460
+  je .L1940
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 4
   mov r15, rbx
@@ -22913,21 +34227,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1460
+  je .L1940
   mov rbx, 0
-  jmp .L1461
-.L1460:
+  jmp .L1941
+.L1940:
   mov rbx, 1
-.L1461:
+.L1941:
   mov r15, rbx
   test r15, r15
-  jz .L1458
+  jz .L1938
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-176], eax
-  jmp .L1459
-.L1458:
-.L1459:
+  jmp .L1939
+.L1938:
+.L1939:
   mov rbx, 4
   movsxd r15, DWORD PTR [rbp-176]
   mov r13, r15
@@ -22942,12 +34256,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1455
-.L1454:
-.L1455:
-  jmp .L1447
-.L1446:
-.L1447:
+  jmp .L1935
+.L1934:
+.L1935:
+  jmp .L1927
+.L1926:
+.L1927:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -22957,7 +34271,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1466
+  jne .L1946
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22967,15 +34281,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1466
+  jne .L1946
   mov rbx, 1
-  jmp .L1467
-.L1466:
+  jmp .L1947
+.L1946:
   mov rbx, 0
-.L1467:
+.L1947:
   mov r15, rbx
   test r15, r15
-  jz .L1464
+  jz .L1944
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -22985,15 +34299,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1464
+  jne .L1944
   mov rbx, 1
-  jmp .L1465
-.L1464:
+  jmp .L1945
+.L1944:
   mov rbx, 0
-.L1465:
+.L1945:
   mov r15, rbx
   test r15, r15
-  jz .L1462
+  jz .L1942
   mov rbx, 0
   mov rax, rbx
   mov DWORD PTR [rbp-180], eax
@@ -23007,7 +34321,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1470
+  je .L1950
   mov rbx, QWORD PTR [rbp-196]
   add rbx, 4
   mov r15, rbx
@@ -23018,21 +34332,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov r15, rbx
   cmp r15, 1
-  je .L1470
+  je .L1950
   mov rbx, 0
-  jmp .L1471
-.L1470:
+  jmp .L1951
+.L1950:
   mov rbx, 1
-.L1471:
+.L1951:
   mov r15, rbx
   test r15, r15
-  jz .L1468
+  jz .L1948
   mov rbx, 1
   mov rax, rbx
   mov DWORD PTR [rbp-180], eax
-  jmp .L1469
-.L1468:
-.L1469:
+  jmp .L1949
+.L1948:
+.L1949:
   mov rbx, 4
   movsxd r15, DWORD PTR [rbp-180]
   mov r13, r15
@@ -23047,9 +34361,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1463
-.L1462:
-.L1463:
+  jmp .L1943
+.L1942:
+.L1943:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -23059,7 +34373,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1476
+  jne .L1956
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -23069,15 +34383,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1476
+  jne .L1956
   mov rbx, 1
-  jmp .L1477
-.L1476:
+  jmp .L1957
+.L1956:
   mov rbx, 0
-.L1477:
+.L1957:
   mov r15, rbx
   test r15, r15
-  jz .L1474
+  jz .L1954
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -23087,15 +34401,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1474
+  jne .L1954
   mov rbx, 1
-  jmp .L1475
-.L1474:
+  jmp .L1955
+.L1954:
   mov rbx, 0
-.L1475:
+.L1955:
   mov r15, rbx
   test r15, r15
-  jz .L1472
+  jz .L1952
   mov rbx, 5
   mov rax, rbx
   add rsp, 200
@@ -23106,9 +34420,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1473
-.L1472:
-.L1473:
+  jmp .L1953
+.L1952:
+.L1953:
   mov r15, QWORD PTR [rbp-188]
   movsxd r15, r15d
   mov rbx, r15
@@ -23118,7 +34432,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r14, r15
   mov r15, rbx
   cmp r15, r14
-  jne .L1482
+  jne .L1962
   mov r15, r12
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -23128,15 +34442,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1482
+  jne .L1962
   mov rbx, 1
-  jmp .L1483
-.L1482:
+  jmp .L1963
+.L1962:
   mov rbx, 0
-.L1483:
+.L1963:
   mov r15, rbx
   test r15, r15
-  jz .L1480
+  jz .L1960
   mov r15, QWORD PTR [rbp-196]
   movsxd r15, DWORD PTR [r15]
   mov rbx, r15
@@ -23146,15 +34460,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r15
   mov r15, rbx
   cmp r15, r13
-  jne .L1480
+  jne .L1960
   mov rbx, 1
-  jmp .L1481
-.L1480:
+  jmp .L1961
+.L1960:
   mov rbx, 0
-.L1481:
+.L1961:
   mov r15, rbx
   test r15, r15
-  jz .L1478
+  jz .L1958
   mov rbx, 5
   mov rax, rbx
   add rsp, 200
@@ -23165,11303 +34479,12 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1479
-.L1478:
-.L1479:
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 200
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 200
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_tl_init:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 72
-.loc 1 33 0
-  mov rbx, rdi
-.loc 1 237 0
-  mov r12, rsi
-.loc 1 35 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r13, r15
-.loc 1 34 0
-  mov rax, r13
-  mov DWORD PTR [rbp-56], eax
-.loc 1 36 0
-  movsxd r15, DWORD PTR [rbp-56]
-  mov r12, r15
-  mov r15, r12
-  cmp r15, 8192
-  jge .L1484
-.loc 1 35 0
-.loc 1 36 0
-  mov r12, 8192
-  mov rax, r12
-  mov DWORD PTR [rbp-56], eax
-.loc 1 35 0
-  jmp .L1485
-.L1484:
-.L1485:
-.loc 1 40 0
-  lea r12, [rbp-72]
-  mov r10, r12
-.loc 1 44 0
-  movsxd r15, DWORD PTR [rbp-56]
-  mov r13, r15
-.loc 1 43 0
-  mov r15, r13
-  mov r14, r15
-.loc 1 44 0
-.loc 1 43 0
-  mov r15, r14
-  mov rax, 40
-  imul r15, rax
-  mov r13, r15
-.loc 1 41 0
-  mov rdi, r13
-  call _std_mem_cst_galloc
-  mov r13, rax
-.loc 1 40 0
-  mov rax, r13
-  mov r15, r12
-  mov QWORD PTR [r15], rax
-.loc 1 46 0
-  lea r12, [rbp-72]
-  mov r13, r12
-  add r13, 8
-.loc 1 47 0
-  mov r12, 0
-.loc 1 46 0
-  mov rax, r12
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-.loc 1 47 0
-  lea r12, [rbp-72]
-.loc 1 48 0
-  mov r13, r12
-  add r13, 12
-  movsxd r15, DWORD PTR [rbp-56]
-  mov r12, r15
-  mov rax, r12
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-.loc 1 49 0
-  lea r12, [rbp-72]
-  mov rdi, rbx
-  mov rsi, r12
-  mov rcx, 16
-  cld
-  rep movsb
-  mov rax, rbx
-  add rsp, 72
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 72
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_tl_push:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 120
-.loc 1 312 0
-  mov rbx, rdi
-.loc 1 317 0
-  mov r12, rsi
-  mov rax, r12
-  mov r15, rax
-  mov rax, QWORD PTR [r15+0]
-  mov QWORD PTR [rbp-96], rax
-  mov rax, QWORD PTR [r15+8]
-  mov QWORD PTR [rbp-88], rax
-  mov rax, QWORD PTR [r15+16]
-  mov QWORD PTR [rbp-80], rax
-  mov rax, QWORD PTR [r15+24]
-  mov QWORD PTR [rbp-72], rax
-  mov rax, QWORD PTR [r15+32]
-  mov QWORD PTR [rbp-64], rax
-.loc 1 55 0
-  mov r12, rbx
-  add r12, 8
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 56 0
-  mov r12, rbx
-  add r12, 12
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-.loc 1 55 0
-  mov r15, r13
-  cmp r15, r14
-  jl .L1486
-.loc 1 54 0
-.loc 1 58 0
-.loc 1 59 0
-  mov r12, rbx
-  add r12, 12
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  shl r15, 1
-  mov r12, r15
-.loc 1 57 0
-.loc 1 61 0
-  xor r10, r10
-.loc 1 64 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r13, r15
-.loc 1 63 0
-  mov r15, r13
-  mov r14, r15
-.loc 1 65 0
-.loc 1 63 0
-  mov r15, r14
-  mov rax, 40
-  imul r15, rax
-  mov r13, r15
-  mov rdi, r13
-  call _std_mem_cst_galloc
-  mov r13, rax
-.loc 1 61 0
-.loc 1 67 0
-.loc 1 68 0
-  mov r15, rbx
-  mov r15, QWORD PTR [r15]
-  mov r14, r15
-.loc 1 70 0
-  mov r8, rbx
-  add r8, 8
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r9, r15
-.loc 1 69 0
-  mov r15, r9
-  mov r8, r15
-.loc 1 71 0
-.loc 1 69 0
-  mov r15, r8
-  mov rax, 40
-  imul r15, rax
-  mov r9, r15
-.loc 1 67 0
-  mov rdi, r13
-  mov rsi, r14
-  mov rdx, r9
-  call _std_mem_cst_memcpy
-  mov r14, rax
-.loc 1 75 0
-  mov r15, rbx
-  mov r15, QWORD PTR [r15]
-  mov r14, r15
-  mov rdi, r14
-  call _std_mem_cst_gfree
-  mov r14, rax
-.loc 1 76 0
-.loc 1 77 0
-  mov rax, r13
-  mov r15, rbx
-  mov QWORD PTR [r15], rax
-.loc 1 80 0
-  mov r13, rbx
-  add r13, 12
-  mov r15, r12
-  movsxd r15, r15d
-  mov r14, r15
-  mov rax, r14
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-.loc 1 54 0
-  jmp .L1487
-.L1486:
-.L1487:
-.loc 1 82 0
-  mov r15, rbx
-  mov r15, QWORD PTR [r15]
-  mov r12, r15
-.loc 1 81 0
-  mov r15, r12
-  mov r13, r15
-.loc 1 83 0
-  mov r12, rbx
-  add r12, 8
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-.loc 1 82 0
-  mov r15, r14
-  mov r12, r15
-.loc 1 83 0
-.loc 1 82 0
-  mov r15, r12
-  mov rax, 40
-  imul r15, rax
-  mov r14, r15
-.loc 1 81 0
-  mov r12, r13
-  add r12, r14
-  mov r15, r12
-  mov r13, r15
-.loc 1 80 0
-.loc 1 84 0
-  movsxd r15, DWORD PTR [rbp-96]
-  mov r12, r15
-  mov rax, r12
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-  mov r12, r13
-  add r12, 4
-  lea r14, [rbp-96]
-  mov r8, r14
-  add r8, 4
-  mov r15, r8
-  mov r15, QWORD PTR [r15]
-  mov r14, r15
-  mov rax, r14
-  mov r15, r12
-  mov QWORD PTR [r15], rax
-.loc 1 85 0
-  mov r12, r13
-  add r12, 12
-  lea r14, [rbp-96]
-  mov r8, r14
-  add r8, 12
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-  mov rax, r14
-  mov r15, r12
-  mov DWORD PTR [r15], eax
-.loc 1 86 0
-  mov r12, r13
-  add r12, 16
-.loc 1 87 0
-  lea r14, [rbp-96]
-  mov r8, r14
-  add r8, 16
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-.loc 1 86 0
-  mov rax, r14
-  mov r15, r12
-  mov DWORD PTR [r15], eax
-.loc 1 90 0
-  mov r12, r13
-  add r12, 20
-  lea r14, [rbp-96]
-  mov r8, r14
-  add r8, 20
-  mov r15, r8
-  mov r15, QWORD PTR [r15]
-  mov r14, r15
-  mov rax, r14
-  mov r15, r12
-  mov QWORD PTR [r15], rax
-  mov r12, r13
-  add r12, 28
-  lea r14, [rbp-96]
-  mov r8, r14
-  add r8, 28
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-  mov rax, r14
-  mov r15, r12
-  mov DWORD PTR [r15], eax
-.loc 1 91 0
-  mov r12, r13
-  add r12, 32
-  lea r14, [rbp-96]
-  mov r8, r14
-  add r8, 32
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-  mov rax, r14
-  mov r15, r12
-  mov DWORD PTR [r15], eax
-  mov r12, r13
-  add r12, 36
-  lea r13, [rbp-96]
-  mov r14, r13
-  add r14, 36
-  mov r15, r14
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov rax, r13
-  mov r15, r12
-  mov DWORD PTR [r15], eax
-  mov r12, rbx
-  add r12, 8
-  mov r13, rbx
-  add r13, 8
-  mov r15, r13
-  movsxd r15, DWORD PTR [r15]
-  mov rbx, r15
-  mov r13, rbx
-  add r13, 1
-  mov rax, r13
-  mov r15, r12
-  mov DWORD PTR [r15], eax
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 120
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_tl_next:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 88
-.loc 1 532 0
-  mov rbx, rdi
-.loc 1 95 0
-  mov r12, rbx
-  add r12, 8
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r12, rbx
-  add r12, 12
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-  mov r15, r13
-  cmp r15, r14
-  jl .L1488
-.loc 1 94 0
-.loc 1 96 0
-  mov r12, rbx
-  add r12, 12
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  shl r15, 1
-  mov r12, r15
-.loc 1 95 0
-.loc 1 96 0
-  xor r10, r10
-.loc 1 97 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r13, r15
-  mov r15, r13
-  mov r14, r15
-  mov r15, r14
-  mov rax, 40
-  imul r15, rax
-  mov r13, r15
-  mov rdi, r13
-  call _std_mem_cst_galloc
-  mov r13, rax
-.loc 1 96 0
-.loc 1 98 0
-  mov r15, rbx
-  mov r15, QWORD PTR [r15]
-  mov r14, r15
-  mov r8, rbx
-  add r8, 8
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r9, r15
-  mov r15, r9
-  mov r8, r15
-  mov r15, r8
-  mov rax, 40
-  imul r15, rax
-  mov r9, r15
-.loc 1 97 0
-  mov rdi, r13
-  mov rsi, r14
-  mov rdx, r9
-  call _std_mem_cst_memcpy
-  mov r14, rax
-.loc 1 99 0
-  mov r15, rbx
-  mov r15, QWORD PTR [r15]
-  mov r14, r15
-.loc 1 98 0
-  mov rdi, r14
-  call _std_mem_cst_gfree
-  mov r14, rax
-.loc 1 99 0
-.loc 1 100 0
-.loc 1 99 0
-  mov rax, r13
-  mov r15, rbx
-  mov QWORD PTR [r15], rax
-.loc 1 100 0
-  mov r13, rbx
-  add r13, 12
-.loc 1 101 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r14, r15
-.loc 1 100 0
-  mov rax, r14
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-.loc 1 94 0
-  jmp .L1489
-.L1488:
-.L1489:
-.loc 1 103 0
-  mov r15, rbx
-  mov r15, QWORD PTR [r15]
-  mov r12, r15
-  mov r15, r12
-  mov r13, r15
-.loc 1 105 0
-  mov r12, rbx
-  add r12, 8
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-.loc 1 104 0
-  mov r15, r14
-  mov r12, r15
-.loc 1 106 0
-.loc 1 104 0
-  mov r15, r12
-  mov rax, 40
-  imul r15, rax
-  mov r14, r15
-.loc 1 103 0
-  mov r12, r13
-  add r12, r14
-  mov r15, r12
-  mov r13, r15
-.loc 1 101 0
-.loc 1 106 0
-  mov r12, rbx
-  add r12, 8
-.loc 1 107 0
-  mov r14, rbx
-  add r14, 8
-  mov r15, r14
-  movsxd r15, DWORD PTR [r15]
-  mov rbx, r15
-  mov r14, rbx
-  add r14, 1
-.loc 1 106 0
-  mov rax, r14
-  mov r15, r12
-  mov DWORD PTR [r15], eax
-.loc 1 108 0
-  mov rax, r13
-  add rsp, 88
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 88
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_tl_get:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 72
-.loc 1 688 0
-  mov rbx, rdi
-.loc 1 693 0
-  mov r12, rsi
-.loc 1 112 0
-  mov r15, rbx
-  mov r15, QWORD PTR [r15]
-  mov r13, r15
-.loc 1 111 0
-  mov r15, r13
-  mov rbx, r15
-.loc 1 113 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r13, r15
-  mov r15, r13
-  mov r12, r15
-  mov r15, r12
-  mov rax, 40
-  imul r15, rax
-  mov r13, r15
-.loc 1 111 0
-  mov r12, rbx
-  add r12, r13
-.loc 1 110 0
-  mov r15, r12
-  mov rbx, r15
-  mov rax, rbx
-  add rsp, 72
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 72
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_make_tok:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 120
-.loc 1 114 0
-  mov rbx, rdi
-.loc 1 733 0
-  mov r12, rsi
-.loc 1 737 0
-  mov r13, rdx
-.loc 1 742 0
-  mov r14, rcx
-.loc 1 746 0
-  mov r8, r8
-.loc 1 118 0
-.loc 1 119 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r9, r15
-.loc 1 118 0
-  mov rax, r9
-  mov DWORD PTR [rbp-108], eax
-.loc 1 119 0
-  lea r12, [rbp-108]
-  mov r9, r12
-  add r9, 4
-.loc 1 120 0
-.loc 1 119 0
-  mov rax, r13
-  mov r15, r9
-  mov QWORD PTR [r15], rax
-.loc 1 120 0
-  lea r12, [rbp-108]
-  mov r13, r12
-  add r13, 12
-.loc 1 121 0
-  mov r15, r14
-  movsxd r15, r15d
-  mov r12, r15
-.loc 1 120 0
-  mov rax, r12
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-.loc 1 121 0
-  lea r12, [rbp-108]
-  mov r13, r12
-  add r13, 16
-  mov r15, r8
-  movsxd r15, r15d
-  mov r12, r15
-  mov rax, r12
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-  lea r12, [rbp-108]
-  mov r13, r12
-  add r13, 20
-.loc 1 122 0
-  mov r12, 0
-.loc 1 121 0
-  mov rax, r12
-  mov r15, r13
-  mov QWORD PTR [r15], rax
-.loc 1 122 0
-  lea r12, [rbp-108]
-  mov r13, r12
-  add r13, 28
-.loc 1 123 0
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-.loc 1 122 0
-  mov rax, r14
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-.loc 1 123 0
-  lea r12, [rbp-108]
-  mov r13, r12
-  add r13, 32
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-  mov rax, r14
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-.loc 1 124 0
-  lea r12, [rbp-108]
-  mov r13, r12
-  add r13, 36
-  mov r12, 0
-  mov rax, r12
-  mov r15, r13
-  mov DWORD PTR [r15], eax
-.loc 1 125 0
-  lea r12, [rbp-108]
-  mov rdi, rbx
-  mov rsi, r12
-  mov rcx, 40
-  cld
-  rep movsb
-  mov rax, rbx
-  add rsp, 120
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 120
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_init_char_tab:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 88
-.loc 1 129 0
-  mov rbx, 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-52], eax
-.L1490:
-.loc 1 130 0
-  movsxd r15, DWORD PTR [rbp-52]
-  mov rbx, r15
-  mov r15, rbx
-  cmp r15, 256
-  jge .L1491
-.loc 1 131 0
-  lea r13, [rip+_caustic_assembler_lexer_cst_char_tab]
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r14, r15
-  mov r15, r13
-  add r15, r14
-  mov QWORD PTR [rbp-60], r15
-.loc 1 132 0
-  mov r9, 0
-.loc 1 131 0
-  mov rax, r9
-  mov r15, QWORD PTR [rbp-60]
-  mov BYTE PTR [r15], al
-.loc 1 132 0
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r10, r15
-.loc 1 133 0
-.loc 1 132 0
-  mov r8, r10
-  add r8, 1
-  mov rax, r8
-  mov DWORD PTR [rbp-52], eax
-.loc 1 130 0
-  jmp .L1490
-.L1491:
-.loc 1 133 0
-  mov rbx, 65
-  mov rax, rbx
-  mov DWORD PTR [rbp-52], eax
-.L1492:
-.loc 1 134 0
-  movsxd r15, DWORD PTR [rbp-52]
-  mov rbx, r15
-  mov r15, rbx
-  cmp r15, 90
-  jg .L1493
-  lea r13, [rip+_caustic_assembler_lexer_cst_char_tab]
-.loc 1 135 0
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r14, r15
-.loc 1 134 0
-  mov r15, r13
-  add r15, r14
-  mov QWORD PTR [rbp-68], r15
-.loc 1 136 0
-  mov r9, 1
-.loc 1 134 0
-  mov rax, r9
-  mov r15, QWORD PTR [rbp-68]
-  mov BYTE PTR [r15], al
-.loc 1 139 0
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r10, r15
-  mov r8, r10
-  add r8, 1
-  mov rax, r8
-  mov DWORD PTR [rbp-52], eax
-.loc 1 134 0
-  jmp .L1492
-.L1493:
-.loc 1 139 0
-  mov rbx, 97
-  mov rax, rbx
-  mov DWORD PTR [rbp-52], eax
-.L1494:
-  movsxd r15, DWORD PTR [rbp-52]
-  mov rbx, r15
-  mov r15, rbx
-  cmp r15, 122
-  jg .L1495
-.loc 1 140 0
-  lea r13, [rip+_caustic_assembler_lexer_cst_char_tab]
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r14, r15
-  mov r15, r13
-  add r15, r14
-  mov QWORD PTR [rbp-76], r15
-  mov r9, 1
-  mov rax, r9
-  mov r15, QWORD PTR [rbp-76]
-  mov BYTE PTR [r15], al
-.loc 1 141 0
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r10, r15
-  mov r8, r10
-  add r8, 1
-  mov rax, r8
-  mov DWORD PTR [rbp-52], eax
-.loc 1 139 0
-  jmp .L1494
-.L1495:
-.loc 1 142 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_char_tab]
-  mov r12, rbx
-  add r12, 95
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 143 0
-  mov rbx, 48
-  mov rax, rbx
-  mov DWORD PTR [rbp-52], eax
-.L1496:
-  movsxd r15, DWORD PTR [rbp-52]
-  mov rbx, r15
-.loc 1 144 0
-.loc 1 143 0
-  mov r15, rbx
-  cmp r15, 57
-  jg .L1497
-.loc 1 144 0
-  lea r13, [rip+_caustic_assembler_lexer_cst_char_tab]
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r14, r15
-  mov r15, r13
-  add r15, r14
-  mov QWORD PTR [rbp-84], r15
-.loc 1 145 0
-  mov r9, 2
-.loc 1 144 0
-  mov rax, r9
-  mov r15, QWORD PTR [rbp-84]
-  mov BYTE PTR [r15], al
-.loc 1 145 0
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r10, r15
-  mov r8, r10
-  add r8, 1
-  mov rax, r8
-  mov DWORD PTR [rbp-52], eax
-.loc 1 143 0
-  jmp .L1496
-.L1497:
-.loc 1 146 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_char_tab]
-  mov r12, rbx
-  add r12, 46
-  mov rbx, 4
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 147 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_char_tab_ready]
-  mov r12, 1
-  mov rax, r12
-  mov r15, rbx
-  mov DWORD PTR [r15], eax
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 88
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_is_alpha:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 56
-.loc 1 971 0
-  mov rbx, rdi
-.loc 1 149 0
-  lea r12, [rip+_caustic_assembler_lexer_cst_char_tab]
-  mov r15, rbx
-  movzx r15, r15b
-  mov r13, r15
-  mov r15, r13
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r13, r12
-  add r13, rbx
-  mov r15, r13
-  movzx r15, BYTE PTR [r15]
-  mov rbx, r15
-.loc 1 151 0
-.loc 1 149 0
-  mov r15, rbx
-  cmp r15, 1
-  jne .L1498
-.loc 1 148 0
-.loc 1 151 0
-  mov rbx, 1
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 148 0
-  jmp .L1499
-.L1498:
-.L1499:
-.loc 1 152 0
-  mov rbx, 0
-.loc 1 151 0
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_is_digit:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 56
-.loc 1 1004 0
-  mov rbx, rdi
-.loc 1 153 0
-  lea r12, [rip+_caustic_assembler_lexer_cst_char_tab]
-.loc 1 154 0
-  mov r15, rbx
-  movzx r15, r15b
-  mov r13, r15
-  mov r15, r13
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r13, r12
-  add r13, rbx
-  mov r15, r13
-  movzx r15, BYTE PTR [r15]
-  mov rbx, r15
-.loc 1 155 0
-.loc 1 154 0
-  mov r15, rbx
-  cmp r15, 2
-  jne .L1500
-.loc 1 153 0
-.loc 1 155 0
-  mov rbx, 1
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 153 0
-  jmp .L1501
-.L1500:
-.L1501:
-.loc 1 156 0
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_is_alnum:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 56
-.loc 1 1037 0
-  mov rbx, rdi
-.loc 1 158 0
-  lea r12, [rip+_caustic_assembler_lexer_cst_char_tab]
-.loc 1 160 0
-  mov r15, rbx
-  movzx r15, r15b
-  mov r13, r15
-.loc 1 158 0
-  mov r15, r13
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r13, r12
-  add r13, rbx
-  mov r15, r13
-  movzx r15, BYTE PTR [r15]
-  mov rbx, r15
-.loc 1 157 0
-.loc 1 163 0
-  mov r15, rbx
-  movzx r15, r15b
-  mov r12, r15
-  mov r15, r12
-  cmp r15, 1
-  je .L1504
-  mov r15, rbx
-  movzx r15, r15b
-  mov r12, r15
-  mov r15, r12
-  cmp r15, 2
-  je .L1504
-  mov rbx, 0
-  jmp .L1505
-.L1504:
-  mov rbx, 1
-.L1505:
-  mov r15, rbx
-  test r15, r15
-  jz .L1502
-  mov rbx, 1
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1503
-.L1502:
-.L1503:
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_is_alnum_dot:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 56
-.loc 1 1082 0
-  mov rbx, rdi
-.loc 1 164 0
-  lea r12, [rip+_caustic_assembler_lexer_cst_char_tab]
-.loc 1 165 0
-  mov r15, rbx
-  movzx r15, r15b
-  mov r13, r15
-.loc 1 164 0
-  mov r15, r13
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r13, r12
-  add r13, rbx
-  mov r15, r13
-  movzx r15, BYTE PTR [r15]
-  mov rbx, r15
-.loc 1 165 0
-  mov r15, rbx
-  movzx r15, r15b
-  mov r12, r15
-  mov r15, r12
-  cmp r15, 0
-  je .L1506
-  mov rbx, 1
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1507
-.L1506:
-.L1507:
-.loc 1 166 0
-  mov rbx, 0
-.loc 1 165 0
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 56
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_parse_number_fast:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 536
-.loc 1 1123 0
-  mov rbx, rdi
-.loc 1 1128 0
-  mov r12, rsi
-.loc 1 1132 0
-  mov QWORD PTR [rbp-393], rdx
-.loc 1 1136 0
-  mov QWORD PTR [rbp-105], rcx
-.loc 1 169 0
-  mov rax, r12
-  mov QWORD PTR [rbp-88], rax
-.loc 1 170 0
-  mov r8, 0
-.loc 1 169 0
-  mov rax, r8
-  mov QWORD PTR [rbp-96], rax
-.loc 1 170 0
-  mov r8, r12
-  mov r9, r8
-  add r9, 1
-  mov r15, r9
-  cmp r15, QWORD PTR [rbp-393]
-  jge .L1512
-  mov r8, r12
-  mov r12, rbx
-  add r12, r8
-  mov r15, r12
-  movzx r15, BYTE PTR [r15]
-  mov r8, r15
-.loc 1 173 0
-.loc 1 170 0
-  mov r15, r8
-  cmp r15, 48
-  jne .L1512
-  mov r12, 1
-  jmp .L1513
-.L1512:
-  mov r12, 0
-.L1513:
-  mov r15, r12
-  test r15, r15
-  jz .L1510
-.loc 1 173 0
-  mov r15, QWORD PTR [rbp-88]
-  mov r12, r15
-  mov r8, r12
-  add r8, 1
-  mov r9, rbx
-  add r9, r8
-  mov r15, r9
-  movzx r15, BYTE PTR [r15]
-  mov r8, r15
-  mov r15, r8
-  cmp r15, 120
-  je .L1514
-  mov r8, r12
-  mov r12, r8
-  add r12, 1
-  mov r8, rbx
-  add r8, r12
-  mov r15, r8
-  movzx r15, BYTE PTR [r15]
-  mov r12, r15
-  mov r15, r12
-  cmp r15, 88
-  je .L1514
-  mov r12, 0
-  jmp .L1515
-.L1514:
-  mov r12, 1
-.L1515:
-.loc 1 170 0
-  mov r15, r12
-  test r15, r15
-  jz .L1510
-  mov r12, 1
-  jmp .L1511
-.L1510:
-  mov r12, 0
-.L1511:
-  mov r15, r12
-  test r15, r15
-  jz .L1508
-.loc 1 173 0
-  mov r15, QWORD PTR [rbp-88]
-  mov r12, r15
-.loc 1 174 0
-.loc 1 173 0
-  mov r8, r12
-  add r8, 2
-  mov rax, r8
-  mov QWORD PTR [rbp-88], rax
-.L1516:
-.loc 1 174 0
-  mov r15, QWORD PTR [rbp-88]
-  mov r12, r15
-  mov r15, r12
-  xor eax, eax
-  cmp r15, QWORD PTR [rbp-393]
-  setl al
-  mov QWORD PTR [rbp-113], rax
-  mov r15, QWORD PTR [rbp-113]
-  test r15, r15
-  jz .L1517
-  mov QWORD PTR [rbp-121], r12
-  mov r15, rbx
-  add r15, QWORD PTR [rbp-121]
-  mov QWORD PTR [rbp-209], r15
-  movzx r15, BYTE PTR [r15]
-  mov r14, r15
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-129], r15
-  cmp r15, 48
-  jb .L1520
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-145], r15
-  cmp r15, 57
-  ja .L1520
-  mov QWORD PTR [rbp-297], 1
-  jmp .L1521
-.L1520:
-  mov QWORD PTR [rbp-297], 0
-.L1521:
-  mov r15, QWORD PTR [rbp-297]
-  test r15, r15
-  jz .L1518
-  mov r15, QWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-161], r15
-.loc 1 175 0
-.loc 1 174 0
-  shl r15, 4
-  mov QWORD PTR [rbp-169], r15
-.loc 1 175 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-177], r15
-  mov QWORD PTR [rbp-185], r15
-.loc 1 174 0
-  mov r15, QWORD PTR [rbp-169]
-  add r15, QWORD PTR [rbp-185]
-  mov QWORD PTR [rbp-193], r15
-.loc 1 175 0
-.loc 1 174 0
-  sub r15, 48
-  mov QWORD PTR [rbp-201], r15
-  mov rax, QWORD PTR [rbp-201]
-  mov QWORD PTR [rbp-96], rax
-  jmp .L1519
-.L1518:
-.loc 1 175 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-217], r15
-  cmp r15, 97
-  jb .L1524
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-233], r15
-  cmp r15, 102
-  ja .L1524
-  mov r9, 1
-  jmp .L1525
-.L1524:
-  mov r9, 0
-.L1525:
-  mov r15, r9
-  test r15, r15
-  jz .L1522
-  mov r15, QWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-249], r15
-.loc 1 176 0
-.loc 1 175 0
-  shl r15, 4
-  mov QWORD PTR [rbp-257], r15
-.loc 1 178 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-265], r15
-  mov QWORD PTR [rbp-273], r15
-.loc 1 175 0
-  mov r15, QWORD PTR [rbp-257]
-  add r15, QWORD PTR [rbp-273]
-  mov QWORD PTR [rbp-281], r15
-.loc 1 178 0
-.loc 1 175 0
-  sub r15, 87
-  mov QWORD PTR [rbp-289], r15
-  mov rax, QWORD PTR [rbp-289]
-  mov QWORD PTR [rbp-96], rax
-  jmp .L1523
-.L1522:
-.loc 1 178 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-305], r15
-  cmp r15, 65
-  jb .L1528
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-321], r15
-  cmp r15, 70
-  ja .L1528
-  mov r10, 1
-  jmp .L1529
-.L1528:
-  mov r10, 0
-.L1529:
-  mov r15, r10
-  test r15, r15
-  jz .L1526
-.loc 1 179 0
-  mov r15, QWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-337], r15
-  shl r15, 4
-  mov QWORD PTR [rbp-345], r15
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-353], r15
-  mov QWORD PTR [rbp-361], r15
-  mov r15, QWORD PTR [rbp-345]
-  add r15, QWORD PTR [rbp-361]
-  mov QWORD PTR [rbp-369], r15
-  sub r15, 55
-  mov QWORD PTR [rbp-377], r15
-.loc 1 178 0
-  mov rax, QWORD PTR [rbp-377]
-  mov QWORD PTR [rbp-96], rax
-  jmp .L1527
-.L1526:
-.loc 1 179 0
-  jmp .L1517
-.L1527:
-.L1523:
-.L1519:
-  mov r15, QWORD PTR [rbp-88]
-  mov QWORD PTR [rbp-385], r15
-  mov r8, QWORD PTR [rbp-385]
-  add r8, 1
-  mov rax, r8
-  mov QWORD PTR [rbp-88], rax
-.loc 1 174 0
-  jmp .L1516
-.L1517:
-.loc 1 180 0
-  mov r15, QWORD PTR [rbp-96]
-  mov r12, r15
-.loc 1 179 0
-  mov rax, r12
-  mov r15, QWORD PTR [rbp-105]
-  mov QWORD PTR [r15], rax
-.loc 1 180 0
-  mov r15, QWORD PTR [rbp-88]
-  mov r12, r15
-  mov rax, r12
-  add rsp, 536
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 170 0
-  jmp .L1509
-.L1508:
-.L1509:
-.L1530:
-.loc 1 180 0
-  mov r15, QWORD PTR [rbp-88]
-  mov r8, r15
-  mov r15, r8
-  cmp r15, QWORD PTR [rbp-393]
-  jge .L1534
-  mov r10, r8
-  mov r15, rbx
-  add r15, r10
-  mov QWORD PTR [rbp-401], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-409], r15
-  cmp r15, 48
-  jb .L1534
-  mov r14, 1
-  jmp .L1535
-.L1534:
-  mov r14, 0
-.L1535:
-  mov r15, r14
-  test r15, r15
-  jz .L1532
-.loc 1 181 0
-  mov r15, QWORD PTR [rbp-88]
-  mov QWORD PTR [rbp-425], r15
-.loc 1 180 0
-  mov r15, rbx
-  add r15, QWORD PTR [rbp-425]
-  mov QWORD PTR [rbp-433], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-441], r15
-.loc 1 183 0
-.loc 1 180 0
-  cmp r15, 57
-  ja .L1532
-  mov r12, 1
-  jmp .L1533
-.L1532:
-  mov r12, 0
-.L1533:
-  mov r15, r12
-  test r15, r15
-  jz .L1531
-.loc 1 183 0
-  mov r15, QWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-457], r15
-  mov rax, 10
-  imul r15, rax
-  mov QWORD PTR [rbp-465], r15
-  mov r15, QWORD PTR [rbp-88]
-  mov r13, r15
-  mov r15, rbx
-  add r15, r13
-  mov QWORD PTR [rbp-481], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-489], r15
-  mov QWORD PTR [rbp-497], r15
-  mov r15, QWORD PTR [rbp-465]
-  add r15, QWORD PTR [rbp-497]
-  mov QWORD PTR [rbp-505], r15
-  sub r15, 48
-  mov QWORD PTR [rbp-513], r15
-  mov rax, QWORD PTR [rbp-513]
-  mov QWORD PTR [rbp-96], rax
-  mov QWORD PTR [rbp-521], r13
-  mov r9, QWORD PTR [rbp-521]
-  add r9, 1
-  mov rax, r9
-  mov QWORD PTR [rbp-88], rax
-.loc 1 180 0
-  jmp .L1530
-.L1531:
-.loc 1 184 0
-  mov r15, QWORD PTR [rbp-96]
-  mov rbx, r15
-  mov rax, rbx
-  mov r15, QWORD PTR [rbp-105]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-88]
-  mov rbx, r15
-  mov rax, rbx
-  add rsp, 536
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 536
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_init_ri_first:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 72
-.loc 1 185 0
-  mov rbx, 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-52], eax
-.L1536:
-  movsxd r15, DWORD PTR [rbp-52]
-  mov rbx, r15
-  mov r15, rbx
-  cmp r15, 256
-  jge .L1537
-  lea r13, [rip+_caustic_assembler_lexer_cst_ri_first]
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r14, r15
-  mov r15, r13
-  add r15, r14
-  mov QWORD PTR [rbp-60], r15
-  mov r9, 0
-  mov rax, r9
-  mov r15, QWORD PTR [rbp-60]
-  mov BYTE PTR [r15], al
-.loc 1 186 0
-.loc 1 189 0
-  movsxd r15, DWORD PTR [rbp-52]
-  mov r10, r15
-  mov r8, r10
-  add r8, 1
-.loc 1 186 0
-  mov rax, r8
-  mov DWORD PTR [rbp-52], eax
-.loc 1 185 0
-  jmp .L1536
-.L1537:
-.loc 1 189 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 97
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 98
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 99
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 100
-.loc 1 190 0
-  mov rbx, 1
-.loc 1 189 0
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 190 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 101
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 105
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-.loc 1 192 0
-  mov r12, rbx
-  add r12, 106
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 108
-.loc 1 193 0
-  mov rbx, 1
-.loc 1 192 0
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 193 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 109
-.loc 1 194 0
-  mov rbx, 1
-.loc 1 193 0
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 194 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 110
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-.loc 1 195 0
-.loc 1 194 0
-  mov r12, rbx
-  add r12, 111
-.loc 1 197 0
-  mov rbx, 1
-.loc 1 194 0
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 197 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 112
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-.loc 1 198 0
-.loc 1 197 0
-  mov r12, rbx
-  add r12, 114
-.loc 1 198 0
-  mov rbx, 1
-.loc 1 197 0
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 198 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-.loc 1 199 0
-.loc 1 198 0
-  mov r12, rbx
-  add r12, 115
-.loc 1 199 0
-  mov rbx, 1
-.loc 1 198 0
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 199 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov r12, rbx
-  add r12, 116
-  mov rbx, 1
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 200 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
-.loc 1 202 0
-.loc 1 201 0
-  mov r12, rbx
-  add r12, 120
-.loc 1 202 0
-  mov rbx, 1
-.loc 1 201 0
-  mov rax, rbx
-  mov r15, r12
-  mov BYTE PTR [r15], al
-.loc 1 202 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first_ready]
-  mov r12, 1
-  mov rax, r12
-  mov r15, rbx
-  mov DWORD PTR [r15], eax
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 72
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_ht_hash:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 88
-.loc 1 1591 0
-  mov rbx, rdi
-.loc 1 1595 0
-  mov r12, rsi
-.loc 1 1599 0
-  mov r13, rdx
-.loc 1 1603 0
-  mov r14, rcx
-.loc 1 1607 0
-  mov r8, r8
-.loc 1 1611 0
-  mov r9, r9
-.loc 1 210 0
-  mov r15, rbx
-  movsxd r15, r15d
-  mov r10, r15
-.loc 1 211 0
-.loc 1 210 0
-  mov r15, r10
-  mov rax, 31
-  imul r15, rax
-  mov rbx, r15
-.loc 1 211 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r10, r15
-  mov r15, r10
-  mov rax, 7
-  imul r15, rax
-  mov r12, r15
-.loc 1 210 0
-  mov r10, rbx
-  add r10, r12
-.loc 1 211 0
-  mov r15, r13
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r15, rbx
-  mov rax, 3
-  imul r15, rax
-  mov r12, r15
-.loc 1 210 0
-  mov rbx, r10
-  add rbx, r12
-.loc 1 212 0
-  mov r15, r14
-  movsxd r15, r15d
-  mov r12, r15
-  mov r15, r12
-  mov rax, 13
-  imul r15, rax
-  mov r13, r15
-.loc 1 210 0
-  mov r12, rbx
-  add r12, r13
-.loc 1 212 0
-  mov r15, r8
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r15, rbx
-  mov rax, 17
-  imul r15, rax
-  mov r13, r15
-.loc 1 210 0
-  mov rbx, r12
-  add rbx, r13
-.loc 1 212 0
-  mov r15, r9
-  movsxd r15, r15d
-  mov r12, r15
-  mov r15, r12
-  mov rax, 127
-  imul r15, rax
-  mov r13, r15
-.loc 1 210 0
-  mov r12, rbx
-  add r12, r13
-.loc 1 212 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r12, rbx
-  and r12, 1023
-  mov rax, r12
-  add rsp, 88
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 88
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_ht_insert:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 712
-.loc 1 1659 0
-  mov QWORD PTR [rbp-168], rdi
-.loc 1 1663 0
-  mov QWORD PTR [rbp-208], rsi
-.loc 1 1667 0
-  mov QWORD PTR [rbp-216], rdx
-.loc 1 1671 0
-  mov r14, rcx
-.loc 1 1675 0
-  mov QWORD PTR [rbp-176], r8
-.loc 1 1679 0
-  mov QWORD PTR [rbp-184], r9
-.loc 1 1683 0
-  mov r15, QWORD PTR [rbp+16]
-  mov QWORD PTR [rbp-192], r15
-.loc 1 1687 0
-  mov r15, QWORD PTR [rbp+24]
-  mov QWORD PTR [rbp-200], r15
-.loc 1 215 0
-  xor r10, r10
-.loc 1 216 0
-  mov r15, QWORD PTR [rbp-168]
-  movsxd r15, r15d
-  mov r8, r15
-  mov r15, QWORD PTR [rbp-208]
-  movsxd r15, r15d
-  mov r9, r15
-.loc 1 217 0
-  mov r15, QWORD PTR [rbp-216]
-  movsxd r15, r15d
-  mov r10, r15
-  mov r15, r14
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r15, QWORD PTR [rbp-176]
-  movsxd r15, r15d
-  mov r12, r15
-.loc 1 218 0
-  mov r15, QWORD PTR [rbp-184]
-  movsxd r15, r15d
-  mov r13, r15
-.loc 1 216 0
-  mov rdi, r8
-  mov rsi, r9
-  mov rdx, r10
-  mov rcx, rbx
-  mov r8, r12
-  mov r9, r13
-  call _caustic_assembler_lexer_cst_ht_hash
-  mov rbx, rax
-.loc 1 215 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-84], eax
-.loc 1 219 0
-  mov rbx, 0
-.loc 1 218 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-88], eax
-.L1538:
-.loc 1 219 0
-  movsxd r15, DWORD PTR [rbp-88]
-  mov QWORD PTR [rbp-224], r15
-  cmp r15, 1024
-  jge .L1539
-.loc 1 220 0
-  movsxd r15, DWORD PTR [rbp-84]
-  mov r13, r15
-  mov r15, r13
-  mov r8, r15
-  mov r15, r8
-  shl r15, 5
-  mov r9, r15
-.loc 1 219 0
-.loc 1 222 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-232], r15
-  mov r15, QWORD PTR [r15]
-  mov r10, r15
-  mov r15, r10
-  mov QWORD PTR [rbp-240], r15
-  add r15, r9
-  mov QWORD PTR [rbp-248], r15
-  add r15, 24
-  mov QWORD PTR [rbp-256], r15
-  mov rbx, r15
-.loc 1 221 0
-.loc 1 223 0
-  mov r15, rbx
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-272], r15
-  cmp r15, 0
-  jne .L1540
-.loc 1 225 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-296], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-288], r15
-.loc 1 224 0
-  mov QWORD PTR [rbp-304], r15
-.loc 1 225 0
-.loc 1 224 0
-  add r15, r9
-  mov QWORD PTR [rbp-312], r15
-  mov QWORD PTR [rbp-320], r15
-.loc 1 225 0
-  mov r15, QWORD PTR [rbp-168]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-328], r15
-  mov rax, QWORD PTR [rbp-328]
-  mov r15, QWORD PTR [rbp-320]
-  mov DWORD PTR [r15], eax
-.loc 1 227 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-344], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-336], r15
-  mov QWORD PTR [rbp-352], r15
-  add r15, r9
-  mov QWORD PTR [rbp-360], r15
-  add r15, 4
-  mov QWORD PTR [rbp-368], r15
-.loc 1 226 0
-  mov QWORD PTR [rbp-376], r15
-.loc 1 225 0
-.loc 1 227 0
-  mov r15, QWORD PTR [rbp-208]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-384], r15
-  mov rax, QWORD PTR [rbp-384]
-  mov r15, QWORD PTR [rbp-376]
-  mov DWORD PTR [r15], eax
-.loc 1 232 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-400], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-392], r15
-.loc 1 231 0
-  mov QWORD PTR [rbp-408], r15
-.loc 1 232 0
-.loc 1 231 0
-  add r15, r9
-  mov QWORD PTR [rbp-416], r15
-.loc 1 232 0
-.loc 1 231 0
-  add r15, 8
-  mov QWORD PTR [rbp-424], r15
-  mov QWORD PTR [rbp-432], r15
-.loc 1 228 0
-.loc 1 232 0
-  mov r15, QWORD PTR [rbp-216]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-440], r15
-  mov rax, QWORD PTR [rbp-440]
-  mov r15, QWORD PTR [rbp-432]
-  mov DWORD PTR [r15], eax
-.loc 1 234 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-456], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-448], r15
-.loc 1 233 0
-  mov QWORD PTR [rbp-464], r15
-.loc 1 234 0
-.loc 1 233 0
-  add r15, r9
-  mov QWORD PTR [rbp-472], r15
-.loc 1 235 0
-.loc 1 233 0
-  add r15, 12
-  mov QWORD PTR [rbp-480], r15
-  mov QWORD PTR [rbp-488], r15
-.loc 1 232 0
-.loc 1 235 0
-  mov r15, r14
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-496], r15
-  mov rax, QWORD PTR [rbp-496]
-  mov r15, QWORD PTR [rbp-488]
-  mov DWORD PTR [r15], eax
-.loc 1 237 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-512], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-504], r15
-.loc 1 236 0
-  mov QWORD PTR [rbp-520], r15
-.loc 1 237 0
-.loc 1 236 0
-  add r15, r9
-  mov QWORD PTR [rbp-528], r15
-.loc 1 238 0
-.loc 1 236 0
-  add r15, 16
-  mov QWORD PTR [rbp-536], r15
-.loc 1 235 0
-  mov QWORD PTR [rbp-544], r15
-.loc 1 238 0
-  mov r15, QWORD PTR [rbp-176]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-552], r15
-  mov rax, QWORD PTR [rbp-552]
-  mov r15, QWORD PTR [rbp-544]
-  mov DWORD PTR [r15], eax
-.loc 1 240 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-568], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-560], r15
-  mov QWORD PTR [rbp-576], r15
-  add r15, r9
-  mov QWORD PTR [rbp-584], r15
-  add r15, 20
-  mov QWORD PTR [rbp-592], r15
-.loc 1 239 0
-  mov QWORD PTR [rbp-600], r15
-.loc 1 238 0
-.loc 1 240 0
-  mov r15, QWORD PTR [rbp-184]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-608], r15
-  mov rax, QWORD PTR [rbp-608]
-  mov r15, QWORD PTR [rbp-600]
-  mov DWORD PTR [r15], eax
-.loc 1 241 0
-  mov r15, QWORD PTR [rbp-192]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-616], r15
-  mov rax, QWORD PTR [rbp-616]
-  mov r15, rbx
-  mov DWORD PTR [r15], eax
-.loc 1 244 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-632], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-624], r15
-  mov QWORD PTR [rbp-640], r15
-  add r15, r9
-  mov QWORD PTR [rbp-648], r15
-  add r15, 28
-  mov QWORD PTR [rbp-656], r15
-.loc 1 242 0
-  mov QWORD PTR [rbp-664], r15
-.loc 1 241 0
-.loc 1 244 0
-  mov r15, QWORD PTR [rbp-200]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-672], r15
-  mov rax, QWORD PTR [rbp-672]
-  mov r15, QWORD PTR [rbp-664]
-  mov DWORD PTR [r15], eax
-.loc 1 245 0
-  add rsp, 712
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 223 0
-  jmp .L1541
-.L1540:
-.L1541:
-.loc 1 245 0
-  movsxd r15, DWORD PTR [rbp-84]
-  mov QWORD PTR [rbp-680], r15
-  add r15, 1
-  mov QWORD PTR [rbp-688], r15
-  and r15, 1023
-  mov QWORD PTR [rbp-696], r15
-  mov rax, QWORD PTR [rbp-696]
-  mov DWORD PTR [rbp-84], eax
-  movsxd r15, DWORD PTR [rbp-88]
-  mov QWORD PTR [rbp-704], r15
-.loc 1 246 0
-.loc 1 245 0
-  mov r12, QWORD PTR [rbp-704]
-  add r12, 1
-  mov rax, r12
-  mov DWORD PTR [rbp-88], eax
-.loc 1 219 0
-  jmp .L1538
-.L1539:
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 712
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_ht_lookup:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 824
-.loc 1 2011 0
-  mov rbx, rdi
-.loc 1 2016 0
-  mov r12, rsi
-.loc 1 251 0
-  mov r15, rbx
-  movzx r15, BYTE PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-164], r15
-.loc 1 248 0
-.loc 1 253 0
-  mov r13, rbx
-  add r13, 1
-  mov r15, r13
-  movzx r15, BYTE PTR [r15]
-  mov r8, r15
-.loc 1 252 0
-  mov r15, r8
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-172], r15
-.loc 1 253 0
-  mov r8, 0
-  mov rax, r8
-  mov DWORD PTR [rbp-72], eax
-.loc 1 254 0
-  mov r8, 0
-.loc 1 253 0
-  mov rax, r8
-  mov DWORD PTR [rbp-76], eax
-.loc 1 256 0
-  mov r8, 0
-.loc 1 254 0
-  mov rax, r8
-  mov DWORD PTR [rbp-80], eax
-.loc 1 256 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r8, r15
-  mov r15, r8
-  cmp r15, 3
-  jl .L1542
-.loc 1 257 0
-  mov r8, rbx
-  add r8, 2
-  mov r15, r8
-  movzx r15, BYTE PTR [r15]
-  mov r9, r15
-  mov r15, r9
-  movsxd r15, r15d
-  mov r8, r15
-  mov rax, r8
-  mov DWORD PTR [rbp-72], eax
-.loc 1 256 0
-  jmp .L1543
-.L1542:
-.L1543:
-.loc 1 257 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r8, r15
-.loc 1 258 0
-.loc 1 257 0
-  mov r15, r8
-  cmp r15, 4
-  jl .L1544
-.loc 1 258 0
-.loc 1 259 0
-  mov r8, rbx
-  add r8, 3
-  mov r15, r8
-  movzx r15, BYTE PTR [r15]
-  mov r9, r15
-.loc 1 258 0
-  mov r15, r9
-  movsxd r15, r15d
-  mov r8, r15
-  mov rax, r8
-  mov DWORD PTR [rbp-76], eax
-.loc 1 257 0
-  jmp .L1545
-.L1544:
-.L1545:
-.loc 1 260 0
-  mov r15, r12
-  movsxd r15, r15d
-  mov r8, r15
-  mov r15, r8
-  cmp r15, 5
-  jl .L1546
-  mov r8, rbx
-  add r8, 4
-  mov r15, r8
-  movzx r15, BYTE PTR [r15]
-  mov rbx, r15
-  mov r15, rbx
-  movsxd r15, r15d
-  mov r8, r15
-  mov rax, r8
-  mov DWORD PTR [rbp-80], eax
-  jmp .L1547
-.L1546:
-.L1547:
-.loc 1 261 0
-  xor r10, r10
-.loc 1 262 0
-  mov r15, QWORD PTR [rbp-164]
-  movsxd r15, r15d
-  mov rbx, r15
-  mov r15, QWORD PTR [rbp-172]
-  movsxd r15, r15d
-  mov r8, r15
-  movsxd r15, DWORD PTR [rbp-72]
-  mov r9, r15
-  movsxd r15, DWORD PTR [rbp-76]
-  mov r10, r15
-  movsxd r15, DWORD PTR [rbp-80]
-  mov r14, r15
-  mov r15, r12
-  movsxd r15, r15d
-  mov r13, r15
-  mov rdi, rbx
-  mov rsi, r8
-  mov rdx, r9
-  mov rcx, r10
-  mov r8, r14
-  mov r9, r13
-  call _caustic_assembler_lexer_cst_ht_hash
-  mov rbx, rax
-.loc 1 261 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-84], eax
-.loc 1 263 0
-  mov rbx, 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-88], eax
-.L1548:
-  movsxd r15, DWORD PTR [rbp-88]
-  mov QWORD PTR [rbp-180], r15
-  cmp r15, 16
-  jge .L1549
-.loc 1 265 0
-  movsxd r15, DWORD PTR [rbp-84]
-  mov QWORD PTR [rbp-420], r15
-  mov QWORD PTR [rbp-620], r15
-  shl r15, 5
-  mov r9, r15
-.loc 1 264 0
-.loc 1 269 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-188], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-628], r15
-  mov QWORD PTR [rbp-196], r15
-  add r15, r9
-  mov QWORD PTR [rbp-204], r15
-.loc 1 270 0
-.loc 1 269 0
-  add r15, 24
-  mov QWORD PTR [rbp-212], r15
-.loc 1 266 0
-  mov QWORD PTR [rbp-220], r15
-.loc 1 265 0
-.loc 1 270 0
-  movsxd r15, DWORD PTR [r15]
-  mov rbx, r15
-  mov r15, rbx
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-236], r15
-  cmp r15, 0
-  jne .L1550
-.loc 1 271 0
-  mov QWORD PTR [rbp-252], 0
-  mov rax, QWORD PTR [rbp-252]
-  add rsp, 824
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 270 0
-  jmp .L1551
-.L1550:
-.L1551:
-.loc 1 273 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-268], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-260], r15
-  mov QWORD PTR [rbp-276], r15
-  add r15, r9
-  mov QWORD PTR [rbp-284], r15
-  add r15, 20
-  mov QWORD PTR [rbp-292], r15
-.loc 1 272 0
-  mov QWORD PTR [rbp-300], r15
-.loc 1 271 0
-.loc 1 273 0
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-308], r15
-  mov r15, r12
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-316], r15
-  mov r15, QWORD PTR [rbp-308]
-  cmp r15, QWORD PTR [rbp-316]
-  jne .L1552
-.loc 1 276 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-340], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-332], r15
-  mov QWORD PTR [rbp-348], r15
-  add r15, r9
-  mov QWORD PTR [rbp-356], r15
-.loc 1 275 0
-  mov QWORD PTR [rbp-364], r15
-.loc 1 274 0
-.loc 1 278 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-380], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-372], r15
-  mov QWORD PTR [rbp-388], r15
-  add r15, r9
-  mov QWORD PTR [rbp-396], r15
-  add r15, 4
-  mov QWORD PTR [rbp-404], r15
-  mov QWORD PTR [rbp-412], r15
-.loc 1 276 0
-.loc 1 279 0
-  mov r15, QWORD PTR [rbp-364]
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-428], r15
-  mov r15, QWORD PTR [rbp-164]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-436], r15
-  mov r15, QWORD PTR [rbp-428]
-  cmp r15, QWORD PTR [rbp-436]
-  jne .L1556
-  mov r15, QWORD PTR [rbp-412]
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-452], r15
-.loc 1 280 0
-  mov r15, QWORD PTR [rbp-172]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-460], r15
-.loc 1 279 0
-  mov r15, QWORD PTR [rbp-452]
-  cmp r15, QWORD PTR [rbp-460]
-  jne .L1556
-  mov r13, 1
-  jmp .L1557
-.L1556:
-  mov r13, 0
-.L1557:
-.loc 1 278 0
-  mov r15, r13
-  test r15, r15
-  jz .L1554
-.loc 1 282 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-484], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-476], r15
-  mov QWORD PTR [rbp-492], r15
-  add r15, r9
-  mov QWORD PTR [rbp-500], r15
-.loc 1 283 0
-.loc 1 282 0
-  add r15, 8
-  mov QWORD PTR [rbp-508], r15
-  mov QWORD PTR [rbp-516], r15
-.loc 1 280 0
-.loc 1 284 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-532], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-524], r15
-.loc 1 283 0
-  mov QWORD PTR [rbp-540], r15
-.loc 1 284 0
-.loc 1 283 0
-  add r15, r9
-  mov QWORD PTR [rbp-548], r15
-.loc 1 285 0
-.loc 1 283 0
-  add r15, 12
-  mov QWORD PTR [rbp-556], r15
-  mov QWORD PTR [rbp-564], r15
-.loc 1 288 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-580], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-572], r15
-  mov QWORD PTR [rbp-588], r15
-  add r15, r9
-  mov QWORD PTR [rbp-596], r15
-  add r15, 16
-  mov QWORD PTR [rbp-604], r15
-.loc 1 285 0
-  mov QWORD PTR [rbp-612], r15
-.loc 1 288 0
-  mov r15, QWORD PTR [rbp-516]
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-636], r15
-  movsxd r15, DWORD PTR [rbp-72]
-  mov QWORD PTR [rbp-644], r15
-  mov r15, QWORD PTR [rbp-636]
-  cmp r15, QWORD PTR [rbp-644]
-  jne .L1562
-.loc 1 289 0
-  mov r15, QWORD PTR [rbp-564]
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-660], r15
-  movsxd r15, DWORD PTR [rbp-76]
-  mov QWORD PTR [rbp-668], r15
-  mov r15, QWORD PTR [rbp-660]
-  cmp r15, QWORD PTR [rbp-668]
-  jne .L1562
-.loc 1 288 0
-  mov r8, 1
-  jmp .L1563
-.L1562:
-  mov r8, 0
-.L1563:
-  mov r15, r8
-  test r15, r15
-  jz .L1560
-.loc 1 289 0
-  mov r15, QWORD PTR [rbp-612]
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-684], r15
-.loc 1 290 0
-  movsxd r15, DWORD PTR [rbp-80]
-  mov QWORD PTR [rbp-692], r15
-.loc 1 289 0
-  mov r15, QWORD PTR [rbp-684]
-  cmp r15, QWORD PTR [rbp-692]
-  jne .L1560
-.loc 1 288 0
-  mov r14, 1
-  jmp .L1561
-.L1560:
-  mov r14, 0
-.L1561:
-  mov r15, r14
-  test r15, r15
-  jz .L1558
-.loc 1 290 0
-  mov r15, rbx
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-708], r15
-  shl r15, 16
-  mov QWORD PTR [rbp-716], r15
-.loc 1 293 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov QWORD PTR [rbp-732], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-724], r15
-.loc 1 291 0
-  mov QWORD PTR [rbp-740], r15
-.loc 1 293 0
-.loc 1 291 0
-  add r15, r9
-  mov QWORD PTR [rbp-748], r15
-.loc 1 297 0
-.loc 1 291 0
-  add r15, 28
-  mov QWORD PTR [rbp-756], r15
-.loc 1 290 0
-  mov QWORD PTR [rbp-764], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-772], r15
-  mov r15, QWORD PTR [rbp-716]
-  add r15, QWORD PTR [rbp-772]
-  mov QWORD PTR [rbp-780], r15
-  mov rax, QWORD PTR [rbp-780]
-  add rsp, 824
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 288 0
-  jmp .L1559
-.L1558:
-.L1559:
-.loc 1 278 0
-  jmp .L1555
-.L1554:
-.L1555:
-.loc 1 273 0
-  jmp .L1553
-.L1552:
-.L1553:
-.loc 1 297 0
-  movsxd r15, DWORD PTR [rbp-84]
-  mov QWORD PTR [rbp-788], r15
-  add r15, 1
-  mov QWORD PTR [rbp-796], r15
-  and r15, 1023
-  mov QWORD PTR [rbp-804], r15
-  mov rax, QWORD PTR [rbp-804]
-  mov DWORD PTR [rbp-84], eax
-  movsxd r15, DWORD PTR [rbp-88]
-  mov QWORD PTR [rbp-812], r15
-  mov r10, QWORD PTR [rbp-812]
-  add r10, 1
-  mov rax, r10
-  mov DWORD PTR [rbp-88], eax
-.loc 1 263 0
-  jmp .L1548
-.L1549:
-.loc 1 299 0
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 824
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 824
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_init_ht:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 4632
-.loc 1 299 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov r10, rbx
-.loc 1 300 0
-  lea r12, [rip+_caustic_assembler_lexer_cst_HT_SIZE]
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  mov r12, r15
-  mov r15, r12
-  shl r15, 5
-  mov r13, r15
-.loc 1 299 0
-  mov rdi, r13
-  call _std_mem_cst_galloc
-  mov r12, rax
-  mov rax, r12
-  mov r15, rbx
-  mov QWORD PTR [r15], rax
-.loc 1 301 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov r15, rbx
-  mov r15, QWORD PTR [r15]
-  mov r12, r15
-  mov rbx, 0
-.loc 1 302 0
-  lea r13, [rip+_caustic_assembler_lexer_cst_HT_SIZE]
-  mov r15, r13
-  movsxd r15, DWORD PTR [r15]
-  mov r14, r15
-.loc 1 301 0
-  mov r15, r14
-  mov r13, r15
-.loc 1 302 0
-.loc 1 301 0
-  mov r15, r13
-  shl r15, 5
-  mov r14, r15
-  mov rdi, r12
-  mov rsi, rbx
-  mov rdx, r14
-  call _std_mem_cst_memset
-  mov rbx, rax
-.loc 1 304 0
-  mov rbx, 97
-  mov r12, 108
-  mov QWORD PTR [rbp-80], 0
-  mov QWORD PTR [rbp-56], 0
-.loc 1 305 0
-  mov QWORD PTR [rbp-64], 0
-  mov QWORD PTR [rbp-72], 2
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_AL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 302 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-80]
-  mov rcx, QWORD PTR [rbp-56]
-  mov r8, QWORD PTR [rbp-64]
-  mov r9, QWORD PTR [rbp-72]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 306 0
-  mov rbx, 97
-.loc 1 307 0
-  mov r12, 120
-  mov QWORD PTR [rbp-112], 0
-  mov QWORD PTR [rbp-88], 0
-  mov QWORD PTR [rbp-96], 0
-  mov QWORD PTR [rbp-104], 2
-.loc 1 308 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_AX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 306 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-112]
-  mov rcx, QWORD PTR [rbp-88]
-  mov r8, QWORD PTR [rbp-96]
-  mov r9, QWORD PTR [rbp-104]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 308 0
-  mov rbx, 99
-  mov r12, 108
-  mov QWORD PTR [rbp-144], 0
-  mov QWORD PTR [rbp-120], 0
-  mov QWORD PTR [rbp-128], 0
-.loc 1 309 0
-  mov QWORD PTR [rbp-136], 2
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_CL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 308 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-144]
-  mov rcx, QWORD PTR [rbp-120]
-  mov r8, QWORD PTR [rbp-128]
-  mov r9, QWORD PTR [rbp-136]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 309 0
-  mov rbx, 99
-  mov r12, 120
-  mov QWORD PTR [rbp-176], 0
-  mov QWORD PTR [rbp-152], 0
-.loc 1 310 0
-  mov QWORD PTR [rbp-160], 0
-  mov QWORD PTR [rbp-168], 2
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_CX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 309 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-176]
-  mov rcx, QWORD PTR [rbp-152]
-  mov r8, QWORD PTR [rbp-160]
-  mov r9, QWORD PTR [rbp-168]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 310 0
-  mov rbx, 100
-  mov r12, 108
-  mov QWORD PTR [rbp-208], 0
-.loc 1 311 0
-  mov QWORD PTR [rbp-184], 0
-  mov QWORD PTR [rbp-192], 0
-  mov QWORD PTR [rbp-200], 2
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_DL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 310 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-208]
-  mov rcx, QWORD PTR [rbp-184]
-  mov r8, QWORD PTR [rbp-192]
-  mov r9, QWORD PTR [rbp-200]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 311 0
-  mov rbx, 100
-  mov r12, 120
-.loc 1 312 0
-  mov QWORD PTR [rbp-240], 0
-  mov QWORD PTR [rbp-216], 0
-  mov QWORD PTR [rbp-224], 0
-  mov QWORD PTR [rbp-232], 2
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_DX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 311 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-240]
-  mov rcx, QWORD PTR [rbp-216]
-  mov r8, QWORD PTR [rbp-224]
-  mov r9, QWORD PTR [rbp-232]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 312 0
-  mov rbx, 100
-.loc 1 313 0
-  mov r12, 105
-  mov QWORD PTR [rbp-272], 0
-  mov QWORD PTR [rbp-248], 0
-  mov QWORD PTR [rbp-256], 0
-  mov QWORD PTR [rbp-264], 2
-  mov r14, 1
-.loc 1 314 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_DI]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 312 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-272]
-  mov rcx, QWORD PTR [rbp-248]
-  mov r8, QWORD PTR [rbp-256]
-  mov r9, QWORD PTR [rbp-264]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 315 0
-  mov rbx, 98
-  mov r12, 108
-  mov QWORD PTR [rbp-304], 0
-.loc 1 316 0
-  mov QWORD PTR [rbp-280], 0
-.loc 1 317 0
-  mov QWORD PTR [rbp-288], 0
-  mov QWORD PTR [rbp-296], 2
-  mov r14, 1
-.loc 1 318 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_BL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 315 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-304]
-  mov rcx, QWORD PTR [rbp-280]
-  mov r8, QWORD PTR [rbp-288]
-  mov r9, QWORD PTR [rbp-296]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 320 0
-  mov rbx, 98
-  mov r12, 120
-.loc 1 321 0
-  mov QWORD PTR [rbp-336], 0
-  mov QWORD PTR [rbp-312], 0
-.loc 1 325 0
-  mov QWORD PTR [rbp-320], 0
-  mov QWORD PTR [rbp-328], 2
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_BX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 319 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-336]
-  mov rcx, QWORD PTR [rbp-312]
-  mov r8, QWORD PTR [rbp-320]
-  mov r9, QWORD PTR [rbp-328]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 325 0
-  mov rbx, 98
-  mov r12, 112
-.loc 1 326 0
-  mov QWORD PTR [rbp-368], 0
-  mov QWORD PTR [rbp-344], 0
-  mov QWORD PTR [rbp-352], 0
-  mov QWORD PTR [rbp-360], 2
-  mov r14, 1
-.loc 1 327 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_BP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 325 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-368]
-  mov rcx, QWORD PTR [rbp-344]
-  mov r8, QWORD PTR [rbp-352]
-  mov r9, QWORD PTR [rbp-360]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 327 0
-  mov rbx, 115
-  mov r12, 112
-.loc 1 328 0
-  mov QWORD PTR [rbp-400], 0
-  mov QWORD PTR [rbp-376], 0
-  mov QWORD PTR [rbp-384], 0
-  mov QWORD PTR [rbp-392], 2
-  mov r14, 1
-.loc 1 330 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_SP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 327 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-400]
-  mov rcx, QWORD PTR [rbp-376]
-  mov r8, QWORD PTR [rbp-384]
-  mov r9, QWORD PTR [rbp-392]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 330 0
-  mov rbx, 115
-.loc 1 331 0
-  mov r12, 105
-  mov QWORD PTR [rbp-432], 0
-  mov QWORD PTR [rbp-408], 0
-  mov QWORD PTR [rbp-416], 0
-  mov QWORD PTR [rbp-424], 2
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_SI]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 330 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-432]
-  mov rcx, QWORD PTR [rbp-408]
-  mov r8, QWORD PTR [rbp-416]
-  mov r9, QWORD PTR [rbp-424]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 334 0
-  mov rbx, 114
-  mov r12, 56
-  mov QWORD PTR [rbp-464], 0
-  mov QWORD PTR [rbp-440], 0
-  mov QWORD PTR [rbp-448], 0
-  mov QWORD PTR [rbp-456], 2
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R8]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 331 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-464]
-  mov rcx, QWORD PTR [rbp-440]
-  mov r8, QWORD PTR [rbp-448]
-  mov r9, QWORD PTR [rbp-456]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 335 0
-  mov rbx, 114
-  mov r12, 57
-  mov QWORD PTR [rbp-496], 0
-  mov QWORD PTR [rbp-472], 0
-  mov QWORD PTR [rbp-480], 0
-  mov QWORD PTR [rbp-488], 2
-.loc 1 336 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R9]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 335 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-496]
-  mov rcx, QWORD PTR [rbp-472]
-  mov r8, QWORD PTR [rbp-480]
-  mov r9, QWORD PTR [rbp-488]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 339 0
-  mov rbx, 114
-  mov r12, 97
-  mov QWORD PTR [rbp-528], 120
-  mov QWORD PTR [rbp-504], 0
-  mov QWORD PTR [rbp-512], 0
-.loc 1 340 0
-  mov QWORD PTR [rbp-520], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RAX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 339 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-528]
-  mov rcx, QWORD PTR [rbp-504]
-  mov r8, QWORD PTR [rbp-512]
-  mov r9, QWORD PTR [rbp-520]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 340 0
-  mov rbx, 114
-.loc 1 341 0
-  mov r12, 99
-  mov QWORD PTR [rbp-560], 120
-  mov QWORD PTR [rbp-536], 0
-.loc 1 342 0
-  mov QWORD PTR [rbp-544], 0
-  mov QWORD PTR [rbp-552], 3
-  mov r14, 1
-.loc 1 343 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RCX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 340 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-560]
-  mov rcx, QWORD PTR [rbp-536]
-  mov r8, QWORD PTR [rbp-544]
-  mov r9, QWORD PTR [rbp-552]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 345 0
-  mov rbx, 114
-  mov r12, 100
-  mov QWORD PTR [rbp-592], 120
-  mov QWORD PTR [rbp-568], 0
-  mov QWORD PTR [rbp-576], 0
-  mov QWORD PTR [rbp-584], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RDX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 343 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-592]
-  mov rcx, QWORD PTR [rbp-568]
-  mov r8, QWORD PTR [rbp-576]
-  mov r9, QWORD PTR [rbp-584]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 346 0
-  mov rbx, 114
-  mov r12, 98
-  mov QWORD PTR [rbp-624], 120
-.loc 1 348 0
-  mov QWORD PTR [rbp-600], 0
-  mov QWORD PTR [rbp-608], 0
-  mov QWORD PTR [rbp-616], 3
-.loc 1 349 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RBX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 345 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-624]
-  mov rcx, QWORD PTR [rbp-600]
-  mov r8, QWORD PTR [rbp-608]
-  mov r9, QWORD PTR [rbp-616]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 350 0
-  mov rbx, 114
-  mov r12, 115
-  mov QWORD PTR [rbp-656], 112
-  mov QWORD PTR [rbp-632], 0
-  mov QWORD PTR [rbp-640], 0
-  mov QWORD PTR [rbp-648], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RSP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 349 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-656]
-  mov rcx, QWORD PTR [rbp-632]
-  mov r8, QWORD PTR [rbp-640]
-  mov r9, QWORD PTR [rbp-648]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 351 0
-  mov rbx, 114
-  mov r12, 98
-  mov QWORD PTR [rbp-688], 112
-  mov QWORD PTR [rbp-664], 0
-  mov QWORD PTR [rbp-672], 0
-  mov QWORD PTR [rbp-680], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RBP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-688]
-  mov rcx, QWORD PTR [rbp-664]
-  mov r8, QWORD PTR [rbp-672]
-  mov r9, QWORD PTR [rbp-680]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 352 0
-  mov rbx, 114
-  mov r12, 115
-.loc 1 354 0
-  mov QWORD PTR [rbp-720], 105
-.loc 1 355 0
-  mov QWORD PTR [rbp-696], 0
-  mov QWORD PTR [rbp-704], 0
-  mov QWORD PTR [rbp-712], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RSI]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 352 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-720]
-  mov rcx, QWORD PTR [rbp-696]
-  mov r8, QWORD PTR [rbp-704]
-  mov r9, QWORD PTR [rbp-712]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 355 0
-  mov rbx, 114
-  mov r12, 100
-  mov QWORD PTR [rbp-752], 105
-.loc 1 356 0
-  mov QWORD PTR [rbp-728], 0
-  mov QWORD PTR [rbp-736], 0
-  mov QWORD PTR [rbp-744], 3
-.loc 1 357 0
-  mov r14, 1
-.loc 1 358 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_RDI]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 355 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-752]
-  mov rcx, QWORD PTR [rbp-728]
-  mov r8, QWORD PTR [rbp-736]
-  mov r9, QWORD PTR [rbp-744]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 359 0
-  mov rbx, 114
-.loc 1 360 0
-  mov r12, 49
-  mov QWORD PTR [rbp-784], 48
-  mov QWORD PTR [rbp-760], 0
-  mov QWORD PTR [rbp-768], 0
-  mov QWORD PTR [rbp-776], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R10]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 358 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-784]
-  mov rcx, QWORD PTR [rbp-760]
-  mov r8, QWORD PTR [rbp-768]
-  mov r9, QWORD PTR [rbp-776]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 360 0
-  mov rbx, 114
-.loc 1 361 0
-  mov r12, 49
-  mov QWORD PTR [rbp-816], 49
-  mov QWORD PTR [rbp-792], 0
-.loc 1 362 0
-  mov QWORD PTR [rbp-800], 0
-  mov QWORD PTR [rbp-808], 3
-.loc 1 363 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R11]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 360 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-816]
-  mov rcx, QWORD PTR [rbp-792]
-  mov r8, QWORD PTR [rbp-800]
-  mov r9, QWORD PTR [rbp-808]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 365 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-848], 50
-  mov QWORD PTR [rbp-824], 0
-  mov QWORD PTR [rbp-832], 0
-  mov QWORD PTR [rbp-840], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R12]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-848]
-  mov rcx, QWORD PTR [rbp-824]
-  mov r8, QWORD PTR [rbp-832]
-  mov r9, QWORD PTR [rbp-840]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 366 0
-  mov rbx, 114
-  mov r12, 49
-.loc 1 367 0
-  mov QWORD PTR [rbp-880], 51
-  mov QWORD PTR [rbp-856], 0
-.loc 1 368 0
-  mov QWORD PTR [rbp-864], 0
-  mov QWORD PTR [rbp-872], 3
-  mov r14, 1
-.loc 1 370 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R13]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 366 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-880]
-  mov rcx, QWORD PTR [rbp-856]
-  mov r8, QWORD PTR [rbp-864]
-  mov r9, QWORD PTR [rbp-872]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 370 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-912], 52
-  mov QWORD PTR [rbp-888], 0
-  mov QWORD PTR [rbp-896], 0
-  mov QWORD PTR [rbp-904], 3
-  mov r14, 1
-.loc 1 371 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R14]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 370 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-912]
-  mov rcx, QWORD PTR [rbp-888]
-  mov r8, QWORD PTR [rbp-896]
-  mov r9, QWORD PTR [rbp-904]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 372 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-944], 53
-.loc 1 374 0
-  mov QWORD PTR [rbp-920], 0
-  mov QWORD PTR [rbp-928], 0
-  mov QWORD PTR [rbp-936], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R15]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 371 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-944]
-  mov rcx, QWORD PTR [rbp-920]
-  mov r8, QWORD PTR [rbp-928]
-  mov r9, QWORD PTR [rbp-936]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 374 0
-  mov rbx, 101
-.loc 1 375 0
-  mov r12, 97
-  mov QWORD PTR [rbp-976], 120
-  mov QWORD PTR [rbp-952], 0
-  mov QWORD PTR [rbp-960], 0
-  mov QWORD PTR [rbp-968], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EAX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 374 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-976]
-  mov rcx, QWORD PTR [rbp-952]
-  mov r8, QWORD PTR [rbp-960]
-  mov r9, QWORD PTR [rbp-968]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 376 0
-  mov rbx, 101
-  mov r12, 99
-  mov QWORD PTR [rbp-1008], 120
-  mov QWORD PTR [rbp-984], 0
-  mov QWORD PTR [rbp-992], 0
-  mov QWORD PTR [rbp-1000], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_ECX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 375 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1008]
-  mov rcx, QWORD PTR [rbp-984]
-  mov r8, QWORD PTR [rbp-992]
-  mov r9, QWORD PTR [rbp-1000]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 377 0
-  mov rbx, 101
-  mov r12, 100
-.loc 1 378 0
-  mov QWORD PTR [rbp-1040], 120
-  mov QWORD PTR [rbp-1016], 0
-  mov QWORD PTR [rbp-1024], 0
-  mov QWORD PTR [rbp-1032], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EDX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 376 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1040]
-  mov rcx, QWORD PTR [rbp-1016]
-  mov r8, QWORD PTR [rbp-1024]
-  mov r9, QWORD PTR [rbp-1032]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 378 0
-  mov rbx, 101
-  mov r12, 98
-.loc 1 379 0
-  mov QWORD PTR [rbp-1072], 120
-  mov QWORD PTR [rbp-1048], 0
-.loc 1 380 0
-  mov QWORD PTR [rbp-1056], 0
-  mov QWORD PTR [rbp-1064], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EBX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 378 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1072]
-  mov rcx, QWORD PTR [rbp-1048]
-  mov r8, QWORD PTR [rbp-1056]
-  mov r9, QWORD PTR [rbp-1064]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 380 0
-  mov rbx, 101
-  mov r12, 115
-  mov QWORD PTR [rbp-1104], 112
-  mov QWORD PTR [rbp-1080], 0
-  mov QWORD PTR [rbp-1088], 0
-.loc 1 381 0
-  mov QWORD PTR [rbp-1096], 3
-  mov r14, 1
-.loc 1 382 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_ESP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 380 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1104]
-  mov rcx, QWORD PTR [rbp-1080]
-  mov r8, QWORD PTR [rbp-1088]
-  mov r9, QWORD PTR [rbp-1096]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 382 0
-  mov rbx, 101
-  mov r12, 98
-  mov QWORD PTR [rbp-1136], 112
-  mov QWORD PTR [rbp-1112], 0
-  mov QWORD PTR [rbp-1120], 0
-  mov QWORD PTR [rbp-1128], 3
-  mov r14, 1
-.loc 1 383 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EBP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 382 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1136]
-  mov rcx, QWORD PTR [rbp-1112]
-  mov r8, QWORD PTR [rbp-1120]
-  mov r9, QWORD PTR [rbp-1128]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 385 0
-  mov rbx, 101
-  mov r12, 115
-.loc 1 386 0
-  mov QWORD PTR [rbp-1168], 105
-.loc 1 387 0
-  mov QWORD PTR [rbp-1144], 0
-  mov QWORD PTR [rbp-1152], 0
-  mov QWORD PTR [rbp-1160], 3
-.loc 1 389 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_ESI]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 385 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1168]
-  mov rcx, QWORD PTR [rbp-1144]
-  mov r8, QWORD PTR [rbp-1152]
-  mov r9, QWORD PTR [rbp-1160]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 390 0
-  mov rbx, 101
-  mov r12, 100
-  mov QWORD PTR [rbp-1200], 105
-  mov QWORD PTR [rbp-1176], 0
-  mov QWORD PTR [rbp-1184], 0
-  mov QWORD PTR [rbp-1192], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_EDI]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 389 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1200]
-  mov rcx, QWORD PTR [rbp-1176]
-  mov r8, QWORD PTR [rbp-1184]
-  mov r9, QWORD PTR [rbp-1192]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 391 0
-  mov rbx, 115
-  mov r12, 112
-  mov QWORD PTR [rbp-1232], 108
-  mov QWORD PTR [rbp-1208], 0
-  mov QWORD PTR [rbp-1216], 0
-  mov QWORD PTR [rbp-1224], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_SPL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1232]
-  mov rcx, QWORD PTR [rbp-1208]
-  mov r8, QWORD PTR [rbp-1216]
-  mov r9, QWORD PTR [rbp-1224]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 392 0
-  mov rbx, 98
-  mov r12, 112
-.loc 1 394 0
-  mov QWORD PTR [rbp-1264], 108
-.loc 1 395 0
-  mov QWORD PTR [rbp-1240], 0
-  mov QWORD PTR [rbp-1248], 0
-  mov QWORD PTR [rbp-1256], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_BPL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 392 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1264]
-  mov rcx, QWORD PTR [rbp-1240]
-  mov r8, QWORD PTR [rbp-1248]
-  mov r9, QWORD PTR [rbp-1256]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 395 0
-  mov rbx, 115
-  mov r12, 105
-  mov QWORD PTR [rbp-1296], 108
-  mov QWORD PTR [rbp-1272], 0
-  mov QWORD PTR [rbp-1280], 0
-  mov QWORD PTR [rbp-1288], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_SIL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1296]
-  mov rcx, QWORD PTR [rbp-1272]
-  mov r8, QWORD PTR [rbp-1280]
-  mov r9, QWORD PTR [rbp-1288]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-  mov rbx, 100
-.loc 1 396 0
-  mov r12, 105
-  mov QWORD PTR [rbp-1328], 108
-  mov QWORD PTR [rbp-1304], 0
-.loc 1 397 0
-  mov QWORD PTR [rbp-1312], 0
-  mov QWORD PTR [rbp-1320], 3
-  mov r14, 1
-.loc 1 398 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_DIL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 395 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1328]
-  mov rcx, QWORD PTR [rbp-1304]
-  mov r8, QWORD PTR [rbp-1312]
-  mov r9, QWORD PTR [rbp-1320]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 398 0
-  mov rbx, 114
-  mov r12, 105
-  mov QWORD PTR [rbp-1360], 112
-  mov QWORD PTR [rbp-1336], 0
-  mov QWORD PTR [rbp-1344], 0
-.loc 1 399 0
-  mov QWORD PTR [rbp-1352], 3
-  mov r14, 1
-  mov r13, 99
-.loc 1 398 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1360]
-  mov rcx, QWORD PTR [rbp-1336]
-  mov r8, QWORD PTR [rbp-1344]
-  mov r9, QWORD PTR [rbp-1352]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 399 0
-  mov rbx, 114
-  mov r12, 56
-  mov QWORD PTR [rbp-1392], 100
-  mov QWORD PTR [rbp-1368], 0
-  mov QWORD PTR [rbp-1376], 0
-.loc 1 400 0
-  mov QWORD PTR [rbp-1384], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R8D]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 399 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1392]
-  mov rcx, QWORD PTR [rbp-1368]
-  mov r8, QWORD PTR [rbp-1376]
-  mov r9, QWORD PTR [rbp-1384]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 401 0
-  mov rbx, 114
-  mov r12, 56
-  mov QWORD PTR [rbp-1424], 119
-.loc 1 402 0
-  mov QWORD PTR [rbp-1400], 0
-  mov QWORD PTR [rbp-1408], 0
-  mov QWORD PTR [rbp-1416], 3
-.loc 1 404 0
-  mov r14, 1
-.loc 1 405 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R8W]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 401 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1424]
-  mov rcx, QWORD PTR [rbp-1400]
-  mov r8, QWORD PTR [rbp-1408]
-  mov r9, QWORD PTR [rbp-1416]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 405 0
-  mov rbx, 114
-  mov r12, 56
-  mov QWORD PTR [rbp-1456], 98
-  mov QWORD PTR [rbp-1432], 0
-  mov QWORD PTR [rbp-1440], 0
-  mov QWORD PTR [rbp-1448], 3
-  mov r14, 1
-.loc 1 406 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R8B]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 405 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1456]
-  mov rcx, QWORD PTR [rbp-1432]
-  mov r8, QWORD PTR [rbp-1440]
-  mov r9, QWORD PTR [rbp-1448]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 407 0
-  mov rbx, 114
-.loc 1 408 0
-  mov r12, 57
-  mov QWORD PTR [rbp-1488], 100
-  mov QWORD PTR [rbp-1464], 0
-.loc 1 409 0
-  mov QWORD PTR [rbp-1472], 0
-.loc 1 410 0
-  mov QWORD PTR [rbp-1480], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R9D]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 407 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1488]
-  mov rcx, QWORD PTR [rbp-1464]
-  mov r8, QWORD PTR [rbp-1472]
-  mov r9, QWORD PTR [rbp-1480]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 410 0
-  mov rbx, 114
-  mov r12, 57
-  mov QWORD PTR [rbp-1520], 119
-  mov QWORD PTR [rbp-1496], 0
-  mov QWORD PTR [rbp-1504], 0
-  mov QWORD PTR [rbp-1512], 3
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R9W]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1520]
-  mov rcx, QWORD PTR [rbp-1496]
-  mov r8, QWORD PTR [rbp-1504]
-  mov r9, QWORD PTR [rbp-1512]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-  mov rbx, 114
-  mov r12, 57
-  mov QWORD PTR [rbp-1552], 98
-.loc 1 411 0
-  mov QWORD PTR [rbp-1528], 0
-  mov QWORD PTR [rbp-1536], 0
-  mov QWORD PTR [rbp-1544], 3
-.loc 1 412 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R9B]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 410 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1552]
-  mov rcx, QWORD PTR [rbp-1528]
-  mov r8, QWORD PTR [rbp-1536]
-  mov r9, QWORD PTR [rbp-1544]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 413 0
-  mov rbx, 114
-.loc 1 414 0
-  mov r12, 49
-  mov QWORD PTR [rbp-1584], 48
-  mov QWORD PTR [rbp-1560], 100
-  mov QWORD PTR [rbp-1568], 0
-  mov QWORD PTR [rbp-1576], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R10D]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 413 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1584]
-  mov rcx, QWORD PTR [rbp-1560]
-  mov r8, QWORD PTR [rbp-1568]
-  mov r9, QWORD PTR [rbp-1576]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 415 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1616], 48
-  mov QWORD PTR [rbp-1592], 119
-  mov QWORD PTR [rbp-1600], 0
-.loc 1 416 0
-  mov QWORD PTR [rbp-1608], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R10W]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 414 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1616]
-  mov rcx, QWORD PTR [rbp-1592]
-  mov r8, QWORD PTR [rbp-1600]
-  mov r9, QWORD PTR [rbp-1608]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 417 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1648], 48
-.loc 1 418 0
-  mov QWORD PTR [rbp-1624], 98
-  mov QWORD PTR [rbp-1632], 0
-  mov QWORD PTR [rbp-1640], 4
-.loc 1 420 0
-  mov r14, 1
-.loc 1 421 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R10B]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 417 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1648]
-  mov rcx, QWORD PTR [rbp-1624]
-  mov r8, QWORD PTR [rbp-1632]
-  mov r9, QWORD PTR [rbp-1640]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 421 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1680], 49
-  mov QWORD PTR [rbp-1656], 100
-  mov QWORD PTR [rbp-1664], 0
-  mov QWORD PTR [rbp-1672], 4
-  mov r14, 1
-.loc 1 422 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R11D]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 421 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1680]
-  mov rcx, QWORD PTR [rbp-1656]
-  mov r8, QWORD PTR [rbp-1664]
-  mov r9, QWORD PTR [rbp-1672]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 423 0
-  mov rbx, 114
-  mov r12, 49
-.loc 1 424 0
-  mov QWORD PTR [rbp-1712], 49
-  mov QWORD PTR [rbp-1688], 119
-  mov QWORD PTR [rbp-1696], 0
-.loc 1 425 0
-  mov QWORD PTR [rbp-1704], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R11W]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 423 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1712]
-  mov rcx, QWORD PTR [rbp-1688]
-  mov r8, QWORD PTR [rbp-1696]
-  mov r9, QWORD PTR [rbp-1704]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 425 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1744], 49
-  mov QWORD PTR [rbp-1720], 98
-.loc 1 426 0
-  mov QWORD PTR [rbp-1728], 0
-  mov QWORD PTR [rbp-1736], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R11B]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 425 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1744]
-  mov rcx, QWORD PTR [rbp-1720]
-  mov r8, QWORD PTR [rbp-1728]
-  mov r9, QWORD PTR [rbp-1736]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 427 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1776], 50
-.loc 1 428 0
-  mov QWORD PTR [rbp-1752], 100
-  mov QWORD PTR [rbp-1760], 0
-  mov QWORD PTR [rbp-1768], 4
-.loc 1 429 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R12D]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 427 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1776]
-  mov rcx, QWORD PTR [rbp-1752]
-  mov r8, QWORD PTR [rbp-1760]
-  mov r9, QWORD PTR [rbp-1768]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 429 0
-  mov rbx, 114
-  mov r12, 49
-.loc 1 430 0
-  mov QWORD PTR [rbp-1808], 50
-  mov QWORD PTR [rbp-1784], 119
-  mov QWORD PTR [rbp-1792], 0
-.loc 1 431 0
-  mov QWORD PTR [rbp-1800], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R12W]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 429 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1808]
-  mov rcx, QWORD PTR [rbp-1784]
-  mov r8, QWORD PTR [rbp-1792]
-  mov r9, QWORD PTR [rbp-1800]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 431 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1840], 50
-.loc 1 432 0
-  mov QWORD PTR [rbp-1816], 98
-  mov QWORD PTR [rbp-1824], 0
-  mov QWORD PTR [rbp-1832], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R12B]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 431 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1840]
-  mov rcx, QWORD PTR [rbp-1816]
-  mov r8, QWORD PTR [rbp-1824]
-  mov r9, QWORD PTR [rbp-1832]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 433 0
-  mov rbx, 114
-.loc 1 435 0
-  mov r12, 49
-.loc 1 436 0
-  mov QWORD PTR [rbp-1872], 51
-  mov QWORD PTR [rbp-1848], 100
-  mov QWORD PTR [rbp-1856], 0
-  mov QWORD PTR [rbp-1864], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R13D]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 433 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1872]
-  mov rcx, QWORD PTR [rbp-1848]
-  mov r8, QWORD PTR [rbp-1856]
-  mov r9, QWORD PTR [rbp-1864]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 436 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1904], 51
-  mov QWORD PTR [rbp-1880], 119
-  mov QWORD PTR [rbp-1888], 0
-  mov QWORD PTR [rbp-1896], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R13W]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1904]
-  mov rcx, QWORD PTR [rbp-1880]
-  mov r8, QWORD PTR [rbp-1888]
-  mov r9, QWORD PTR [rbp-1896]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 437 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1936], 51
-.loc 1 438 0
-  mov QWORD PTR [rbp-1912], 98
-  mov QWORD PTR [rbp-1920], 0
-  mov QWORD PTR [rbp-1928], 4
-.loc 1 439 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R13B]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 436 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1936]
-  mov rcx, QWORD PTR [rbp-1912]
-  mov r8, QWORD PTR [rbp-1920]
-  mov r9, QWORD PTR [rbp-1928]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 440 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-1968], 52
-  mov QWORD PTR [rbp-1944], 100
-  mov QWORD PTR [rbp-1952], 0
-  mov QWORD PTR [rbp-1960], 4
-  mov r14, 1
-.loc 1 441 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R14D]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 440 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-1968]
-  mov rcx, QWORD PTR [rbp-1944]
-  mov r8, QWORD PTR [rbp-1952]
-  mov r9, QWORD PTR [rbp-1960]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 441 0
-  mov rbx, 114
-  mov r12, 49
-.loc 1 442 0
-  mov QWORD PTR [rbp-2000], 52
-  mov QWORD PTR [rbp-1976], 119
-  mov QWORD PTR [rbp-1984], 0
-  mov QWORD PTR [rbp-1992], 4
-.loc 1 443 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R14W]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 441 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2000]
-  mov rcx, QWORD PTR [rbp-1976]
-  mov r8, QWORD PTR [rbp-1984]
-  mov r9, QWORD PTR [rbp-1992]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 444 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-2032], 52
-  mov QWORD PTR [rbp-2008], 98
-  mov QWORD PTR [rbp-2016], 0
-.loc 1 445 0
-  mov QWORD PTR [rbp-2024], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R14B]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 444 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2032]
-  mov rcx, QWORD PTR [rbp-2008]
-  mov r8, QWORD PTR [rbp-2016]
-  mov r9, QWORD PTR [rbp-2024]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 446 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-2064], 53
-  mov QWORD PTR [rbp-2040], 100
-  mov QWORD PTR [rbp-2048], 0
-  mov QWORD PTR [rbp-2056], 4
-  mov r14, 1
-.loc 1 447 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R15D]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 446 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2064]
-  mov rcx, QWORD PTR [rbp-2040]
-  mov r8, QWORD PTR [rbp-2048]
-  mov r9, QWORD PTR [rbp-2056]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 447 0
-  mov rbx, 114
-.loc 1 448 0
-  mov r12, 49
-  mov QWORD PTR [rbp-2096], 53
-  mov QWORD PTR [rbp-2072], 119
-.loc 1 449 0
-  mov QWORD PTR [rbp-2080], 0
-.loc 1 451 0
-  mov QWORD PTR [rbp-2088], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R15W]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 447 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2096]
-  mov rcx, QWORD PTR [rbp-2072]
-  mov r8, QWORD PTR [rbp-2080]
-  mov r9, QWORD PTR [rbp-2088]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 451 0
-  mov rbx, 114
-  mov r12, 49
-  mov QWORD PTR [rbp-2128], 53
-  mov QWORD PTR [rbp-2104], 98
-  mov QWORD PTR [rbp-2112], 0
-.loc 1 452 0
-  mov QWORD PTR [rbp-2120], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_R15B]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 451 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2128]
-  mov rcx, QWORD PTR [rbp-2104]
-  mov r8, QWORD PTR [rbp-2112]
-  mov r9, QWORD PTR [rbp-2120]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 453 0
-  mov rbx, 120
-.loc 1 454 0
-  mov r12, 109
-  mov QWORD PTR [rbp-2160], 109
-  mov QWORD PTR [rbp-2136], 48
-.loc 1 455 0
-  mov QWORD PTR [rbp-2144], 0
-  mov QWORD PTR [rbp-2152], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM0]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 453 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2160]
-  mov rcx, QWORD PTR [rbp-2136]
-  mov r8, QWORD PTR [rbp-2144]
-  mov r9, QWORD PTR [rbp-2152]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 455 0
-  mov rbx, 120
-  mov r12, 109
-.loc 1 456 0
-  mov QWORD PTR [rbp-2192], 109
-  mov QWORD PTR [rbp-2168], 49
-  mov QWORD PTR [rbp-2176], 0
-  mov QWORD PTR [rbp-2184], 4
-  mov r14, 1
-.loc 1 457 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM1]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 455 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2192]
-  mov rcx, QWORD PTR [rbp-2168]
-  mov r8, QWORD PTR [rbp-2176]
-  mov r9, QWORD PTR [rbp-2184]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 457 0
-  mov rbx, 120
-.loc 1 458 0
-  mov r12, 109
-  mov QWORD PTR [rbp-2224], 109
-  mov QWORD PTR [rbp-2200], 50
-.loc 1 459 0
-  mov QWORD PTR [rbp-2208], 0
-  mov QWORD PTR [rbp-2216], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM2]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 457 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2224]
-  mov rcx, QWORD PTR [rbp-2200]
-  mov r8, QWORD PTR [rbp-2208]
-  mov r9, QWORD PTR [rbp-2216]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 460 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2256], 109
-.loc 1 461 0
-  mov QWORD PTR [rbp-2232], 51
-  mov QWORD PTR [rbp-2240], 0
-  mov QWORD PTR [rbp-2248], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM3]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 459 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2256]
-  mov rcx, QWORD PTR [rbp-2232]
-  mov r8, QWORD PTR [rbp-2240]
-  mov r9, QWORD PTR [rbp-2248]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 461 0
-  mov rbx, 120
-  mov r12, 109
-.loc 1 462 0
-  mov QWORD PTR [rbp-2288], 109
-  mov QWORD PTR [rbp-2264], 52
-  mov QWORD PTR [rbp-2272], 0
-  mov QWORD PTR [rbp-2280], 4
-  mov r14, 1
-.loc 1 463 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM4]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 461 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2288]
-  mov rcx, QWORD PTR [rbp-2264]
-  mov r8, QWORD PTR [rbp-2272]
-  mov r9, QWORD PTR [rbp-2280]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 466 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2320], 109
-  mov QWORD PTR [rbp-2296], 53
-  mov QWORD PTR [rbp-2304], 0
-  mov QWORD PTR [rbp-2312], 4
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM5]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 464 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2320]
-  mov rcx, QWORD PTR [rbp-2296]
-  mov r8, QWORD PTR [rbp-2304]
-  mov r9, QWORD PTR [rbp-2312]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 467 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2352], 109
-.loc 1 468 0
-  mov QWORD PTR [rbp-2328], 54
-  mov QWORD PTR [rbp-2336], 0
-  mov QWORD PTR [rbp-2344], 4
-.loc 1 469 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM6]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 466 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2352]
-  mov rcx, QWORD PTR [rbp-2328]
-  mov r8, QWORD PTR [rbp-2336]
-  mov r9, QWORD PTR [rbp-2344]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 470 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2384], 109
-  mov QWORD PTR [rbp-2360], 55
-  mov QWORD PTR [rbp-2368], 0
-  mov QWORD PTR [rbp-2376], 4
-  mov r14, 1
-.loc 1 471 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM7]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 470 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2384]
-  mov rcx, QWORD PTR [rbp-2360]
-  mov r8, QWORD PTR [rbp-2368]
-  mov r9, QWORD PTR [rbp-2376]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 471 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2416], 109
-.loc 1 472 0
-  mov QWORD PTR [rbp-2392], 56
-  mov QWORD PTR [rbp-2400], 0
-  mov QWORD PTR [rbp-2408], 4
-  mov r14, 1
-.loc 1 473 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM8]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 471 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2416]
-  mov rcx, QWORD PTR [rbp-2392]
-  mov r8, QWORD PTR [rbp-2400]
-  mov r9, QWORD PTR [rbp-2408]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 474 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2448], 109
-  mov QWORD PTR [rbp-2424], 57
-  mov QWORD PTR [rbp-2432], 0
-  mov QWORD PTR [rbp-2440], 4
-.loc 1 475 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM9]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 474 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2448]
-  mov rcx, QWORD PTR [rbp-2424]
-  mov r8, QWORD PTR [rbp-2432]
-  mov r9, QWORD PTR [rbp-2440]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 476 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2480], 109
-  mov QWORD PTR [rbp-2456], 49
-  mov QWORD PTR [rbp-2464], 48
-  mov QWORD PTR [rbp-2472], 5
-  mov r14, 1
-.loc 1 477 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM10]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 476 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2480]
-  mov rcx, QWORD PTR [rbp-2456]
-  mov r8, QWORD PTR [rbp-2464]
-  mov r9, QWORD PTR [rbp-2472]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 477 0
-  mov rbx, 120
-  mov r12, 109
-.loc 1 478 0
-  mov QWORD PTR [rbp-2512], 109
-  mov QWORD PTR [rbp-2488], 49
-  mov QWORD PTR [rbp-2496], 49
-.loc 1 480 0
-  mov QWORD PTR [rbp-2504], 5
-.loc 1 481 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM11]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 477 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2512]
-  mov rcx, QWORD PTR [rbp-2488]
-  mov r8, QWORD PTR [rbp-2496]
-  mov r9, QWORD PTR [rbp-2504]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 481 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2544], 109
-  mov QWORD PTR [rbp-2520], 49
-  mov QWORD PTR [rbp-2528], 50
-  mov QWORD PTR [rbp-2536], 5
-.loc 1 482 0
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM12]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 481 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2544]
-  mov rcx, QWORD PTR [rbp-2520]
-  mov r8, QWORD PTR [rbp-2528]
-  mov r9, QWORD PTR [rbp-2536]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 483 0
-  mov rbx, 120
-.loc 1 484 0
-  mov r12, 109
-  mov QWORD PTR [rbp-2576], 109
-  mov QWORD PTR [rbp-2552], 49
-.loc 1 485 0
-  mov QWORD PTR [rbp-2560], 51
-  mov QWORD PTR [rbp-2568], 5
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM13]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 483 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2576]
-  mov rcx, QWORD PTR [rbp-2552]
-  mov r8, QWORD PTR [rbp-2560]
-  mov r9, QWORD PTR [rbp-2568]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 485 0
-  mov rbx, 120
-  mov r12, 109
-  mov QWORD PTR [rbp-2608], 109
-.loc 1 486 0
-  mov QWORD PTR [rbp-2584], 49
-  mov QWORD PTR [rbp-2592], 52
-  mov QWORD PTR [rbp-2600], 5
-  mov r14, 1
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM14]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 485 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2608]
-  mov rcx, QWORD PTR [rbp-2584]
-  mov r8, QWORD PTR [rbp-2592]
-  mov r9, QWORD PTR [rbp-2600]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 487 0
-  mov rbx, 120
-  mov r12, 109
-.loc 1 488 0
-  mov QWORD PTR [rbp-2640], 109
-  mov QWORD PTR [rbp-2616], 49
-  mov QWORD PTR [rbp-2624], 53
-.loc 1 490 0
-  mov QWORD PTR [rbp-2632], 5
-.loc 1 491 0
-  mov r14, 1
-.loc 1 492 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_REG_XMM15]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 487 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2640]
-  mov rcx, QWORD PTR [rbp-2616]
-  mov r8, QWORD PTR [rbp-2624]
-  mov r9, QWORD PTR [rbp-2632]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 493 0
-  mov rbx, 111
-  mov r12, 114
-.loc 1 494 0
-  mov QWORD PTR [rbp-2672], 0
-.loc 1 496 0
-  mov QWORD PTR [rbp-2648], 0
-  mov QWORD PTR [rbp-2656], 0
-  mov QWORD PTR [rbp-2664], 2
-  mov r14, 2
-.loc 1 497 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_OR]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 493 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2672]
-  mov rcx, QWORD PTR [rbp-2648]
-  mov r8, QWORD PTR [rbp-2656]
-  mov r9, QWORD PTR [rbp-2664]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 497 0
-  mov rbx, 106
-  mov r12, 122
-  mov QWORD PTR [rbp-2704], 0
-  mov QWORD PTR [rbp-2680], 0
-  mov QWORD PTR [rbp-2688], 0
-  mov QWORD PTR [rbp-2696], 2
-.loc 1 498 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JZ]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 497 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2704]
-  mov rcx, QWORD PTR [rbp-2680]
-  mov r8, QWORD PTR [rbp-2688]
-  mov r9, QWORD PTR [rbp-2696]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 498 0
-  mov rbx, 106
-  mov r12, 101
-  mov QWORD PTR [rbp-2736], 0
-  mov QWORD PTR [rbp-2712], 0
-  mov QWORD PTR [rbp-2720], 0
-  mov QWORD PTR [rbp-2728], 2
-.loc 1 499 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 498 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2736]
-  mov rcx, QWORD PTR [rbp-2712]
-  mov r8, QWORD PTR [rbp-2720]
-  mov r9, QWORD PTR [rbp-2728]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 503 0
-  mov rbx, 106
-  mov r12, 108
-  mov QWORD PTR [rbp-2768], 0
-  mov QWORD PTR [rbp-2744], 0
-  mov QWORD PTR [rbp-2752], 0
-  mov QWORD PTR [rbp-2760], 2
-.loc 1 504 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 501 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2768]
-  mov rcx, QWORD PTR [rbp-2744]
-  mov r8, QWORD PTR [rbp-2752]
-  mov r9, QWORD PTR [rbp-2760]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 504 0
-  mov rbx, 106
-  mov r12, 103
-  mov QWORD PTR [rbp-2800], 0
-  mov QWORD PTR [rbp-2776], 0
-  mov QWORD PTR [rbp-2784], 0
-.loc 1 505 0
-  mov QWORD PTR [rbp-2792], 2
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JG]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 504 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2800]
-  mov rcx, QWORD PTR [rbp-2776]
-  mov r8, QWORD PTR [rbp-2784]
-  mov r9, QWORD PTR [rbp-2792]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 507 0
-  mov rbx, 106
-  mov r12, 97
-  mov QWORD PTR [rbp-2832], 0
-  mov QWORD PTR [rbp-2808], 0
-  mov QWORD PTR [rbp-2816], 0
-  mov QWORD PTR [rbp-2824], 2
-  mov r14, 2
-.loc 1 508 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JA]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 505 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2832]
-  mov rcx, QWORD PTR [rbp-2808]
-  mov r8, QWORD PTR [rbp-2816]
-  mov r9, QWORD PTR [rbp-2824]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 509 0
-  mov rbx, 106
-  mov r12, 98
-.loc 1 510 0
-  mov QWORD PTR [rbp-2864], 0
-  mov QWORD PTR [rbp-2840], 0
-  mov QWORD PTR [rbp-2848], 0
-  mov QWORD PTR [rbp-2856], 2
-.loc 1 511 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JB]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 509 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2864]
-  mov rcx, QWORD PTR [rbp-2840]
-  mov r8, QWORD PTR [rbp-2848]
-  mov r9, QWORD PTR [rbp-2856]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 512 0
-  mov rbx, 109
-  mov r12, 111
-  mov QWORD PTR [rbp-2896], 118
-  mov QWORD PTR [rbp-2872], 0
-.loc 1 513 0
-  mov QWORD PTR [rbp-2880], 0
-  mov QWORD PTR [rbp-2888], 3
-  mov r14, 2
-.loc 1 514 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOV]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 511 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2896]
-  mov rcx, QWORD PTR [rbp-2872]
-  mov r8, QWORD PTR [rbp-2880]
-  mov r9, QWORD PTR [rbp-2888]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 515 0
-  mov rbx, 108
-  mov r12, 101
-  mov QWORD PTR [rbp-2928], 97
-  mov QWORD PTR [rbp-2904], 0
-.loc 1 516 0
-  mov QWORD PTR [rbp-2912], 0
-  mov QWORD PTR [rbp-2920], 3
-  mov r14, 2
-.loc 1 517 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_LEA]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 515 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2928]
-  mov rcx, QWORD PTR [rbp-2904]
-  mov r8, QWORD PTR [rbp-2912]
-  mov r9, QWORD PTR [rbp-2920]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 518 0
-  mov rbx, 97
-  mov r12, 100
-  mov QWORD PTR [rbp-2960], 100
-  mov QWORD PTR [rbp-2936], 0
-.loc 1 519 0
-  mov QWORD PTR [rbp-2944], 0
-  mov QWORD PTR [rbp-2952], 3
-  mov r14, 2
-.loc 1 520 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 517 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2960]
-  mov rcx, QWORD PTR [rbp-2936]
-  mov r8, QWORD PTR [rbp-2944]
-  mov r9, QWORD PTR [rbp-2952]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 523 0
-  mov rbx, 115
-  mov r12, 117
-  mov QWORD PTR [rbp-2992], 98
-  mov QWORD PTR [rbp-2968], 0
-  mov QWORD PTR [rbp-2976], 0
-  mov QWORD PTR [rbp-2984], 3
-.loc 1 525 0
-  mov r14, 2
-.loc 1 527 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 520 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-2992]
-  mov rcx, QWORD PTR [rbp-2968]
-  mov r8, QWORD PTR [rbp-2976]
-  mov r9, QWORD PTR [rbp-2984]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 527 0
-  mov rbx, 115
-  mov r12, 104
-  mov QWORD PTR [rbp-3024], 108
-  mov QWORD PTR [rbp-3000], 0
-  mov QWORD PTR [rbp-3008], 0
-  mov QWORD PTR [rbp-3016], 3
-.loc 1 528 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SHL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 527 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3024]
-  mov rcx, QWORD PTR [rbp-3000]
-  mov r8, QWORD PTR [rbp-3008]
-  mov r9, QWORD PTR [rbp-3016]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 528 0
-  mov rbx, 115
-  mov r12, 104
-  mov QWORD PTR [rbp-3056], 114
-  mov QWORD PTR [rbp-3032], 0
-  mov QWORD PTR [rbp-3040], 0
-.loc 1 529 0
-  mov QWORD PTR [rbp-3048], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SHR]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 528 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3056]
-  mov rcx, QWORD PTR [rbp-3032]
-  mov r8, QWORD PTR [rbp-3040]
-  mov r9, QWORD PTR [rbp-3048]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 530 0
-  mov rbx, 115
-  mov r12, 97
-  mov QWORD PTR [rbp-3088], 114
-  mov QWORD PTR [rbp-3064], 0
-  mov QWORD PTR [rbp-3072], 0
-  mov QWORD PTR [rbp-3080], 3
-.loc 1 531 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SAR]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 530 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3088]
-  mov rcx, QWORD PTR [rbp-3064]
-  mov r8, QWORD PTR [rbp-3072]
-  mov r9, QWORD PTR [rbp-3080]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 534 0
-  mov rbx, 100
-  mov r12, 105
-  mov QWORD PTR [rbp-3120], 118
-  mov QWORD PTR [rbp-3096], 0
-  mov QWORD PTR [rbp-3104], 0
-  mov QWORD PTR [rbp-3112], 3
-  mov r14, 2
-.loc 1 535 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_DIV]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 534 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3120]
-  mov rcx, QWORD PTR [rbp-3096]
-  mov r8, QWORD PTR [rbp-3104]
-  mov r9, QWORD PTR [rbp-3112]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 535 0
-  mov rbx, 99
-  mov r12, 113
-.loc 1 536 0
-  mov QWORD PTR [rbp-3152], 111
-  mov QWORD PTR [rbp-3128], 0
-  mov QWORD PTR [rbp-3136], 0
-.loc 1 537 0
-  mov QWORD PTR [rbp-3144], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CQO]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 535 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3152]
-  mov rcx, QWORD PTR [rbp-3128]
-  mov r8, QWORD PTR [rbp-3136]
-  mov r9, QWORD PTR [rbp-3144]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 537 0
-  mov rbx, 99
-.loc 1 538 0
-  mov r12, 100
-  mov QWORD PTR [rbp-3184], 113
-.loc 1 539 0
-  mov QWORD PTR [rbp-3160], 0
-.loc 1 542 0
-  mov QWORD PTR [rbp-3168], 0
-  mov QWORD PTR [rbp-3176], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CDQ]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 537 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3184]
-  mov rcx, QWORD PTR [rbp-3160]
-  mov r8, QWORD PTR [rbp-3168]
-  mov r9, QWORD PTR [rbp-3176]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 543 0
-  mov rbx, 99
-  mov r12, 109
-  mov QWORD PTR [rbp-3216], 112
-  mov QWORD PTR [rbp-3192], 0
-  mov QWORD PTR [rbp-3200], 0
-  mov QWORD PTR [rbp-3208], 3
-  mov r14, 2
-.loc 1 544 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CMP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 543 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3216]
-  mov rcx, QWORD PTR [rbp-3192]
-  mov r8, QWORD PTR [rbp-3200]
-  mov r9, QWORD PTR [rbp-3208]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 544 0
-  mov rbx, 99
-  mov r12, 108
-  mov QWORD PTR [rbp-3248], 100
-  mov QWORD PTR [rbp-3224], 0
-  mov QWORD PTR [rbp-3232], 0
-  mov QWORD PTR [rbp-3240], 3
-  mov r14, 2
-.loc 1 545 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CLD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 544 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3248]
-  mov rcx, QWORD PTR [rbp-3224]
-  mov r8, QWORD PTR [rbp-3232]
-  mov r9, QWORD PTR [rbp-3240]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 546 0
-  mov rbx, 110
-.loc 1 548 0
-  mov r12, 101
-.loc 1 551 0
-  mov QWORD PTR [rbp-3280], 103
-  mov QWORD PTR [rbp-3256], 0
-  mov QWORD PTR [rbp-3264], 0
-  mov QWORD PTR [rbp-3272], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_NEG]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 545 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3280]
-  mov rcx, QWORD PTR [rbp-3256]
-  mov r8, QWORD PTR [rbp-3264]
-  mov r9, QWORD PTR [rbp-3272]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 552 0
-  mov rbx, 110
-  mov r12, 111
-  mov QWORD PTR [rbp-3312], 116
-  mov QWORD PTR [rbp-3288], 0
-  mov QWORD PTR [rbp-3296], 0
-  mov QWORD PTR [rbp-3304], 3
-  mov r14, 2
-.loc 1 553 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_NOT]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 552 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3312]
-  mov rcx, QWORD PTR [rbp-3288]
-  mov r8, QWORD PTR [rbp-3296]
-  mov r9, QWORD PTR [rbp-3304]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 553 0
-  mov rbx, 110
-  mov r12, 111
-  mov QWORD PTR [rbp-3344], 112
-.loc 1 554 0
-  mov QWORD PTR [rbp-3320], 0
-  mov QWORD PTR [rbp-3328], 0
-  mov QWORD PTR [rbp-3336], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_NOP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 553 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3344]
-  mov rcx, QWORD PTR [rbp-3320]
-  mov r8, QWORD PTR [rbp-3328]
-  mov r9, QWORD PTR [rbp-3336]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 555 0
-  mov rbx, 97
-  mov r12, 110
-.loc 1 556 0
-  mov QWORD PTR [rbp-3376], 100
-  mov QWORD PTR [rbp-3352], 0
-  mov QWORD PTR [rbp-3360], 0
-.loc 1 557 0
-  mov QWORD PTR [rbp-3368], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 555 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3376]
-  mov rcx, QWORD PTR [rbp-3352]
-  mov r8, QWORD PTR [rbp-3360]
-  mov r9, QWORD PTR [rbp-3368]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 558 0
-  mov rbx, 120
-  mov r12, 111
-.loc 1 559 0
-  mov QWORD PTR [rbp-3408], 114
-  mov QWORD PTR [rbp-3384], 0
-  mov QWORD PTR [rbp-3392], 0
-  mov QWORD PTR [rbp-3400], 3
-.loc 1 560 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_XOR]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 558 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3408]
-  mov rcx, QWORD PTR [rbp-3384]
-  mov r8, QWORD PTR [rbp-3392]
-  mov r9, QWORD PTR [rbp-3400]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 563 0
-  mov rbx, 114
-  mov r12, 101
-  mov QWORD PTR [rbp-3440], 116
-.loc 1 564 0
-  mov QWORD PTR [rbp-3416], 0
-  mov QWORD PTR [rbp-3424], 0
-  mov QWORD PTR [rbp-3432], 3
-  mov r14, 2
-.loc 1 565 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_RET]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 561 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3440]
-  mov rcx, QWORD PTR [rbp-3416]
-  mov r8, QWORD PTR [rbp-3424]
-  mov r9, QWORD PTR [rbp-3432]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 565 0
-  mov rbx, 114
-  mov r12, 101
-  mov QWORD PTR [rbp-3472], 112
-  mov QWORD PTR [rbp-3448], 0
-  mov QWORD PTR [rbp-3456], 0
-  mov QWORD PTR [rbp-3464], 3
-.loc 1 566 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_REP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 565 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3472]
-  mov rcx, QWORD PTR [rbp-3448]
-  mov r8, QWORD PTR [rbp-3456]
-  mov r9, QWORD PTR [rbp-3464]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 566 0
-  mov rbx, 106
-  mov r12, 109
-  mov QWORD PTR [rbp-3504], 112
-  mov QWORD PTR [rbp-3480], 0
-  mov QWORD PTR [rbp-3488], 0
-  mov QWORD PTR [rbp-3496], 3
-  mov r14, 2
-.loc 1 567 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JMP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 566 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3504]
-  mov rcx, QWORD PTR [rbp-3480]
-  mov r8, QWORD PTR [rbp-3488]
-  mov r9, QWORD PTR [rbp-3496]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 570 0
-  mov rbx, 106
-.loc 1 571 0
-  mov r12, 110
-.loc 1 573 0
-  mov QWORD PTR [rbp-3536], 122
-  mov QWORD PTR [rbp-3512], 0
-  mov QWORD PTR [rbp-3520], 0
-.loc 1 575 0
-  mov QWORD PTR [rbp-3528], 3
-.loc 1 577 0
-  mov r14, 2
-.loc 1 581 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JNZ]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 568 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3536]
-  mov rcx, QWORD PTR [rbp-3512]
-  mov r8, QWORD PTR [rbp-3520]
-  mov r9, QWORD PTR [rbp-3528]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 581 0
-  mov rbx, 106
-  mov r12, 110
-  mov QWORD PTR [rbp-3568], 101
-.loc 1 582 0
-  mov QWORD PTR [rbp-3544], 0
-  mov QWORD PTR [rbp-3552], 0
-  mov QWORD PTR [rbp-3560], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JNE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 581 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3568]
-  mov rcx, QWORD PTR [rbp-3544]
-  mov r8, QWORD PTR [rbp-3552]
-  mov r9, QWORD PTR [rbp-3560]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 583 0
-  mov rbx, 106
-  mov r12, 108
-  mov QWORD PTR [rbp-3600], 101
-  mov QWORD PTR [rbp-3576], 0
-  mov QWORD PTR [rbp-3584], 0
-  mov QWORD PTR [rbp-3592], 3
-  mov r14, 2
-.loc 1 584 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JLE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 582 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3600]
-  mov rcx, QWORD PTR [rbp-3576]
-  mov r8, QWORD PTR [rbp-3584]
-  mov r9, QWORD PTR [rbp-3592]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 584 0
-  mov rbx, 106
-  mov r12, 103
-  mov QWORD PTR [rbp-3632], 101
-  mov QWORD PTR [rbp-3608], 0
-  mov QWORD PTR [rbp-3616], 0
-.loc 1 588 0
-  mov QWORD PTR [rbp-3624], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JGE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 584 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3632]
-  mov rcx, QWORD PTR [rbp-3608]
-  mov r8, QWORD PTR [rbp-3616]
-  mov r9, QWORD PTR [rbp-3624]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 589 0
-  mov rbx, 106
-  mov r12, 97
-  mov QWORD PTR [rbp-3664], 101
-  mov QWORD PTR [rbp-3640], 0
-  mov QWORD PTR [rbp-3648], 0
-.loc 1 591 0
-  mov QWORD PTR [rbp-3656], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JAE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 588 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3664]
-  mov rcx, QWORD PTR [rbp-3640]
-  mov r8, QWORD PTR [rbp-3648]
-  mov r9, QWORD PTR [rbp-3656]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 592 0
-  mov rbx, 106
-  mov r12, 98
-  mov QWORD PTR [rbp-3696], 101
-  mov QWORD PTR [rbp-3672], 0
-  mov QWORD PTR [rbp-3680], 0
-  mov QWORD PTR [rbp-3688], 3
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_JBE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3696]
-  mov rcx, QWORD PTR [rbp-3672]
-  mov r8, QWORD PTR [rbp-3680]
-  mov r9, QWORD PTR [rbp-3688]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 593 0
-  mov rbx, 112
-  mov r12, 111
-.loc 1 594 0
-  mov QWORD PTR [rbp-3728], 112
-  mov QWORD PTR [rbp-3704], 0
-  mov QWORD PTR [rbp-3712], 0
-.loc 1 595 0
-  mov QWORD PTR [rbp-3720], 3
-  mov r14, 2
-.loc 1 596 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_POP]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 593 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3728]
-  mov rcx, QWORD PTR [rbp-3704]
-  mov r8, QWORD PTR [rbp-3712]
-  mov r9, QWORD PTR [rbp-3720]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 597 0
-  mov rbx, 112
-  mov r12, 117
-  mov QWORD PTR [rbp-3760], 115
-  mov QWORD PTR [rbp-3736], 104
-.loc 1 598 0
-  mov QWORD PTR [rbp-3744], 0
-  mov QWORD PTR [rbp-3752], 4
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_PUSH]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 597 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3760]
-  mov rcx, QWORD PTR [rbp-3736]
-  mov r8, QWORD PTR [rbp-3744]
-  mov r9, QWORD PTR [rbp-3752]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 599 0
-  mov rbx, 105
-  mov r12, 109
-  mov QWORD PTR [rbp-3792], 117
-  mov QWORD PTR [rbp-3768], 108
-  mov QWORD PTR [rbp-3776], 0
-  mov QWORD PTR [rbp-3784], 4
-  mov r14, 2
-.loc 1 600 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_IMUL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 598 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3792]
-  mov rcx, QWORD PTR [rbp-3768]
-  mov r8, QWORD PTR [rbp-3776]
-  mov r9, QWORD PTR [rbp-3784]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 600 0
-  mov rbx, 105
-  mov r12, 100
-  mov QWORD PTR [rbp-3824], 105
-.loc 1 601 0
-  mov QWORD PTR [rbp-3800], 118
-  mov QWORD PTR [rbp-3808], 0
-  mov QWORD PTR [rbp-3816], 4
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_IDIV]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 600 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3824]
-  mov rcx, QWORD PTR [rbp-3800]
-  mov r8, QWORD PTR [rbp-3808]
-  mov r9, QWORD PTR [rbp-3816]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 601 0
-  mov rbx, 116
-  mov r12, 101
-.loc 1 602 0
-  mov QWORD PTR [rbp-3856], 115
-  mov QWORD PTR [rbp-3832], 116
-.loc 1 606 0
-  mov QWORD PTR [rbp-3840], 0
-  mov QWORD PTR [rbp-3848], 4
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_TEST]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 601 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3856]
-  mov rcx, QWORD PTR [rbp-3832]
-  mov r8, QWORD PTR [rbp-3840]
-  mov r9, QWORD PTR [rbp-3848]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 606 0
-  mov rbx, 115
-  mov r12, 101
-  mov QWORD PTR [rbp-3888], 116
-.loc 1 607 0
-  mov QWORD PTR [rbp-3864], 101
-  mov QWORD PTR [rbp-3872], 0
-  mov QWORD PTR [rbp-3880], 4
-  mov r14, 2
-.loc 1 608 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 606 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3888]
-  mov rcx, QWORD PTR [rbp-3864]
-  mov r8, QWORD PTR [rbp-3872]
-  mov r9, QWORD PTR [rbp-3880]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 608 0
-  mov rbx, 115
-  mov r12, 101
-.loc 1 609 0
-  mov QWORD PTR [rbp-3920], 116
-  mov QWORD PTR [rbp-3896], 108
-  mov QWORD PTR [rbp-3904], 0
-  mov QWORD PTR [rbp-3912], 4
-  mov r14, 2
-.loc 1 610 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 608 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3920]
-  mov rcx, QWORD PTR [rbp-3896]
-  mov r8, QWORD PTR [rbp-3904]
-  mov r9, QWORD PTR [rbp-3912]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 610 0
-  mov rbx, 115
-  mov r12, 101
-.loc 1 611 0
-  mov QWORD PTR [rbp-3952], 116
-  mov QWORD PTR [rbp-3928], 103
-  mov QWORD PTR [rbp-3936], 0
-  mov QWORD PTR [rbp-3944], 4
-  mov r14, 2
-.loc 1 613 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETG]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 610 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3952]
-  mov rcx, QWORD PTR [rbp-3928]
-  mov r8, QWORD PTR [rbp-3936]
-  mov r9, QWORD PTR [rbp-3944]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 613 0
-  mov rbx, 115
-.loc 1 614 0
-  mov r12, 101
-  mov QWORD PTR [rbp-3984], 116
-  mov QWORD PTR [rbp-3960], 98
-  mov QWORD PTR [rbp-3968], 0
-  mov QWORD PTR [rbp-3976], 4
-  mov r14, 2
-.loc 1 616 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETB]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 613 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-3984]
-  mov rcx, QWORD PTR [rbp-3960]
-  mov r8, QWORD PTR [rbp-3968]
-  mov r9, QWORD PTR [rbp-3976]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 616 0
-  mov rbx, 115
-  mov r12, 101
-.loc 1 617 0
-  mov QWORD PTR [rbp-4016], 116
-  mov QWORD PTR [rbp-3992], 97
-  mov QWORD PTR [rbp-4000], 0
-  mov QWORD PTR [rbp-4008], 4
-  mov r14, 2
-.loc 1 618 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETA]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 616 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4016]
-  mov rcx, QWORD PTR [rbp-3992]
-  mov r8, QWORD PTR [rbp-4000]
-  mov r9, QWORD PTR [rbp-4008]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 618 0
-  mov rbx, 99
-  mov r12, 97
-  mov QWORD PTR [rbp-4048], 108
-.loc 1 619 0
-  mov QWORD PTR [rbp-4024], 108
-  mov QWORD PTR [rbp-4032], 0
-  mov QWORD PTR [rbp-4040], 4
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CALL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 618 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4048]
-  mov rcx, QWORD PTR [rbp-4024]
-  mov r8, QWORD PTR [rbp-4032]
-  mov r9, QWORD PTR [rbp-4040]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 620 0
-  mov rbx, 109
-  mov r12, 111
-  mov QWORD PTR [rbp-4080], 118
-  mov QWORD PTR [rbp-4056], 113
-  mov QWORD PTR [rbp-4064], 0
-  mov QWORD PTR [rbp-4072], 4
-  mov r14, 2
-.loc 1 621 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVQ]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 619 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4080]
-  mov rcx, QWORD PTR [rbp-4056]
-  mov r8, QWORD PTR [rbp-4064]
-  mov r9, QWORD PTR [rbp-4072]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 621 0
-  mov rbx, 109
-  mov r12, 111
-  mov QWORD PTR [rbp-4112], 118
-  mov QWORD PTR [rbp-4088], 115
-  mov QWORD PTR [rbp-4096], 120
-.loc 1 622 0
-  mov QWORD PTR [rbp-4104], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 621 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4112]
-  mov rcx, QWORD PTR [rbp-4088]
-  mov r8, QWORD PTR [rbp-4096]
-  mov r9, QWORD PTR [rbp-4104]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 622 0
-  mov rbx, 109
-  mov r12, 111
-  mov QWORD PTR [rbp-4144], 118
-  mov QWORD PTR [rbp-4120], 122
-  mov QWORD PTR [rbp-4128], 120
-  mov QWORD PTR [rbp-4136], 5
-.loc 1 624 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVZX]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 622 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4144]
-  mov rcx, QWORD PTR [rbp-4120]
-  mov r8, QWORD PTR [rbp-4128]
-  mov r9, QWORD PTR [rbp-4136]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 624 0
-  mov rbx, 109
-.loc 1 625 0
-  mov r12, 111
-  mov QWORD PTR [rbp-4176], 118
-  mov QWORD PTR [rbp-4152], 115
-  mov QWORD PTR [rbp-4160], 98
-.loc 1 626 0
-  mov QWORD PTR [rbp-4168], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSB]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 624 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4176]
-  mov rcx, QWORD PTR [rbp-4152]
-  mov r8, QWORD PTR [rbp-4160]
-  mov r9, QWORD PTR [rbp-4168]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 626 0
-  mov rbx, 115
-  mov r12, 101
-  mov QWORD PTR [rbp-4208], 116
-  mov QWORD PTR [rbp-4184], 110
-  mov QWORD PTR [rbp-4192], 101
-.loc 1 627 0
-  mov QWORD PTR [rbp-4200], 5
-.loc 1 628 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETNE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 626 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4208]
-  mov rcx, QWORD PTR [rbp-4184]
-  mov r8, QWORD PTR [rbp-4192]
-  mov r9, QWORD PTR [rbp-4200]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 628 0
-  mov rbx, 115
-  mov r12, 101
-  mov QWORD PTR [rbp-4240], 116
-  mov QWORD PTR [rbp-4216], 108
-  mov QWORD PTR [rbp-4224], 101
-  mov QWORD PTR [rbp-4232], 5
-.loc 1 629 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETLE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 628 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4240]
-  mov rcx, QWORD PTR [rbp-4216]
-  mov r8, QWORD PTR [rbp-4224]
-  mov r9, QWORD PTR [rbp-4232]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 629 0
-  mov rbx, 115
-  mov r12, 101
-  mov QWORD PTR [rbp-4272], 116
-  mov QWORD PTR [rbp-4248], 103
-  mov QWORD PTR [rbp-4256], 101
-.loc 1 630 0
-  mov QWORD PTR [rbp-4264], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETGE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 629 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4272]
-  mov rcx, QWORD PTR [rbp-4248]
-  mov r8, QWORD PTR [rbp-4256]
-  mov r9, QWORD PTR [rbp-4264]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 631 0
-  mov rbx, 115
-  mov r12, 101
-  mov QWORD PTR [rbp-4304], 116
-.loc 1 632 0
-  mov QWORD PTR [rbp-4280], 98
-  mov QWORD PTR [rbp-4288], 101
-  mov QWORD PTR [rbp-4296], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETBE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 630 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4304]
-  mov rcx, QWORD PTR [rbp-4280]
-  mov r8, QWORD PTR [rbp-4288]
-  mov r9, QWORD PTR [rbp-4296]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 632 0
-  mov rbx, 115
-  mov r12, 101
-  mov QWORD PTR [rbp-4336], 116
-  mov QWORD PTR [rbp-4312], 97
-  mov QWORD PTR [rbp-4320], 101
-  mov QWORD PTR [rbp-4328], 5
-.loc 1 633 0
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SETAE]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 632 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4336]
-  mov rcx, QWORD PTR [rbp-4312]
-  mov r8, QWORD PTR [rbp-4320]
-  mov r9, QWORD PTR [rbp-4328]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 633 0
-  mov rbx, 97
-  mov r12, 100
-  mov QWORD PTR [rbp-4368], 100
-  mov QWORD PTR [rbp-4344], 115
-  mov QWORD PTR [rbp-4352], 100
-  mov QWORD PTR [rbp-4360], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_ADDSD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4368]
-  mov rcx, QWORD PTR [rbp-4344]
-  mov r8, QWORD PTR [rbp-4352]
-  mov r9, QWORD PTR [rbp-4360]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 634 0
-  mov rbx, 115
-  mov r12, 117
-  mov QWORD PTR [rbp-4400], 98
-  mov QWORD PTR [rbp-4376], 115
-  mov QWORD PTR [rbp-4384], 100
-  mov QWORD PTR [rbp-4392], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SUBSD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4400]
-  mov rcx, QWORD PTR [rbp-4376]
-  mov r8, QWORD PTR [rbp-4384]
-  mov r9, QWORD PTR [rbp-4392]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-  mov rbx, 109
-.loc 1 635 0
-  mov r12, 117
-  mov QWORD PTR [rbp-4432], 108
-  mov QWORD PTR [rbp-4408], 115
-  mov QWORD PTR [rbp-4416], 100
-  mov QWORD PTR [rbp-4424], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MULSD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 634 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4432]
-  mov rcx, QWORD PTR [rbp-4408]
-  mov r8, QWORD PTR [rbp-4416]
-  mov r9, QWORD PTR [rbp-4424]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 635 0
-  mov rbx, 100
-  mov r12, 105
-  mov QWORD PTR [rbp-4464], 118
-  mov QWORD PTR [rbp-4440], 115
-.loc 1 636 0
-  mov QWORD PTR [rbp-4448], 100
-.loc 1 638 0
-  mov QWORD PTR [rbp-4456], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_DIVSD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 635 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4464]
-  mov rcx, QWORD PTR [rbp-4440]
-  mov r8, QWORD PTR [rbp-4448]
-  mov r9, QWORD PTR [rbp-4456]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 639 0
-  mov rbx, 120
-  mov r12, 111
-  mov QWORD PTR [rbp-4496], 114
-  mov QWORD PTR [rbp-4472], 112
-  mov QWORD PTR [rbp-4480], 100
-.loc 1 640 0
-  mov QWORD PTR [rbp-4488], 5
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_XORPD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 638 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4496]
-  mov rcx, QWORD PTR [rbp-4472]
-  mov r8, QWORD PTR [rbp-4480]
-  mov r9, QWORD PTR [rbp-4488]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 641 0
-  mov rbx, 109
-.loc 1 642 0
-  mov r12, 111
-  mov QWORD PTR [rbp-4528], 118
-  mov QWORD PTR [rbp-4504], 115
-  mov QWORD PTR [rbp-4512], 120
-  mov QWORD PTR [rbp-4520], 6
-.loc 1 643 0
-  mov r14, 2
-.loc 1 644 0
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSXD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 641 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4528]
-  mov rcx, QWORD PTR [rbp-4504]
-  mov r8, QWORD PTR [rbp-4512]
-  mov r9, QWORD PTR [rbp-4520]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 649 0
-  mov rbx, 115
-  mov r12, 121
-  mov QWORD PTR [rbp-4560], 115
-  mov QWORD PTR [rbp-4536], 99
-  mov QWORD PTR [rbp-4544], 97
-  mov QWORD PTR [rbp-4552], 7
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_SYSCALL]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 645 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4560]
-  mov rcx, QWORD PTR [rbp-4536]
-  mov r8, QWORD PTR [rbp-4544]
-  mov r9, QWORD PTR [rbp-4552]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 649 0
-  mov rbx, 99
-.loc 1 650 0
-  mov r12, 118
-  mov QWORD PTR [rbp-4592], 116
-  mov QWORD PTR [rbp-4568], 115
-  mov QWORD PTR [rbp-4576], 105
-  mov QWORD PTR [rbp-4584], 8
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSI2SD]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 649 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4592]
-  mov rcx, QWORD PTR [rbp-4568]
-  mov r8, QWORD PTR [rbp-4576]
-  mov r9, QWORD PTR [rbp-4584]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 651 0
-  mov rbx, 99
-  mov r12, 118
-  mov QWORD PTR [rbp-4624], 116
-  mov QWORD PTR [rbp-4600], 116
-  mov QWORD PTR [rbp-4608], 115
-.loc 1 652 0
-  mov QWORD PTR [rbp-4616], 9
-  mov r14, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
-  mov r15, r8
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 650 0
-  mov r15, r13
-  push r15
-  mov r15, r14
-  push r15
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, QWORD PTR [rbp-4624]
-  mov rcx, QWORD PTR [rbp-4600]
-  mov r8, QWORD PTR [rbp-4608]
-  mov r9, QWORD PTR [rbp-4616]
-  call _caustic_assembler_lexer_cst_ht_insert
-  mov rbx, rax
-  add rsp, 16
-.loc 1 654 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ht_ready]
-  mov r12, 1
-  mov rax, r12
-  mov r15, rbx
-  mov DWORD PTR [r15], eax
-  mov rbx, 0
-  mov rax, rbx
-  add rsp, 4632
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-_caustic_assembler_lexer_cst_tokenize:
-  push rbp
-  mov rbp, rsp
-  push rbx
-  push r12
-  push r13
-  push r14
-  push r15
-  sub rsp, 8728
-.loc 1 655 0
-  mov QWORD PTR [rbp-354], rdi
-.loc 1 5533 0
-  mov QWORD PTR [rbp-2714], rsi
-.loc 1 5538 0
-  mov QWORD PTR [rbp-2698], rdx
-.loc 1 658 0
-  lea r14, [rip+_caustic_assembler_lexer_cst_char_tab_ready]
-  mov r15, r14
-  movsxd r15, DWORD PTR [r15]
-  mov r8, r15
-  mov r15, r8
-  cmp r15, 0
-  jne .L1564
-.loc 1 657 0
-.loc 1 658 0
-  call _caustic_assembler_lexer_cst_init_char_tab
-  mov r14, rax
-.loc 1 657 0
-  jmp .L1565
-.L1564:
-.L1565:
-.loc 1 658 0
-  lea r14, [rip+_caustic_assembler_lexer_cst_ri_first_ready]
-  mov r15, r14
-  movsxd r15, DWORD PTR [r15]
-  mov r8, r15
-.loc 1 659 0
-.loc 1 658 0
-  mov r15, r8
-  cmp r15, 0
-  jne .L1566
-.loc 1 659 0
-  call _caustic_assembler_lexer_cst_init_ri_first
-  mov r14, rax
-.loc 1 658 0
-  jmp .L1567
-.L1566:
-.L1567:
-.loc 1 659 0
-  lea r14, [rip+_caustic_assembler_lexer_cst_ht_ready]
-  mov r15, r14
-  movsxd r15, DWORD PTR [r15]
-  mov r8, r15
-  mov r15, r8
-  cmp r15, 0
-  jne .L1568
-.loc 1 662 0
-  call _caustic_assembler_lexer_cst_init_ht
-  mov r14, rax
-.loc 1 659 0
-  jmp .L1569
-.L1568:
-.L1569:
-.loc 1 664 0
-  mov rax, QWORD PTR [rbp-2698]
-  mov r15, 3
-  push rdx
-  cqo
-  idiv r15
-  mov r15, rax
-  pop rdx
-  mov r14, r15
-  mov r15, r14
-  movsxd r15, r15d
-  mov r8, r15
-.loc 1 665 0
-.loc 1 664 0
-  mov r14, r8
-  add r14, 4096
-.loc 1 662 0
-.loc 1 665 0
-  xor r10, r10
-  lea rbx, [rbp-8674]
-.loc 1 666 0
-  mov r15, r14
-  movsxd r15, r15d
-  mov r8, r15
-.loc 1 665 0
-  mov rdi, rbx
-  mov rsi, r8
-  call _caustic_assembler_lexer_cst_tl_init
-  mov r14, rax
-  lea r14, [rbp-84]
-  mov rdi, r14
-  mov rsi, rbx
-  mov rcx, 16
-  cld
-  rep movsb
-.loc 1 667 0
-  mov rbx, 0
-.loc 1 666 0
-  mov rax, rbx
-  mov QWORD PTR [rbp-92], rax
-.loc 1 667 0
-  mov rbx, 1
-  mov rax, rbx
-  mov DWORD PTR [rbp-96], eax
-  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov r14, 0
-  mov rax, r14
-  mov r15, rbx
-  mov QWORD PTR [r15], rax
-  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-.loc 1 668 0
-.loc 1 667 0
-  mov r14, rbx
-  add r14, 8
-.loc 1 668 0
-  mov rbx, 0
-.loc 1 667 0
-  mov rax, rbx
-  mov r15, r14
-  mov QWORD PTR [r15], rax
-.loc 1 668 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-.loc 1 669 0
-.loc 1 668 0
-  mov r14, rbx
-  add r14, 16
-.loc 1 669 0
-  mov rbx, 0
-.loc 1 668 0
-  mov rax, rbx
-  mov r15, r14
-  mov QWORD PTR [r15], rax
-.loc 1 669 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov r14, rbx
-  add r14, 24
-  mov rbx, 0
-  mov rax, rbx
-  mov r15, r14
-  mov QWORD PTR [r15], rax
-  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov r14, rbx
-  add r14, 32
-  mov rbx, 0
-  mov rax, rbx
-  mov r15, r14
-  mov QWORD PTR [r15], rax
-.loc 1 670 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov r14, rbx
-  add r14, 40
-  mov rbx, 0
-  mov rax, rbx
-  mov r15, r14
-  mov QWORD PTR [r15], rax
-  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-.loc 1 671 0
-  mov r14, rbx
-  add r14, 48
-  mov rbx, 0
-  mov rax, rbx
-  mov r15, r14
-  mov QWORD PTR [r15], rax
-.loc 1 672 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov r14, rbx
-  add r14, 56
-.loc 1 673 0
-  mov rbx, 0
-.loc 1 672 0
-  mov rax, rbx
-  mov r15, r14
-  mov QWORD PTR [r15], rax
-.loc 1 675 0
-.loc 1 674 0
-.loc 1 678 0
-  mov r15, QWORD PTR [rbp-2714]
-  mov QWORD PTR [rbp-394], r15
-.loc 1 677 0
-.L1570:
-.loc 1 678 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-362], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1571
-  mov r15, QWORD PTR [rbp-362]
-  mov QWORD PTR [rbp-378], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-378]
-  mov QWORD PTR [rbp-386], r15
-  movzx r15, BYTE PTR [r15]
-  mov r14, r15
-.loc 1 679 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-418], r15
-.loc 1 680 0
-.loc 1 679 0
-  cmp r15, 32
-  je .L1576
-.loc 1 680 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-434], r15
-.loc 1 681 0
-.loc 1 680 0
-  cmp r15, 9
-  je .L1576
-.loc 1 679 0
-  mov QWORD PTR [rbp-410], 0
-  jmp .L1577
-.L1576:
-  mov QWORD PTR [rbp-410], 1
-.L1577:
-  mov r15, QWORD PTR [rbp-410]
-  test r15, r15
-  jnz .L1574
-.loc 1 681 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-450], r15
-.loc 1 683 0
-.loc 1 681 0
-  cmp r15, 13
-  je .L1574
-.loc 1 679 0
-  mov QWORD PTR [rbp-402], 0
-  jmp .L1575
-.L1574:
-  mov QWORD PTR [rbp-402], 1
-.L1575:
-  mov r15, QWORD PTR [rbp-402]
-  test r15, r15
-  jz .L1572
-.loc 1 685 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-466], r15
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-474], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-482], r15
-  add r15, 1
-  mov QWORD PTR [rbp-490], r15
-  mov rax, QWORD PTR [rbp-490]
-  mov r15, QWORD PTR [rbp-466]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-498], r15
-  add r15, 1
-  mov QWORD PTR [rbp-506], r15
-  mov rax, QWORD PTR [rbp-506]
-  mov QWORD PTR [rbp-92], rax
-.L1578:
-.loc 1 687 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-522], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1580
-  mov r15, QWORD PTR [rbp-522]
-  mov QWORD PTR [rbp-538], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-538]
-  mov QWORD PTR [rbp-546], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-554], r15
-  cmp r15, 32
-  jne .L1580
-  mov QWORD PTR [rbp-514], 1
-  jmp .L1581
-.L1580:
-  mov QWORD PTR [rbp-514], 0
-.L1581:
-  mov r15, QWORD PTR [rbp-514]
-  test r15, r15
-  jz .L1579
-.loc 1 688 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-570], r15
-  add r15, 1
-  mov QWORD PTR [rbp-578], r15
-.loc 1 687 0
-  mov rax, QWORD PTR [rbp-578]
-  mov QWORD PTR [rbp-92], rax
-  jmp .L1578
-.L1579:
-.loc 1 679 0
-  jmp .L1573
-.L1572:
-.loc 1 688 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-586], r15
-.loc 1 689 0
-.loc 1 688 0
-  cmp r15, 10
-  jne .L1582
-.loc 1 689 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-602], r15
-  add r15, 8
-  mov QWORD PTR [rbp-610], r15
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-618], r15
-.loc 1 690 0
-.loc 1 689 0
-  add r15, 8
-  mov QWORD PTR [rbp-626], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-634], r15
-.loc 1 690 0
-.loc 1 689 0
-  add r15, 1
-  mov QWORD PTR [rbp-642], r15
-  mov rax, QWORD PTR [rbp-642]
-  mov r15, QWORD PTR [rbp-610]
-  mov QWORD PTR [r15], rax
-.loc 1 690 0
-  xor r10, r10
-.loc 1 693 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-650], r15
-.loc 1 692 0
-  mov rdi, QWORD PTR [rbp-650]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-658], rax
-.loc 1 690 0
-.loc 1 693 0
-.loc 1 694 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_NEWLINE]
-  mov QWORD PTR [rbp-674], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-666], r15
-.loc 1 693 0
-  mov rax, QWORD PTR [rbp-666]
-  mov r15, QWORD PTR [rbp-658]
-  mov DWORD PTR [r15], eax
-.loc 1 694 0
-  mov r15, QWORD PTR [rbp-658]
-  add r15, 4
-  mov QWORD PTR [rbp-682], r15
-.loc 1 696 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-690], r15
-  mov r15, QWORD PTR [rbp-394]
-  add r15, QWORD PTR [rbp-690]
-  mov QWORD PTR [rbp-698], r15
-  mov QWORD PTR [rbp-706], r15
-.loc 1 694 0
-  mov rax, QWORD PTR [rbp-706]
-  mov r15, QWORD PTR [rbp-682]
-  mov QWORD PTR [r15], rax
-.loc 1 696 0
-  mov r15, QWORD PTR [rbp-658]
-  add r15, 12
-  mov QWORD PTR [rbp-714], r15
-  mov QWORD PTR [rbp-722], 1
-  mov rax, QWORD PTR [rbp-722]
-  mov r15, QWORD PTR [rbp-714]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-658]
-  add r15, 16
-  mov QWORD PTR [rbp-730], r15
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-738], r15
-  mov rax, QWORD PTR [rbp-738]
-  mov r15, QWORD PTR [rbp-730]
-  mov DWORD PTR [r15], eax
-.loc 1 698 0
-  mov r15, QWORD PTR [rbp-658]
-  add r15, 20
-  mov QWORD PTR [rbp-746], r15
-  mov QWORD PTR [rbp-754], 0
-  mov rax, QWORD PTR [rbp-754]
-  mov r15, QWORD PTR [rbp-746]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-658]
-  add r15, 28
-  mov QWORD PTR [rbp-762], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-778], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-770], r15
-  mov rax, QWORD PTR [rbp-770]
-  mov r15, QWORD PTR [rbp-762]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-658]
-  add r15, 32
-  mov QWORD PTR [rbp-786], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-802], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-794], r15
-  mov rax, QWORD PTR [rbp-794]
-  mov r15, QWORD PTR [rbp-786]
-  mov DWORD PTR [r15], eax
-.loc 1 700 0
-  mov r15, QWORD PTR [rbp-658]
-  add r15, 36
-  mov QWORD PTR [rbp-810], r15
-  mov QWORD PTR [rbp-818], 0
-  mov rax, QWORD PTR [rbp-818]
-  mov r15, QWORD PTR [rbp-810]
-  mov DWORD PTR [r15], eax
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-826], r15
-  add r15, 1
-  mov QWORD PTR [rbp-834], r15
-  mov rax, QWORD PTR [rbp-834]
-  mov DWORD PTR [rbp-96], eax
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-842], r15
-  add r15, 1
-  mov QWORD PTR [rbp-850], r15
-  mov rax, QWORD PTR [rbp-850]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 688 0
-  jmp .L1583
-.L1582:
-.loc 1 703 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-858], r15
-  cmp r15, 35
-  jne .L1584
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-874], r15
-  add r15, 16
-  mov QWORD PTR [rbp-882], r15
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-890], r15
-  add r15, 16
-  mov QWORD PTR [rbp-898], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-906], r15
-.loc 1 704 0
-.loc 1 703 0
-  add r15, 1
-  mov QWORD PTR [rbp-914], r15
-  mov rax, QWORD PTR [rbp-914]
-  mov r15, QWORD PTR [rbp-882]
-  mov QWORD PTR [r15], rax
-.L1586:
-.loc 1 704 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-930], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1588
-  mov r15, QWORD PTR [rbp-930]
-  mov QWORD PTR [rbp-946], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-946]
-  mov QWORD PTR [rbp-954], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-962], r15
-  cmp r15, 10
-  je .L1588
-  mov QWORD PTR [rbp-922], 1
-  jmp .L1589
-.L1588:
-  mov QWORD PTR [rbp-922], 0
-.L1589:
-  mov r15, QWORD PTR [rbp-922]
-  test r15, r15
-  jz .L1587
-.loc 1 705 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-978], r15
-  add r15, 1
-  mov QWORD PTR [rbp-986], r15
-.loc 1 704 0
-  mov rax, QWORD PTR [rbp-986]
-  mov QWORD PTR [rbp-92], rax
-  jmp .L1586
-.L1587:
-.loc 1 703 0
-  jmp .L1585
-.L1584:
-.loc 1 706 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1010], r15
-  cmp r15, 47
-  jne .L1594
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1026], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1034], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1594
-  mov QWORD PTR [rbp-1002], 1
-  jmp .L1595
-.L1594:
-  mov QWORD PTR [rbp-1002], 0
-.L1595:
-  mov r15, QWORD PTR [rbp-1002]
-  test r15, r15
-  jz .L1592
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1050], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1058], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-1058]
-  mov QWORD PTR [rbp-1066], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-1074], r15
-  cmp r15, 47
-  jne .L1592
-  mov QWORD PTR [rbp-994], 1
-  jmp .L1593
-.L1592:
-  mov QWORD PTR [rbp-994], 0
-.L1593:
-  mov r15, QWORD PTR [rbp-994]
-  test r15, r15
-  jz .L1590
-.loc 1 707 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-1090], r15
-  add r15, 16
-  mov QWORD PTR [rbp-1098], r15
-.loc 1 708 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-1106], r15
-  add r15, 16
-  mov QWORD PTR [rbp-1114], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-1122], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1130], r15
-.loc 1 707 0
-  mov rax, QWORD PTR [rbp-1130]
-  mov r15, QWORD PTR [rbp-1098]
-  mov QWORD PTR [r15], rax
-.L1596:
-.loc 1 708 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1146], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1598
-  mov r15, QWORD PTR [rbp-1146]
-  mov QWORD PTR [rbp-1162], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-1162]
-  mov QWORD PTR [rbp-1170], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-1178], r15
-  cmp r15, 10
-  je .L1598
-  mov QWORD PTR [rbp-1138], 1
-  jmp .L1599
-.L1598:
-  mov QWORD PTR [rbp-1138], 0
-.L1599:
-  mov r15, QWORD PTR [rbp-1138]
-  test r15, r15
-  jz .L1597
-.loc 1 712 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1194], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1202], r15
-.loc 1 708 0
-  mov rax, QWORD PTR [rbp-1202]
-  mov QWORD PTR [rbp-92], rax
-  jmp .L1596
-.L1597:
-.loc 1 706 0
-  jmp .L1591
-.L1590:
-.loc 1 712 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1210], r15
-  cmp r15, 34
-  jne .L1600
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1226], r15
-.loc 1 713 0
-  mov QWORD PTR [rbp-1234], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1242], r15
-.loc 1 712 0
-  mov rax, QWORD PTR [rbp-1242]
-  mov QWORD PTR [rbp-92], rax
-.L1602:
-.loc 1 713 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1258], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1604
-  mov r15, QWORD PTR [rbp-1258]
-  mov QWORD PTR [rbp-1274], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-1274]
-  mov QWORD PTR [rbp-1282], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-1290], r15
-  cmp r15, 34
-  je .L1604
-  mov QWORD PTR [rbp-1250], 1
-  jmp .L1605
-.L1604:
-  mov QWORD PTR [rbp-1250], 0
-.L1605:
-  mov r15, QWORD PTR [rbp-1250]
-  test r15, r15
-  jz .L1603
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1306], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-1306]
-  mov QWORD PTR [rbp-1314], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-1322], r15
-  cmp r15, 92
-  jne .L1606
-.loc 1 715 0
-  mov r15, QWORD PTR [rbp-1306]
-  mov QWORD PTR [rbp-1338], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1346], r15
-  mov rax, QWORD PTR [rbp-1346]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 713 0
-  jmp .L1607
-.L1606:
-.L1607:
-.loc 1 715 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1354], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1362], r15
-  mov rax, QWORD PTR [rbp-1362]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 713 0
-  jmp .L1602
-.L1603:
-.loc 1 716 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1370], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1608
-.loc 1 715 0
-.loc 1 716 0
-.loc 1 717 0
-  mov r15, QWORD PTR [rbp-1370]
-  mov QWORD PTR [rbp-1386], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1394], r15
-.loc 1 716 0
-  mov rax, QWORD PTR [rbp-1394]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 715 0
-  jmp .L1609
-.L1608:
-.L1609:
-.loc 1 717 0
-  xor r10, r10
-.loc 1 718 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-1402], r15
-  mov rdi, QWORD PTR [rbp-1402]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-1410], rax
-.loc 1 717 0
-.loc 1 718 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_STRING]
-  mov QWORD PTR [rbp-1426], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1418], r15
-  mov rax, QWORD PTR [rbp-1418]
-  mov r15, QWORD PTR [rbp-1410]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-1410]
-  add r15, 4
-  mov QWORD PTR [rbp-1434], r15
-.loc 1 719 0
-.loc 1 718 0
-  mov r15, QWORD PTR [rbp-394]
-  add r15, QWORD PTR [rbp-1226]
-  mov QWORD PTR [rbp-1442], r15
-  mov QWORD PTR [rbp-1450], r15
-  mov rax, QWORD PTR [rbp-1450]
-  mov r15, QWORD PTR [rbp-1434]
-  mov QWORD PTR [r15], rax
-.loc 1 719 0
-  mov r15, QWORD PTR [rbp-1410]
-  add r15, 12
-  mov QWORD PTR [rbp-1458], r15
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-1466], r15
-  sub r15, QWORD PTR [rbp-1226]
-  mov QWORD PTR [rbp-1474], r15
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-1482], r15
-  mov rax, QWORD PTR [rbp-1482]
-  mov r15, QWORD PTR [rbp-1458]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-1410]
-  add r15, 16
-  mov QWORD PTR [rbp-1490], r15
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-1498], r15
-  mov rax, QWORD PTR [rbp-1498]
-  mov r15, QWORD PTR [rbp-1490]
-  mov DWORD PTR [r15], eax
-.loc 1 720 0
-  mov r15, QWORD PTR [rbp-1410]
-  add r15, 20
-  mov QWORD PTR [rbp-1506], r15
-.loc 1 721 0
-  mov QWORD PTR [rbp-1514], 0
-.loc 1 720 0
-  mov rax, QWORD PTR [rbp-1514]
-  mov r15, QWORD PTR [rbp-1506]
-  mov QWORD PTR [r15], rax
-.loc 1 721 0
-  mov r15, QWORD PTR [rbp-1410]
-  add r15, 28
-  mov QWORD PTR [rbp-1522], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-1538], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1530], r15
-  mov rax, QWORD PTR [rbp-1530]
-  mov r15, QWORD PTR [rbp-1522]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-1410]
-  add r15, 32
-  mov QWORD PTR [rbp-1546], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-1562], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1554], r15
-  mov rax, QWORD PTR [rbp-1554]
-  mov r15, QWORD PTR [rbp-1546]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-1410]
-  add r15, 36
-  mov QWORD PTR [rbp-1570], r15
-  mov QWORD PTR [rbp-1578], 0
-  mov rax, QWORD PTR [rbp-1578]
-  mov r15, QWORD PTR [rbp-1570]
-  mov DWORD PTR [r15], eax
-.loc 1 712 0
-  jmp .L1601
-.L1600:
-.loc 1 724 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1634], r15
-  cmp r15, 44
-  je .L1622
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1650], r15
-  cmp r15, 58
-  je .L1622
-  mov QWORD PTR [rbp-1626], 0
-  jmp .L1623
-.L1622:
-  mov QWORD PTR [rbp-1626], 1
-.L1623:
-  mov r15, QWORD PTR [rbp-1626]
-  test r15, r15
-  jnz .L1620
-.loc 1 725 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1666], r15
-  cmp r15, 91
-  je .L1620
-.loc 1 724 0
-  mov QWORD PTR [rbp-1618], 0
-  jmp .L1621
-.L1620:
-  mov QWORD PTR [rbp-1618], 1
-.L1621:
-  mov r15, QWORD PTR [rbp-1618]
-  test r15, r15
-  jnz .L1618
-.loc 1 725 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1682], r15
-  cmp r15, 93
-  je .L1618
-.loc 1 724 0
-  mov QWORD PTR [rbp-1610], 0
-  jmp .L1619
-.L1618:
-  mov QWORD PTR [rbp-1610], 1
-.L1619:
-  mov r15, QWORD PTR [rbp-1610]
-  test r15, r15
-  jnz .L1616
-.loc 1 725 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1698], r15
-  cmp r15, 43
-  je .L1616
-.loc 1 724 0
-  mov QWORD PTR [rbp-1602], 0
-  jmp .L1617
-.L1616:
-  mov QWORD PTR [rbp-1602], 1
-.L1617:
-  mov r15, QWORD PTR [rbp-1602]
-  test r15, r15
-  jnz .L1614
-.loc 1 726 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1714], r15
-  cmp r15, 42
-  je .L1614
-.loc 1 724 0
-  mov QWORD PTR [rbp-1594], 0
-  jmp .L1615
-.L1614:
-  mov QWORD PTR [rbp-1594], 1
-.L1615:
-  mov r15, QWORD PTR [rbp-1594]
-  test r15, r15
-  jnz .L1612
-.loc 1 726 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1730], r15
-  cmp r15, 45
-  je .L1612
-.loc 1 724 0
-  mov QWORD PTR [rbp-1586], 0
-  jmp .L1613
-.L1612:
-  mov QWORD PTR [rbp-1586], 1
-.L1613:
-  mov r15, QWORD PTR [rbp-1586]
-  test r15, r15
-  jz .L1610
-.loc 1 726 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-1746], r15
-  add r15, 24
-  mov QWORD PTR [rbp-1754], r15
-.loc 1 727 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-1762], r15
-  add r15, 24
-  mov QWORD PTR [rbp-1770], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-1778], r15
-  add r15, 1
-  mov QWORD PTR [rbp-1786], r15
-.loc 1 726 0
-  mov rax, QWORD PTR [rbp-1786]
-  mov r15, QWORD PTR [rbp-1754]
-  mov QWORD PTR [r15], rax
-.loc 1 729 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_COMMA]
-  mov QWORD PTR [rbp-1802], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1794], r15
-.loc 1 727 0
-  mov rax, QWORD PTR [rbp-1794]
-  mov DWORD PTR [rbp-141], eax
-.loc 1 729 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1810], r15
-  cmp r15, 58
-  jne .L1624
-.loc 1 731 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_COLON]
-  mov QWORD PTR [rbp-1834], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1826], r15
-  mov rax, QWORD PTR [rbp-1826]
-  mov DWORD PTR [rbp-141], eax
-.loc 1 729 0
-  jmp .L1625
-.L1624:
-.loc 1 731 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1842], r15
-  cmp r15, 91
-  jne .L1626
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_LBRACKET]
-  mov QWORD PTR [rbp-1866], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1858], r15
-  mov rax, QWORD PTR [rbp-1858]
-  mov DWORD PTR [rbp-141], eax
-  jmp .L1627
-.L1626:
-.loc 1 732 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1874], r15
-  cmp r15, 93
-  jne .L1628
-.loc 1 733 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_RBRACKET]
-  mov QWORD PTR [rbp-1898], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1890], r15
-.loc 1 732 0
-  mov rax, QWORD PTR [rbp-1890]
-  mov DWORD PTR [rbp-141], eax
-  jmp .L1629
-.L1628:
-.loc 1 734 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1906], r15
-  cmp r15, 43
-  jne .L1630
-.loc 1 735 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_PLUS]
-  mov QWORD PTR [rbp-1930], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1922], r15
-  mov rax, QWORD PTR [rbp-1922]
-  mov DWORD PTR [rbp-141], eax
-.loc 1 734 0
-  jmp .L1631
-.L1630:
-.loc 1 735 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1938], r15
-  cmp r15, 42
-  jne .L1632
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_STAR]
-  mov QWORD PTR [rbp-1962], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1954], r15
-  mov rax, QWORD PTR [rbp-1954]
-  mov DWORD PTR [rbp-141], eax
-  jmp .L1633
-.L1632:
-.loc 1 737 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-1970], r15
-  cmp r15, 45
-  jne .L1634
-.loc 1 738 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_MINUS]
-  mov QWORD PTR [rbp-1994], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-1986], r15
-.loc 1 737 0
-  mov rax, QWORD PTR [rbp-1986]
-  mov DWORD PTR [rbp-141], eax
-  jmp .L1635
-.L1634:
-.L1635:
-.L1633:
-.L1631:
-.L1629:
-.L1627:
-.L1625:
-.loc 1 738 0
-  xor r10, r10
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-2002], r15
-  mov rdi, QWORD PTR [rbp-2002]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-2010], rax
-.loc 1 740 0
-  movsxd r15, DWORD PTR [rbp-141]
-  mov QWORD PTR [rbp-2018], r15
-  mov rax, QWORD PTR [rbp-2018]
-  mov r15, QWORD PTR [rbp-2010]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-2010]
-  add r15, 4
-  mov QWORD PTR [rbp-2026], r15
-.loc 1 741 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-2034], r15
-  mov r15, QWORD PTR [rbp-394]
-  add r15, QWORD PTR [rbp-2034]
-  mov QWORD PTR [rbp-2042], r15
-  mov QWORD PTR [rbp-2050], r15
-.loc 1 740 0
-  mov rax, QWORD PTR [rbp-2050]
-  mov r15, QWORD PTR [rbp-2026]
-  mov QWORD PTR [r15], rax
-.loc 1 741 0
-.loc 1 742 0
-  mov r15, QWORD PTR [rbp-2010]
-  add r15, 12
-  mov QWORD PTR [rbp-2058], r15
-.loc 1 743 0
-  mov QWORD PTR [rbp-2066], 1
-.loc 1 742 0
-  mov rax, QWORD PTR [rbp-2066]
-  mov r15, QWORD PTR [rbp-2058]
-  mov DWORD PTR [r15], eax
-.loc 1 743 0
-  mov r15, QWORD PTR [rbp-2010]
-  add r15, 16
-  mov QWORD PTR [rbp-2074], r15
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-2082], r15
-  mov rax, QWORD PTR [rbp-2082]
-  mov r15, QWORD PTR [rbp-2074]
-  mov DWORD PTR [r15], eax
-.loc 1 744 0
-  mov r15, QWORD PTR [rbp-2010]
-  add r15, 20
-  mov QWORD PTR [rbp-2090], r15
-  mov QWORD PTR [rbp-2098], 0
-  mov rax, QWORD PTR [rbp-2098]
-  mov r15, QWORD PTR [rbp-2090]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-2010]
-  add r15, 28
-  mov QWORD PTR [rbp-2106], r15
-.loc 1 745 0
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-2122], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-2114], r15
-.loc 1 744 0
-  mov rax, QWORD PTR [rbp-2114]
-  mov r15, QWORD PTR [rbp-2106]
-  mov DWORD PTR [r15], eax
-.loc 1 746 0
-  mov r15, QWORD PTR [rbp-2010]
-  add r15, 32
-  mov QWORD PTR [rbp-2130], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-2146], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-2138], r15
-  mov rax, QWORD PTR [rbp-2138]
-  mov r15, QWORD PTR [rbp-2130]
-  mov DWORD PTR [r15], eax
-.loc 1 747 0
-  mov r15, QWORD PTR [rbp-2010]
-  add r15, 36
-  mov QWORD PTR [rbp-2154], r15
-  mov QWORD PTR [rbp-2162], 0
-  mov rax, QWORD PTR [rbp-2162]
-  mov r15, QWORD PTR [rbp-2154]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-2170], r15
-.loc 1 748 0
-.loc 1 747 0
-  add r15, 1
-  mov QWORD PTR [rbp-2178], r15
-  mov rax, QWORD PTR [rbp-2178]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 724 0
-  jmp .L1611
-.L1610:
-.loc 1 748 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-2194], r15
-  cmp r15, 48
-  jb .L1638
-.loc 1 749 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-2210], r15
-.loc 1 750 0
-.loc 1 749 0
-  cmp r15, 57
-  ja .L1638
-.loc 1 748 0
-  mov QWORD PTR [rbp-2186], 1
-  jmp .L1639
-.L1638:
-  mov QWORD PTR [rbp-2186], 0
-.L1639:
-  mov r15, QWORD PTR [rbp-2186]
-  test r15, r15
-  jz .L1636
-.loc 1 750 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-2226], r15
-  add r15, 32
-  mov QWORD PTR [rbp-2234], r15
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-2242], r15
-.loc 1 751 0
-.loc 1 750 0
-  add r15, 32
-  mov QWORD PTR [rbp-2250], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-2258], r15
-.loc 1 751 0
-.loc 1 750 0
-  add r15, 1
-  mov QWORD PTR [rbp-2266], r15
-  mov rax, QWORD PTR [rbp-2266]
-  mov r15, QWORD PTR [rbp-2234]
-  mov QWORD PTR [r15], rax
-.loc 1 752 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-2274], r15
-.loc 1 751 0
-.loc 1 753 0
-  mov QWORD PTR [rbp-2282], 0
-.loc 1 752 0
-  mov rax, QWORD PTR [rbp-2282]
-  mov QWORD PTR [rbp-165], rax
-.loc 1 753 0
-  xor r10, r10
-.loc 1 758 0
-  mov r15, QWORD PTR [rbp-2274]
-  mov QWORD PTR [rbp-2290], r15
-.loc 1 760 0
-.loc 1 763 0
-  lea r15, [rbp-165]
-  mov QWORD PTR [rbp-2298], r15
-.loc 1 758 0
-  mov rdi, QWORD PTR [rbp-2714]
-  mov rsi, QWORD PTR [rbp-2290]
-  mov rdx, QWORD PTR [rbp-2698]
-  mov rcx, QWORD PTR [rbp-2298]
-  call _caustic_assembler_lexer_cst_parse_number_fast
-  mov QWORD PTR [rbp-2306], rax
-.loc 1 753 0
-.loc 1 763 0
-  xor r10, r10
-.loc 1 764 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-2314], r15
-  mov rdi, QWORD PTR [rbp-2314]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-2322], rax
-.loc 1 763 0
-.loc 1 764 0
-.loc 1 765 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_NUMBER]
-  mov QWORD PTR [rbp-2338], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-2330], r15
-.loc 1 764 0
-  mov rax, QWORD PTR [rbp-2330]
-  mov r15, QWORD PTR [rbp-2322]
-  mov DWORD PTR [r15], eax
-.loc 1 765 0
-  mov r15, QWORD PTR [rbp-2322]
-  add r15, 4
-  mov QWORD PTR [rbp-2346], r15
-  mov r15, QWORD PTR [rbp-394]
-  add r15, QWORD PTR [rbp-2274]
-  mov QWORD PTR [rbp-2354], r15
-  mov QWORD PTR [rbp-2362], r15
-  mov rax, QWORD PTR [rbp-2362]
-  mov r15, QWORD PTR [rbp-2346]
-  mov QWORD PTR [r15], rax
-.loc 1 766 0
-  mov r15, QWORD PTR [rbp-2322]
-  add r15, 12
-  mov QWORD PTR [rbp-2370], r15
-.loc 1 769 0
-  mov r15, QWORD PTR [rbp-2306]
-  sub r15, QWORD PTR [rbp-2274]
-  mov QWORD PTR [rbp-2378], r15
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-2386], r15
-.loc 1 766 0
-  mov rax, QWORD PTR [rbp-2386]
-  mov r15, QWORD PTR [rbp-2370]
-  mov DWORD PTR [r15], eax
-.loc 1 769 0
-  mov r15, QWORD PTR [rbp-2322]
-  add r15, 16
-  mov QWORD PTR [rbp-2394], r15
-.loc 1 770 0
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-2402], r15
-.loc 1 769 0
-  mov rax, QWORD PTR [rbp-2402]
-  mov r15, QWORD PTR [rbp-2394]
-  mov DWORD PTR [r15], eax
-.loc 1 770 0
-  mov r15, QWORD PTR [rbp-2322]
-  add r15, 20
-  mov QWORD PTR [rbp-2410], r15
-  mov r15, QWORD PTR [rbp-165]
-  mov QWORD PTR [rbp-2418], r15
-  mov rax, QWORD PTR [rbp-2418]
-  mov r15, QWORD PTR [rbp-2410]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-2322]
-  add r15, 28
-  mov QWORD PTR [rbp-2426], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-2442], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-2434], r15
-  mov rax, QWORD PTR [rbp-2434]
-  mov r15, QWORD PTR [rbp-2426]
-  mov DWORD PTR [r15], eax
-.loc 1 773 0
-  mov r15, QWORD PTR [rbp-2322]
-  add r15, 32
-  mov QWORD PTR [rbp-2450], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-2466], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-2458], r15
-  mov rax, QWORD PTR [rbp-2458]
-  mov r15, QWORD PTR [rbp-2450]
-  mov DWORD PTR [r15], eax
-.loc 1 774 0
-  mov r15, QWORD PTR [rbp-2322]
-  add r15, 36
-  mov QWORD PTR [rbp-2474], r15
-  mov QWORD PTR [rbp-2482], 0
-  mov rax, QWORD PTR [rbp-2482]
-  mov r15, QWORD PTR [rbp-2474]
-  mov DWORD PTR [r15], eax
-  mov rax, QWORD PTR [rbp-2306]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 748 0
-  jmp .L1637
-.L1636:
-.loc 1 774 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-2490], r15
-  cmp r15, 46
-  jne .L1640
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-2506], r15
-  add r15, 40
-  mov QWORD PTR [rbp-2514], r15
-.loc 1 775 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-2522], r15
-  add r15, 40
-  mov QWORD PTR [rbp-2530], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-2538], r15
-  add r15, 1
-  mov QWORD PTR [rbp-2546], r15
-.loc 1 774 0
-  mov rax, QWORD PTR [rbp-2546]
-  mov r15, QWORD PTR [rbp-2514]
-  mov QWORD PTR [r15], rax
-.loc 1 776 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-2554], r15
-.loc 1 775 0
-.loc 1 776 0
-  mov QWORD PTR [rbp-2562], r15
-.loc 1 777 0
-.loc 1 776 0
-  add r15, 1
-  mov QWORD PTR [rbp-2570], r15
-  mov rax, QWORD PTR [rbp-2570]
-  mov QWORD PTR [rbp-92], rax
-.L1642:
-.loc 1 777 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-2586], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1644
-  lea r15, [rip+_caustic_assembler_lexer_cst_char_tab]
-  mov QWORD PTR [rbp-2602], r15
-.loc 1 778 0
-  mov r15, QWORD PTR [rbp-2586]
-  mov QWORD PTR [rbp-2610], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-2610]
-  mov QWORD PTR [rbp-2618], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-2626], r15
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-2634], r15
-.loc 1 777 0
-  mov r15, QWORD PTR [rbp-2602]
-  add r15, QWORD PTR [rbp-2634]
-  mov QWORD PTR [rbp-2642], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-2650], r15
-.loc 1 778 0
-.loc 1 777 0
-  cmp r15, 0
-  je .L1644
-  mov QWORD PTR [rbp-2578], 1
-  jmp .L1645
-.L1644:
-  mov QWORD PTR [rbp-2578], 0
-.L1645:
-  mov r15, QWORD PTR [rbp-2578]
-  test r15, r15
-  jz .L1643
-.loc 1 778 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-2666], r15
-.loc 1 779 0
-.loc 1 778 0
-  add r15, 1
-  mov QWORD PTR [rbp-2674], r15
-  mov rax, QWORD PTR [rbp-2674]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 777 0
-  jmp .L1642
-.L1643:
-.loc 1 780 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-2682], r15
-  sub r15, QWORD PTR [rbp-2554]
-  mov QWORD PTR [rbp-2690], r15
-.loc 1 779 0
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6146], r15
-.loc 1 781 0
-  mov r15, QWORD PTR [rbp-394]
-  add r15, QWORD PTR [rbp-2554]
-  mov QWORD PTR [rbp-2706], r15
-  mov r13, r15
-.loc 1 783 0
-  mov QWORD PTR [rbp-2722], 0
-.loc 1 782 0
-  mov rax, QWORD PTR [rbp-2722]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 784 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-2738], r15
-.loc 1 785 0
-.loc 1 784 0
-  cmp r15, 4
-  jl .L1648
-.loc 1 785 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-2754], r15
-  cmp r15, 14
-  jg .L1648
-.loc 1 784 0
-  mov QWORD PTR [rbp-2730], 1
-  jmp .L1649
-.L1648:
-  mov QWORD PTR [rbp-2730], 0
-.L1649:
-.loc 1 783 0
-  mov r15, QWORD PTR [rbp-2730]
-  test r15, r15
-  jz .L1646
-.loc 1 785 0
-  mov r15, r13
-  add r15, 1
-  mov QWORD PTR [rbp-2770], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-2778], r15
-.loc 1 786 0
-  movzx r15, r15b
-  mov QWORD PTR [rbp-2818], r15
-  cmp r15, 116
-  jne .L1658
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-2834], r15
-  cmp r15, 5
-  jne .L1658
-  mov QWORD PTR [rbp-2810], 1
-  jmp .L1659
-.L1658:
-  mov QWORD PTR [rbp-2810], 0
-.L1659:
-  mov r15, QWORD PTR [rbp-2810]
-  test r15, r15
-  jz .L1656
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-2850], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-2858], r15
-  cmp r15, 101
-  jne .L1656
-  mov QWORD PTR [rbp-2802], 1
-  jmp .L1657
-.L1656:
-  mov QWORD PTR [rbp-2802], 0
-.L1657:
-  mov r15, QWORD PTR [rbp-2802]
-  test r15, r15
-  jz .L1654
-.loc 1 787 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-2874], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-2882], r15
-  cmp r15, 120
-  jne .L1654
-.loc 1 786 0
-  mov QWORD PTR [rbp-2794], 1
-  jmp .L1655
-.L1654:
-  mov QWORD PTR [rbp-2794], 0
-.L1655:
-  mov r15, QWORD PTR [rbp-2794]
-  test r15, r15
-  jz .L1652
-.loc 1 787 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-2898], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-2906], r15
-  cmp r15, 116
-  jne .L1652
-.loc 1 786 0
-  mov QWORD PTR [rbp-2786], 1
-  jmp .L1653
-.L1652:
-  mov QWORD PTR [rbp-2786], 0
-.L1653:
-.loc 1 785 0
-  mov r15, QWORD PTR [rbp-2786]
-  test r15, r15
-  jz .L1650
-.loc 1 787 0
-  mov QWORD PTR [rbp-2922], 1
-  mov rax, QWORD PTR [rbp-2922]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 785 0
-  jmp .L1651
-.L1650:
-.loc 1 787 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-2962], r15
-  cmp r15, 100
-  jne .L1668
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-2978], r15
-.loc 1 788 0
-.loc 1 787 0
-  cmp r15, 5
-  jne .L1668
-  mov QWORD PTR [rbp-2954], 1
-  jmp .L1669
-.L1668:
-  mov QWORD PTR [rbp-2954], 0
-.L1669:
-  mov r15, QWORD PTR [rbp-2954]
-  test r15, r15
-  jz .L1666
-.loc 1 790 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-2994], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3002], r15
-  cmp r15, 97
-  jne .L1666
-.loc 1 787 0
-  mov QWORD PTR [rbp-2946], 1
-  jmp .L1667
-.L1666:
-  mov QWORD PTR [rbp-2946], 0
-.L1667:
-  mov r15, QWORD PTR [rbp-2946]
-  test r15, r15
-  jz .L1664
-.loc 1 790 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-3018], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3026], r15
-.loc 1 791 0
-.loc 1 790 0
-  cmp r15, 116
-  jne .L1664
-.loc 1 787 0
-  mov QWORD PTR [rbp-2938], 1
-  jmp .L1665
-.L1664:
-  mov QWORD PTR [rbp-2938], 0
-.L1665:
-  mov r15, QWORD PTR [rbp-2938]
-  test r15, r15
-  jz .L1662
-.loc 1 791 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-3042], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3050], r15
-  cmp r15, 97
-  jne .L1662
-.loc 1 787 0
-  mov QWORD PTR [rbp-2930], 1
-  jmp .L1663
-.L1662:
-  mov QWORD PTR [rbp-2930], 0
-.L1663:
-  mov r15, QWORD PTR [rbp-2930]
-  test r15, r15
-  jz .L1660
-.loc 1 791 0
-  mov QWORD PTR [rbp-3066], 1
-  mov rax, QWORD PTR [rbp-3066]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 787 0
-  jmp .L1661
-.L1660:
-.loc 1 792 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-3098], r15
-  cmp r15, 98
-  jne .L1676
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-3114], r15
-  cmp r15, 4
-  jne .L1676
-  mov QWORD PTR [rbp-3090], 1
-  jmp .L1677
-.L1676:
-  mov QWORD PTR [rbp-3090], 0
-.L1677:
-  mov r15, QWORD PTR [rbp-3090]
-  test r15, r15
-  jz .L1674
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-3130], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3138], r15
-  cmp r15, 115
-  jne .L1674
-  mov QWORD PTR [rbp-3082], 1
-  jmp .L1675
-.L1674:
-  mov QWORD PTR [rbp-3082], 0
-.L1675:
-  mov r15, QWORD PTR [rbp-3082]
-  test r15, r15
-  jz .L1672
-.loc 1 793 0
-.loc 1 792 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-3154], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3162], r15
-.loc 1 793 0
-.loc 1 792 0
-  cmp r15, 115
-  jne .L1672
-  mov QWORD PTR [rbp-3074], 1
-  jmp .L1673
-.L1672:
-  mov QWORD PTR [rbp-3074], 0
-.L1673:
-.loc 1 791 0
-  mov r15, QWORD PTR [rbp-3074]
-  test r15, r15
-  jz .L1670
-.loc 1 793 0
-  mov QWORD PTR [rbp-3178], 1
-  mov rax, QWORD PTR [rbp-3178]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 791 0
-  jmp .L1671
-.L1670:
-.loc 1 793 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-3186], r15
-  cmp r15, 103
-  jne .L1678
-.loc 1 794 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-3234], r15
-  cmp r15, 6
-  jne .L1688
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-3250], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3258], r15
-  cmp r15, 108
-  jne .L1688
-  mov QWORD PTR [rbp-3226], 1
-  jmp .L1689
-.L1688:
-  mov QWORD PTR [rbp-3226], 0
-.L1689:
-  mov r15, QWORD PTR [rbp-3226]
-  test r15, r15
-  jz .L1686
-.loc 1 795 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-3274], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3282], r15
-  cmp r15, 111
-  jne .L1686
-.loc 1 794 0
-  mov QWORD PTR [rbp-3218], 1
-  jmp .L1687
-.L1686:
-  mov QWORD PTR [rbp-3218], 0
-.L1687:
-  mov r15, QWORD PTR [rbp-3218]
-  test r15, r15
-  jz .L1684
-.loc 1 795 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-3298], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3306], r15
-  cmp r15, 98
-  jne .L1684
-.loc 1 794 0
-  mov QWORD PTR [rbp-3210], 1
-  jmp .L1685
-.L1684:
-  mov QWORD PTR [rbp-3210], 0
-.L1685:
-  mov r15, QWORD PTR [rbp-3210]
-  test r15, r15
-  jz .L1682
-.loc 1 795 0
-  mov r15, r13
-  add r15, 5
-  mov QWORD PTR [rbp-3322], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3330], r15
-  cmp r15, 108
-  jne .L1682
-.loc 1 794 0
-  mov QWORD PTR [rbp-3202], 1
-  jmp .L1683
-.L1682:
-  mov QWORD PTR [rbp-3202], 0
-.L1683:
-  mov r15, QWORD PTR [rbp-3202]
-  test r15, r15
-  jz .L1680
-.loc 1 795 0
-.loc 1 796 0
-  mov QWORD PTR [rbp-3346], 1
-.loc 1 795 0
-  mov rax, QWORD PTR [rbp-3346]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 794 0
-  jmp .L1681
-.L1680:
-.loc 1 796 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-3394], r15
-  cmp r15, 7
-  jne .L1700
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-3410], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3418], r15
-  cmp r15, 108
-  jne .L1700
-  mov QWORD PTR [rbp-3386], 1
-  jmp .L1701
-.L1700:
-  mov QWORD PTR [rbp-3386], 0
-.L1701:
-  mov r15, QWORD PTR [rbp-3386]
-  test r15, r15
-  jz .L1698
-.loc 1 797 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-3434], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3442], r15
-  cmp r15, 111
-  jne .L1698
-.loc 1 796 0
-  mov QWORD PTR [rbp-3378], 1
-  jmp .L1699
-.L1698:
-  mov QWORD PTR [rbp-3378], 0
-.L1699:
-  mov r15, QWORD PTR [rbp-3378]
-  test r15, r15
-  jz .L1696
-.loc 1 797 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-3458], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3466], r15
-.loc 1 798 0
-.loc 1 797 0
-  cmp r15, 98
-  jne .L1696
-.loc 1 796 0
-  mov QWORD PTR [rbp-3370], 1
-  jmp .L1697
-.L1696:
-  mov QWORD PTR [rbp-3370], 0
-.L1697:
-  mov r15, QWORD PTR [rbp-3370]
-  test r15, r15
-  jz .L1694
-.loc 1 798 0
-  mov r15, r13
-  add r15, 5
-  mov QWORD PTR [rbp-3482], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3490], r15
-  cmp r15, 97
-  jne .L1694
-.loc 1 796 0
-  mov QWORD PTR [rbp-3362], 1
-  jmp .L1695
-.L1694:
-  mov QWORD PTR [rbp-3362], 0
-.L1695:
-  mov r15, QWORD PTR [rbp-3362]
-  test r15, r15
-  jz .L1692
-.loc 1 798 0
-.loc 1 799 0
-  mov r15, r13
-  add r15, 6
-  mov QWORD PTR [rbp-3506], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3514], r15
-  cmp r15, 108
-  jne .L1692
-.loc 1 796 0
-  mov QWORD PTR [rbp-3354], 1
-  jmp .L1693
-.L1692:
-  mov QWORD PTR [rbp-3354], 0
-.L1693:
-  mov r15, QWORD PTR [rbp-3354]
-  test r15, r15
-  jz .L1690
-.loc 1 800 0
-  mov QWORD PTR [rbp-3530], 1
-  mov rax, QWORD PTR [rbp-3530]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 796 0
-  jmp .L1691
-.L1690:
-.L1691:
-.L1681:
-.loc 1 793 0
-  jmp .L1679
-.L1678:
-.loc 1 803 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-3538], r15
-  cmp r15, 115
-  jne .L1702
-.loc 1 804 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-3594], r15
-  cmp r15, 7
-  jne .L1714
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-3610], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3618], r15
-  cmp r15, 116
-  jne .L1714
-  mov QWORD PTR [rbp-3586], 1
-  jmp .L1715
-.L1714:
-  mov QWORD PTR [rbp-3586], 0
-.L1715:
-  mov r15, QWORD PTR [rbp-3586]
-  test r15, r15
-  jz .L1712
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-3634], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3642], r15
-  cmp r15, 114
-  jne .L1712
-  mov QWORD PTR [rbp-3578], 1
-  jmp .L1713
-.L1712:
-  mov QWORD PTR [rbp-3578], 0
-.L1713:
-  mov r15, QWORD PTR [rbp-3578]
-  test r15, r15
-  jz .L1710
-.loc 1 805 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-3658], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3666], r15
-  cmp r15, 105
-  jne .L1710
-.loc 1 804 0
-  mov QWORD PTR [rbp-3570], 1
-  jmp .L1711
-.L1710:
-  mov QWORD PTR [rbp-3570], 0
-.L1711:
-  mov r15, QWORD PTR [rbp-3570]
-  test r15, r15
-  jz .L1708
-.loc 1 805 0
-  mov r15, r13
-  add r15, 5
-  mov QWORD PTR [rbp-3682], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3690], r15
-.loc 1 806 0
-.loc 1 805 0
-  cmp r15, 110
-  jne .L1708
-.loc 1 804 0
-  mov QWORD PTR [rbp-3562], 1
-  jmp .L1709
-.L1708:
-  mov QWORD PTR [rbp-3562], 0
-.L1709:
-  mov r15, QWORD PTR [rbp-3562]
-  test r15, r15
-  jz .L1706
-.loc 1 806 0
-  mov r15, r13
-  add r15, 6
-  mov QWORD PTR [rbp-3706], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3714], r15
-  cmp r15, 103
-  jne .L1706
-.loc 1 804 0
-  mov QWORD PTR [rbp-3554], 1
-  jmp .L1707
-.L1706:
-  mov QWORD PTR [rbp-3554], 0
-.L1707:
-.loc 1 803 0
-  mov r15, QWORD PTR [rbp-3554]
-  test r15, r15
-  jz .L1704
-.loc 1 806 0
-  mov QWORD PTR [rbp-3730], 1
-  mov rax, QWORD PTR [rbp-3730]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 803 0
-  jmp .L1705
-.L1704:
-.loc 1 807 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-3786], r15
-  cmp r15, 8
-  jne .L1728
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-3802], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3810], r15
-.loc 1 808 0
-.loc 1 807 0
-  cmp r15, 101
-  jne .L1728
-  mov QWORD PTR [rbp-3778], 1
-  jmp .L1729
-.L1728:
-  mov QWORD PTR [rbp-3778], 0
-.L1729:
-  mov r15, QWORD PTR [rbp-3778]
-  test r15, r15
-  jz .L1726
-.loc 1 811 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-3826], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3834], r15
-  cmp r15, 99
-  jne .L1726
-.loc 1 807 0
-  mov QWORD PTR [rbp-3770], 1
-  jmp .L1727
-.L1726:
-  mov QWORD PTR [rbp-3770], 0
-.L1727:
-  mov r15, QWORD PTR [rbp-3770]
-  test r15, r15
-  jz .L1724
-.loc 1 811 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-3850], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3858], r15
-.loc 1 812 0
-.loc 1 811 0
-  cmp r15, 116
-  jne .L1724
-.loc 1 807 0
-  mov QWORD PTR [rbp-3762], 1
-  jmp .L1725
-.L1724:
-  mov QWORD PTR [rbp-3762], 0
-.L1725:
-  mov r15, QWORD PTR [rbp-3762]
-  test r15, r15
-  jz .L1722
-.loc 1 812 0
-  mov r15, r13
-  add r15, 5
-  mov QWORD PTR [rbp-3874], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3882], r15
-  cmp r15, 105
-  jne .L1722
-.loc 1 807 0
-  mov QWORD PTR [rbp-3754], 1
-  jmp .L1723
-.L1722:
-  mov QWORD PTR [rbp-3754], 0
-.L1723:
-  mov r15, QWORD PTR [rbp-3754]
-  test r15, r15
-  jz .L1720
-.loc 1 812 0
-.loc 1 813 0
-.loc 1 812 0
-  mov r15, r13
-  add r15, 6
-  mov QWORD PTR [rbp-3898], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3906], r15
-.loc 1 813 0
-.loc 1 812 0
-  cmp r15, 111
-  jne .L1720
-.loc 1 807 0
-  mov QWORD PTR [rbp-3746], 1
-  jmp .L1721
-.L1720:
-  mov QWORD PTR [rbp-3746], 0
-.L1721:
-  mov r15, QWORD PTR [rbp-3746]
-  test r15, r15
-  jz .L1718
-.loc 1 813 0
-  mov r15, r13
-  add r15, 7
-  mov QWORD PTR [rbp-3922], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-3930], r15
-  cmp r15, 110
-  jne .L1718
-.loc 1 807 0
-  mov QWORD PTR [rbp-3738], 1
-  jmp .L1719
-.L1718:
-  mov QWORD PTR [rbp-3738], 0
-.L1719:
-.loc 1 806 0
-  mov r15, QWORD PTR [rbp-3738]
-  test r15, r15
-  jz .L1716
-.loc 1 813 0
-  mov QWORD PTR [rbp-3946], 1
-  mov rax, QWORD PTR [rbp-3946]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 806 0
-  jmp .L1717
-.L1716:
-.L1717:
-.L1705:
-.loc 1 803 0
-  jmp .L1703
-.L1702:
-.loc 1 814 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-3986], r15
-  cmp r15, 98
-  jne .L1738
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-4002], r15
-.loc 1 815 0
-.loc 1 814 0
-  cmp r15, 5
-  jne .L1738
-  mov QWORD PTR [rbp-3978], 1
-  jmp .L1739
-.L1738:
-  mov QWORD PTR [rbp-3978], 0
-.L1739:
-  mov r15, QWORD PTR [rbp-3978]
-  test r15, r15
-  jz .L1736
-.loc 1 815 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-4018], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4026], r15
-.loc 1 816 0
-.loc 1 815 0
-  cmp r15, 121
-  jne .L1736
-.loc 1 814 0
-  mov QWORD PTR [rbp-3970], 1
-  jmp .L1737
-.L1736:
-  mov QWORD PTR [rbp-3970], 0
-.L1737:
-  mov r15, QWORD PTR [rbp-3970]
-  test r15, r15
-  jz .L1734
-.loc 1 816 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-4042], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4050], r15
-  cmp r15, 116
-  jne .L1734
-.loc 1 814 0
-  mov QWORD PTR [rbp-3962], 1
-  jmp .L1735
-.L1734:
-  mov QWORD PTR [rbp-3962], 0
-.L1735:
-  mov r15, QWORD PTR [rbp-3962]
-  test r15, r15
-  jz .L1732
-.loc 1 817 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-4066], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4074], r15
-  cmp r15, 101
-  jne .L1732
-.loc 1 814 0
-  mov QWORD PTR [rbp-3954], 1
-  jmp .L1733
-.L1732:
-  mov QWORD PTR [rbp-3954], 0
-.L1733:
-  mov r15, QWORD PTR [rbp-3954]
-  test r15, r15
-  jz .L1730
-.loc 1 818 0
-  mov QWORD PTR [rbp-4090], 1
-  mov rax, QWORD PTR [rbp-4090]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 814 0
-  jmp .L1731
-.L1730:
-.loc 1 825 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-4130], r15
-  cmp r15, 119
-  jne .L1748
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-4146], r15
-  cmp r15, 5
-  jne .L1748
-  mov QWORD PTR [rbp-4122], 1
-  jmp .L1749
-.L1748:
-  mov QWORD PTR [rbp-4122], 0
-.L1749:
-  mov r15, QWORD PTR [rbp-4122]
-  test r15, r15
-  jz .L1746
-.loc 1 826 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-4162], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4170], r15
-  cmp r15, 111
-  jne .L1746
-.loc 1 825 0
-  mov QWORD PTR [rbp-4114], 1
-  jmp .L1747
-.L1746:
-  mov QWORD PTR [rbp-4114], 0
-.L1747:
-  mov r15, QWORD PTR [rbp-4114]
-  test r15, r15
-  jz .L1744
-.loc 1 826 0
-.loc 1 828 0
-.loc 1 826 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-4186], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4194], r15
-.loc 1 828 0
-.loc 1 826 0
-  cmp r15, 114
-  jne .L1744
-.loc 1 825 0
-  mov QWORD PTR [rbp-4106], 1
-  jmp .L1745
-.L1744:
-  mov QWORD PTR [rbp-4106], 0
-.L1745:
-  mov r15, QWORD PTR [rbp-4106]
-  test r15, r15
-  jz .L1742
-.loc 1 828 0
-.loc 1 829 0
-.loc 1 828 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-4210], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4218], r15
-.loc 1 829 0
-.loc 1 828 0
-  cmp r15, 100
-  jne .L1742
-.loc 1 825 0
-  mov QWORD PTR [rbp-4098], 1
-  jmp .L1743
-.L1742:
-  mov QWORD PTR [rbp-4098], 0
-.L1743:
-  mov r15, QWORD PTR [rbp-4098]
-  test r15, r15
-  jz .L1740
-.loc 1 829 0
-  mov QWORD PTR [rbp-4234], 1
-  mov rax, QWORD PTR [rbp-4234]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 825 0
-  jmp .L1741
-.L1740:
-.loc 1 830 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-4274], r15
-  cmp r15, 108
-  jne .L1758
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-4290], r15
-.loc 1 831 0
-.loc 1 830 0
-  cmp r15, 5
-  jne .L1758
-  mov QWORD PTR [rbp-4266], 1
-  jmp .L1759
-.L1758:
-  mov QWORD PTR [rbp-4266], 0
-.L1759:
-  mov r15, QWORD PTR [rbp-4266]
-  test r15, r15
-  jz .L1756
-.loc 1 831 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-4306], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4314], r15
-  cmp r15, 111
-  jne .L1756
-.loc 1 830 0
-  mov QWORD PTR [rbp-4258], 1
-  jmp .L1757
-.L1756:
-  mov QWORD PTR [rbp-4258], 0
-.L1757:
-  mov r15, QWORD PTR [rbp-4258]
-  test r15, r15
-  jz .L1754
-.loc 1 831 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-4330], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4338], r15
-.loc 1 832 0
-.loc 1 831 0
-  cmp r15, 110
-  jne .L1754
-.loc 1 830 0
-  mov QWORD PTR [rbp-4250], 1
-  jmp .L1755
-.L1754:
-  mov QWORD PTR [rbp-4250], 0
-.L1755:
-  mov r15, QWORD PTR [rbp-4250]
-  test r15, r15
-  jz .L1752
-.loc 1 834 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-4354], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4362], r15
-  cmp r15, 103
-  jne .L1752
-.loc 1 830 0
-  mov QWORD PTR [rbp-4242], 1
-  jmp .L1753
-.L1752:
-  mov QWORD PTR [rbp-4242], 0
-.L1753:
-  mov r15, QWORD PTR [rbp-4242]
-  test r15, r15
-  jz .L1750
-.loc 1 834 0
-  mov QWORD PTR [rbp-4378], 1
-  mov rax, QWORD PTR [rbp-4378]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 830 0
-  jmp .L1751
-.L1750:
-.loc 1 835 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-4418], r15
-  cmp r15, 113
-  jne .L1768
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-4434], r15
-  cmp r15, 5
-  jne .L1768
-  mov QWORD PTR [rbp-4410], 1
-  jmp .L1769
-.L1768:
-  mov QWORD PTR [rbp-4410], 0
-.L1769:
-  mov r15, QWORD PTR [rbp-4410]
-  test r15, r15
-  jz .L1766
-.loc 1 836 0
-.loc 1 835 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-4450], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4458], r15
-.loc 1 836 0
-.loc 1 835 0
-  cmp r15, 117
-  jne .L1766
-  mov QWORD PTR [rbp-4402], 1
-  jmp .L1767
-.L1766:
-  mov QWORD PTR [rbp-4402], 0
-.L1767:
-  mov r15, QWORD PTR [rbp-4402]
-  test r15, r15
-  jz .L1764
-.loc 1 836 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-4474], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4482], r15
-  cmp r15, 97
-  jne .L1764
-.loc 1 835 0
-  mov QWORD PTR [rbp-4394], 1
-  jmp .L1765
-.L1764:
-  mov QWORD PTR [rbp-4394], 0
-.L1765:
-  mov r15, QWORD PTR [rbp-4394]
-  test r15, r15
-  jz .L1762
-.loc 1 837 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-4498], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4506], r15
-  cmp r15, 100
-  jne .L1762
-.loc 1 835 0
-  mov QWORD PTR [rbp-4386], 1
-  jmp .L1763
-.L1762:
-  mov QWORD PTR [rbp-4386], 0
-.L1763:
-.loc 1 834 0
-  mov r15, QWORD PTR [rbp-4386]
-  test r15, r15
-  jz .L1760
-.loc 1 837 0
-  mov QWORD PTR [rbp-4522], 1
-  mov rax, QWORD PTR [rbp-4522]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 834 0
-  jmp .L1761
-.L1760:
-.loc 1 838 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-4562], r15
-.loc 1 839 0
-.loc 1 838 0
-  cmp r15, 122
-  jne .L1778
-.loc 1 839 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-4578], r15
-.loc 1 840 0
-.loc 1 839 0
-  cmp r15, 5
-  jne .L1778
-.loc 1 838 0
-  mov QWORD PTR [rbp-4554], 1
-  jmp .L1779
-.L1778:
-  mov QWORD PTR [rbp-4554], 0
-.L1779:
-  mov r15, QWORD PTR [rbp-4554]
-  test r15, r15
-  jz .L1776
-.loc 1 840 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-4594], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4602], r15
-.loc 1 841 0
-.loc 1 840 0
-  cmp r15, 101
-  jne .L1776
-.loc 1 838 0
-  mov QWORD PTR [rbp-4546], 1
-  jmp .L1777
-.L1776:
-  mov QWORD PTR [rbp-4546], 0
-.L1777:
-  mov r15, QWORD PTR [rbp-4546]
-  test r15, r15
-  jz .L1774
-.loc 1 845 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-4618], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4626], r15
-  cmp r15, 114
-  jne .L1774
-.loc 1 838 0
-  mov QWORD PTR [rbp-4538], 1
-  jmp .L1775
-.L1774:
-  mov QWORD PTR [rbp-4538], 0
-.L1775:
-  mov r15, QWORD PTR [rbp-4538]
-  test r15, r15
-  jz .L1772
-.loc 1 845 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-4642], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4650], r15
-.loc 1 846 0
-.loc 1 845 0
-  cmp r15, 111
-  jne .L1772
-.loc 1 838 0
-  mov QWORD PTR [rbp-4530], 1
-  jmp .L1773
-.L1772:
-  mov QWORD PTR [rbp-4530], 0
-.L1773:
-  mov r15, QWORD PTR [rbp-4530]
-  test r15, r15
-  jz .L1770
-.loc 1 846 0
-  mov QWORD PTR [rbp-4666], 1
-  mov rax, QWORD PTR [rbp-4666]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 838 0
-  jmp .L1771
-.L1770:
-.loc 1 846 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-4714], r15
-  cmp r15, 97
-  jne .L1790
-.loc 1 847 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-4730], r15
-  cmp r15, 6
-  jne .L1790
-.loc 1 846 0
-  mov QWORD PTR [rbp-4706], 1
-  jmp .L1791
-.L1790:
-  mov QWORD PTR [rbp-4706], 0
-.L1791:
-  mov r15, QWORD PTR [rbp-4706]
-  test r15, r15
-  jz .L1788
-.loc 1 847 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-4746], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4754], r15
-  cmp r15, 115
-  jne .L1788
-.loc 1 846 0
-  mov QWORD PTR [rbp-4698], 1
-  jmp .L1789
-.L1788:
-  mov QWORD PTR [rbp-4698], 0
-.L1789:
-  mov r15, QWORD PTR [rbp-4698]
-  test r15, r15
-  jz .L1786
-.loc 1 847 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-4770], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4778], r15
-  cmp r15, 99
-  jne .L1786
-.loc 1 846 0
-  mov QWORD PTR [rbp-4690], 1
-  jmp .L1787
-.L1786:
-  mov QWORD PTR [rbp-4690], 0
-.L1787:
-  mov r15, QWORD PTR [rbp-4690]
-  test r15, r15
-  jz .L1784
-.loc 1 847 0
-.loc 1 850 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-4794], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4802], r15
-  cmp r15, 105
-  jne .L1784
-.loc 1 846 0
-  mov QWORD PTR [rbp-4682], 1
-  jmp .L1785
-.L1784:
-  mov QWORD PTR [rbp-4682], 0
-.L1785:
-  mov r15, QWORD PTR [rbp-4682]
-  test r15, r15
-  jz .L1782
-.loc 1 850 0
-  mov r15, r13
-  add r15, 5
-  mov QWORD PTR [rbp-4818], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4826], r15
-.loc 1 851 0
-.loc 1 850 0
-  cmp r15, 105
-  jne .L1782
-.loc 1 846 0
-  mov QWORD PTR [rbp-4674], 1
-  jmp .L1783
-.L1782:
-  mov QWORD PTR [rbp-4674], 0
-.L1783:
-  mov r15, QWORD PTR [rbp-4674]
-  test r15, r15
-  jz .L1780
-.loc 1 851 0
-  mov QWORD PTR [rbp-4842], 1
-  mov rax, QWORD PTR [rbp-4842]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 846 0
-  jmp .L1781
-.L1780:
-.loc 1 851 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-4890], r15
-  cmp r15, 97
-  jne .L1802
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-4906], r15
-.loc 1 852 0
-.loc 1 851 0
-  cmp r15, 6
-  jne .L1802
-  mov QWORD PTR [rbp-4882], 1
-  jmp .L1803
-.L1802:
-  mov QWORD PTR [rbp-4882], 0
-.L1803:
-  mov r15, QWORD PTR [rbp-4882]
-  test r15, r15
-  jz .L1800
-.loc 1 852 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-4922], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4930], r15
-  cmp r15, 115
-  jne .L1800
-.loc 1 851 0
-  mov QWORD PTR [rbp-4874], 1
-  jmp .L1801
-.L1800:
-  mov QWORD PTR [rbp-4874], 0
-.L1801:
-  mov r15, QWORD PTR [rbp-4874]
-  test r15, r15
-  jz .L1798
-.loc 1 852 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-4946], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4954], r15
-.loc 1 853 0
-.loc 1 852 0
-  cmp r15, 99
-  jne .L1798
-.loc 1 851 0
-  mov QWORD PTR [rbp-4866], 1
-  jmp .L1799
-.L1798:
-  mov QWORD PTR [rbp-4866], 0
-.L1799:
-  mov r15, QWORD PTR [rbp-4866]
-  test r15, r15
-  jz .L1796
-.loc 1 853 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-4970], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-4978], r15
-  cmp r15, 105
-  jne .L1796
-.loc 1 851 0
-  mov QWORD PTR [rbp-4858], 1
-  jmp .L1797
-.L1796:
-  mov QWORD PTR [rbp-4858], 0
-.L1797:
-  mov r15, QWORD PTR [rbp-4858]
-  test r15, r15
-  jz .L1794
-.loc 1 853 0
-  mov r15, r13
-  add r15, 5
-  mov QWORD PTR [rbp-4994], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5002], r15
-  cmp r15, 122
-  jne .L1794
-.loc 1 851 0
-  mov QWORD PTR [rbp-4850], 1
-  jmp .L1795
-.L1794:
-  mov QWORD PTR [rbp-4850], 0
-.L1795:
-  mov r15, QWORD PTR [rbp-4850]
-  test r15, r15
-  jz .L1792
-.loc 1 853 0
-.loc 1 856 0
-  mov QWORD PTR [rbp-5018], 1
-.loc 1 853 0
-  mov rax, QWORD PTR [rbp-5018]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 851 0
-  jmp .L1793
-.L1792:
-.loc 1 856 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5066], r15
-  cmp r15, 118
-  jne .L1814
-.loc 1 857 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-5082], r15
-  cmp r15, 6
-  jne .L1814
-.loc 1 856 0
-  mov QWORD PTR [rbp-5058], 1
-  jmp .L1815
-.L1814:
-  mov QWORD PTR [rbp-5058], 0
-.L1815:
-  mov r15, QWORD PTR [rbp-5058]
-  test r15, r15
-  jz .L1812
-.loc 1 857 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-5098], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5106], r15
-  cmp r15, 97
-  jne .L1812
-.loc 1 856 0
-  mov QWORD PTR [rbp-5050], 1
-  jmp .L1813
-.L1812:
-  mov QWORD PTR [rbp-5050], 0
-.L1813:
-  mov r15, QWORD PTR [rbp-5050]
-  test r15, r15
-  jz .L1810
-.loc 1 857 0
-.loc 1 858 0
-.loc 1 857 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-5122], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5130], r15
-.loc 1 858 0
-.loc 1 857 0
-  cmp r15, 108
-  jne .L1810
-.loc 1 856 0
-  mov QWORD PTR [rbp-5042], 1
-  jmp .L1811
-.L1810:
-  mov QWORD PTR [rbp-5042], 0
-.L1811:
-  mov r15, QWORD PTR [rbp-5042]
-  test r15, r15
-  jz .L1808
-.loc 1 858 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-5146], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5154], r15
-.loc 1 859 0
-.loc 1 858 0
-  cmp r15, 117
-  jne .L1808
-.loc 1 856 0
-  mov QWORD PTR [rbp-5034], 1
-  jmp .L1809
-.L1808:
-  mov QWORD PTR [rbp-5034], 0
-.L1809:
-  mov r15, QWORD PTR [rbp-5034]
-  test r15, r15
-  jz .L1806
-.loc 1 859 0
-  mov r15, r13
-  add r15, 5
-  mov QWORD PTR [rbp-5170], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5178], r15
-  cmp r15, 101
-  jne .L1806
-.loc 1 856 0
-  mov QWORD PTR [rbp-5026], 1
-  jmp .L1807
-.L1806:
-  mov QWORD PTR [rbp-5026], 0
-.L1807:
-  mov r15, QWORD PTR [rbp-5026]
-  test r15, r15
-  jz .L1804
-.loc 1 859 0
-  mov QWORD PTR [rbp-5194], 1
-  mov rax, QWORD PTR [rbp-5194]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 856 0
-  jmp .L1805
-.L1804:
-.loc 1 862 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5250], r15
-  cmp r15, 114
-  jne .L1828
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-5266], r15
-  cmp r15, 7
-  jne .L1828
-  mov QWORD PTR [rbp-5242], 1
-  jmp .L1829
-.L1828:
-  mov QWORD PTR [rbp-5242], 0
-.L1829:
-  mov r15, QWORD PTR [rbp-5242]
-  test r15, r15
-  jz .L1826
-.loc 1 863 0
-.loc 1 862 0
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-5282], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5290], r15
-.loc 1 863 0
-.loc 1 862 0
-  cmp r15, 111
-  jne .L1826
-  mov QWORD PTR [rbp-5234], 1
-  jmp .L1827
-.L1826:
-  mov QWORD PTR [rbp-5234], 0
-.L1827:
-  mov r15, QWORD PTR [rbp-5234]
-  test r15, r15
-  jz .L1824
-.loc 1 863 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-5306], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5314], r15
-  cmp r15, 100
-  jne .L1824
-.loc 1 862 0
-  mov QWORD PTR [rbp-5226], 1
-  jmp .L1825
-.L1824:
-  mov QWORD PTR [rbp-5226], 0
-.L1825:
-  mov r15, QWORD PTR [rbp-5226]
-  test r15, r15
-  jz .L1822
-.loc 1 863 0
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-5330], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5338], r15
-.loc 1 864 0
-.loc 1 863 0
-  cmp r15, 97
-  jne .L1822
-.loc 1 862 0
-  mov QWORD PTR [rbp-5218], 1
-  jmp .L1823
-.L1822:
-  mov QWORD PTR [rbp-5218], 0
-.L1823:
-  mov r15, QWORD PTR [rbp-5218]
-  test r15, r15
-  jz .L1820
-.loc 1 864 0
-  mov r15, r13
-  add r15, 5
-  mov QWORD PTR [rbp-5354], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5362], r15
-  cmp r15, 116
-  jne .L1820
-.loc 1 862 0
-  mov QWORD PTR [rbp-5210], 1
-  jmp .L1821
-.L1820:
-  mov QWORD PTR [rbp-5210], 0
-.L1821:
-  mov r15, QWORD PTR [rbp-5210]
-  test r15, r15
-  jz .L1818
-.loc 1 864 0
-  mov r15, r13
-  add r15, 6
-  mov QWORD PTR [rbp-5378], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5386], r15
-.loc 1 865 0
-.loc 1 864 0
-  cmp r15, 97
-  jne .L1818
-.loc 1 862 0
-  mov QWORD PTR [rbp-5202], 1
-  jmp .L1819
-.L1818:
-  mov QWORD PTR [rbp-5202], 0
-.L1819:
-.loc 1 859 0
-  mov r15, QWORD PTR [rbp-5202]
-  test r15, r15
-  jz .L1816
-.loc 1 865 0
-  mov QWORD PTR [rbp-5402], 1
-  mov rax, QWORD PTR [rbp-5402]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 859 0
-  jmp .L1817
-.L1816:
-.loc 1 865 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5410], r15
-  cmp r15, 105
-  jne .L1830
-.loc 1 866 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-5426], r15
-  cmp r15, 14
-  jne .L1832
-.loc 1 867 0
-  mov QWORD PTR [rbp-5442], 1
-.loc 1 866 0
-  mov rax, QWORD PTR [rbp-5442]
-  mov DWORD PTR [rbp-205], eax
-  jmp .L1833
-.L1832:
-.L1833:
-.loc 1 865 0
-  jmp .L1831
-.L1830:
-.loc 1 867 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5450], r15
-  cmp r15, 102
-  jne .L1834
-.loc 1 868 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-5490], r15
-  cmp r15, 5
-  jne .L1842
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-5506], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5514], r15
-  cmp r15, 105
-  jne .L1842
-  mov QWORD PTR [rbp-5482], 1
-  jmp .L1843
-.L1842:
-  mov QWORD PTR [rbp-5482], 0
-.L1843:
-  mov r15, QWORD PTR [rbp-5482]
-  test r15, r15
-  jz .L1840
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-5530], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5538], r15
-  cmp r15, 108
-  jne .L1840
-  mov QWORD PTR [rbp-5474], 1
-  jmp .L1841
-.L1840:
-  mov QWORD PTR [rbp-5474], 0
-.L1841:
-  mov r15, QWORD PTR [rbp-5474]
-  test r15, r15
-  jz .L1838
-  mov r15, r13
-  add r15, 4
-  mov QWORD PTR [rbp-5554], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5562], r15
-.loc 1 869 0
-.loc 1 868 0
-  cmp r15, 101
-  jne .L1838
-  mov QWORD PTR [rbp-5466], 1
-  jmp .L1839
-.L1838:
-  mov QWORD PTR [rbp-5466], 0
-.L1839:
-.loc 1 867 0
-  mov r15, QWORD PTR [rbp-5466]
-  test r15, r15
-  jz .L1836
-.loc 1 869 0
-  mov QWORD PTR [rbp-5578], 1
-  mov rax, QWORD PTR [rbp-5578]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 867 0
-  jmp .L1837
-.L1836:
-.L1837:
-  jmp .L1835
-.L1834:
-.loc 1 869 0
-  mov r15, QWORD PTR [rbp-2778]
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5586], r15
-  cmp r15, 108
-  jne .L1844
-.loc 1 872 0
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-5618], r15
-  cmp r15, 4
-  jne .L1850
-  mov r15, r13
-  add r15, 2
-  mov QWORD PTR [rbp-5634], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5642], r15
-  cmp r15, 111
-  jne .L1850
-  mov QWORD PTR [rbp-5610], 1
-  jmp .L1851
-.L1850:
-  mov QWORD PTR [rbp-5610], 0
-.L1851:
-  mov r15, QWORD PTR [rbp-5610]
-  test r15, r15
-  jz .L1848
-.loc 1 873 0
-  mov r15, r13
-  add r15, 3
-  mov QWORD PTR [rbp-5658], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-5666], r15
-  cmp r15, 99
-  jne .L1848
-.loc 1 872 0
-  mov QWORD PTR [rbp-5602], 1
-  jmp .L1849
-.L1848:
-  mov QWORD PTR [rbp-5602], 0
-.L1849:
-.loc 1 869 0
-  mov r15, QWORD PTR [rbp-5602]
-  test r15, r15
-  jz .L1846
-.loc 1 873 0
-  mov QWORD PTR [rbp-5682], 1
-  mov rax, QWORD PTR [rbp-5682]
-  mov DWORD PTR [rbp-205], eax
-.loc 1 869 0
-  jmp .L1847
-.L1846:
-.L1847:
-  jmp .L1845
-.L1844:
-.L1845:
-.L1835:
-.L1831:
-.L1817:
-.L1805:
-.L1793:
-.L1781:
-.L1771:
-.L1761:
-.L1751:
-.L1741:
-.L1731:
-.L1703:
-.L1679:
-.L1671:
-.L1661:
-.L1651:
-.loc 1 783 0
-  jmp .L1647
-.L1646:
-.L1647:
-.loc 1 873 0
-  xor r10, r10
-.loc 1 875 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-5690], r15
-.loc 1 874 0
-  mov rdi, QWORD PTR [rbp-5690]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-5698], rax
-.loc 1 873 0
-.loc 1 876 0
-  movsxd r15, DWORD PTR [rbp-205]
-  mov QWORD PTR [rbp-5706], r15
-  cmp r15, 1
-  jne .L1852
-.loc 1 877 0
-.loc 1 878 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_DIRECTIVE]
-  mov QWORD PTR [rbp-5730], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-5722], r15
-.loc 1 877 0
-  mov rax, QWORD PTR [rbp-5722]
-  mov r15, QWORD PTR [rbp-5698]
-  mov DWORD PTR [r15], eax
-.loc 1 876 0
-  jmp .L1853
-.L1852:
-.loc 1 880 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
-  mov QWORD PTR [rbp-5746], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-5738], r15
-  mov rax, QWORD PTR [rbp-5738]
-  mov r15, QWORD PTR [rbp-5698]
-  mov DWORD PTR [r15], eax
-.L1853:
-  mov r15, QWORD PTR [rbp-5698]
-  add r15, 4
-  mov QWORD PTR [rbp-5754], r15
-  mov rax, r13
-  mov r15, QWORD PTR [rbp-5754]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-5698]
-  add r15, 12
-  mov QWORD PTR [rbp-5762], r15
-  mov r15, QWORD PTR [rbp-6146]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-5770], r15
-  mov rax, QWORD PTR [rbp-5770]
-  mov r15, QWORD PTR [rbp-5762]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-5698]
-  add r15, 16
-  mov QWORD PTR [rbp-5778], r15
-.loc 1 881 0
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-5786], r15
-.loc 1 880 0
-  mov rax, QWORD PTR [rbp-5786]
-  mov r15, QWORD PTR [rbp-5778]
-  mov DWORD PTR [r15], eax
-.loc 1 881 0
-  mov r15, QWORD PTR [rbp-5698]
-  add r15, 20
-  mov QWORD PTR [rbp-5794], r15
-.loc 1 882 0
-  mov QWORD PTR [rbp-5802], 0
-.loc 1 881 0
-  mov rax, QWORD PTR [rbp-5802]
-  mov r15, QWORD PTR [rbp-5794]
-  mov QWORD PTR [r15], rax
-.loc 1 882 0
-  mov r15, QWORD PTR [rbp-5698]
-  add r15, 28
-  mov QWORD PTR [rbp-5810], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-5826], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-5818], r15
-  mov rax, QWORD PTR [rbp-5818]
-  mov r15, QWORD PTR [rbp-5810]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-5698]
-  add r15, 32
-  mov QWORD PTR [rbp-5834], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-5850], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-5842], r15
-  mov rax, QWORD PTR [rbp-5842]
-  mov r15, QWORD PTR [rbp-5834]
-  mov DWORD PTR [r15], eax
-.loc 1 883 0
-  mov r15, QWORD PTR [rbp-5698]
-  add r15, 36
-  mov QWORD PTR [rbp-5858], r15
-.loc 1 884 0
-  mov QWORD PTR [rbp-5866], 0
-.loc 1 883 0
-  mov rax, QWORD PTR [rbp-5866]
-  mov r15, QWORD PTR [rbp-5858]
-  mov DWORD PTR [r15], eax
-.loc 1 774 0
-  jmp .L1641
-.L1640:
-.loc 1 886 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5898], r15
-  cmp r15, 65
-  jb .L1860
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5914], r15
-  cmp r15, 90
-  ja .L1860
-  mov QWORD PTR [rbp-5890], 1
-  jmp .L1861
-.L1860:
-  mov QWORD PTR [rbp-5890], 0
-.L1861:
-  mov r15, QWORD PTR [rbp-5890]
-  test r15, r15
-  jnz .L1858
-.loc 1 887 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5938], r15
-  cmp r15, 97
-  jb .L1862
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5954], r15
-.loc 1 888 0
-.loc 1 887 0
-  cmp r15, 122
-  ja .L1862
-  mov QWORD PTR [rbp-5930], 1
-  jmp .L1863
-.L1862:
-  mov QWORD PTR [rbp-5930], 0
-.L1863:
-.loc 1 886 0
-  mov r15, QWORD PTR [rbp-5930]
-  test r15, r15
-  jnz .L1858
-  mov QWORD PTR [rbp-5882], 0
-  jmp .L1859
-.L1858:
-  mov QWORD PTR [rbp-5882], 1
-.L1859:
-  mov r15, QWORD PTR [rbp-5882]
-  test r15, r15
-  jnz .L1856
-.loc 1 888 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-5970], r15
-  cmp r15, 95
-  je .L1856
-.loc 1 886 0
-  mov QWORD PTR [rbp-5874], 0
-  jmp .L1857
-.L1856:
-  mov QWORD PTR [rbp-5874], 1
-.L1857:
-  mov r15, QWORD PTR [rbp-5874]
-  test r15, r15
-  jz .L1854
-.loc 1 889 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-5986], r15
-.loc 1 888 0
-.loc 1 893 0
-  mov QWORD PTR [rbp-5994], r15
-  add r15, 1
-  mov QWORD PTR [rbp-6002], r15
-  mov rax, QWORD PTR [rbp-6002]
-  mov QWORD PTR [rbp-92], rax
-.L1864:
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-6018], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1866
-  lea r15, [rip+_caustic_assembler_lexer_cst_char_tab]
-  mov QWORD PTR [rbp-6034], r15
-.loc 1 894 0
-  mov r15, QWORD PTR [rbp-6018]
-  mov QWORD PTR [rbp-6042], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-6042]
-  mov QWORD PTR [rbp-6050], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6058], r15
-.loc 1 893 0
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6066], r15
-  mov r15, QWORD PTR [rbp-6034]
-  add r15, QWORD PTR [rbp-6066]
-  mov QWORD PTR [rbp-6074], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6082], r15
-.loc 1 894 0
-.loc 1 893 0
-  cmp r15, 0
-  je .L1866
-  mov QWORD PTR [rbp-6010], 1
-  jmp .L1867
-.L1866:
-  mov QWORD PTR [rbp-6010], 0
-.L1867:
-  mov r15, QWORD PTR [rbp-6010]
-  test r15, r15
-  jz .L1865
-.loc 1 894 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-6098], r15
-  add r15, 1
-  mov QWORD PTR [rbp-6106], r15
-  mov rax, QWORD PTR [rbp-6106]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 893 0
-  jmp .L1864
-.L1865:
-.loc 1 898 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-6114], r15
-  sub r15, QWORD PTR [rbp-5986]
-  mov QWORD PTR [rbp-6122], r15
-.loc 1 897 0
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6130], r15
-.loc 1 899 0
-  mov r15, QWORD PTR [rbp-394]
-  add r15, QWORD PTR [rbp-5986]
-  mov QWORD PTR [rbp-6138], r15
-  mov r12, r15
-.loc 1 898 0
-.loc 1 899 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6154], r15
-.loc 1 900 0
-.loc 1 899 0
-  cmp r15, 9
-  jg .L1868
-.loc 1 900 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-6170], r15
-  add r15, 48
-  mov QWORD PTR [rbp-6178], r15
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-6186], r15
-  add r15, 48
-  mov QWORD PTR [rbp-6194], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-6202], r15
-  add r15, 1
-  mov QWORD PTR [rbp-6210], r15
-  mov rax, QWORD PTR [rbp-6210]
-  mov r15, QWORD PTR [rbp-6178]
-  mov QWORD PTR [r15], rax
-.loc 1 899 0
-  jmp .L1869
-.L1868:
-.loc 1 901 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-6218], r15
-  add r15, 56
-  mov QWORD PTR [rbp-6226], r15
-.loc 1 902 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-  mov QWORD PTR [rbp-6234], r15
-.loc 1 903 0
-  add r15, 56
-  mov QWORD PTR [rbp-6242], r15
-  mov r15, QWORD PTR [r15]
-  mov QWORD PTR [rbp-6250], r15
-.loc 1 904 0
-.loc 1 903 0
-  add r15, 1
-  mov QWORD PTR [rbp-6258], r15
-.loc 1 901 0
-  mov rax, QWORD PTR [rbp-6258]
-  mov r15, QWORD PTR [rbp-6226]
-  mov QWORD PTR [r15], rax
-.L1869:
-.loc 1 905 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-6290], r15
-.loc 1 906 0
-.loc 1 905 0
-  cmp r15, 66
-  jb .L1876
-.loc 1 909 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-6306], r15
-  cmp r15, 87
-  ja .L1876
-.loc 1 905 0
-  mov QWORD PTR [rbp-6282], 1
-  jmp .L1877
-.L1876:
-  mov QWORD PTR [rbp-6282], 0
-.L1877:
-  mov r15, QWORD PTR [rbp-6282]
-  test r15, r15
-  jz .L1874
-.loc 1 909 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6322], r15
-  cmp r15, 4
-  jl .L1874
-.loc 1 905 0
-  mov QWORD PTR [rbp-6274], 1
-  jmp .L1875
-.L1874:
-  mov QWORD PTR [rbp-6274], 0
-.L1875:
-  mov r15, QWORD PTR [rbp-6274]
-  test r15, r15
-  jz .L1872
-.loc 1 909 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6338], r15
-.loc 1 910 0
-.loc 1 909 0
-  cmp r15, 5
-  jg .L1872
-.loc 1 905 0
-  mov QWORD PTR [rbp-6266], 1
-  jmp .L1873
-.L1872:
-  mov QWORD PTR [rbp-6266], 0
-.L1873:
-  mov r15, QWORD PTR [rbp-6266]
-  test r15, r15
-  jz .L1870
-.loc 1 910 0
-  mov QWORD PTR [rbp-6354], 0
-  mov rax, QWORD PTR [rbp-6354]
-  mov DWORD PTR [rbp-238], eax
-.loc 1 911 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-6402], r15
-  cmp r15, 81
-  jne .L1888
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6418], r15
-  cmp r15, 5
-  jne .L1888
-  mov QWORD PTR [rbp-6394], 1
-  jmp .L1889
-.L1888:
-  mov QWORD PTR [rbp-6394], 0
-.L1889:
-  mov r15, QWORD PTR [rbp-6394]
-  test r15, r15
-  jz .L1886
-  mov r15, r12
-  add r15, 1
-  mov QWORD PTR [rbp-6434], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6442], r15
-.loc 1 912 0
-.loc 1 911 0
-  cmp r15, 87
-  jne .L1886
-  mov QWORD PTR [rbp-6386], 1
-  jmp .L1887
-.L1886:
-  mov QWORD PTR [rbp-6386], 0
-.L1887:
-  mov r15, QWORD PTR [rbp-6386]
-  test r15, r15
-  jz .L1884
-.loc 1 912 0
-  mov r15, r12
-  add r15, 2
-  mov QWORD PTR [rbp-6458], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6466], r15
-.loc 1 914 0
-.loc 1 912 0
-  cmp r15, 79
-  jne .L1884
-.loc 1 911 0
-  mov QWORD PTR [rbp-6378], 1
-  jmp .L1885
-.L1884:
-  mov QWORD PTR [rbp-6378], 0
-.L1885:
-  mov r15, QWORD PTR [rbp-6378]
-  test r15, r15
-  jz .L1882
-.loc 1 914 0
-  mov r15, r12
-  add r15, 3
-  mov QWORD PTR [rbp-6482], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6490], r15
-  cmp r15, 82
-  jne .L1882
-.loc 1 911 0
-  mov QWORD PTR [rbp-6370], 1
-  jmp .L1883
-.L1882:
-  mov QWORD PTR [rbp-6370], 0
-.L1883:
-  mov r15, QWORD PTR [rbp-6370]
-  test r15, r15
-  jz .L1880
-.loc 1 914 0
-.loc 1 915 0
-  mov r15, r12
-  add r15, 4
-  mov QWORD PTR [rbp-6506], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6514], r15
-  cmp r15, 68
-  jne .L1880
-.loc 1 911 0
-  mov QWORD PTR [rbp-6362], 1
-  jmp .L1881
-.L1880:
-  mov QWORD PTR [rbp-6362], 0
-.L1881:
-.loc 1 910 0
-  mov r15, QWORD PTR [rbp-6362]
-  test r15, r15
-  jz .L1878
-.loc 1 915 0
-  mov QWORD PTR [rbp-6530], 64
-  mov rax, QWORD PTR [rbp-6530]
-  mov DWORD PTR [rbp-238], eax
-.loc 1 910 0
-  jmp .L1879
-.L1878:
-.loc 1 916 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-6578], r15
-  cmp r15, 68
-  jne .L1900
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6594], r15
-  cmp r15, 5
-  jne .L1900
-  mov QWORD PTR [rbp-6570], 1
-  jmp .L1901
-.L1900:
-  mov QWORD PTR [rbp-6570], 0
-.L1901:
-  mov r15, QWORD PTR [rbp-6570]
-  test r15, r15
-  jz .L1898
-.loc 1 917 0
-.loc 1 916 0
-  mov r15, r12
-  add r15, 1
-  mov QWORD PTR [rbp-6610], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6618], r15
-.loc 1 918 0
-.loc 1 916 0
-  cmp r15, 87
-  jne .L1898
-  mov QWORD PTR [rbp-6562], 1
-  jmp .L1899
-.L1898:
-  mov QWORD PTR [rbp-6562], 0
-.L1899:
-  mov r15, QWORD PTR [rbp-6562]
-  test r15, r15
-  jz .L1896
-.loc 1 920 0
-  mov r15, r12
-  add r15, 2
-  mov QWORD PTR [rbp-6634], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6642], r15
-.loc 1 921 0
-.loc 1 920 0
-  cmp r15, 79
-  jne .L1896
-.loc 1 916 0
-  mov QWORD PTR [rbp-6554], 1
-  jmp .L1897
-.L1896:
-  mov QWORD PTR [rbp-6554], 0
-.L1897:
-  mov r15, QWORD PTR [rbp-6554]
-  test r15, r15
-  jz .L1894
-.loc 1 921 0
-.loc 1 922 0
-.loc 1 921 0
-  mov r15, r12
-  add r15, 3
-  mov QWORD PTR [rbp-6658], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6666], r15
-.loc 1 922 0
-.loc 1 921 0
-  cmp r15, 82
-  jne .L1894
-.loc 1 916 0
-  mov QWORD PTR [rbp-6546], 1
-  jmp .L1895
-.L1894:
-  mov QWORD PTR [rbp-6546], 0
-.L1895:
-  mov r15, QWORD PTR [rbp-6546]
-  test r15, r15
-  jz .L1892
-.loc 1 923 0
-  mov r15, r12
-  add r15, 4
-  mov QWORD PTR [rbp-6682], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6690], r15
-.loc 1 924 0
-.loc 1 923 0
-  cmp r15, 68
-  jne .L1892
-.loc 1 916 0
-  mov QWORD PTR [rbp-6538], 1
-  jmp .L1893
-.L1892:
-  mov QWORD PTR [rbp-6538], 0
-.L1893:
-  mov r15, QWORD PTR [rbp-6538]
-  test r15, r15
-  jz .L1890
-.loc 1 924 0
-.loc 1 927 0
-  mov QWORD PTR [rbp-6706], 32
-.loc 1 924 0
-  mov rax, QWORD PTR [rbp-6706]
-  mov DWORD PTR [rbp-238], eax
-.loc 1 916 0
-  jmp .L1891
-.L1890:
-.loc 1 927 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-6746], r15
-  cmp r15, 87
-  jne .L1910
-.loc 1 928 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6762], r15
-  cmp r15, 4
-  jne .L1910
-.loc 1 927 0
-  mov QWORD PTR [rbp-6738], 1
-  jmp .L1911
-.L1910:
-  mov QWORD PTR [rbp-6738], 0
-.L1911:
-  mov r15, QWORD PTR [rbp-6738]
-  test r15, r15
-  jz .L1908
-.loc 1 928 0
-  mov r15, r12
-  add r15, 1
-  mov QWORD PTR [rbp-6778], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6786], r15
-  cmp r15, 79
-  jne .L1908
-.loc 1 927 0
-  mov QWORD PTR [rbp-6730], 1
-  jmp .L1909
-.L1908:
-  mov QWORD PTR [rbp-6730], 0
-.L1909:
-  mov r15, QWORD PTR [rbp-6730]
-  test r15, r15
-  jz .L1906
-.loc 1 928 0
-  mov r15, r12
-  add r15, 2
-  mov QWORD PTR [rbp-6802], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6810], r15
-  cmp r15, 82
-  jne .L1906
-.loc 1 927 0
-  mov QWORD PTR [rbp-6722], 1
-  jmp .L1907
-.L1906:
-  mov QWORD PTR [rbp-6722], 0
-.L1907:
-  mov r15, QWORD PTR [rbp-6722]
-  test r15, r15
-  jz .L1904
-.loc 1 929 0
-  mov r15, r12
-  add r15, 3
-  mov QWORD PTR [rbp-6826], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6834], r15
-  cmp r15, 68
-  jne .L1904
-.loc 1 927 0
-  mov QWORD PTR [rbp-6714], 1
-  jmp .L1905
-.L1904:
-  mov QWORD PTR [rbp-6714], 0
-.L1905:
-  mov r15, QWORD PTR [rbp-6714]
-  test r15, r15
-  jz .L1902
-.loc 1 929 0
-  mov QWORD PTR [rbp-6850], 16
-  mov rax, QWORD PTR [rbp-6850]
-  mov DWORD PTR [rbp-238], eax
-.loc 1 927 0
-  jmp .L1903
-.L1902:
-.loc 1 929 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-6890], r15
-.loc 1 930 0
-.loc 1 929 0
-  cmp r15, 66
-  jne .L1920
-.loc 1 930 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-6906], r15
-  cmp r15, 4
-  jne .L1920
-.loc 1 929 0
-  mov QWORD PTR [rbp-6882], 1
-  jmp .L1921
-.L1920:
-  mov QWORD PTR [rbp-6882], 0
-.L1921:
-  mov r15, QWORD PTR [rbp-6882]
-  test r15, r15
-  jz .L1918
-.loc 1 931 0
-  mov r15, r12
-  add r15, 1
-  mov QWORD PTR [rbp-6922], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6930], r15
-  cmp r15, 89
-  jne .L1918
-.loc 1 929 0
-  mov QWORD PTR [rbp-6874], 1
-  jmp .L1919
-.L1918:
-  mov QWORD PTR [rbp-6874], 0
-.L1919:
-  mov r15, QWORD PTR [rbp-6874]
-  test r15, r15
-  jz .L1916
-.loc 1 931 0
-  mov r15, r12
-  add r15, 2
-  mov QWORD PTR [rbp-6946], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6954], r15
-.loc 1 932 0
-.loc 1 931 0
-  cmp r15, 84
-  jne .L1916
-.loc 1 929 0
-  mov QWORD PTR [rbp-6866], 1
-  jmp .L1917
-.L1916:
-  mov QWORD PTR [rbp-6866], 0
-.L1917:
-  mov r15, QWORD PTR [rbp-6866]
-  test r15, r15
-  jz .L1914
-.loc 1 932 0
-.loc 1 933 0
-.loc 1 932 0
-  mov r15, r12
-  add r15, 3
-  mov QWORD PTR [rbp-6970], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-6978], r15
-.loc 1 933 0
-.loc 1 932 0
-  cmp r15, 69
-  jne .L1914
-.loc 1 929 0
-  mov QWORD PTR [rbp-6858], 1
-  jmp .L1915
-.L1914:
-  mov QWORD PTR [rbp-6858], 0
-.L1915:
-  mov r15, QWORD PTR [rbp-6858]
-  test r15, r15
-  jz .L1912
-.loc 1 933 0
-.loc 1 934 0
-  mov QWORD PTR [rbp-6994], 8
-.loc 1 933 0
-  mov rax, QWORD PTR [rbp-6994]
-  mov DWORD PTR [rbp-238], eax
-.loc 1 929 0
-  jmp .L1913
-.L1912:
-.L1913:
-.L1903:
-.L1891:
-.L1879:
-.loc 1 934 0
-  movsxd r15, DWORD PTR [rbp-238]
-  mov QWORD PTR [rbp-7002], r15
-  cmp r15, 0
-  jle .L1922
-.loc 1 935 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-7018], r15
-.loc 1 934 0
-.L1924:
-.loc 1 935 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-7034], r15
-  cmp r15, QWORD PTR [rbp-2698]
-  jge .L1926
-  mov r15, QWORD PTR [rbp-7034]
-  mov QWORD PTR [rbp-7050], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-7050]
-  mov QWORD PTR [rbp-7058], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-7066], r15
-.loc 1 936 0
-.loc 1 935 0
-  cmp r15, 32
-  jne .L1926
-  mov QWORD PTR [rbp-7026], 1
-  jmp .L1927
-.L1926:
-  mov QWORD PTR [rbp-7026], 0
-.L1927:
-  mov r15, QWORD PTR [rbp-7026]
-  test r15, r15
-  jz .L1925
-.loc 1 936 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-7082], r15
-  add r15, 1
-  mov QWORD PTR [rbp-7090], r15
-  mov rax, QWORD PTR [rbp-7090]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 935 0
-  jmp .L1924
-.L1925:
-.loc 1 936 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-7122], r15
-  add r15, 3
-  mov QWORD PTR [rbp-7130], r15
-.loc 1 937 0
-.loc 1 936 0
-  cmp r15, QWORD PTR [rbp-2698]
-  jg .L1934
-.loc 1 937 0
-  mov r15, QWORD PTR [rbp-7122]
-  mov QWORD PTR [rbp-7146], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-7146]
-  mov QWORD PTR [rbp-7154], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-7162], r15
-  cmp r15, 80
-  jne .L1934
-.loc 1 936 0
-  mov QWORD PTR [rbp-7114], 1
-  jmp .L1935
-.L1934:
-  mov QWORD PTR [rbp-7114], 0
-.L1935:
-  mov r15, QWORD PTR [rbp-7114]
-  test r15, r15
-  jz .L1932
-.loc 1 937 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-7178], r15
-  add r15, 1
-  mov QWORD PTR [rbp-7186], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-7186]
-  mov QWORD PTR [rbp-7194], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-7202], r15
-.loc 1 938 0
-.loc 1 937 0
-  cmp r15, 84
-  jne .L1932
-.loc 1 936 0
-  mov QWORD PTR [rbp-7106], 1
-  jmp .L1933
-.L1932:
-  mov QWORD PTR [rbp-7106], 0
-.L1933:
-  mov r15, QWORD PTR [rbp-7106]
-  test r15, r15
-  jz .L1930
-.loc 1 938 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-7218], r15
-  add r15, 2
-  mov QWORD PTR [rbp-7226], r15
-  mov r15, QWORD PTR [rbp-2714]
-  add r15, QWORD PTR [rbp-7226]
-  mov QWORD PTR [rbp-7234], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-7242], r15
-  cmp r15, 82
-  jne .L1930
-.loc 1 936 0
-  mov QWORD PTR [rbp-7098], 1
-  jmp .L1931
-.L1930:
-  mov QWORD PTR [rbp-7098], 0
-.L1931:
-  mov r15, QWORD PTR [rbp-7098]
-  test r15, r15
-  jz .L1928
-.loc 1 938 0
-.loc 1 939 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-7258], r15
-  add r15, 3
-  mov QWORD PTR [rbp-7266], r15
-.loc 1 938 0
-  mov rax, QWORD PTR [rbp-7266]
-  mov QWORD PTR [rbp-92], rax
-.loc 1 939 0
-  xor r10, r10
-.loc 1 940 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-7274], r15
-.loc 1 939 0
-  mov rdi, QWORD PTR [rbp-7274]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-7282], rax
-.loc 1 940 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_SIZE_PREFIX]
-  mov QWORD PTR [rbp-7298], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7290], r15
-  mov rax, QWORD PTR [rbp-7290]
-  mov r15, QWORD PTR [rbp-7282]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7282]
-  add r15, 4
-  mov QWORD PTR [rbp-7306], r15
-  mov rax, r12
-  mov r15, QWORD PTR [rbp-7306]
-  mov QWORD PTR [r15], rax
-.loc 1 941 0
-  mov r15, QWORD PTR [rbp-7282]
-  add r15, 12
-  mov QWORD PTR [rbp-7314], r15
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-7322], r15
-  sub r15, QWORD PTR [rbp-5986]
-  mov QWORD PTR [rbp-7330], r15
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-7338], r15
-  mov rax, QWORD PTR [rbp-7338]
-  mov r15, QWORD PTR [rbp-7314]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7282]
-  add r15, 16
-  mov QWORD PTR [rbp-7346], r15
-.loc 1 942 0
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-7354], r15
-.loc 1 941 0
-  mov rax, QWORD PTR [rbp-7354]
-  mov r15, QWORD PTR [rbp-7346]
-  mov DWORD PTR [r15], eax
-.loc 1 942 0
-.loc 1 943 0
-  mov r15, QWORD PTR [rbp-7282]
-  add r15, 20
-  mov QWORD PTR [rbp-7362], r15
-.loc 1 946 0
-  mov QWORD PTR [rbp-7370], 0
-.loc 1 943 0
-  mov rax, QWORD PTR [rbp-7370]
-  mov r15, QWORD PTR [rbp-7362]
-  mov QWORD PTR [r15], rax
-.loc 1 946 0
-  mov r15, QWORD PTR [rbp-7282]
-  add r15, 28
-  mov QWORD PTR [rbp-7378], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-7394], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7386], r15
-  mov rax, QWORD PTR [rbp-7386]
-  mov r15, QWORD PTR [rbp-7378]
-  mov DWORD PTR [r15], eax
-.loc 1 947 0
-  mov r15, QWORD PTR [rbp-7282]
-  add r15, 32
-  mov QWORD PTR [rbp-7402], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-7418], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7410], r15
-  mov rax, QWORD PTR [rbp-7410]
-  mov r15, QWORD PTR [rbp-7402]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7282]
-  add r15, 36
-  mov QWORD PTR [rbp-7426], r15
-  movsxd r15, DWORD PTR [rbp-238]
-  mov QWORD PTR [rbp-7434], r15
-  mov rax, QWORD PTR [rbp-7434]
-  mov r15, QWORD PTR [rbp-7426]
-  mov DWORD PTR [r15], eax
-.loc 1 936 0
-  jmp .L1929
-.L1928:
-.loc 1 948 0
-  mov rax, QWORD PTR [rbp-7018]
-  mov QWORD PTR [rbp-92], rax
-  xor r10, r10
-.loc 1 949 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-7442], r15
-.loc 1 948 0
-  mov rdi, QWORD PTR [rbp-7442]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-7450], rax
-.loc 1 949 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
-  mov QWORD PTR [rbp-7466], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7458], r15
-  mov rax, QWORD PTR [rbp-7458]
-  mov r15, QWORD PTR [rbp-7450]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7450]
-  add r15, 4
-  mov QWORD PTR [rbp-7474], r15
-  mov rax, r12
-  mov r15, QWORD PTR [rbp-7474]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-7450]
-  add r15, 12
-  mov QWORD PTR [rbp-7482], r15
-.loc 1 950 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-7490], r15
-.loc 1 949 0
-  mov rax, QWORD PTR [rbp-7490]
-  mov r15, QWORD PTR [rbp-7482]
-  mov DWORD PTR [r15], eax
-.loc 1 950 0
-.loc 1 951 0
-  mov r15, QWORD PTR [rbp-7450]
-  add r15, 16
-  mov QWORD PTR [rbp-7498], r15
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-7506], r15
-  mov rax, QWORD PTR [rbp-7506]
-  mov r15, QWORD PTR [rbp-7498]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7450]
-  add r15, 20
-  mov QWORD PTR [rbp-7514], r15
-  mov QWORD PTR [rbp-7522], 0
-  mov rax, QWORD PTR [rbp-7522]
-  mov r15, QWORD PTR [rbp-7514]
-  mov QWORD PTR [r15], rax
-.loc 1 952 0
-  mov r15, QWORD PTR [rbp-7450]
-  add r15, 28
-  mov QWORD PTR [rbp-7530], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-7546], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7538], r15
-  mov rax, QWORD PTR [rbp-7538]
-  mov r15, QWORD PTR [rbp-7530]
-  mov DWORD PTR [r15], eax
-.loc 1 955 0
-  mov r15, QWORD PTR [rbp-7450]
-  add r15, 32
-  mov QWORD PTR [rbp-7554], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-7570], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7562], r15
-  mov rax, QWORD PTR [rbp-7562]
-  mov r15, QWORD PTR [rbp-7554]
-  mov DWORD PTR [r15], eax
-.loc 1 956 0
-  mov r15, QWORD PTR [rbp-7450]
-  add r15, 36
-  mov QWORD PTR [rbp-7578], r15
-  mov QWORD PTR [rbp-7586], 0
-  mov rax, QWORD PTR [rbp-7586]
-  mov r15, QWORD PTR [rbp-7578]
-  mov DWORD PTR [r15], eax
-.L1929:
-.loc 1 934 0
-  jmp .L1923
-.L1922:
-.loc 1 956 0
-  xor r10, r10
-.loc 1 957 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-7594], r15
-  mov rdi, QWORD PTR [rbp-7594]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-7602], rax
-.loc 1 956 0
-.loc 1 958 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
-  mov QWORD PTR [rbp-7618], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7610], r15
-  mov rax, QWORD PTR [rbp-7610]
-  mov r15, QWORD PTR [rbp-7602]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7602]
-  add r15, 4
-  mov QWORD PTR [rbp-7626], r15
-  mov rax, r12
-  mov r15, QWORD PTR [rbp-7626]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-7602]
-  add r15, 12
-  mov QWORD PTR [rbp-7634], r15
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-7642], r15
-  mov rax, QWORD PTR [rbp-7642]
-  mov r15, QWORD PTR [rbp-7634]
-  mov DWORD PTR [r15], eax
-.loc 1 959 0
-  mov r15, QWORD PTR [rbp-7602]
-  add r15, 16
-  mov QWORD PTR [rbp-7650], r15
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-7658], r15
-  mov rax, QWORD PTR [rbp-7658]
-  mov r15, QWORD PTR [rbp-7650]
-  mov DWORD PTR [r15], eax
-.loc 1 960 0
-  mov r15, QWORD PTR [rbp-7602]
-  add r15, 20
-  mov QWORD PTR [rbp-7666], r15
-  mov QWORD PTR [rbp-7674], 0
-  mov rax, QWORD PTR [rbp-7674]
-  mov r15, QWORD PTR [rbp-7666]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-7602]
-  add r15, 28
-  mov QWORD PTR [rbp-7682], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-7698], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7690], r15
-  mov rax, QWORD PTR [rbp-7690]
-  mov r15, QWORD PTR [rbp-7682]
-  mov DWORD PTR [r15], eax
-.loc 1 961 0
-  mov r15, QWORD PTR [rbp-7602]
-  add r15, 32
-  mov QWORD PTR [rbp-7706], r15
-.loc 1 964 0
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-7722], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7714], r15
-.loc 1 961 0
-  mov rax, QWORD PTR [rbp-7714]
-  mov r15, QWORD PTR [rbp-7706]
-  mov DWORD PTR [r15], eax
-.loc 1 964 0
-  mov r15, QWORD PTR [rbp-7602]
-  add r15, 36
-  mov QWORD PTR [rbp-7730], r15
-  mov QWORD PTR [rbp-7738], 0
-  mov rax, QWORD PTR [rbp-7738]
-  mov r15, QWORD PTR [rbp-7730]
-  mov DWORD PTR [r15], eax
-.L1923:
-.loc 1 905 0
-  jmp .L1871
-.L1870:
-.loc 1 965 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-7754], r15
-  cmp r15, 9
-  jg .L1938
-  lea r15, [rip+_caustic_assembler_lexer_cst_ri_first]
-  mov QWORD PTR [rbp-7770], r15
-.loc 1 966 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-7778], r15
-.loc 1 965 0
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-7786], r15
-  mov r15, QWORD PTR [rbp-7770]
-  add r15, QWORD PTR [rbp-7786]
-  mov QWORD PTR [rbp-7794], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-7802], r15
-.loc 1 966 0
-.loc 1 965 0
-  cmp r15, 0
-  je .L1938
-  mov QWORD PTR [rbp-7746], 0
-  jmp .L1939
-.L1938:
-  mov QWORD PTR [rbp-7746], 1
-.L1939:
-  mov r15, QWORD PTR [rbp-7746]
-  test r15, r15
-  jz .L1936
-.loc 1 966 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-7834], r15
-  cmp r15, 8
-  jne .L1944
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-7850], r15
-.loc 1 967 0
-.loc 1 966 0
-  cmp r15, 110
-  jne .L1944
-  mov QWORD PTR [rbp-7826], 1
-  jmp .L1945
-.L1944:
-  mov QWORD PTR [rbp-7826], 0
-.L1945:
-  mov r15, QWORD PTR [rbp-7826]
-  test r15, r15
-  jz .L1942
-.loc 1 967 0
-  mov r15, r12
-  add r15, 1
-  mov QWORD PTR [rbp-7866], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-7874], r15
-  cmp r15, 111
-  jne .L1942
-.loc 1 966 0
-  mov QWORD PTR [rbp-7818], 1
-  jmp .L1943
-.L1942:
-  mov QWORD PTR [rbp-7818], 0
-.L1943:
-  mov r15, QWORD PTR [rbp-7818]
-  test r15, r15
-  jz .L1940
-  jmp .L1941
-.L1940:
-.loc 1 967 0
-  xor r10, r10
-.loc 1 968 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-7890], r15
-  mov rdi, QWORD PTR [rbp-7890]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-7898], rax
-.loc 1 967 0
-.loc 1 969 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
-  mov QWORD PTR [rbp-7914], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7906], r15
-  mov rax, QWORD PTR [rbp-7906]
-  mov r15, QWORD PTR [rbp-7898]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7898]
-  add r15, 4
-  mov QWORD PTR [rbp-7922], r15
-  mov rax, r12
-  mov r15, QWORD PTR [rbp-7922]
-  mov QWORD PTR [r15], rax
-.loc 1 971 0
-  mov r15, QWORD PTR [rbp-7898]
-  add r15, 12
-  mov QWORD PTR [rbp-7930], r15
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-7938], r15
-  mov rax, QWORD PTR [rbp-7938]
-  mov r15, QWORD PTR [rbp-7930]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7898]
-  add r15, 16
-  mov QWORD PTR [rbp-7946], r15
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-7954], r15
-  mov rax, QWORD PTR [rbp-7954]
-  mov r15, QWORD PTR [rbp-7946]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7898]
-  add r15, 20
-  mov QWORD PTR [rbp-7962], r15
-  mov QWORD PTR [rbp-7970], 0
-  mov rax, QWORD PTR [rbp-7970]
-  mov r15, QWORD PTR [rbp-7962]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-7898]
-  add r15, 28
-  mov QWORD PTR [rbp-7978], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-7994], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-7986], r15
-  mov rax, QWORD PTR [rbp-7986]
-  mov r15, QWORD PTR [rbp-7978]
-  mov DWORD PTR [r15], eax
-.loc 1 972 0
-  mov r15, QWORD PTR [rbp-7898]
-  add r15, 32
-  mov QWORD PTR [rbp-8002], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-8018], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-8010], r15
-  mov rax, QWORD PTR [rbp-8010]
-  mov r15, QWORD PTR [rbp-8002]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-7898]
-  add r15, 36
-  mov QWORD PTR [rbp-8026], r15
-  mov QWORD PTR [rbp-8034], 0
-  mov rax, QWORD PTR [rbp-8034]
-  mov r15, QWORD PTR [rbp-8026]
-  mov DWORD PTR [r15], eax
-.L1941:
-.loc 1 965 0
-  jmp .L1937
-.L1936:
-.loc 1 973 0
-  xor r10, r10
-.loc 1 974 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8042], r15
-  mov rdi, r12
-  mov rsi, QWORD PTR [rbp-8042]
-  call _caustic_assembler_lexer_cst_ht_lookup
-  mov QWORD PTR [rbp-8050], rax
-.loc 1 973 0
-.loc 1 975 0
-  mov r15, QWORD PTR [rbp-8050]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8058], r15
-.loc 1 976 0
-.loc 1 975 0
-  cmp r15, 0
-  jne .L1946
-.loc 1 977 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8098], r15
-  cmp r15, 3
-  jne .L1954
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-8114], r15
-.loc 1 978 0
-.loc 1 977 0
-  cmp r15, 80
-  jne .L1954
-  mov QWORD PTR [rbp-8090], 1
-  jmp .L1955
-.L1954:
-  mov QWORD PTR [rbp-8090], 0
-.L1955:
-  mov r15, QWORD PTR [rbp-8090]
-  test r15, r15
-  jz .L1952
-.loc 1 978 0
-  mov r15, r12
-  add r15, 1
-  mov QWORD PTR [rbp-8130], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-8138], r15
-.loc 1 979 0
-.loc 1 978 0
-  cmp r15, 84
-  jne .L1952
-.loc 1 977 0
-  mov QWORD PTR [rbp-8082], 1
-  jmp .L1953
-.L1952:
-  mov QWORD PTR [rbp-8082], 0
-.L1953:
-  mov r15, QWORD PTR [rbp-8082]
-  test r15, r15
-  jz .L1950
-.loc 1 979 0
-.loc 1 980 0
-  mov r15, r12
-  add r15, 2
-  mov QWORD PTR [rbp-8154], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-8162], r15
-  cmp r15, 82
-  jne .L1950
-.loc 1 977 0
-  mov QWORD PTR [rbp-8074], 1
-  jmp .L1951
-.L1950:
-  mov QWORD PTR [rbp-8074], 0
-.L1951:
-.loc 1 976 0
-  mov r15, QWORD PTR [rbp-8074]
-  test r15, r15
-  jz .L1948
-  jmp .L1949
-.L1948:
-.loc 1 981 0
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8194], r15
-.loc 1 982 0
-.loc 1 981 0
-  cmp r15, 8
-  jne .L1960
-.loc 1 982 0
-  mov r15, r14
-  movzx r15, r15b
-  mov QWORD PTR [rbp-8210], r15
-.loc 1 983 0
-.loc 1 982 0
-  cmp r15, 110
-  jne .L1960
-.loc 1 981 0
-  mov QWORD PTR [rbp-8186], 1
-  jmp .L1961
-.L1960:
-  mov QWORD PTR [rbp-8186], 0
-.L1961:
-  mov r15, QWORD PTR [rbp-8186]
-  test r15, r15
-  jz .L1958
-.loc 1 983 0
-  mov r15, r12
-  add r15, 1
-  mov QWORD PTR [rbp-8226], r15
-  movzx r15, BYTE PTR [r15]
-  mov QWORD PTR [rbp-8234], r15
-.loc 1 984 0
-.loc 1 983 0
-  cmp r15, 111
-  jne .L1958
-.loc 1 981 0
-  mov QWORD PTR [rbp-8178], 1
   jmp .L1959
 .L1958:
-  mov QWORD PTR [rbp-8178], 0
 .L1959:
-  mov r15, QWORD PTR [rbp-8178]
-  test r15, r15
-  jz .L1956
-  jmp .L1957
-.L1956:
-.loc 1 985 0
-  xor r10, r10
-.loc 1 986 0
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-8250], r15
-  mov rdi, QWORD PTR [rbp-8250]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-8258], rax
-.loc 1 985 0
-.loc 1 986 0
-.loc 1 987 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
-  mov QWORD PTR [rbp-8274], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-8266], r15
-  mov rax, QWORD PTR [rbp-8266]
-  mov r15, QWORD PTR [rbp-8258]
-  mov DWORD PTR [r15], eax
-.loc 1 990 0
-  mov r15, QWORD PTR [rbp-8258]
-  add r15, 4
-  mov QWORD PTR [rbp-8282], r15
-  mov rax, r12
-  mov r15, QWORD PTR [rbp-8282]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-8258]
-  add r15, 12
-  mov QWORD PTR [rbp-8290], r15
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8298], r15
-  mov rax, QWORD PTR [rbp-8298]
-  mov r15, QWORD PTR [rbp-8290]
-  mov DWORD PTR [r15], eax
-.loc 1 993 0
-  mov r15, QWORD PTR [rbp-8258]
-  add r15, 16
-  mov QWORD PTR [rbp-8306], r15
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-8314], r15
-  mov rax, QWORD PTR [rbp-8314]
-  mov r15, QWORD PTR [rbp-8306]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-8258]
-  add r15, 20
-  mov QWORD PTR [rbp-8322], r15
-  mov QWORD PTR [rbp-8330], 0
-  mov rax, QWORD PTR [rbp-8330]
-  mov r15, QWORD PTR [rbp-8322]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-8258]
-  add r15, 28
-  mov QWORD PTR [rbp-8338], r15
-.loc 1 994 0
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-8354], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-8346], r15
-.loc 1 993 0
-  mov rax, QWORD PTR [rbp-8346]
-  mov r15, QWORD PTR [rbp-8338]
-  mov DWORD PTR [r15], eax
-.loc 1 994 0
-  mov r15, QWORD PTR [rbp-8258]
-  add r15, 32
-  mov QWORD PTR [rbp-8362], r15
-.loc 1 995 0
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-8378], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-8370], r15
-.loc 1 994 0
-  mov rax, QWORD PTR [rbp-8370]
-  mov r15, QWORD PTR [rbp-8362]
-  mov DWORD PTR [r15], eax
-.loc 1 995 0
-  mov r15, QWORD PTR [rbp-8258]
-  add r15, 36
-  mov QWORD PTR [rbp-8386], r15
-  mov QWORD PTR [rbp-8394], 0
-  mov rax, QWORD PTR [rbp-8394]
-  mov r15, QWORD PTR [rbp-8386]
-  mov DWORD PTR [r15], eax
-.L1957:
-.L1949:
-.loc 1 975 0
-  jmp .L1947
-.L1946:
-.loc 1 1000 0
-  mov r15, QWORD PTR [rbp-8050]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8402], r15
-  sar r15, 16
-  mov QWORD PTR [rbp-8410], r15
-.loc 1 996 0
-.loc 1 1001 0
-  mov r15, QWORD PTR [rbp-8050]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8418], r15
-  and r15, 65535
-  mov QWORD PTR [rbp-8426], r15
-.loc 1 1000 0
-.loc 1 1001 0
-  xor r10, r10
-  lea r15, [rbp-84]
-  mov QWORD PTR [rbp-8434], r15
-  mov rdi, QWORD PTR [rbp-8434]
-  call _caustic_assembler_lexer_cst_tl_next
-  mov QWORD PTR [rbp-8442], rax
-  mov r15, QWORD PTR [rbp-8410]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8450], r15
-.loc 1 1002 0
-.loc 1 1001 0
-  cmp r15, 1
-  jne .L1962
-.loc 1 1002 0
-.loc 1 1003 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_REGISTER]
-  mov QWORD PTR [rbp-8474], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-8466], r15
-.loc 1 1002 0
-  mov rax, QWORD PTR [rbp-8466]
-  mov r15, QWORD PTR [rbp-8442]
-  mov DWORD PTR [r15], eax
-.loc 1 1003 0
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 28
-  mov QWORD PTR [rbp-8482], r15
-  mov r15, QWORD PTR [rbp-8426]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8490], r15
-  mov rax, QWORD PTR [rbp-8490]
-  mov r15, QWORD PTR [rbp-8482]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 32
-  mov QWORD PTR [rbp-8498], r15
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
-  mov QWORD PTR [rbp-8514], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-8506], r15
-  mov rax, QWORD PTR [rbp-8506]
-  mov r15, QWORD PTR [rbp-8498]
-  mov DWORD PTR [r15], eax
-.loc 1 1001 0
-  jmp .L1963
-.L1962:
-.loc 1 1005 0
-  lea r15, [rip+_caustic_assembler_lexer_cst_TK_INSTRUCTION]
-  mov QWORD PTR [rbp-8530], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-8522], r15
-  mov rax, QWORD PTR [rbp-8522]
-  mov r15, QWORD PTR [rbp-8442]
-  mov DWORD PTR [r15], eax
-.loc 1 1006 0
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 28
-  mov QWORD PTR [rbp-8538], r15
-.loc 1 1007 0
-  lea r15, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov QWORD PTR [rbp-8554], r15
-  movsxd r15, DWORD PTR [r15]
-  mov QWORD PTR [rbp-8546], r15
-.loc 1 1006 0
-  mov rax, QWORD PTR [rbp-8546]
-  mov r15, QWORD PTR [rbp-8538]
-  mov DWORD PTR [r15], eax
-.loc 1 1007 0
-.loc 1 1009 0
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 32
-  mov QWORD PTR [rbp-8562], r15
-  mov r15, QWORD PTR [rbp-8426]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8570], r15
-  mov rax, QWORD PTR [rbp-8570]
-  mov r15, QWORD PTR [rbp-8562]
-  mov DWORD PTR [r15], eax
-.L1963:
-.loc 1 1010 0
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 4
-  mov QWORD PTR [rbp-8578], r15
-  mov rax, r12
-  mov r15, QWORD PTR [rbp-8578]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 12
-  mov QWORD PTR [rbp-8586], r15
-  mov r15, QWORD PTR [rbp-6130]
-  movsxd r15, r15d
-  mov QWORD PTR [rbp-8594], r15
-  mov rax, QWORD PTR [rbp-8594]
-  mov r15, QWORD PTR [rbp-8586]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 16
-  mov QWORD PTR [rbp-8602], r15
-  movsxd r15, DWORD PTR [rbp-96]
-  mov QWORD PTR [rbp-8610], r15
-  mov rax, QWORD PTR [rbp-8610]
-  mov r15, QWORD PTR [rbp-8602]
-  mov DWORD PTR [r15], eax
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 20
-  mov QWORD PTR [rbp-8618], r15
-  mov QWORD PTR [rbp-8626], 0
-  mov rax, QWORD PTR [rbp-8626]
-  mov r15, QWORD PTR [rbp-8618]
-  mov QWORD PTR [r15], rax
-  mov r15, QWORD PTR [rbp-8442]
-  add r15, 36
-  mov QWORD PTR [rbp-8634], r15
-  mov QWORD PTR [rbp-8642], 0
-  mov rax, QWORD PTR [rbp-8642]
-  mov r15, QWORD PTR [rbp-8634]
-  mov DWORD PTR [r15], eax
-.L1947:
-.L1937:
-.L1871:
-.loc 1 886 0
-  jmp .L1855
-.L1854:
-.loc 1 1011 0
-.loc 1 1012 0
-  mov r15, QWORD PTR [rbp-92]
-  mov QWORD PTR [rbp-8650], r15
-  mov rbx, QWORD PTR [rbp-8650]
-  add rbx, 1
-.loc 1 1011 0
+  mov rbx, 0
   mov rax, rbx
-  mov QWORD PTR [rbp-92], rax
-.L1855:
-.L1641:
-.L1637:
-.L1611:
-.L1601:
-.L1591:
-.L1585:
-.L1583:
-.L1573:
-.loc 1 678 0
-  jmp .L1570
-.L1571:
-.loc 1 1012 0
-  xor r10, r10
-  lea r15, [rbp-8714]
-  mov QWORD PTR [rbp-8658], r15
-  lea r12, [rip+_caustic_assembler_lexer_cst_TK_EOF]
-  mov r15, r12
-  movsxd r15, DWORD PTR [r15]
-  mov r13, r15
-.loc 1 1013 0
-  mov r12, 0
-.loc 1 1012 0
-  mov r15, r12
-  mov r14, r15
-.loc 1 1013 0
-  mov r12, 0
-  movsxd r15, DWORD PTR [rbp-96]
-  mov rbx, r15
-.loc 1 1012 0
-  mov rdi, QWORD PTR [rbp-8658]
-  mov rsi, r13
-  mov rdx, r14
-  mov rcx, r12
-  mov r8, rbx
-  call _caustic_assembler_lexer_cst_make_tok
-  mov rbx, rax
-  lea rbx, [rbp-346]
-  mov rdi, rbx
-  mov rsi, QWORD PTR [rbp-8658]
-  mov rcx, 40
-  cld
-  rep movsb
-.loc 1 1013 0
-  lea rbx, [rbp-84]
-  lea r12, [rbp-346]
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_lexer_cst_tl_push
-  mov rbx, rax
-  lea rbx, [rbp-84]
-  mov rdi, QWORD PTR [rbp-354]
-  mov rsi, rbx
-  mov rcx, 16
-  cld
-  rep movsb
-  mov rax, QWORD PTR [rbp-354]
-  add rsp, 8728
+  add rsp, 200
   pop r15
   pop r14
   pop r13
@@ -34471,7 +34494,7 @@ _caustic_assembler_lexer_cst_tokenize:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 8728
+  add rsp, 200
   pop r15
   pop r14
   pop r13
