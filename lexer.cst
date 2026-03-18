@@ -1,6 +1,6 @@
 use "../std/mem.cst" as mem;
 use "../std/linux.cst" as linux;
-use "encoder.cst" as enc;
+use "asm_defs.cst" as def;
 
 // Token kinds
 let is i32 as TK_EOF with imut = 0;
@@ -68,6 +68,21 @@ fn tl_push(tl as *TokenList, tok as Token) as void {
     tl.count = tl.count + 1;
 }
 
+// Fast emit: get next slot, caller fills it. Returns null if needs grow.
+fn tl_next(tl as *TokenList) as *Token {
+    if (tl.count >= tl.cap) {
+        let is i32 as new_cap = tl.cap * 2;
+        let is *u8 as new_data = mem.galloc(cast(i64, new_cap) * sizeof(Token));
+        mem.memcpy(new_data, tl.data, cast(i64, tl.count) * sizeof(Token));
+        mem.gfree(tl.data);
+        tl.data = new_data;
+        tl.cap = new_cap;
+    }
+    let is *Token as slot = cast(*Token, cast(i64, tl.data) + cast(i64, tl.count) * sizeof(Token));
+    tl.count = tl.count + 1;
+    return slot;
+}
+
 fn tl_get(tl as *TokenList, idx as i32) as *Token {
     return cast(*Token, cast(i64, tl.data) + cast(i64, idx) * sizeof(Token));
 }
@@ -79,33 +94,60 @@ fn make_tok(kind as i32, ptr as *u8, len as i32, line as i32) as Token {
     t.len = len;
     t.line = line;
     t.num_val = 0;
-    t.reg_id = enc.REG_NONE;
-    t.inst_id = enc.INST_NONE;
+    t.reg_id = def.REG_NONE;
+    t.inst_id = def.INST_NONE;
     t.size_val = 0;
     return t;
 }
 
+// Char classification table: bit 0=alpha, bit 1=digit, bit 2=space/tab
+let is [256]u8 as char_tab with mut;
+let is i32 as char_tab_ready with mut = 0;
+
+fn init_char_tab() as void {
+    let is i32 as ci with mut = 0;
+    while (ci < 256) { char_tab[ci] = 0; ci = ci + 1; }
+    // alpha: A-Z
+    ci = 65;
+    while (ci <= 90) { char_tab[ci] = 1; ci = ci + 1; }
+    // alpha: a-z
+    ci = 97;
+    while (ci <= 122) { char_tab[ci] = 1; ci = ci + 1; }
+    // alpha: _
+    char_tab[95] = 1;
+    // digit: 0-9
+    ci = 48;
+    while (ci <= 57) { char_tab[ci] = 2; ci = ci + 1; }
+    // alnum + dot (for identifiers like .L0, names.with.dots)
+    // dot gets bit 4
+    char_tab[46] = 4;
+    char_tab_ready = 1;
+}
+
 fn is_alpha(c as u8) as i32 {
-    if (c >= 65 && c <= 90) { return 1; }
-    if (c >= 97 && c <= 122) { return 1; }
-    if (c == 95) { return 1; }
+    if (char_tab[cast(i32, c)] == 1) { return 1; }
     return 0;
 }
 
 fn is_digit(c as u8) as i32 {
-    if (c >= 48 && c <= 57) { return 1; }
+    if (char_tab[cast(i32, c)] == 2) { return 1; }
     return 0;
 }
 
 fn is_alnum(c as u8) as i32 {
-    if (is_alpha(c) == 1) { return 1; }
-    if (is_digit(c) == 1) { return 1; }
+    let is u8 as v = char_tab[cast(i32, c)];
+    if (v == 1 || v == 2) { return 1; }
     return 0;
 }
 
-fn parse_number(src as *u8, pos as i64, src_len as i64) as i64 {
-    // Returns the parsed number value
-    // The caller advances pos by counting digits
+fn is_alnum_dot(c as u8) as i32 {
+    let is u8 as v = char_tab[cast(i32, c)];
+    if (v != 0) { return 1; }
+    return 0;
+}
+
+// Parse number and return new position. Value written to *out_val.
+fn parse_number_fast(src as *u8, pos as i64, src_len as i64, out_val as *i64) as i64 {
     let is i64 as i with mut = pos;
     let is i64 as result with mut = 0;
 
@@ -125,63 +167,335 @@ fn parse_number(src as *u8, pos as i64, src_len as i64) as i64 {
             }
             i = i + 1;
         }
-        return result;
+        *out_val = result;
+        return i;
     }
 
     // Decimal
-    while (i < src_len && is_digit(src[i]) == 1) {
+    while (i < src_len && src[i] >= 48 && src[i] <= 57) {
         result = result * 10 + cast(i64, src[i]) - 48;
         i = i + 1;
     }
-    return result;
+    *out_val = result;
+    return i;
 }
 
-fn count_number_len(src as *u8, pos as i64, src_len as i64) as i32 {
-    let is i64 as i with mut = pos;
-    if (i + 1 < src_len && src[i] == 48 && (src[i + 1] == 120 || src[i + 1] == 88)) {
-        i = i + 2;
-        while (i < src_len) {
-            let is u8 as c = src[i];
-            if ((c >= 48 && c <= 57) || (c >= 97 && c <= 102) || (c >= 65 && c <= 70)) {
-                i = i + 1;
-            } else {
-                break;
+// Lookup table: 1 = valid first char for register or instruction (lowercase only)
+// Regs: a,b,c,d,e,r,s,x  Insts: a,c,d,i,j,l,m,n,o,p,r,s,t,x
+let is [256]u8 as ri_first with mut;
+let is i32 as ri_first_ready with mut = 0;
+
+fn init_ri_first() as void {
+    let is i32 as ci with mut = 0;
+    while (ci < 256) { ri_first[ci] = 0; ci = ci + 1; }
+    ri_first[97] = 1;  // a
+    ri_first[98] = 1;  // b
+    ri_first[99] = 1;  // c
+    ri_first[100] = 1; // d
+    ri_first[101] = 1; // e
+    ri_first[105] = 1; // i
+    ri_first[106] = 1; // j
+    ri_first[108] = 1; // l
+    ri_first[109] = 1; // m
+    ri_first[110] = 1; // n
+    ri_first[111] = 1; // o
+    ri_first[112] = 1; // p
+    ri_first[114] = 1; // r
+    ri_first[115] = 1; // s
+    ri_first[116] = 1; // t
+    ri_first[120] = 1; // x
+    ri_first_ready = 1;
+}
+
+// === Hash table for combined register/instruction lookup ===
+// 1024 entries, each 32 bytes: c0(i32)+c1(i32)+c2(i32)+c3(i32)+c4(i32)+len(i32)+kind(i32)+id(i32)
+// kind: 0=empty, 1=register, 2=instruction
+// c3=ptr[3] if len>=4, c4=ptr[4] if len>=5, else 0
+let is i32 as HT_SIZE with imut = 1024;
+let is *u8 as ht_data with mut;
+let is i32 as ht_ready with mut = 0;
+
+fn ht_hash(c0 as i32, c1 as i32, c2 as i32, c3 as i32, c4 as i32, len as i32) as i32 {
+    let is i32 as h = c0 * 31 + c1 * 7 + c2 * 3 + c3 * 13 + c4 * 17 + len * 127;
+    return (h & 1023);
+}
+
+fn ht_insert(c0 as i32, c1 as i32, c2 as i32, c3 as i32, c4 as i32, len as i32, kind as i32, id as i32) as void {
+    let is i32 as h with mut = ht_hash(c0, c1, c2, c3, c4, len);
+    let is i32 as tries with mut = 0;
+    while (tries < 1024) {
+        let is i64 as off = cast(i64, h) * 32;
+        let is *i32 as pk = cast(*i32, cast(i64, ht_data) + off + 24);
+        if (*pk == 0) {
+            let is *i32 as p0 = cast(*i32, cast(i64, ht_data) + off);
+            *p0 = c0;
+            let is *i32 as p1 = cast(*i32, cast(i64, ht_data) + off + 4);
+            *p1 = c1;
+            let is *i32 as p2 = cast(*i32, cast(i64, ht_data) + off + 8);
+            *p2 = c2;
+            let is *i32 as p3 = cast(*i32, cast(i64, ht_data) + off + 12);
+            *p3 = c3;
+            let is *i32 as p4 = cast(*i32, cast(i64, ht_data) + off + 16);
+            *p4 = c4;
+            let is *i32 as pl = cast(*i32, cast(i64, ht_data) + off + 20);
+            *pl = len;
+            *pk = kind;
+            let is *i32 as pi = cast(*i32, cast(i64, ht_data) + off + 28);
+            *pi = id;
+            return;
+        }
+        h = (h + 1) & 1023;
+        tries = tries + 1;
+    }
+}
+
+// Returns: kind in high 16 bits, id in low 16 bits. 0 = not found.
+fn ht_lookup(ptr as *u8, len as i32) as i32 {
+    let is i32 as c0 = cast(i32, ptr[0]);
+    let is i32 as c1 = cast(i32, ptr[1]);
+    let is i32 as c2 with mut = 0;
+    let is i32 as c3 with mut = 0;
+    let is i32 as c4 with mut = 0;
+    if (len >= 3) { c2 = cast(i32, ptr[2]); }
+    if (len >= 4) { c3 = cast(i32, ptr[3]); }
+    if (len >= 5) { c4 = cast(i32, ptr[4]); }
+    let is i32 as h with mut = ht_hash(c0, c1, c2, c3, c4, len);
+    let is i32 as tries with mut = 0;
+    while (tries < 16) {
+        let is i64 as off = cast(i64, h) * 32;
+        let is *i32 as pk = cast(*i32, cast(i64, ht_data) + off + 24);
+        let is i32 as kind = *pk;
+        if (kind == 0) { return 0; }
+        let is *i32 as pl = cast(*i32, cast(i64, ht_data) + off + 20);
+        if (*pl == len) {
+            let is *i32 as p0 = cast(*i32, cast(i64, ht_data) + off);
+            let is *i32 as p1 = cast(*i32, cast(i64, ht_data) + off + 4);
+            if (*p0 == c0 && *p1 == c1) {
+                let is *i32 as p2 = cast(*i32, cast(i64, ht_data) + off + 8);
+                let is *i32 as p3 = cast(*i32, cast(i64, ht_data) + off + 12);
+                let is *i32 as p4 = cast(*i32, cast(i64, ht_data) + off + 16);
+                if (*p2 == c2 && *p3 == c3 && *p4 == c4) {
+                    return kind * 65536 + *cast(*i32, cast(i64, ht_data) + off + 28);
+                }
             }
         }
-        return cast(i32, i - pos);
+        h = (h + 1) & 1023;
+        tries = tries + 1;
     }
-    while (i < src_len && is_digit(src[i]) == 1) {
-        i = i + 1;
-    }
-    return cast(i32, i - pos);
+    return 0;
 }
 
+fn init_ht() as void {
+    ht_data = mem.galloc(cast(i64, HT_SIZE) * 32);
+    mem.memset(ht_data, 0, cast(i64, HT_SIZE) * 32);
+
+    // Registers (kind=1)
+    // ht_insert(c0, c1, c2, c3, c4, len, kind, id)
+    // len 2
+    ht_insert(97, 108, 0, 0, 0, 2, 1, def.REG_AL);  // al
+    ht_insert(97, 120, 0, 0, 0, 2, 1, def.REG_AX);  // ax
+    ht_insert(99, 108, 0, 0, 0, 2, 1, def.REG_CL);  // cl
+    ht_insert(99, 120, 0, 0, 0, 2, 1, def.REG_CX);  // cx
+    ht_insert(100, 108, 0, 0, 0, 2, 1, def.REG_DL); // dl
+    ht_insert(100, 120, 0, 0, 0, 2, 1, def.REG_DX); // dx
+    ht_insert(100, 105, 0, 0, 0, 2, 1, def.REG_DI); // di
+    ht_insert(98, 108, 0, 0, 0, 2, 1, def.REG_BL);  // bl
+    ht_insert(98, 120, 0, 0, 0, 2, 1, def.REG_BX);  // bx
+    ht_insert(98, 112, 0, 0, 0, 2, 1, def.REG_BP);  // bp
+    ht_insert(115, 112, 0, 0, 0, 2, 1, def.REG_SP); // sp
+    ht_insert(115, 105, 0, 0, 0, 2, 1, def.REG_SI); // si
+    ht_insert(114, 56, 0, 0, 0, 2, 1, def.REG_R8);  // r8
+    ht_insert(114, 57, 0, 0, 0, 2, 1, def.REG_R9);  // r9
+    // len 3
+    ht_insert(114, 97, 120, 0, 0, 3, 1, def.REG_RAX);  // rax
+    ht_insert(114, 99, 120, 0, 0, 3, 1, def.REG_RCX);  // rcx
+    ht_insert(114, 100, 120, 0, 0, 3, 1, def.REG_RDX); // rdx
+    ht_insert(114, 98, 120, 0, 0, 3, 1, def.REG_RBX);  // rbx
+    ht_insert(114, 115, 112, 0, 0, 3, 1, def.REG_RSP); // rsp
+    ht_insert(114, 98, 112, 0, 0, 3, 1, def.REG_RBP);  // rbp
+    ht_insert(114, 115, 105, 0, 0, 3, 1, def.REG_RSI); // rsi
+    ht_insert(114, 100, 105, 0, 0, 3, 1, def.REG_RDI); // rdi
+    ht_insert(114, 49, 48, 0, 0, 3, 1, def.REG_R10);   // r10
+    ht_insert(114, 49, 49, 0, 0, 3, 1, def.REG_R11);   // r11
+    ht_insert(114, 49, 50, 0, 0, 3, 1, def.REG_R12);   // r12
+    ht_insert(114, 49, 51, 0, 0, 3, 1, def.REG_R13);   // r13
+    ht_insert(114, 49, 52, 0, 0, 3, 1, def.REG_R14);   // r14
+    ht_insert(114, 49, 53, 0, 0, 3, 1, def.REG_R15);   // r15
+    ht_insert(101, 97, 120, 0, 0, 3, 1, def.REG_EAX);  // eax
+    ht_insert(101, 99, 120, 0, 0, 3, 1, def.REG_ECX);  // ecx
+    ht_insert(101, 100, 120, 0, 0, 3, 1, def.REG_EDX); // edx
+    ht_insert(101, 98, 120, 0, 0, 3, 1, def.REG_EBX);  // ebx
+    ht_insert(101, 115, 112, 0, 0, 3, 1, def.REG_ESP); // esp
+    ht_insert(101, 98, 112, 0, 0, 3, 1, def.REG_EBP);  // ebp
+    ht_insert(101, 115, 105, 0, 0, 3, 1, def.REG_ESI); // esi
+    ht_insert(101, 100, 105, 0, 0, 3, 1, def.REG_EDI); // edi
+    ht_insert(115, 112, 108, 0, 0, 3, 1, def.REG_SPL); // spl
+    ht_insert(98, 112, 108, 0, 0, 3, 1, def.REG_BPL);  // bpl
+    ht_insert(115, 105, 108, 0, 0, 3, 1, def.REG_SIL); // sil
+    ht_insert(100, 105, 108, 0, 0, 3, 1, def.REG_DIL); // dil
+    ht_insert(114, 105, 112, 0, 0, 3, 1, 99);          // rip (special, id=99)
+    ht_insert(114, 56, 100, 0, 0, 3, 1, def.REG_R8D);  // r8d
+    ht_insert(114, 56, 119, 0, 0, 3, 1, def.REG_R8W);  // r8w
+    ht_insert(114, 56, 98, 0, 0, 3, 1, def.REG_R8B);   // r8b
+    ht_insert(114, 57, 100, 0, 0, 3, 1, def.REG_R9D);  // r9d
+    ht_insert(114, 57, 119, 0, 0, 3, 1, def.REG_R9W);  // r9w
+    ht_insert(114, 57, 98, 0, 0, 3, 1, def.REG_R9B);   // r9b
+    // len 4: r10d..r15b
+    ht_insert(114, 49, 48, 100, 0, 4, 1, def.REG_R10D); // r10d
+    ht_insert(114, 49, 48, 119, 0, 4, 1, def.REG_R10W); // r10w
+    ht_insert(114, 49, 48, 98, 0, 4, 1, def.REG_R10B);  // r10b
+    ht_insert(114, 49, 49, 100, 0, 4, 1, def.REG_R11D); // r11d
+    ht_insert(114, 49, 49, 119, 0, 4, 1, def.REG_R11W); // r11w
+    ht_insert(114, 49, 49, 98, 0, 4, 1, def.REG_R11B);  // r11b
+    ht_insert(114, 49, 50, 100, 0, 4, 1, def.REG_R12D); // r12d
+    ht_insert(114, 49, 50, 119, 0, 4, 1, def.REG_R12W); // r12w
+    ht_insert(114, 49, 50, 98, 0, 4, 1, def.REG_R12B);  // r12b
+    ht_insert(114, 49, 51, 100, 0, 4, 1, def.REG_R13D); // r13d
+    ht_insert(114, 49, 51, 119, 0, 4, 1, def.REG_R13W); // r13w
+    ht_insert(114, 49, 51, 98, 0, 4, 1, def.REG_R13B);  // r13b
+    ht_insert(114, 49, 52, 100, 0, 4, 1, def.REG_R14D); // r14d
+    ht_insert(114, 49, 52, 119, 0, 4, 1, def.REG_R14W); // r14w
+    ht_insert(114, 49, 52, 98, 0, 4, 1, def.REG_R14B);  // r14b
+    ht_insert(114, 49, 53, 100, 0, 4, 1, def.REG_R15D); // r15d
+    ht_insert(114, 49, 53, 119, 0, 4, 1, def.REG_R15W); // r15w
+    ht_insert(114, 49, 53, 98, 0, 4, 1, def.REG_R15B);  // r15b
+    // len 4: xmm0-9
+    ht_insert(120, 109, 109, 48, 0, 4, 1, def.REG_XMM0); // xmm0
+    ht_insert(120, 109, 109, 49, 0, 4, 1, def.REG_XMM1); // xmm1
+    ht_insert(120, 109, 109, 50, 0, 4, 1, def.REG_XMM2); // xmm2
+    ht_insert(120, 109, 109, 51, 0, 4, 1, def.REG_XMM3); // xmm3
+    ht_insert(120, 109, 109, 52, 0, 4, 1, def.REG_XMM4); // xmm4
+    ht_insert(120, 109, 109, 53, 0, 4, 1, def.REG_XMM5); // xmm5
+    ht_insert(120, 109, 109, 54, 0, 4, 1, def.REG_XMM6); // xmm6
+    ht_insert(120, 109, 109, 55, 0, 4, 1, def.REG_XMM7); // xmm7
+    ht_insert(120, 109, 109, 56, 0, 4, 1, def.REG_XMM8); // xmm8
+    ht_insert(120, 109, 109, 57, 0, 4, 1, def.REG_XMM9); // xmm9
+    // len 5: xmm10-15
+    ht_insert(120, 109, 109, 49, 48, 5, 1, def.REG_XMM10); // xmm10
+    ht_insert(120, 109, 109, 49, 49, 5, 1, def.REG_XMM11); // xmm11
+    ht_insert(120, 109, 109, 49, 50, 5, 1, def.REG_XMM12); // xmm12
+    ht_insert(120, 109, 109, 49, 51, 5, 1, def.REG_XMM13); // xmm13
+    ht_insert(120, 109, 109, 49, 52, 5, 1, def.REG_XMM14); // xmm14
+    ht_insert(120, 109, 109, 49, 53, 5, 1, def.REG_XMM15); // xmm15
+
+    // Instructions (kind=2)
+    // len 2
+    ht_insert(111, 114, 0, 0, 0, 2, 2, def.INST_OR);  // or
+    ht_insert(106, 122, 0, 0, 0, 2, 2, def.INST_JZ);  // jz
+    ht_insert(106, 101, 0, 0, 0, 2, 2, def.INST_JE);  // je
+    ht_insert(106, 108, 0, 0, 0, 2, 2, def.INST_JL);  // jl
+    ht_insert(106, 103, 0, 0, 0, 2, 2, def.INST_JG);  // jg
+    ht_insert(106, 97, 0, 0, 0, 2, 2, def.INST_JA);   // ja
+    ht_insert(106, 98, 0, 0, 0, 2, 2, def.INST_JB);   // jb
+    // len 3
+    ht_insert(109, 111, 118, 0, 0, 3, 2, def.INST_MOV); // mov
+    ht_insert(108, 101, 97, 0, 0, 3, 2, def.INST_LEA);  // lea
+    ht_insert(97, 100, 100, 0, 0, 3, 2, def.INST_ADD);  // add
+    ht_insert(115, 117, 98, 0, 0, 3, 2, def.INST_SUB);  // sub
+    ht_insert(115, 104, 108, 0, 0, 3, 2, def.INST_SHL); // shl
+    ht_insert(115, 104, 114, 0, 0, 3, 2, def.INST_SHR); // shr
+    ht_insert(115, 97, 114, 0, 0, 3, 2, def.INST_SAR);  // sar
+    ht_insert(100, 105, 118, 0, 0, 3, 2, def.INST_DIV); // div
+    ht_insert(99, 113, 111, 0, 0, 3, 2, def.INST_CQO);  // cqo
+    ht_insert(99, 100, 113, 0, 0, 3, 2, def.INST_CDQ);  // cdq
+    ht_insert(99, 109, 112, 0, 0, 3, 2, def.INST_CMP);  // cmp
+    ht_insert(99, 108, 100, 0, 0, 3, 2, def.INST_CLD);  // cld
+    ht_insert(110, 101, 103, 0, 0, 3, 2, def.INST_NEG); // neg
+    ht_insert(110, 111, 116, 0, 0, 3, 2, def.INST_NOT); // not
+    ht_insert(110, 111, 112, 0, 0, 3, 2, def.INST_NOP); // nop
+    ht_insert(97, 110, 100, 0, 0, 3, 2, def.INST_AND);  // and
+    ht_insert(120, 111, 114, 0, 0, 3, 2, def.INST_XOR); // xor
+    ht_insert(114, 101, 116, 0, 0, 3, 2, def.INST_RET); // ret
+    ht_insert(114, 101, 112, 0, 0, 3, 2, def.INST_REP); // rep
+    ht_insert(106, 109, 112, 0, 0, 3, 2, def.INST_JMP); // jmp
+    ht_insert(106, 110, 122, 0, 0, 3, 2, def.INST_JNZ); // jnz
+    ht_insert(106, 110, 101, 0, 0, 3, 2, def.INST_JNE); // jne
+    ht_insert(106, 108, 101, 0, 0, 3, 2, def.INST_JLE); // jle
+    ht_insert(106, 103, 101, 0, 0, 3, 2, def.INST_JGE); // jge
+    ht_insert(106, 97, 101, 0, 0, 3, 2, def.INST_JAE);  // jae
+    ht_insert(106, 98, 101, 0, 0, 3, 2, def.INST_JBE);  // jbe
+    ht_insert(112, 111, 112, 0, 0, 3, 2, def.INST_POP); // pop
+    // len 4
+    ht_insert(112, 117, 115, 104, 0, 4, 2, def.INST_PUSH); // push
+    ht_insert(105, 109, 117, 108, 0, 4, 2, def.INST_IMUL); // imul
+    ht_insert(105, 100, 105, 118, 0, 4, 2, def.INST_IDIV); // idiv
+    ht_insert(116, 101, 115, 116, 0, 4, 2, def.INST_TEST); // test
+    ht_insert(115, 101, 116, 101, 0, 4, 2, def.INST_SETE); // sete
+    ht_insert(115, 101, 116, 108, 0, 4, 2, def.INST_SETL); // setl
+    ht_insert(115, 101, 116, 103, 0, 4, 2, def.INST_SETG); // setg
+    ht_insert(115, 101, 116, 98, 0, 4, 2, def.INST_SETB);  // setb
+    ht_insert(115, 101, 116, 97, 0, 4, 2, def.INST_SETA);  // seta
+    ht_insert(99, 97, 108, 108, 0, 4, 2, def.INST_CALL);   // call
+    ht_insert(109, 111, 118, 113, 0, 4, 2, def.INST_MOVQ); // movq
+    // len 5
+    ht_insert(109, 111, 118, 115, 120, 5, 2, def.INST_MOVSX);  // movsx
+    ht_insert(109, 111, 118, 122, 120, 5, 2, def.INST_MOVZX);  // movzx
+    ht_insert(109, 111, 118, 115, 98, 5, 2, def.INST_MOVSB);   // movsb
+    ht_insert(115, 101, 116, 110, 101, 5, 2, def.INST_SETNE);  // setne
+    ht_insert(115, 101, 116, 108, 101, 5, 2, def.INST_SETLE);  // setle
+    ht_insert(115, 101, 116, 103, 101, 5, 2, def.INST_SETGE);  // setge
+    ht_insert(115, 101, 116, 98, 101, 5, 2, def.INST_SETBE);   // setbe
+    ht_insert(115, 101, 116, 97, 101, 5, 2, def.INST_SETAE);   // setae
+    ht_insert(97, 100, 100, 115, 100, 5, 2, def.INST_ADDSD);   // addsd
+    ht_insert(115, 117, 98, 115, 100, 5, 2, def.INST_SUBSD);   // subsd
+    ht_insert(109, 117, 108, 115, 100, 5, 2, def.INST_MULSD);  // mulsd
+    ht_insert(100, 105, 118, 115, 100, 5, 2, def.INST_DIVSD);  // divsd
+    ht_insert(120, 111, 114, 112, 100, 5, 2, def.INST_XORPD);  // xorpd
+    // len 6
+    ht_insert(109, 111, 118, 115, 120, 6, 2, def.INST_MOVSXD);    // movsxd
+    // len 7
+    ht_insert(115, 121, 115, 99, 97, 7, 2, def.INST_SYSCALL);     // syscall
+    // len 8
+    ht_insert(99, 118, 116, 115, 105, 8, 2, def.INST_CVTSI2SD);   // cvtsi2sd
+    // len 9
+    ht_insert(99, 118, 116, 116, 115, 9, 2, def.INST_CVTTSD2SI);  // cvttsd2si
+    ht_ready = 1;
+}
+
+// Tokenizer profiling counters
+let is [8]i64 as tok_prof_counts with mut;
+// 0=spaces, 1=newlines, 2=comments, 3=punct, 4=numbers, 5=dots, 6=idents_short, 7=idents_long
+
 fn tokenize(src as *u8, src_len as i64) as TokenList {
-    // Estimate ~2 tokens per 12 bytes of source
-    let is i32 as tok_hint = cast(i32, src_len / 6) + 4096;
+    if (char_tab_ready == 0) { init_char_tab(); }
+    if (ri_first_ready == 0) { init_ri_first(); }
+    if (ht_ready == 0) { init_ht(); }
+    // Estimate ~1 token per 3 bytes of source (avoid array resize)
+    let is i32 as tok_hint = cast(i32, src_len / 3) + 4096;
     let is TokenList as tl = tl_init(tok_hint);
     let is i64 as i with mut = 0;
     let is i32 as line with mut = 1;
+    tok_prof_counts[0] = 0; tok_prof_counts[1] = 0; tok_prof_counts[2] = 0; tok_prof_counts[3] = 0;
+    tok_prof_counts[4] = 0; tok_prof_counts[5] = 0; tok_prof_counts[6] = 0; tok_prof_counts[7] = 0;
+
+    let is *u8 as base = src;
+    let is i64 as base_i = cast(i64, src);
 
     while (i < src_len) {
         let is u8 as c = src[i];
 
-        // Skip whitespace (not newline)
+        // Skip whitespace (not newline) — fast skip loop
         if (c == 32 || c == 9 || c == 13) {
+            tok_prof_counts[0] = tok_prof_counts[0] + 1;
             i = i + 1;
+            while (i < src_len && src[i] == 32) { i = i + 1; }
         }
         // Newline
         else if (c == 10) {
-            let is Token as t = make_tok(TK_NEWLINE, cast(*u8, cast(i64, src) + i), 1, line);
-            tl_push(&tl, t);
+            tok_prof_counts[1] = tok_prof_counts[1] + 1;
+            let is *Token as t = tl_next(&tl);
+            t.kind = TK_NEWLINE; t.ptr = cast(*u8, base_i + i); t.len = 1; t.line = line;
+            t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
             line = line + 1;
             i = i + 1;
         }
         // Comment: # or //
         else if (c == 35) {
+            tok_prof_counts[2] = tok_prof_counts[2] + 1;
             while (i < src_len && src[i] != 10) { i = i + 1; }
         }
         else if (c == 47 && i + 1 < src_len && src[i + 1] == 47) {
+            tok_prof_counts[2] = tok_prof_counts[2] + 1;
             while (i < src_len && src[i] != 10) { i = i + 1; }
         }
         // String literal
@@ -193,159 +507,166 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                 i = i + 1;
             }
             if (i < src_len) { i = i + 1; }
-            let is Token as t = make_tok(TK_STRING, cast(*u8, cast(i64, src) + start), cast(i32, i - start), line);
-            tl_push(&tl, t);
+            let is *Token as t = tl_next(&tl);
+            t.kind = TK_STRING; t.ptr = cast(*u8, base_i + start); t.len = cast(i32, i - start); t.line = line;
+            t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
         }
-        // Punctuation
-        else if (c == 44) { let is Token as t = make_tok(TK_COMMA, cast(*u8, cast(i64, src) + i), 1, line); tl_push(&tl, t); i = i + 1; }
-        else if (c == 58) { let is Token as t = make_tok(TK_COLON, cast(*u8, cast(i64, src) + i), 1, line); tl_push(&tl, t); i = i + 1; }
-        else if (c == 91) { let is Token as t = make_tok(TK_LBRACKET, cast(*u8, cast(i64, src) + i), 1, line); tl_push(&tl, t); i = i + 1; }
-        else if (c == 93) { let is Token as t = make_tok(TK_RBRACKET, cast(*u8, cast(i64, src) + i), 1, line); tl_push(&tl, t); i = i + 1; }
-        else if (c == 43) { let is Token as t = make_tok(TK_PLUS, cast(*u8, cast(i64, src) + i), 1, line); tl_push(&tl, t); i = i + 1; }
-        else if (c == 42) { let is Token as t = make_tok(TK_STAR, cast(*u8, cast(i64, src) + i), 1, line); tl_push(&tl, t); i = i + 1; }
-        // Minus sign or negative number
-        else if (c == 45) {
-            let is Token as t = make_tok(TK_MINUS, cast(*u8, cast(i64, src) + i), 1, line);
-            tl_push(&tl, t);
+        // Single-char punctuation (combined check)
+        else if (c == 44 || c == 58 || c == 91 || c == 93 || c == 43 || c == 42 || c == 45) {
+            tok_prof_counts[3] = tok_prof_counts[3] + 1;
+            let is i32 as tk with mut = TK_COMMA;
+            if (c == 58) { tk = TK_COLON; }
+            else if (c == 91) { tk = TK_LBRACKET; }
+            else if (c == 93) { tk = TK_RBRACKET; }
+            else if (c == 43) { tk = TK_PLUS; }
+            else if (c == 42) { tk = TK_STAR; }
+            else if (c == 45) { tk = TK_MINUS; }
+            let is *Token as t = tl_next(&tl);
+            t.kind = tk; t.ptr = cast(*u8, base_i + i); t.len = 1; t.line = line;
+            t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
             i = i + 1;
         }
-        // Number
-        else if (is_digit(c) == 1) {
+        // Number (0-9)
+        else if (c >= 48 && c <= 57) {
+            tok_prof_counts[4] = tok_prof_counts[4] + 1;
             let is i64 as start = i;
-            let is i64 as val = parse_number(src, i, src_len);
-            let is i32 as nlen = count_number_len(src, i, src_len);
-            let is Token as t = make_tok(TK_NUMBER, cast(*u8, cast(i64, src) + start), nlen, line);
-            t.num_val = val;
-            tl_push(&tl, t);
-            i = i + cast(i64, nlen);
+            let is i64 as val with mut = 0;
+            let is i64 as new_i = parse_number_fast(src, i, src_len, &val);
+            let is *Token as t = tl_next(&tl);
+            t.kind = TK_NUMBER; t.ptr = cast(*u8, base_i + start); t.len = cast(i32, new_i - start); t.line = line;
+            t.num_val = val; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+            i = new_i;
         }
-        // Dot: directive or label part
+        // Dot: directive or local label
         else if (c == 46) {
+            tok_prof_counts[5] = tok_prof_counts[5] + 1;
             let is i64 as start = i;
             i = i + 1;
-            while (i < src_len && (is_alnum(src[i]) == 1 || src[i] == 46)) {
-                i = i + 1;
-            }
+            while (i < src_len && char_tab[cast(i32, src[i])] != 0) { i = i + 1; }
             let is i32 as tlen = cast(i32, i - start);
-            let is *u8 as tptr = cast(*u8, cast(i64, src) + start);
+            let is *u8 as tptr = cast(*u8, base_i + start);
 
-            // Check if it's a known directive
-            if (enc.streq_lit(tptr, tlen, ".intel_syntax") == 1 ||
-                enc.streq_lit(tptr, tlen, ".text") == 1 ||
-                enc.streq_lit(tptr, tlen, ".data") == 1 ||
-                enc.streq_lit(tptr, tlen, ".rodata") == 1 ||
-                enc.streq_lit(tptr, tlen, ".bss") == 1 ||
-                enc.streq_lit(tptr, tlen, ".globl") == 1 ||
-                enc.streq_lit(tptr, tlen, ".global") == 1 ||
-                enc.streq_lit(tptr, tlen, ".section") == 1 ||
-                enc.streq_lit(tptr, tlen, ".string") == 1 ||
-                enc.streq_lit(tptr, tlen, ".byte") == 1 ||
-                enc.streq_lit(tptr, tlen, ".word") == 1 ||
-                enc.streq_lit(tptr, tlen, ".long") == 1 ||
-                enc.streq_lit(tptr, tlen, ".quad") == 1 ||
-                enc.streq_lit(tptr, tlen, ".zero") == 1 ||
-                enc.streq_lit(tptr, tlen, ".ascii") == 1 ||
-                enc.streq_lit(tptr, tlen, ".asciz") == 1 ||
-                enc.streq_lit(tptr, tlen, ".value") == 1) {
-                let is Token as t = make_tok(TK_DIRECTIVE, tptr, tlen, line);
-                tl_push(&tl, t);
+            // Fast directive check: dispatch on second char + length
+            let is i32 as is_dir with mut = 0;
+            if (tlen >= 4 && tlen <= 14) {
+                let is u8 as c1 = tptr[1];
+                if (c1 == 116 && tlen == 5 && tptr[2] == 101 && tptr[3] == 120 && tptr[4] == 116) { is_dir = 1; } // .text
+                else if (c1 == 100 && tlen == 5 && tptr[2] == 97 && tptr[3] == 116 && tptr[4] == 97) { is_dir = 1; } // .data
+                else if (c1 == 98 && tlen == 4 && tptr[2] == 115 && tptr[3] == 115) { is_dir = 1; } // .bss
+                else if (c1 == 103) { // .globl, .global
+                    if (tlen == 6 && tptr[2] == 108 && tptr[3] == 111 && tptr[4] == 98 && tptr[5] == 108) { is_dir = 1; }
+                    else if (tlen == 7 && tptr[2] == 108 && tptr[3] == 111 && tptr[4] == 98 && tptr[5] == 97 && tptr[6] == 108) { is_dir = 1; }
+                }
+                else if (c1 == 115) { // .string, .section
+                    if (tlen == 7 && tptr[2] == 116 && tptr[3] == 114 && tptr[4] == 105 && tptr[5] == 110 && tptr[6] == 103) { is_dir = 1; }
+                    else if (tlen == 8 && tptr[2] == 101 && tptr[3] == 99 && tptr[4] == 116 && tptr[5] == 105 && tptr[6] == 111 && tptr[7] == 110) { is_dir = 1; }
+                }
+                else if (c1 == 98 && tlen == 5 && tptr[2] == 121 && tptr[3] == 116 && tptr[4] == 101) { is_dir = 1; } // .byte
+                else if (c1 == 119 && tlen == 5 && tptr[2] == 111 && tptr[3] == 114 && tptr[4] == 100) { is_dir = 1; } // .word
+                else if (c1 == 108 && tlen == 5 && tptr[2] == 111 && tptr[3] == 110 && tptr[4] == 103) { is_dir = 1; } // .long
+                else if (c1 == 113 && tlen == 5 && tptr[2] == 117 && tptr[3] == 97 && tptr[4] == 100) { is_dir = 1; } // .quad
+                else if (c1 == 122 && tlen == 5 && tptr[2] == 101 && tptr[3] == 114 && tptr[4] == 111) { is_dir = 1; } // .zero
+                else if (c1 == 97 && tlen == 6 && tptr[2] == 115 && tptr[3] == 99 && tptr[4] == 105 && tptr[5] == 105) { is_dir = 1; } // .ascii
+                else if (c1 == 97 && tlen == 6 && tptr[2] == 115 && tptr[3] == 99 && tptr[4] == 105 && tptr[5] == 122) { is_dir = 1; } // .asciz
+                else if (c1 == 118 && tlen == 6 && tptr[2] == 97 && tptr[3] == 108 && tptr[4] == 117 && tptr[5] == 101) { is_dir = 1; } // .value
+                else if (c1 == 114 && tlen == 7 && tptr[2] == 111 && tptr[3] == 100 && tptr[4] == 97 && tptr[5] == 116 && tptr[6] == 97) { is_dir = 1; } // .rodata
+                else if (c1 == 105) { // .intel_syntax
+                    if (tlen == 14) { is_dir = 1; }
+                }
+                else if (c1 == 102) { // .file, .loc
+                    if (tlen == 5 && tptr[2] == 105 && tptr[3] == 108 && tptr[4] == 101) { is_dir = 1; } // .file
+                }
+                else if (c1 == 108) { // .loc
+                    if (tlen == 4 && tptr[2] == 111 && tptr[3] == 99) { is_dir = 1; } // .loc
+                }
+            }
+            let is *Token as t = tl_next(&tl);
+            if (is_dir == 1) {
+                t.kind = TK_DIRECTIVE;
             } else {
-                // Local label like .L0, .LC0
-                let is Token as t = make_tok(TK_IDENT, tptr, tlen, line);
-                tl_push(&tl, t);
+                t.kind = TK_IDENT;
             }
+            t.ptr = tptr; t.len = tlen; t.line = line;
+            t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
         }
-        // Identifier
-        else if (is_alpha(c) == 1) {
+        // Identifier (starts with alpha: A-Z, a-z, _)
+        else if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122) || c == 95) {
             let is i64 as start = i;
-            while (i < src_len && (is_alnum(src[i]) == 1 || src[i] == 46)) {
-                i = i + 1;
-            }
+            i = i + 1;
+            while (i < src_len && char_tab[cast(i32, src[i])] != 0) { i = i + 1; }
             let is i32 as tlen = cast(i32, i - start);
-            let is *u8 as tptr = cast(*u8, cast(i64, src) + start);
+            let is *u8 as tptr = cast(*u8, base_i + start);
 
-            // Check: size prefix?
-            if (enc.streq_lit(tptr, tlen, "QWORD") == 1) {
-                // Consume " PTR"
-                let is i64 as save_i = i;
-                // skip spaces
-                while (i < src_len && src[i] == 32) { i = i + 1; }
-                if (i + 3 <= src_len && src[i] == 80 && src[i+1] == 84 && src[i+2] == 82) {
-                    i = i + 3;
-                    let is Token as t = make_tok(TK_SIZE_PREFIX, tptr, cast(i32, i - start), line);
-                    t.size_val = 64;
-                    tl_push(&tl, t);
+            if (tlen <= 9) { tok_prof_counts[6] = tok_prof_counts[6] + 1; }
+            else { tok_prof_counts[7] = tok_prof_counts[7] + 1; }
+
+            // Fast check size prefix (uppercase first char B-W, len 4-5)
+            if (c >= 66 && c <= 87 && tlen >= 4 && tlen <= 5) {
+                let is i32 as sz_val with mut = 0;
+                if (c == 81 && tlen == 5 && tptr[1] == 87 && tptr[2] == 79 && tptr[3] == 82 && tptr[4] == 68) { sz_val = 64; } // QWORD
+                else if (c == 68 && tlen == 5 && tptr[1] == 87 && tptr[2] == 79 && tptr[3] == 82 && tptr[4] == 68) { sz_val = 32; } // DWORD
+                else if (c == 87 && tlen == 4 && tptr[1] == 79 && tptr[2] == 82 && tptr[3] == 68) { sz_val = 16; } // WORD
+                else if (c == 66 && tlen == 4 && tptr[1] == 89 && tptr[2] == 84 && tptr[3] == 69) { sz_val = 8; } // BYTE
+
+                if (sz_val > 0) {
+                    let is i64 as save_i = i;
+                    while (i < src_len && src[i] == 32) { i = i + 1; }
+                    if (i + 3 <= src_len && src[i] == 80 && src[i+1] == 84 && src[i+2] == 82) {
+                        i = i + 3;
+                        let is *Token as t = tl_next(&tl);
+                        t.kind = TK_SIZE_PREFIX; t.ptr = tptr; t.len = cast(i32, i - start); t.line = line;
+                        t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = sz_val;
+                    } else {
+                        i = save_i;
+                        let is *Token as t = tl_next(&tl);
+                        t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen; t.line = line;
+                        t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+                    }
                 } else {
-                    i = save_i;
-                    let is Token as t = make_tok(TK_IDENT, tptr, tlen, line);
-                    tl_push(&tl, t);
+                    // Uppercase non-size-prefix: always plain IDENT
+                    let is *Token as t = tl_next(&tl);
+                    t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen; t.line = line;
+                    t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
                 }
             }
-            else if (enc.streq_lit(tptr, tlen, "DWORD") == 1) {
-                let is i64 as save_i = i;
-                while (i < src_len && src[i] == 32) { i = i + 1; }
-                if (i + 3 <= src_len && src[i] == 80 && src[i+1] == 84 && src[i+2] == 82) {
-                    i = i + 3;
-                    let is Token as t = make_tok(TK_SIZE_PREFIX, tptr, cast(i32, i - start), line);
-                    t.size_val = 32;
-                    tl_push(&tl, t);
+            else if (tlen > 9 || ri_first[cast(i32, c)] == 0) {
+                // Long ident or non-reg/inst first char: plain IDENT
+                if (tlen == 8 && c == 110 && tptr[1] == 111) {
+                    // noprefix - skip
                 } else {
-                    i = save_i;
-                    let is Token as t = make_tok(TK_IDENT, tptr, tlen, line);
-                    tl_push(&tl, t);
-                }
-            }
-            else if (enc.streq_lit(tptr, tlen, "WORD") == 1) {
-                let is i64 as save_i = i;
-                while (i < src_len && src[i] == 32) { i = i + 1; }
-                if (i + 3 <= src_len && src[i] == 80 && src[i+1] == 84 && src[i+2] == 82) {
-                    i = i + 3;
-                    let is Token as t = make_tok(TK_SIZE_PREFIX, tptr, cast(i32, i - start), line);
-                    t.size_val = 16;
-                    tl_push(&tl, t);
-                } else {
-                    i = save_i;
-                    let is Token as t = make_tok(TK_IDENT, tptr, tlen, line);
-                    tl_push(&tl, t);
-                }
-            }
-            else if (enc.streq_lit(tptr, tlen, "BYTE") == 1) {
-                let is i64 as save_i = i;
-                while (i < src_len && src[i] == 32) { i = i + 1; }
-                if (i + 3 <= src_len && src[i] == 80 && src[i+1] == 84 && src[i+2] == 82) {
-                    i = i + 3;
-                    let is Token as t = make_tok(TK_SIZE_PREFIX, tptr, cast(i32, i - start), line);
-                    t.size_val = 8;
-                    tl_push(&tl, t);
-                } else {
-                    i = save_i;
-                    let is Token as t = make_tok(TK_IDENT, tptr, tlen, line);
-                    tl_push(&tl, t);
+                    let is *Token as t = tl_next(&tl);
+                    t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen; t.line = line;
+                    t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
                 }
             }
             else {
-                // Check register
-                let is i32 as reg = enc.lookup_register(tptr, tlen);
-                if (reg != enc.REG_NONE) {
-                    let is Token as t = make_tok(TK_REGISTER, tptr, tlen, line);
-                    t.reg_id = reg;
-                    tl_push(&tl, t);
-                } else {
-                    // Check instruction
-                    let is i32 as inst = enc.lookup_instruction(tptr, tlen);
-                    if (inst != enc.INST_NONE) {
-                        let is Token as t = make_tok(TK_INSTRUCTION, tptr, tlen, line);
-                        t.inst_id = inst;
-                        tl_push(&tl, t);
+                // Hash table lookup for all regs/instructions (len 2-9)
+                let is i32 as ht_result = ht_lookup(tptr, tlen);
+                if (ht_result == 0) {
+                    if (tlen == 3 && c == 80 && tptr[1] == 84 && tptr[2] == 82) {
+                        // PTR - skip
+                    } else if (tlen == 8 && c == 110 && tptr[1] == 111) {
+                        // noprefix - skip
                     } else {
-                        // Check if it's "noprefix" or "PTR" leftover
-                        if (enc.streq_lit(tptr, tlen, "noprefix") == 1 || enc.streq_lit(tptr, tlen, "PTR") == 1) {
-                            // skip
-                        } else {
-                            let is Token as t = make_tok(TK_IDENT, tptr, tlen, line);
-                            tl_push(&tl, t);
-                        }
+                        let is *Token as t = tl_next(&tl);
+                        t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen; t.line = line;
+                        t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
                     }
+                } else {
+                    let is i32 as ht_kind = ht_result >> 16;
+                    let is i32 as ht_id = ht_result & 65535;
+                    let is *Token as t = tl_next(&tl);
+                    if (ht_kind == 1) {
+                        t.kind = TK_REGISTER;
+                        t.reg_id = ht_id;
+                        t.inst_id = def.INST_NONE;
+                    } else {
+                        t.kind = TK_INSTRUCTION;
+                        t.reg_id = def.REG_NONE;
+                        t.inst_id = ht_id;
+                    }
+                    t.ptr = tptr; t.len = tlen; t.line = line;
+                    t.num_val = 0; t.size_val = 0;
                 }
             }
         }

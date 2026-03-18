@@ -1,6 +1,7 @@
 use "../std/mem.cst" as mem;
 use "../std/linux.cst" as linux;
 use "encoder.cst" as enc;
+use "buf.cst" as buf;
 
 // ELF constants
 let is i32 as ET_REL with imut = 1;
@@ -38,14 +39,41 @@ struct SymbolTable {
     data as *u8;
     count as i32;
     cap as i32;
+    // Hash table for O(1) lookup
+    hash_buckets as *i32;  // bucket[h] = first symbol index, -1 = empty
+    hash_next as *i32;     // next[i] = next symbol in chain, -1 = end
+    hash_size as i32;      // number of buckets
+    hash_cap as i32;       // capacity of hash_next array
+}
+
+fn sym_hash(name_ptr as *u8, name_len as i32, table_size as i32) as i32 {
+    let is i64 as h with mut = 5381;
+    let is i32 as i with mut = 0;
+    while (i < name_len) {
+        h = h * 33 + cast(i64, name_ptr[i]);
+        i = i + 1;
+    }
+    if (h < 0) { h = 0 - h; }
+    return cast(i32, h % cast(i64, table_size));
 }
 
 fn sym_init() as SymbolTable {
     let is i32 as cap = 1024;
+    let is i32 as hash_sz = 16384;
     let is SymbolTable as st;
     st.data = mem.galloc(cast(i64, cap) * sizeof(Symbol));
     st.count = 0;
     st.cap = cap;
+    st.hash_size = hash_sz;
+    st.hash_cap = cap;
+    st.hash_buckets = cast(*i32, mem.galloc(cast(i64, hash_sz) * 4));
+    st.hash_next = cast(*i32, mem.galloc(cast(i64, cap) * 4));
+    // Init buckets to -1
+    let is i32 as bi with mut = 0;
+    while (bi < hash_sz) {
+        st.hash_buckets[bi] = 0 - 1;
+        bi = bi + 1;
+    }
     return st;
 }
 
@@ -61,25 +89,37 @@ fn sym_add(st as *SymbolTable, name_ptr as *u8, name_len as i32, section as i32,
         mem.gfree(st.data);
         st.data = new_data;
         st.cap = new_cap;
+        // Grow hash_next array
+        let is *i32 as new_next = cast(*i32, mem.galloc(cast(i64, new_cap) * 4));
+        mem.memcpy(cast(*u8, new_next), cast(*u8, st.hash_next), cast(i64, st.hash_cap) * 4);
+        mem.gfree(cast(*u8, st.hash_next));
+        st.hash_next = new_next;
+        st.hash_cap = new_cap;
     }
-    let is *Symbol as s = sym_get(st, st.count);
+    let is i32 as idx = st.count;
+    let is *Symbol as s = sym_get(st, idx);
     s.name_ptr = name_ptr;
     s.name_len = name_len;
     s.section = section;
     s.offset = offset;
     s.is_global = is_global;
     s.strtab_off = 0;
+    // Insert into hash table
+    let is i32 as h = sym_hash(name_ptr, name_len, st.hash_size);
+    st.hash_next[idx] = st.hash_buckets[h];
+    st.hash_buckets[h] = idx;
     st.count = st.count + 1;
 }
 
 fn sym_find(st as *SymbolTable, name_ptr as *u8, name_len as i32) as i32 {
-    let is i32 as i with mut = 0;
-    while (i < st.count) {
-        let is *Symbol as s = sym_get(st, i);
+    let is i32 as h = sym_hash(name_ptr, name_len, st.hash_size);
+    let is i32 as idx with mut = st.hash_buckets[h];
+    while (idx >= 0) {
+        let is *Symbol as s = sym_get(st, idx);
         if (enc.streq(s.name_ptr, s.name_len, name_ptr, name_len) == 1) {
-            return i;
+            return idx;
         }
-        i = i + 1;
+        idx = st.hash_next[idx];
     }
     return 99999;
 }
@@ -146,11 +186,11 @@ fn reloc_add(rl as *RelocList, offset as i64, sym_idx as i64, rtype as i64, adde
 
 // Write ELF64 relocatable object file
 // Sections: null, .text, .data, .rodata, .bss, .symtab, .strtab, .rela.text, .shstrtab
-fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer,
-             rodata_buf as *enc.ByteBuffer, bss_size as i64,
+fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer,
+             rodata_buf as *buf.ByteBuffer, bss_size as i64,
              symtab as *SymbolTable, relocs as *RelocList) as void {
 
-    let is enc.ByteBuffer as out = enc.buf_init(65536);
+    let is buf.ByteBuffer as out = buf.buf_init(65536);
 
     // Section indices
     let is i32 as SEC_NULL with mut = 0;
@@ -165,41 +205,41 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
     let is i32 as NUM_SECTIONS = 9;
 
     // Build .shstrtab
-    let is enc.ByteBuffer as shstrtab = enc.buf_init(256);
-    enc.buf_emit8(&shstrtab, 0); // null byte at start
+    let is buf.ByteBuffer as shstrtab = buf.buf_init(256);
+    buf.buf_emit8(&shstrtab, 0); // null byte at start
     // Record offsets of each name
     let is i32 as sh_text_name = cast(i32, shstrtab.len);
-    enc.buf_append(&shstrtab, ".text", 6);
+    buf.buf_append(&shstrtab, ".text", 6);
     let is i32 as sh_data_name = cast(i32, shstrtab.len);
-    enc.buf_append(&shstrtab, ".data", 6);
+    buf.buf_append(&shstrtab, ".data", 6);
     let is i32 as sh_rodata_name = cast(i32, shstrtab.len);
-    enc.buf_append(&shstrtab, ".rodata", 8);
+    buf.buf_append(&shstrtab, ".rodata", 8);
     let is i32 as sh_bss_name = cast(i32, shstrtab.len);
-    enc.buf_append(&shstrtab, ".bss", 5);
+    buf.buf_append(&shstrtab, ".bss", 5);
     let is i32 as sh_symtab_name = cast(i32, shstrtab.len);
-    enc.buf_append(&shstrtab, ".symtab", 8);
+    buf.buf_append(&shstrtab, ".symtab", 8);
     let is i32 as sh_strtab_name = cast(i32, shstrtab.len);
-    enc.buf_append(&shstrtab, ".strtab", 8);
+    buf.buf_append(&shstrtab, ".strtab", 8);
     let is i32 as sh_rela_name = cast(i32, shstrtab.len);
-    enc.buf_append(&shstrtab, ".rela.text", 11);
+    buf.buf_append(&shstrtab, ".rela.text", 11);
     let is i32 as sh_shstrtab_name = cast(i32, shstrtab.len);
-    enc.buf_append(&shstrtab, ".shstrtab", 10);
+    buf.buf_append(&shstrtab, ".shstrtab", 10);
 
     // Build .strtab (for symbol names)
-    let is enc.ByteBuffer as strtab = enc.buf_init(4096);
-    enc.buf_emit8(&strtab, 0); // null byte at start
+    let is buf.ByteBuffer as strtab = buf.buf_init(4096);
+    buf.buf_emit8(&strtab, 0); // null byte at start
 
     // Build ELF symtab entries
     // First: null entry (24 bytes of zeros)
     // Then: section symbols for .text, .data, .rodata, .bss
     // Then: all user symbols
-    let is enc.ByteBuffer as symtab_buf = enc.buf_init(4096);
+    let is buf.ByteBuffer as symtab_buf = buf.buf_init(4096);
 
     // Null symbol (24 bytes)
     let is i32 as sym_entry_size = 24;
     let is i32 as si with mut = 0;
     while (si < sym_entry_size) {
-        enc.buf_emit8(&symtab_buf, 0);
+        buf.buf_emit8(&symtab_buf, 0);
         si = si + 1;
     }
 
@@ -208,17 +248,17 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
     let is i32 as sec_idx with mut = 0;
     while (sec_idx < 4) {
         // st_name = 0
-        enc.buf_emit32_le(&symtab_buf, 0);
+        buf.buf_emit32_le(&symtab_buf, 0);
         // st_info = STT_SECTION | (STB_LOCAL << 4)
-        enc.buf_emit8(&symtab_buf, STT_SECTION);
+        buf.buf_emit8(&symtab_buf, STT_SECTION);
         // st_other = 0
-        enc.buf_emit8(&symtab_buf, 0);
+        buf.buf_emit8(&symtab_buf, 0);
         // st_shndx = section index (1=text, 2=data, 3=rodata, 4=bss)
-        enc.buf_emit16_le(&symtab_buf, sec_idx + 1);
+        buf.buf_emit16_le(&symtab_buf, sec_idx + 1);
         // st_value = 0
-        enc.buf_emit64_le(&symtab_buf, 0);
+        buf.buf_emit64_le(&symtab_buf, 0);
         // st_size = 0
-        enc.buf_emit64_le(&symtab_buf, 0);
+        buf.buf_emit64_le(&symtab_buf, 0);
         sec_idx = sec_idx + 1;
     }
 
@@ -246,23 +286,23 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
             // Add string to strtab
             let is i32 as str_off = cast(i32, strtab.len);
             s.strtab_off = str_off;
-            enc.buf_append(&strtab, s.name_ptr, cast(i64, s.name_len));
-            enc.buf_emit8(&strtab, 0);
+            buf.buf_append(&strtab, s.name_ptr, cast(i64, s.name_len));
+            buf.buf_emit8(&strtab, 0);
 
             // st_name
-            enc.buf_emit32_le(&symtab_buf, cast(i64, str_off));
+            buf.buf_emit32_le(&symtab_buf, cast(i64, str_off));
             // st_info: STT_NOTYPE | (STB_LOCAL << 4)
-            enc.buf_emit8(&symtab_buf, STT_NOTYPE);
+            buf.buf_emit8(&symtab_buf, STT_NOTYPE);
             // st_other
-            enc.buf_emit8(&symtab_buf, 0);
+            buf.buf_emit8(&symtab_buf, 0);
             // st_shndx
             let is i32 as shndx with mut = s.section + 1;
             if (s.section == 99) { shndx = 0; }
-            enc.buf_emit16_le(&symtab_buf, shndx);
+            buf.buf_emit16_le(&symtab_buf, shndx);
             // st_value
-            enc.buf_emit64_le(&symtab_buf, s.offset);
+            buf.buf_emit64_le(&symtab_buf, s.offset);
             // st_size
-            enc.buf_emit64_le(&symtab_buf, 0);
+            buf.buf_emit64_le(&symtab_buf, 0);
 
             // Record in our local mapping array using pointer arithmetic
             let is *i32 as map_slot = cast(*i32, cast(i64, sym_map) + cast(i64, syi) * 4);
@@ -279,21 +319,21 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
         if (s.is_global == 1) {
             let is i32 as str_off = cast(i32, strtab.len);
             s.strtab_off = str_off;
-            enc.buf_append(&strtab, s.name_ptr, cast(i64, s.name_len));
-            enc.buf_emit8(&strtab, 0);
+            buf.buf_append(&strtab, s.name_ptr, cast(i64, s.name_len));
+            buf.buf_emit8(&strtab, 0);
 
-            enc.buf_emit32_le(&symtab_buf, cast(i64, str_off));
+            buf.buf_emit32_le(&symtab_buf, cast(i64, str_off));
             // STT_FUNC for .text, STT_OBJECT for .data/.rodata/.bss
             let is i32 as sym_type with mut = STT_FUNC;
             if (s.section == 1 || s.section == 2 || s.section == 3) { sym_type = STT_OBJECT; }
             let is i32 as info = sym_type + STB_GLOBAL * 16;
-            enc.buf_emit8(&symtab_buf, info);
-            enc.buf_emit8(&symtab_buf, 0);
+            buf.buf_emit8(&symtab_buf, info);
+            buf.buf_emit8(&symtab_buf, 0);
             let is i32 as shndx with mut = s.section + 1;
             if (s.section == 99) { shndx = 0; }
-            enc.buf_emit16_le(&symtab_buf, shndx);
-            enc.buf_emit64_le(&symtab_buf, s.offset);
-            enc.buf_emit64_le(&symtab_buf, 0);
+            buf.buf_emit16_le(&symtab_buf, shndx);
+            buf.buf_emit64_le(&symtab_buf, s.offset);
+            buf.buf_emit64_le(&symtab_buf, 0);
 
             let is *i32 as map_slot = cast(*i32, cast(i64, sym_map) + cast(i64, syi) * 4);
             *map_slot = elf_sym_idx;
@@ -303,12 +343,12 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
     }
 
     // Build .rela.text
-    let is enc.ByteBuffer as rela_buf = enc.buf_init(4096);
+    let is buf.ByteBuffer as rela_buf = buf.buf_init(4096);
     let is i32 as ri with mut = 0;
     while (ri < relocs.count) {
         let is *Reloc as r = reloc_get(relocs, ri);
         // r_offset
-        enc.buf_emit64_le(&rela_buf, r.offset);
+        buf.buf_emit64_le(&rela_buf, r.offset);
         // r_info = (sym_idx << 32) | type
         let is i64 as mapped_idx with mut = r.sym_idx;
         // Look up in sym_map if it's a user symbol
@@ -317,9 +357,9 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
             mapped_idx = cast(i64, *map_slot);
         }
         let is i64 as info = mapped_idx * 4294967296 + r.rtype;
-        enc.buf_emit64_le(&rela_buf, info);
+        buf.buf_emit64_le(&rela_buf, info);
         // r_addend
-        enc.buf_emit64_le(&rela_buf, r.addend);
+        buf.buf_emit64_le(&rela_buf, r.addend);
         ri = ri + 1;
     }
 
@@ -380,165 +420,165 @@ fn write_elf(fd as i64, text_buf as *enc.ByteBuffer, data_buf as *enc.ByteBuffer
 
     // === Write ELF header ===
     // Magic
-    enc.buf_emit8(&out, 127); enc.buf_emit8(&out, 69); enc.buf_emit8(&out, 76); enc.buf_emit8(&out, 70);
+    buf.buf_emit8(&out, 127); buf.buf_emit8(&out, 69); buf.buf_emit8(&out, 76); buf.buf_emit8(&out, 70);
     // Class (64-bit), Data (LE), Version, OS/ABI, padding
-    enc.buf_emit8(&out, 2); enc.buf_emit8(&out, 1); enc.buf_emit8(&out, 1); enc.buf_emit8(&out, 0);
-    enc.buf_emit64_le(&out, 0); // padding
+    buf.buf_emit8(&out, 2); buf.buf_emit8(&out, 1); buf.buf_emit8(&out, 1); buf.buf_emit8(&out, 0);
+    buf.buf_emit64_le(&out, 0); // padding
     // e_type = ET_REL
-    enc.buf_emit16_le(&out, ET_REL);
+    buf.buf_emit16_le(&out, ET_REL);
     // e_machine = EM_X86_64
-    enc.buf_emit16_le(&out, EM_X86_64);
+    buf.buf_emit16_le(&out, EM_X86_64);
     // e_version
-    enc.buf_emit32_le(&out, 1);
+    buf.buf_emit32_le(&out, 1);
     // e_entry
-    enc.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, 0);
     // e_phoff
-    enc.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, 0);
     // e_shoff
-    enc.buf_emit64_le(&out, shdr_off);
+    buf.buf_emit64_le(&out, shdr_off);
     // e_flags
-    enc.buf_emit32_le(&out, 0);
+    buf.buf_emit32_le(&out, 0);
     // e_ehsize
-    enc.buf_emit16_le(&out, 64);
+    buf.buf_emit16_le(&out, 64);
     // e_phentsize, e_phnum
-    enc.buf_emit16_le(&out, 0);
-    enc.buf_emit16_le(&out, 0);
+    buf.buf_emit16_le(&out, 0);
+    buf.buf_emit16_le(&out, 0);
     // e_shentsize
-    enc.buf_emit16_le(&out, 64);
+    buf.buf_emit16_le(&out, 64);
     // e_shnum
-    enc.buf_emit16_le(&out, NUM_SECTIONS);
+    buf.buf_emit16_le(&out, NUM_SECTIONS);
     // e_shstrndx
-    enc.buf_emit16_le(&out, SEC_SHSTRTAB);
+    buf.buf_emit16_le(&out, SEC_SHSTRTAB);
 
     // === Write section data ===
     // .text
-    enc.buf_append(&out, text_buf.data, text_size);
-    enc.buf_align(&out, 16);
+    buf.buf_append(&out, text_buf.data, text_size);
+    buf.buf_align(&out, 16);
     // .data
     if (data_size > 0) {
-        enc.buf_append(&out, data_buf.data, data_size);
-        enc.buf_align(&out, 16);
+        buf.buf_append(&out, data_buf.data, data_size);
+        buf.buf_align(&out, 16);
     }
     // .rodata
     if (rodata_size > 0) {
-        enc.buf_append(&out, rodata_buf.data, rodata_size);
-        enc.buf_align(&out, 16);
+        buf.buf_append(&out, rodata_buf.data, rodata_size);
+        buf.buf_align(&out, 16);
     }
     // .symtab
-    enc.buf_append(&out, symtab_buf.data, symtab_size);
-    enc.buf_align(&out, 8);
+    buf.buf_append(&out, symtab_buf.data, symtab_size);
+    buf.buf_align(&out, 8);
     // .strtab
-    enc.buf_append(&out, strtab.data, strtab_size);
+    buf.buf_append(&out, strtab.data, strtab_size);
     // .rela.text
     if (rela_size > 0) {
-        enc.buf_align(&out, 8);
-        enc.buf_append(&out, rela_buf.data, rela_size);
+        buf.buf_align(&out, 8);
+        buf.buf_append(&out, rela_buf.data, rela_size);
     }
     // .shstrtab
-    enc.buf_append(&out, shstrtab.data, shstrtab_size);
-    enc.buf_align(&out, 8);
+    buf.buf_append(&out, shstrtab.data, shstrtab_size);
+    buf.buf_align(&out, 8);
 
     // === Write section headers ===
     // Helper: write one section header (64 bytes)
     // 0: SHT_NULL
     let is i32 as shi with mut = 0;
-    while (shi < 64) { enc.buf_emit8(&out, 0); shi = shi + 1; }
+    while (shi < 64) { buf.buf_emit8(&out, 0); shi = shi + 1; }
 
     // 1: .text
-    enc.buf_emit32_le(&out, cast(i64, sh_text_name));
-    enc.buf_emit32_le(&out, cast(i64, SHT_PROGBITS));
-    enc.buf_emit64_le(&out, cast(i64, SHF_ALLOC + SHF_EXECINSTR));
-    enc.buf_emit64_le(&out, 0); // addr
-    enc.buf_emit64_le(&out, text_off);
-    enc.buf_emit64_le(&out, text_size);
-    enc.buf_emit32_le(&out, 0); // link
-    enc.buf_emit32_le(&out, 0); // info
-    enc.buf_emit64_le(&out, 16); // addralign
-    enc.buf_emit64_le(&out, 0); // entsize
+    buf.buf_emit32_le(&out, cast(i64, sh_text_name));
+    buf.buf_emit32_le(&out, cast(i64, SHT_PROGBITS));
+    buf.buf_emit64_le(&out, cast(i64, SHF_ALLOC + SHF_EXECINSTR));
+    buf.buf_emit64_le(&out, 0); // addr
+    buf.buf_emit64_le(&out, text_off);
+    buf.buf_emit64_le(&out, text_size);
+    buf.buf_emit32_le(&out, 0); // link
+    buf.buf_emit32_le(&out, 0); // info
+    buf.buf_emit64_le(&out, 16); // addralign
+    buf.buf_emit64_le(&out, 0); // entsize
 
     // 2: .data
-    enc.buf_emit32_le(&out, cast(i64, sh_data_name));
-    enc.buf_emit32_le(&out, cast(i64, SHT_PROGBITS));
-    enc.buf_emit64_le(&out, cast(i64, SHF_ALLOC + SHF_WRITE));
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, data_off);
-    enc.buf_emit64_le(&out, data_size);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit64_le(&out, 8);
-    enc.buf_emit64_le(&out, 0);
+    buf.buf_emit32_le(&out, cast(i64, sh_data_name));
+    buf.buf_emit32_le(&out, cast(i64, SHT_PROGBITS));
+    buf.buf_emit64_le(&out, cast(i64, SHF_ALLOC + SHF_WRITE));
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, data_off);
+    buf.buf_emit64_le(&out, data_size);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit64_le(&out, 8);
+    buf.buf_emit64_le(&out, 0);
 
     // 3: .rodata
-    enc.buf_emit32_le(&out, cast(i64, sh_rodata_name));
-    enc.buf_emit32_le(&out, cast(i64, SHT_PROGBITS));
-    enc.buf_emit64_le(&out, cast(i64, SHF_ALLOC));
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, rodata_off);
-    enc.buf_emit64_le(&out, rodata_size);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit64_le(&out, 1);
-    enc.buf_emit64_le(&out, 0);
+    buf.buf_emit32_le(&out, cast(i64, sh_rodata_name));
+    buf.buf_emit32_le(&out, cast(i64, SHT_PROGBITS));
+    buf.buf_emit64_le(&out, cast(i64, SHF_ALLOC));
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, rodata_off);
+    buf.buf_emit64_le(&out, rodata_size);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit64_le(&out, 1);
+    buf.buf_emit64_le(&out, 0);
 
     // 4: .bss
-    enc.buf_emit32_le(&out, cast(i64, sh_bss_name));
-    enc.buf_emit32_le(&out, cast(i64, SHT_NOBITS));
-    enc.buf_emit64_le(&out, cast(i64, SHF_ALLOC + SHF_WRITE));
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, bss_off);
-    enc.buf_emit64_le(&out, bss_size);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit64_le(&out, 8);
-    enc.buf_emit64_le(&out, 0);
+    buf.buf_emit32_le(&out, cast(i64, sh_bss_name));
+    buf.buf_emit32_le(&out, cast(i64, SHT_NOBITS));
+    buf.buf_emit64_le(&out, cast(i64, SHF_ALLOC + SHF_WRITE));
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, bss_off);
+    buf.buf_emit64_le(&out, bss_size);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit64_le(&out, 8);
+    buf.buf_emit64_le(&out, 0);
 
     // 5: .symtab
-    enc.buf_emit32_le(&out, cast(i64, sh_symtab_name));
-    enc.buf_emit32_le(&out, cast(i64, SHT_SYMTAB));
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, symtab_off);
-    enc.buf_emit64_le(&out, symtab_size);
-    enc.buf_emit32_le(&out, cast(i64, SEC_STRTAB)); // link = .strtab
-    enc.buf_emit32_le(&out, cast(i64, num_locals)); // info = first global sym idx
-    enc.buf_emit64_le(&out, 8);
-    enc.buf_emit64_le(&out, 24); // entsize
+    buf.buf_emit32_le(&out, cast(i64, sh_symtab_name));
+    buf.buf_emit32_le(&out, cast(i64, SHT_SYMTAB));
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, symtab_off);
+    buf.buf_emit64_le(&out, symtab_size);
+    buf.buf_emit32_le(&out, cast(i64, SEC_STRTAB)); // link = .strtab
+    buf.buf_emit32_le(&out, cast(i64, num_locals)); // info = first global sym idx
+    buf.buf_emit64_le(&out, 8);
+    buf.buf_emit64_le(&out, 24); // entsize
 
     // 6: .strtab
-    enc.buf_emit32_le(&out, cast(i64, sh_strtab_name));
-    enc.buf_emit32_le(&out, cast(i64, SHT_STRTAB));
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, strtab_off);
-    enc.buf_emit64_le(&out, strtab_size);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit64_le(&out, 1);
-    enc.buf_emit64_le(&out, 0);
+    buf.buf_emit32_le(&out, cast(i64, sh_strtab_name));
+    buf.buf_emit32_le(&out, cast(i64, SHT_STRTAB));
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, strtab_off);
+    buf.buf_emit64_le(&out, strtab_size);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit64_le(&out, 1);
+    buf.buf_emit64_le(&out, 0);
 
     // 7: .rela.text
-    enc.buf_emit32_le(&out, cast(i64, sh_rela_name));
-    enc.buf_emit32_le(&out, cast(i64, SHT_RELA));
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, rela_off);
-    enc.buf_emit64_le(&out, rela_size);
-    enc.buf_emit32_le(&out, cast(i64, SEC_SYMTAB)); // link = .symtab
-    enc.buf_emit32_le(&out, cast(i64, SEC_TEXT));    // info = .text section
-    enc.buf_emit64_le(&out, 8);
-    enc.buf_emit64_le(&out, 24); // entsize
+    buf.buf_emit32_le(&out, cast(i64, sh_rela_name));
+    buf.buf_emit32_le(&out, cast(i64, SHT_RELA));
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, rela_off);
+    buf.buf_emit64_le(&out, rela_size);
+    buf.buf_emit32_le(&out, cast(i64, SEC_SYMTAB)); // link = .symtab
+    buf.buf_emit32_le(&out, cast(i64, SEC_TEXT));    // info = .text section
+    buf.buf_emit64_le(&out, 8);
+    buf.buf_emit64_le(&out, 24); // entsize
 
     // 8: .shstrtab
-    enc.buf_emit32_le(&out, cast(i64, sh_shstrtab_name));
-    enc.buf_emit32_le(&out, cast(i64, SHT_STRTAB));
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, 0);
-    enc.buf_emit64_le(&out, shstrtab_off);
-    enc.buf_emit64_le(&out, shstrtab_size);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit32_le(&out, 0);
-    enc.buf_emit64_le(&out, 1);
-    enc.buf_emit64_le(&out, 0);
+    buf.buf_emit32_le(&out, cast(i64, sh_shstrtab_name));
+    buf.buf_emit32_le(&out, cast(i64, SHT_STRTAB));
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, 0);
+    buf.buf_emit64_le(&out, shstrtab_off);
+    buf.buf_emit64_le(&out, shstrtab_size);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit32_le(&out, 0);
+    buf.buf_emit64_le(&out, 1);
+    buf.buf_emit64_le(&out, 0);
 
     // Write to file
     linux.write(fd, out.data, out.len);
