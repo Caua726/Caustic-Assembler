@@ -169,6 +169,8 @@ struct Operand {
     mem_base as i32;
     mem_disp as i64;
     mem_size as i32;
+    mem_index as i32;
+    mem_scale as i32;
     label_ptr as *u8;
     label_len as i32;
 }
@@ -181,6 +183,8 @@ fn operand_none() as Operand {
     op.mem_base = REG_NONE;
     op.mem_disp = 0;
     op.mem_size = 0;
+    op.mem_index = REG_NONE;
+    op.mem_scale = 0;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
     return op;
@@ -194,6 +198,8 @@ fn operand_reg(id as i32) as Operand {
     op.mem_base = REG_NONE;
     op.mem_disp = 0;
     op.mem_size = 0;
+    op.mem_index = REG_NONE;
+    op.mem_scale = 0;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
     return op;
@@ -207,6 +213,8 @@ fn operand_imm(val as i64) as Operand {
     op.mem_base = REG_NONE;
     op.mem_disp = 0;
     op.mem_size = 0;
+    op.mem_index = REG_NONE;
+    op.mem_scale = 0;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
     return op;
@@ -220,6 +228,23 @@ fn operand_mem(base as i32, disp as i64, size as i32) as Operand {
     op.mem_base = base;
     op.mem_disp = disp;
     op.mem_size = size;
+    op.mem_index = REG_NONE;
+    op.mem_scale = 0;
+    op.label_ptr = cast(*u8, 0);
+    op.label_len = 0;
+    return op;
+}
+
+fn operand_mem_sib(base as i32, index as i32, scale as i32, disp as i64, size as i32) as Operand {
+    let is Operand as op;
+    op.kind = OP_MEM;
+    op.reg_id = REG_NONE;
+    op.imm = 0;
+    op.mem_base = base;
+    op.mem_disp = disp;
+    op.mem_size = size;
+    op.mem_index = index;
+    op.mem_scale = scale;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
     return op;
@@ -233,6 +258,8 @@ fn operand_label(ptr as *u8, len as i32) as Operand {
     op.mem_base = REG_NONE;
     op.mem_disp = 0;
     op.mem_size = 0;
+    op.mem_index = REG_NONE;
+    op.mem_scale = 0;
     op.label_ptr = ptr;
     op.label_len = len;
     return op;
@@ -246,6 +273,8 @@ fn operand_rip_label(ptr as *u8, len as i32) as Operand {
     op.mem_base = REG_NONE;
     op.mem_disp = 0;
     op.mem_size = 0;
+    op.mem_index = REG_NONE;
+    op.mem_scale = 0;
     op.label_ptr = ptr;
     op.label_len = len;
     return op;

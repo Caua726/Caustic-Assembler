@@ -109,6 +109,8 @@ struct ParsedLine {
     op1_mem_base as i32;
     op1_mem_disp as i64;
     op1_mem_size as i32;
+    op1_mem_index as i32;
+    op1_mem_scale as i32;
     op1_label_ptr as *u8;
     op1_label_len as i32;
     // op2 flattened
@@ -118,6 +120,8 @@ struct ParsedLine {
     op2_mem_base as i32;
     op2_mem_disp as i64;
     op2_mem_size as i32;
+    op2_mem_index as i32;
+    op2_mem_scale as i32;
     op2_label_ptr as *u8;
     op2_label_len as i32;
     // other
@@ -173,6 +177,8 @@ fn pl_add(pl as *ParsedLines) as *ParsedLine {
     line.op1_mem_base = def.REG_NONE;
     line.op1_mem_disp = 0;
     line.op1_mem_size = 0;
+    line.op1_mem_index = def.REG_NONE;
+    line.op1_mem_scale = 0;
     line.op1_label_ptr = cast(*u8, 0);
     line.op1_label_len = 0;
     line.op2_kind = def.OP_NONE;
@@ -181,6 +187,8 @@ fn pl_add(pl as *ParsedLines) as *ParsedLine {
     line.op2_mem_base = def.REG_NONE;
     line.op2_mem_disp = 0;
     line.op2_mem_size = 0;
+    line.op2_mem_index = def.REG_NONE;
+    line.op2_mem_scale = 0;
     line.op2_label_ptr = cast(*u8, 0);
     line.op2_label_len = 0;
     line.label_ptr = cast(*u8, 0);
@@ -209,6 +217,8 @@ fn make_op(line as *ParsedLine, which as i32) as def.Operand {
         op.mem_base = line.op1_mem_base;
         op.mem_disp = line.op1_mem_disp;
         op.mem_size = line.op1_mem_size;
+        op.mem_index = line.op1_mem_index;
+        op.mem_scale = line.op1_mem_scale;
         op.label_ptr = line.op1_label_ptr;
         op.label_len = line.op1_label_len;
     } else {
@@ -218,6 +228,8 @@ fn make_op(line as *ParsedLine, which as i32) as def.Operand {
         op.mem_base = line.op2_mem_base;
         op.mem_disp = line.op2_mem_disp;
         op.mem_size = line.op2_mem_size;
+        op.mem_index = line.op2_mem_index;
+        op.mem_scale = line.op2_mem_scale;
         op.label_ptr = line.op2_label_ptr;
         op.label_len = line.op2_label_len;
     }
@@ -235,8 +247,26 @@ fn set_op_imm(line as *ParsedLine, which as i32, val as i64) as void {
 }
 
 fn set_op_mem(line as *ParsedLine, which as i32, base as i32, disp as i64, sz as i32) as void {
-    if (which == 1) { line.op1_kind = def.OP_MEM; line.op1_mem_base = base; line.op1_mem_disp = disp; line.op1_mem_size = sz; }
-    else { line.op2_kind = def.OP_MEM; line.op2_mem_base = base; line.op2_mem_disp = disp; line.op2_mem_size = sz; }
+    if (which == 1) { line.op1_kind = def.OP_MEM; line.op1_mem_base = base; line.op1_mem_disp = disp; line.op1_mem_size = sz; line.op1_mem_index = def.REG_NONE; line.op1_mem_scale = 0; }
+    else { line.op2_kind = def.OP_MEM; line.op2_mem_base = base; line.op2_mem_disp = disp; line.op2_mem_size = sz; line.op2_mem_index = def.REG_NONE; line.op2_mem_scale = 0; }
+}
+
+fn set_op_mem_sib(line as *ParsedLine, which as i32, base as i32, index as i32, scale as i32, disp as i64, sz as i32) as void {
+    if (which == 1) {
+        line.op1_kind = def.OP_MEM;
+        line.op1_mem_base = base;
+        line.op1_mem_index = index;
+        line.op1_mem_scale = scale;
+        line.op1_mem_disp = disp;
+        line.op1_mem_size = sz;
+    } else {
+        line.op2_kind = def.OP_MEM;
+        line.op2_mem_base = base;
+        line.op2_mem_index = index;
+        line.op2_mem_scale = scale;
+        line.op2_mem_disp = disp;
+        line.op2_mem_size = sz;
+    }
 }
 
 fn set_op_label(line as *ParsedLine, which as i32, ptr as *u8, len as i32) as void {
@@ -271,12 +301,42 @@ fn parse_mem_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as 
         }
     }
     let is i64 as disp with mut = 0;
+    let is i32 as index_reg with mut = def.REG_NONE;
+    let is i32 as scale with mut = 0;
     let is *lex.Token as next2 = lex.tl_get(tl, p);
     if (next2.kind == lex.TK_PLUS) {
-        p = p + 1;
-        let is *lex.Token as d = lex.tl_get(tl, p);
-        disp = d.num_val;
-        p = p + 1;
+        let is *lex.Token as peek = lex.tl_get(tl, p + 1);
+        if (peek.kind == lex.TK_REGISTER) {
+            p = p + 1;
+            index_reg = peek.reg_id;
+            p = p + 1;
+            let is *lex.Token as star = lex.tl_get(tl, p);
+            if (star.kind == lex.TK_STAR) {
+                p = p + 1;
+                let is *lex.Token as sc = lex.tl_get(tl, p);
+                scale = cast(i32, sc.num_val);
+                p = p + 1;
+            } else {
+                scale = 1;
+            }
+            let is *lex.Token as after = lex.tl_get(tl, p);
+            if (after.kind == lex.TK_PLUS) {
+                p = p + 1;
+                let is *lex.Token as d = lex.tl_get(tl, p);
+                disp = d.num_val;
+                p = p + 1;
+            } else if (after.kind == lex.TK_MINUS) {
+                p = p + 1;
+                let is *lex.Token as d = lex.tl_get(tl, p);
+                disp = 0 - d.num_val;
+                p = p + 1;
+            }
+        } else {
+            p = p + 1;
+            let is *lex.Token as d = lex.tl_get(tl, p);
+            disp = d.num_val;
+            p = p + 1;
+        }
     } else if (next2.kind == lex.TK_MINUS) {
         p = p + 1;
         let is *lex.Token as d = lex.tl_get(tl, p);
@@ -286,7 +346,11 @@ fn parse_mem_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as 
     let is *lex.Token as rb2 = lex.tl_get(tl, p);
     if (rb2.kind == lex.TK_RBRACKET) { p = p + 1; }
     *out_pos = p;
-    set_op_mem(line, which, base_reg, disp, mem_size);
+    if (index_reg != def.REG_NONE) {
+        set_op_mem_sib(line, which, base_reg, index_reg, scale, disp, mem_size);
+    } else {
+        set_op_mem(line, which, base_reg, disp, mem_size);
+    }
 }
 
 // Parse an operand starting at token index pos, stores into line's op1 or op2

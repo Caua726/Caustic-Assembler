@@ -332,6 +332,45 @@ fn mem_modrm_size(base_id as i32, disp as i64) as i32 {
     }
 }
 
+// Emit SIB memory operand: [base + index * scale + disp]
+fn emit_mem_modrm_sib(b as *buf.ByteBuffer, reg_field as i32, base_id as i32, index_id as i32, scale as i32, disp as i64) as void {
+    let is i32 as base_code = reg_code(base_id);
+    let is i32 as index_code = reg_code(index_id);
+    let is i32 as ss with mut = 0;
+    if (scale == 2) { ss = 1; }
+    else if (scale == 4) { ss = 2; }
+    else if (scale == 8) { ss = 3; }
+
+    if (disp == 0 && base_code != 5) {
+        buf.buf_emit8(b, make_modrm(0, reg_field, 4));
+        buf.buf_emit8(b, make_sib(ss, index_code, base_code));
+    } else if (disp_is8(disp) == 1) {
+        buf.buf_emit8(b, make_modrm(1, reg_field, 4));
+        buf.buf_emit8(b, make_sib(ss, index_code, base_code));
+        buf.buf_emit8(b, cast(i32, disp));
+    } else {
+        buf.buf_emit8(b, make_modrm(2, reg_field, 4));
+        buf.buf_emit8(b, make_sib(ss, index_code, base_code));
+        buf.buf_emit32_le(b, disp);
+    }
+}
+
+fn mem_modrm_sib_size(base_id as i32, disp as i64) as i32 {
+    let is i32 as base_code = reg_code(base_id);
+    if (disp == 0 && base_code != 5) {
+        return 2;
+    } else if (disp_is8(disp) == 1) {
+        return 3;
+    } else {
+        return 6;
+    }
+}
+
+fn has_sib(op as *def.Operand) as i32 {
+    if (op.kind == def.OP_MEM && op.mem_index != def.REG_NONE) { return 1; }
+    return 0;
+}
+
 // === Main encoding function ===
 // Returns number of bytes emitted. If buf is null-ptr (pass1), still returns size.
 fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Operand, resolve_label as i64, cur_off as i64) as i32 {
@@ -509,13 +548,20 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
             let is i32 as w with mut = 0;
             if (sz == 64) { w = 1; need_rex = 1; }
             if (reg_ext(op2.reg_id) == 1 || reg_ext(op1.mem_base) == 1) { need_rex = 1; }
+            if (has_sib(op1) == 1 && reg_ext(op1.mem_index) == 1) { need_rex = 1; }
             if (sz == 8 && needs_rex_for_8bit(op2.reg_id) == 1) { need_rex = 1; }
             if (need_rex == 1) {
-                buf.buf_emit8(b, make_rex(w, reg_ext(op2.reg_id), 0, reg_ext(op1.mem_base)));
+                let is i32 as rex_x with mut = 0;
+                if (has_sib(op1) == 1) { rex_x = reg_ext(op1.mem_index); }
+                buf.buf_emit8(b, make_rex(w, reg_ext(op2.reg_id), rex_x, reg_ext(op1.mem_base)));
             }
             if (sz == 8) { buf.buf_emit8(b, 136); }
             else { buf.buf_emit8(b, 137); }
-            emit_mem_modrm(b, src_code, op1.mem_base, op1.mem_disp);
+            if (has_sib(op1) == 1) {
+                emit_mem_modrm_sib(b, src_code, op1.mem_base, op1.mem_index, op1.mem_scale, op1.mem_disp);
+            } else {
+                emit_mem_modrm(b, src_code, op1.mem_base, op1.mem_disp);
+            }
             return cast(i32, b.len - start);
         }
 
@@ -528,13 +574,20 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
             let is i32 as w with mut = 0;
             if (sz == 64) { w = 1; need_rex = 1; }
             if (reg_ext(op1.reg_id) == 1 || reg_ext(op2.mem_base) == 1) { need_rex = 1; }
+            if (has_sib(op2) == 1 && reg_ext(op2.mem_index) == 1) { need_rex = 1; }
             if (sz == 8 && needs_rex_for_8bit(op1.reg_id) == 1) { need_rex = 1; }
             if (need_rex == 1) {
-                buf.buf_emit8(b, make_rex(w, reg_ext(op1.reg_id), 0, reg_ext(op2.mem_base)));
+                let is i32 as rex_x with mut = 0;
+                if (has_sib(op2) == 1) { rex_x = reg_ext(op2.mem_index); }
+                buf.buf_emit8(b, make_rex(w, reg_ext(op1.reg_id), rex_x, reg_ext(op2.mem_base)));
             }
             if (sz == 8) { buf.buf_emit8(b, 138); }
             else { buf.buf_emit8(b, 139); }
-            emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) {
+                emit_mem_modrm_sib(b, dst_code, op2.mem_base, op2.mem_index, op2.mem_scale, op2.mem_disp);
+            } else {
+                emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            }
             return cast(i32, b.len - start);
         }
 
@@ -560,12 +613,19 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
             let is i32 as w with mut = 0;
             if (sz == 64) { w = 1; need_rex = 1; }
             if (reg_ext(op1.mem_base) == 1) { need_rex = 1; }
+            if (has_sib(op1) == 1 && reg_ext(op1.mem_index) == 1) { need_rex = 1; }
             if (need_rex == 1) {
-                buf.buf_emit8(b, make_rex(w, 0, 0, reg_ext(op1.mem_base)));
+                let is i32 as rex_x with mut = 0;
+                if (has_sib(op1) == 1) { rex_x = reg_ext(op1.mem_index); }
+                buf.buf_emit8(b, make_rex(w, 0, rex_x, reg_ext(op1.mem_base)));
             }
             if (sz == 8) { buf.buf_emit8(b, 198); }
             else { buf.buf_emit8(b, 199); }
-            emit_mem_modrm(b, 0, op1.mem_base, op1.mem_disp);
+            if (has_sib(op1) == 1) {
+                emit_mem_modrm_sib(b, 0, op1.mem_base, op1.mem_index, op1.mem_scale, op1.mem_disp);
+            } else {
+                emit_mem_modrm(b, 0, op1.mem_base, op1.mem_disp);
+            }
             if (sz == 8) { buf.buf_emit8(b, cast(i32, op2.imm)); }
             else if (sz == 16) { buf.buf_emit16_le(b, cast(i32, op2.imm)); }
             else { buf.buf_emit32_le(b, op2.imm); }
@@ -577,9 +637,15 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
     if (inst == def.INST_LEA) {
         if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
             let is i32 as dst_code = reg_code(op1.reg_id);
-            buf.buf_emit8(b, make_rex(1, reg_ext(op1.reg_id), 0, reg_ext(op2.mem_base)));
+            let is i32 as rex_x with mut = 0;
+            if (has_sib(op2) == 1) { rex_x = reg_ext(op2.mem_index); }
+            buf.buf_emit8(b, make_rex(1, reg_ext(op1.reg_id), rex_x, reg_ext(op2.mem_base)));
             buf.buf_emit8(b, 141);
-            emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) {
+                emit_mem_modrm_sib(b, dst_code, op2.mem_base, op2.mem_index, op2.mem_scale, op2.mem_disp);
+            } else {
+                emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            }
             return cast(i32, b.len - start);
         }
         // LEA reg, [rip+label] — RIP-relative
@@ -662,9 +728,15 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
             let is i32 as w with mut = 0;
             if (sz == 64) { w = 1; }
             if (sz == 16) { buf.buf_emit8(b, 102); }
-            buf.buf_emit8(b, make_rex(w, reg_ext(op1.reg_id), 0, reg_ext(op2.mem_base)));
+            let is i32 as rex_x with mut = 0;
+            if (has_sib(op2) == 1) { rex_x = reg_ext(op2.mem_index); }
+            buf.buf_emit8(b, make_rex(w, reg_ext(op1.reg_id), rex_x, reg_ext(op2.mem_base)));
             buf.buf_emit8(b, opcode + 2);
-            emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) {
+                emit_mem_modrm_sib(b, dst_code, op2.mem_base, op2.mem_index, op2.mem_scale, op2.mem_disp);
+            } else {
+                emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            }
             return cast(i32, b.len - start);
         }
     }
@@ -735,10 +807,15 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         buf.buf_emit8(b, make_rex(1, reg_ext(op1.reg_id), 0, 0));
         if (op2.kind == def.OP_MEM) {
             let is i64 as rex_pos = b.len - 1;
-            // Fix REX.B
-            b.data[rex_pos] = cast(u8, make_rex(1, reg_ext(op1.reg_id), 0, reg_ext(op2.mem_base)));
+            let is i32 as rex_x with mut = 0;
+            if (has_sib(op2) == 1) { rex_x = reg_ext(op2.mem_index); }
+            b.data[rex_pos] = cast(u8, make_rex(1, reg_ext(op1.reg_id), rex_x, reg_ext(op2.mem_base)));
             buf.buf_emit8(b, 99);
-            emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) {
+                emit_mem_modrm_sib(b, dst_code, op2.mem_base, op2.mem_index, op2.mem_scale, op2.mem_disp);
+            } else {
+                emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            }
         } else if (op2.kind == def.OP_REG) {
             b.data[b.len - 1] = cast(u8, make_rex(1, reg_ext(op1.reg_id), 0, reg_ext(op2.reg_id)));
             buf.buf_emit8(b, 99);
@@ -752,11 +829,17 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         let is i32 as dst_code = reg_code(op1.reg_id);
         if (op2.kind == def.OP_MEM) {
             let is i32 as w = 1;
-            buf.buf_emit8(b, make_rex(w, reg_ext(op1.reg_id), 0, reg_ext(op2.mem_base)));
+            let is i32 as rex_x with mut = 0;
+            if (has_sib(op2) == 1) { rex_x = reg_ext(op2.mem_index); }
+            buf.buf_emit8(b, make_rex(w, reg_ext(op1.reg_id), rex_x, reg_ext(op2.mem_base)));
             buf.buf_emit8(b, 15);
             if (op2.mem_size == 8) { buf.buf_emit8(b, 190); }
             else { buf.buf_emit8(b, 191); }
-            emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) {
+                emit_mem_modrm_sib(b, dst_code, op2.mem_base, op2.mem_index, op2.mem_scale, op2.mem_disp);
+            } else {
+                emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            }
         }
         else if (op2.kind == def.OP_REG) {
             let is i32 as src_sz = reg_size(op2.reg_id);
@@ -775,11 +858,17 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         if (op2.kind == def.OP_MEM) {
             let is i32 as w with mut = 0;
             if (reg_size(op1.reg_id) == 64) { w = 1; }
-            buf.buf_emit8(b, make_rex(w, reg_ext(op1.reg_id), 0, reg_ext(op2.mem_base)));
+            let is i32 as rex_x with mut = 0;
+            if (has_sib(op2) == 1) { rex_x = reg_ext(op2.mem_index); }
+            buf.buf_emit8(b, make_rex(w, reg_ext(op1.reg_id), rex_x, reg_ext(op2.mem_base)));
             buf.buf_emit8(b, 15);
             if (op2.mem_size == 8) { buf.buf_emit8(b, 182); }
             else { buf.buf_emit8(b, 183); }
-            emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) {
+                emit_mem_modrm_sib(b, dst_code, op2.mem_base, op2.mem_index, op2.mem_scale, op2.mem_disp);
+            } else {
+                emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            }
         }
         else if (op2.kind == def.OP_REG) {
             let is i32 as src_sz = reg_size(op2.reg_id);
@@ -948,8 +1037,11 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
             let is i32 as need_rex with mut = 0;
             if (sz == 64) { need_rex = 1; }
             if (reg_ext(op2.reg_id) == 1 || reg_ext(op1.mem_base) == 1) { need_rex = 1; }
+            if (has_sib(op1) == 1 && reg_ext(op1.mem_index) == 1) { need_rex = 1; }
             if (sz == 8 && needs_rex_for_8bit(op2.reg_id) == 1) { need_rex = 1; }
-            return s + need_rex + 1 + mem_modrm_size(op1.mem_base, op1.mem_disp);
+            let is i32 as mm with mut = mem_modrm_size(op1.mem_base, op1.mem_disp);
+            if (has_sib(op1) == 1) { mm = mem_modrm_sib_size(op1.mem_base, op1.mem_disp); }
+            return s + need_rex + 1 + mm;
         }
         // MOV reg, [mem]
         if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
@@ -959,8 +1051,11 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
             let is i32 as need_rex with mut = 0;
             if (sz == 64) { need_rex = 1; }
             if (reg_ext(op1.reg_id) == 1 || reg_ext(op2.mem_base) == 1) { need_rex = 1; }
+            if (has_sib(op2) == 1 && reg_ext(op2.mem_index) == 1) { need_rex = 1; }
             if (sz == 8 && needs_rex_for_8bit(op1.reg_id) == 1) { need_rex = 1; }
-            return s + need_rex + 1 + mem_modrm_size(op2.mem_base, op2.mem_disp);
+            let is i32 as mm with mut = mem_modrm_size(op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) { mm = mem_modrm_sib_size(op2.mem_base, op2.mem_disp); }
+            return s + need_rex + 1 + mm;
         }
         // MOV reg, [rip+label]
         if (op1.kind == def.OP_REG && op2.kind == def.OP_RIP_LABEL) { return 7; }
@@ -973,7 +1068,10 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
             let is i32 as need_rex with mut = 0;
             if (sz == 64) { need_rex = 1; }
             if (reg_ext(op1.mem_base) == 1) { need_rex = 1; }
-            s = s + need_rex + 1 + mem_modrm_size(op1.mem_base, op1.mem_disp);
+            if (has_sib(op1) == 1 && reg_ext(op1.mem_index) == 1) { need_rex = 1; }
+            let is i32 as mm with mut = mem_modrm_size(op1.mem_base, op1.mem_disp);
+            if (has_sib(op1) == 1) { mm = mem_modrm_sib_size(op1.mem_base, op1.mem_disp); }
+            s = s + need_rex + 1 + mm;
             if (sz == 8) { return s + 1; }
             if (sz == 16) { return s + 2; }
             return s + 4;
@@ -983,7 +1081,9 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
     // LEA
     if (inst == def.INST_LEA) {
         if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
-            return 2 + mem_modrm_size(op2.mem_base, op2.mem_disp);
+            let is i32 as mm with mut = mem_modrm_size(op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) { mm = mem_modrm_sib_size(op2.mem_base, op2.mem_disp); }
+            return 2 + mm;
         }
         if (op1.kind == def.OP_REG && op2.kind == def.OP_RIP_LABEL) { return 7; }
     }
@@ -1019,7 +1119,9 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
             let is i32 as sz = reg_size(op1.reg_id);
             let is i32 as s with mut = 0;
             if (sz == 16) { s = s + 1; }
-            return s + 1 + 1 + mem_modrm_size(op2.mem_base, op2.mem_disp);
+            let is i32 as mm with mut = mem_modrm_size(op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) { mm = mem_modrm_sib_size(op2.mem_base, op2.mem_disp); }
+            return s + 1 + 1 + mm;
         }
     }
 
@@ -1048,19 +1150,31 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
 
     // MOVSXD — always REX
     if (inst == def.INST_MOVSXD) {
-        if (op2.kind == def.OP_MEM) { return 2 + mem_modrm_size(op2.mem_base, op2.mem_disp); }
+        if (op2.kind == def.OP_MEM) {
+            let is i32 as mm with mut = mem_modrm_size(op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) { mm = mem_modrm_sib_size(op2.mem_base, op2.mem_disp); }
+            return 2 + mm;
+        }
         if (op2.kind == def.OP_REG) { return 3; }
     }
 
     // MOVSX — always REX + 0F prefix
     if (inst == def.INST_MOVSX) {
-        if (op2.kind == def.OP_MEM) { return 3 + mem_modrm_size(op2.mem_base, op2.mem_disp); }
+        if (op2.kind == def.OP_MEM) {
+            let is i32 as mm with mut = mem_modrm_size(op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) { mm = mem_modrm_sib_size(op2.mem_base, op2.mem_disp); }
+            return 3 + mm;
+        }
         if (op2.kind == def.OP_REG) { return 4; }
     }
 
     // MOVZX — REX + 0F prefix
     if (inst == def.INST_MOVZX) {
-        if (op2.kind == def.OP_MEM) { return 3 + mem_modrm_size(op2.mem_base, op2.mem_disp); }
+        if (op2.kind == def.OP_MEM) {
+            let is i32 as mm with mut = mem_modrm_size(op2.mem_base, op2.mem_disp);
+            if (has_sib(op2) == 1) { mm = mem_modrm_sib_size(op2.mem_base, op2.mem_disp); }
+            return 3 + mm;
+        }
         if (op2.kind == def.OP_REG) { return 4; }
     }
 
