@@ -447,6 +447,8 @@ fn init_ht() as void {
     ht_insert(115, 121, 115, 99, 97, 7, 2, def.INST_SYSCALL);     // syscall
     // len 8
     ht_insert(99, 118, 116, 115, 105, 8, 2, def.INST_CVTSI2SD);   // cvtsi2sd
+    ht_insert(99, 118, 116, 115, 100, 8, 2, def.INST_CVTSD2SS);   // cvtsd2ss
+    ht_insert(99, 118, 116, 115, 115, 8, 2, def.INST_CVTSS2SD);   // cvtss2sd
     // len 9
     ht_insert(99, 118, 116, 116, 115, 9, 2, def.INST_CVTTSD2SI);  // cvttsd2si
     ht_ready = 1;

@@ -652,6 +652,12 @@ _caustic_assembler_asm_defs_cst_INST_CDQ:
 .globl _caustic_assembler_asm_defs_cst_INST_DIV
 _caustic_assembler_asm_defs_cst_INST_DIV:
   .long 62
+.globl _caustic_assembler_asm_defs_cst_INST_CVTSD2SS
+_caustic_assembler_asm_defs_cst_INST_CVTSD2SS:
+  .long 63
+.globl _caustic_assembler_asm_defs_cst_INST_CVTSS2SD
+_caustic_assembler_asm_defs_cst_INST_CVTSS2SD:
+  .long 64
 .globl _caustic_assembler_asm_defs_cst_INST_NONE
 _caustic_assembler_asm_defs_cst_INST_NONE:
   .long 0
@@ -1395,7 +1401,7 @@ _std_linux_cst_exit:
   mov rbp, rsp
   push rbx
   push r12
-  sub rsp, 60
+  sub rsp, 64
 .loc 1 439 0
   mov rbx, rdi
   mov rax, rbx
@@ -1409,7 +1415,7 @@ _std_linux_cst_exit:
   mov rbx, rax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 64
   pop r12
   pop rbx
   pop rbp
@@ -1637,7 +1643,9 @@ _std_mem_cst_reserve:
   mov rax, r13
   mov QWORD PTR [rbp-72], rax
 .loc 1 17 0
-  mov QWORD PTR [rbp-80], -1
+  mov rbx, -1
+  mov rax, rbx
+  mov QWORD PTR [rbp-80], rax
 .loc 1 18 0
   xor r10, r10
 .loc 1 19 0
@@ -1890,8 +1898,10 @@ _std_mem_cst_alloc:
   cmp rax, r12
   jge .L4
   lea rbx, [rbp-72]
+  mov r12, 8
+  mov rax, r12
   mov rcx, rbx
-  mov QWORD PTR [rcx], 8
+  mov QWORD PTR [rcx], rax
   jmp .L5
 .L4:
 .L5:
@@ -2460,7 +2470,7 @@ _std_mem_cst_gheapinit:
 .loc 1 108 0
 .loc 1 111 0
   lea rbx, [rip+_std_mem_cst__std_heap]
-  mov r10, rbx
+  xor r10, r10
 .loc 1 112 0
   mov r12, QWORD PTR [rbp-56]
   mov rdi, r12
@@ -2512,7 +2522,7 @@ _std_mem_cst_gheapreset:
   mov QWORD PTR [rcx], rax
 .loc 1 121 0
   lea rbx, [rip+_std_mem_cst__std_heap]
-  mov r10, rbx
+  xor r10, r10
 .loc 1 122 0
   mov r12, QWORD PTR [rbp-56]
 .loc 1 121 0
@@ -2655,8 +2665,10 @@ _std_mem_cst_memcpy:
   mov rax, rbx
   mov QWORD PTR [rbp-72], rax
 .loc 1 149 0
-  mov QWORD PTR [rbp-80], 0
+  mov rbx, 0
 .loc 1 148 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-80], rax
 .L30:
 .loc 1 149 0
   mov rax, QWORD PTR [rbp-80]
@@ -2724,7 +2736,7 @@ _std_mem_cst_memset:
   push r13
   push r14
   push r15
-  sub rsp, 100
+  sub rsp, 104
 .loc 1 1062 0
   mov rbx, rdi
   mov rax, rbx
@@ -2738,8 +2750,10 @@ _std_mem_cst_memset:
   mov rax, rbx
   mov QWORD PTR [rbp-68], rax
 .loc 1 157 0
-  mov QWORD PTR [rbp-76], 0
+  mov rbx, 0
 .loc 1 155 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-76], rax
 .L32:
 .loc 1 157 0
   mov rbx, QWORD PTR [rbp-76]
@@ -2774,7 +2788,7 @@ _std_mem_cst_memset:
 .loc 1 158 0
   mov rbx, QWORD PTR [rbp-56]
   mov rax, rbx
-  add rsp, 100
+  add rsp, 104
   pop r15
   pop r14
   pop r13
@@ -2784,7 +2798,7 @@ _std_mem_cst_memset:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 100
+  add rsp, 104
   pop r15
   pop r14
   pop r13
@@ -2814,7 +2828,9 @@ _std_mem_cst_memcmp:
   mov rax, rbx
   mov QWORD PTR [rbp-72], rax
 .loc 1 162 0
-  mov QWORD PTR [rbp-80], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-80], rax
 .L34:
 .loc 1 163 0
   mov rax, QWORD PTR [rbp-80]
@@ -2932,100 +2948,113 @@ _caustic_assembler_asm_defs_cst_operand_none:
   push r12
   push r13
   push r14
-  sub rsp, 108
-.loc 1 215 0
-  mov rbx, rdi
-.loc 1 216 0
-  lea r12, [rbp-100]
+  sub rsp, 112
 .loc 1 217 0
+  mov rbx, rdi
+.loc 1 219 0
+  lea r12, [rbp-100]
   lea r13, [rip+_caustic_assembler_asm_defs_cst_OP_NONE]
   mov r14, r13
   movsxd r14, DWORD PTR [r14]
   mov rax, r14
   mov rcx, r12
   mov DWORD PTR [rcx], eax
+.loc 1 220 0
   lea r12, [rbp-100]
   mov r13, 4
   mov r14, r12
   add r14, r13
-.loc 1 218 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 217 0
   mov rax, r13
   mov rcx, r14
   mov DWORD PTR [rcx], eax
-.loc 1 218 0
   lea r12, [rbp-100]
+.loc 1 221 0
   mov r13, 8
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
-.loc 1 219 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rbp-100]
   mov r13, 16
   mov r14, r12
   add r14, r13
+.loc 1 222 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-  mov rax, r13
-  mov rcx, r14
-  mov DWORD PTR [rcx], eax
-  lea r12, [rbp-100]
-.loc 1 220 0
-  mov r13, 20
-  mov r14, r12
-  add r14, r13
-  mov rcx, r14
-  mov QWORD PTR [rcx], 0
-  lea r12, [rbp-100]
-  mov r13, 28
-  mov r14, r12
-  add r14, r13
 .loc 1 221 0
-  mov rcx, r14
-  mov DWORD PTR [rcx], 0
-.loc 1 220 0
-.loc 1 221 0
-  lea r12, [rbp-100]
-  mov r13, 32
-  mov r14, r12
-  add r14, r13
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
   mov rax, r13
   mov rcx, r14
   mov DWORD PTR [rcx], eax
 .loc 1 222 0
   lea r12, [rbp-100]
+  mov r13, 20
+  mov r14, r12
+  add r14, r13
+  mov r12, 0
+  mov rax, r12
+  mov rcx, r14
+  mov QWORD PTR [rcx], rax
+.loc 1 223 0
+  lea r12, [rbp-100]
+  mov r13, 28
+  mov r14, r12
+  add r14, r13
+  mov r12, 0
+  mov rax, r12
+  mov rcx, r14
+  mov DWORD PTR [rcx], eax
+  lea r12, [rbp-100]
+.loc 1 224 0
+  mov r13, 32
+  mov r14, r12
+  add r14, r13
+.loc 1 225 0
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+.loc 1 224 0
+  mov rax, r13
+  mov rcx, r14
+  mov DWORD PTR [rcx], eax
+.loc 1 225 0
+  lea r12, [rbp-100]
   mov r13, 36
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
+.loc 1 226 0
   lea r12, [rbp-100]
-.loc 1 223 0
   mov r13, 40
   mov r14, r12
   add r14, r13
-.loc 1 224 0
+.loc 1 227 0
   mov r12, 0
-.loc 1 223 0
+.loc 1 226 0
   mov r13, r12
   mov rax, r13
   mov rcx, r14
   mov QWORD PTR [rcx], rax
-.loc 1 225 0
+.loc 1 227 0
   lea r12, [rbp-100]
   mov r13, 48
   mov r14, r12
   add r14, r13
+.loc 1 228 0
+  mov r12, 0
+.loc 1 227 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
+.loc 1 228 0
   lea r12, [rbp-100]
   mov rdi, rbx
   mov rsi, r12
@@ -3033,7 +3062,7 @@ _caustic_assembler_asm_defs_cst_operand_none:
   cld
   rep movsb
   mov rax, rbx
-  add rsp, 108
+  add rsp, 112
   pop r14
   pop r13
   pop r12
@@ -3042,7 +3071,7 @@ _caustic_assembler_asm_defs_cst_operand_none:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 108
+  add rsp, 112
   pop r14
   pop r13
   pop r12
@@ -3057,104 +3086,114 @@ _caustic_assembler_asm_defs_cst_operand_reg:
   push r13
   push r14
   sub rsp, 112
-.loc 1 226 0
+.loc 1 228 0
   mov rbx, rdi
-.loc 1 1641 0
+.loc 1 1661 0
   mov r12, rsi
   mov rax, r12
   mov DWORD PTR [rbp-52], eax
-.loc 1 228 0
+.loc 1 230 0
   lea r12, [rbp-104]
+.loc 1 231 0
   lea r13, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r14, r13
   movsxd r14, DWORD PTR [r14]
+.loc 1 230 0
   mov rax, r14
   mov rcx, r12
   mov DWORD PTR [rcx], eax
-.loc 1 229 0
+.loc 1 231 0
   lea r12, [rbp-104]
   mov r13, 4
   mov r14, r12
   add r14, r13
+.loc 1 232 0
   movsxd r12, DWORD PTR [rbp-52]
+.loc 1 231 0
   mov rax, r12
   mov rcx, r14
   mov DWORD PTR [rcx], eax
+.loc 1 232 0
   lea r12, [rbp-104]
   mov r13, 8
   mov r14, r12
   add r14, r13
-.loc 1 230 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
-.loc 1 229 0
-.loc 1 230 0
+  mov QWORD PTR [rcx], rax
+.loc 1 233 0
   lea r12, [rbp-104]
   mov r13, 16
   mov r14, r12
   add r14, r13
-.loc 1 231 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 230 0
   mov rax, r13
   mov rcx, r14
   mov DWORD PTR [rcx], eax
-.loc 1 231 0
   lea r12, [rbp-104]
   mov r13, 20
   mov r14, r12
   add r14, r13
+.loc 1 234 0
+  mov r12, 0
+.loc 1 233 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
-.loc 1 232 0
+  mov QWORD PTR [rcx], rax
+.loc 1 234 0
   lea r12, [rbp-104]
   mov r13, 28
   mov r14, r12
   add r14, r13
+.loc 1 235 0
+  mov r12, 0
+.loc 1 234 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
+.loc 1 236 0
   lea r12, [rbp-104]
   mov r13, 32
   mov r14, r12
   add r14, r13
-.loc 1 233 0
+.loc 1 239 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 232 0
+.loc 1 236 0
   mov rax, r13
   mov rcx, r14
   mov DWORD PTR [rcx], eax
-.loc 1 233 0
+.loc 1 239 0
   lea r12, [rbp-104]
   mov r13, 36
   mov r14, r12
   add r14, r13
-.loc 1 234 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
-.loc 1 233 0
-.loc 1 234 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-104]
   mov r13, 40
   mov r14, r12
   add r14, r13
-.loc 1 236 0
   mov r12, 0
-.loc 1 234 0
   mov r13, r12
   mov rax, r13
   mov rcx, r14
   mov QWORD PTR [rcx], rax
-.loc 1 239 0
+.loc 1 240 0
   lea r12, [rbp-104]
   mov r13, 48
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-104]
   mov rdi, rbx
   mov rsi, r12
@@ -3185,14 +3224,14 @@ _caustic_assembler_asm_defs_cst_operand_imm:
   push r12
   push r13
   push r14
-  sub rsp, 116
-.loc 1 239 0
+  sub rsp, 112
+.loc 1 240 0
   mov rbx, rdi
-.loc 1 1727 0
+.loc 1 1747 0
   mov r12, rsi
   mov rax, r12
   mov QWORD PTR [rbp-56], rax
-.loc 1 240 0
+.loc 1 241 0
   lea r12, [rbp-108]
   lea r13, [rip+_caustic_assembler_asm_defs_cst_OP_IMM]
   mov r14, r13
@@ -3210,17 +3249,15 @@ _caustic_assembler_asm_defs_cst_operand_imm:
   mov rax, r13
   mov rcx, r14
   mov DWORD PTR [rcx], eax
+.loc 1 244 0
   lea r12, [rbp-108]
   mov r13, 8
   mov r14, r12
   add r14, r13
-.loc 1 241 0
   mov r12, QWORD PTR [rbp-56]
-.loc 1 240 0
   mov rax, r12
   mov rcx, r14
   mov QWORD PTR [rcx], rax
-.loc 1 241 0
   lea r12, [rbp-108]
   mov r13, 16
   mov r14, r12
@@ -3235,18 +3272,19 @@ _caustic_assembler_asm_defs_cst_operand_imm:
   mov r13, 20
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rbp-108]
-.loc 1 242 0
+.loc 1 245 0
   mov r13, 28
   mov r14, r12
   add r14, r13
-.loc 1 244 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
-.loc 1 242 0
-.loc 1 244 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-108]
   mov r13, 32
   mov r14, r12
@@ -3261,26 +3299,30 @@ _caustic_assembler_asm_defs_cst_operand_imm:
   mov r13, 36
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-108]
   mov r13, 40
   mov r14, r12
   add r14, r13
-.loc 1 245 0
+.loc 1 246 0
   mov r12, 0
+.loc 1 245 0
   mov r13, r12
-.loc 1 244 0
   mov rax, r13
   mov rcx, r14
   mov QWORD PTR [rcx], rax
-.loc 1 245 0
+.loc 1 246 0
   lea r12, [rbp-108]
   mov r13, 48
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-108]
   mov rdi, rbx
   mov rsi, r12
@@ -3288,7 +3330,7 @@ _caustic_assembler_asm_defs_cst_operand_imm:
   cld
   rep movsb
   mov rax, rbx
-  add rsp, 116
+  add rsp, 112
   pop r14
   pop r13
   pop r12
@@ -3297,7 +3339,7 @@ _caustic_assembler_asm_defs_cst_operand_imm:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 116
+  add rsp, 112
   pop r14
   pop r13
   pop r12
@@ -3311,29 +3353,32 @@ _caustic_assembler_asm_defs_cst_operand_mem:
   push r12
   push r13
   push r14
-  sub rsp, 124
-.loc 1 245 0
+  sub rsp, 128
+.loc 1 247 0
   mov rbx, rdi
-.loc 1 1813 0
+.loc 1 1833 0
   mov r12, rsi
   mov rax, r12
   mov DWORD PTR [rbp-52], eax
-.loc 1 1817 0
+.loc 1 1837 0
   mov r12, rdx
   mov rax, r12
   mov QWORD PTR [rbp-60], rax
-.loc 1 1821 0
+.loc 1 1841 0
   mov r12, rcx
   mov rax, r12
   mov DWORD PTR [rbp-64], eax
 .loc 1 249 0
   lea r12, [rbp-116]
+.loc 1 250 0
   lea r13, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
   mov r14, r13
   movsxd r14, DWORD PTR [r14]
+.loc 1 249 0
   mov rax, r14
   mov rcx, r12
   mov DWORD PTR [rcx], eax
+.loc 1 250 0
   lea r12, [rbp-116]
   mov r13, 4
   mov r14, r12
@@ -3348,8 +3393,10 @@ _caustic_assembler_asm_defs_cst_operand_mem:
   mov r13, 8
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rbp-116]
   mov r13, 16
   mov r14, r12
@@ -3358,7 +3405,6 @@ _caustic_assembler_asm_defs_cst_operand_mem:
   mov rax, r12
   mov rcx, r14
   mov DWORD PTR [rcx], eax
-.loc 1 250 0
   lea r12, [rbp-116]
   mov r13, 20
   mov r14, r12
@@ -3389,23 +3435,30 @@ _caustic_assembler_asm_defs_cst_operand_mem:
   mov r13, 36
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-116]
   mov r13, 40
   mov r14, r12
   add r14, r13
+.loc 1 251 0
   mov r12, 0
   mov r13, r12
+.loc 1 250 0
   mov rax, r13
   mov rcx, r14
   mov QWORD PTR [rcx], rax
+.loc 1 251 0
   lea r12, [rbp-116]
   mov r13, 48
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-116]
   mov rdi, rbx
   mov rsi, r12
@@ -3413,7 +3466,7 @@ _caustic_assembler_asm_defs_cst_operand_mem:
   cld
   rep movsb
   mov rax, rbx
-  add rsp, 124
+  add rsp, 128
   pop r14
   pop r13
   pop r12
@@ -3422,7 +3475,7 @@ _caustic_assembler_asm_defs_cst_operand_mem:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 124
+  add rsp, 128
   pop r14
   pop r13
   pop r12
@@ -3436,30 +3489,30 @@ _caustic_assembler_asm_defs_cst_operand_mem_sib:
   push r12
   push r13
   push r14
-  sub rsp, 132
-.loc 1 250 0
+  sub rsp, 128
+.loc 1 251 0
   mov rbx, rdi
-.loc 1 1907 0
+.loc 1 1927 0
   mov r12, rsi
   mov rax, r12
   mov DWORD PTR [rbp-52], eax
-.loc 1 1911 0
+.loc 1 1931 0
   mov r12, rdx
   mov rax, r12
   mov DWORD PTR [rbp-56], eax
-.loc 1 1915 0
+.loc 1 1935 0
   mov r12, rcx
   mov rax, r12
   mov DWORD PTR [rbp-60], eax
-.loc 1 1919 0
+.loc 1 1939 0
   mov r12, r8
   mov rax, r12
   mov QWORD PTR [rbp-68], rax
-.loc 1 1923 0
+.loc 1 1943 0
   mov r12, r9
   mov rax, r12
   mov DWORD PTR [rbp-72], eax
-.loc 1 251 0
+.loc 1 254 0
   lea r12, [rbp-124]
   lea r13, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
   mov r14, r13
@@ -3478,15 +3531,13 @@ _caustic_assembler_asm_defs_cst_operand_mem_sib:
   mov rcx, r14
   mov DWORD PTR [rcx], eax
   lea r12, [rbp-124]
-.loc 1 252 0
   mov r13, 8
   mov r14, r12
   add r14, r13
-.loc 1 254 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
-.loc 1 252 0
-.loc 1 254 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rbp-124]
   mov r13, 16
   mov r14, r12
@@ -3503,6 +3554,7 @@ _caustic_assembler_asm_defs_cst_operand_mem_sib:
   mov rax, r12
   mov rcx, r14
   mov QWORD PTR [rcx], rax
+.loc 1 255 0
   lea r12, [rbp-124]
   mov r13, 28
   mov r14, r12
@@ -3511,6 +3563,7 @@ _caustic_assembler_asm_defs_cst_operand_mem_sib:
   mov rax, r12
   mov rcx, r14
   mov DWORD PTR [rcx], eax
+.loc 1 256 0
   lea r12, [rbp-124]
   mov r13, 32
   mov r14, r12
@@ -3523,32 +3576,37 @@ _caustic_assembler_asm_defs_cst_operand_mem_sib:
   mov r13, 36
   mov r14, r12
   add r14, r13
+.loc 1 257 0
   movsxd r12, DWORD PTR [rbp-60]
+.loc 1 256 0
   mov rax, r12
   mov rcx, r14
   mov DWORD PTR [rcx], eax
+.loc 1 257 0
   lea r12, [rbp-124]
-.loc 1 255 0
   mov r13, 40
   mov r14, r12
   add r14, r13
-.loc 1 256 0
+.loc 1 259 0
   mov r12, 0
-.loc 1 255 0
+.loc 1 258 0
   mov r13, r12
+.loc 1 257 0
   mov rax, r13
   mov rcx, r14
   mov QWORD PTR [rcx], rax
-.loc 1 256 0
+.loc 1 259 0
   lea r12, [rbp-124]
   mov r13, 48
   mov r14, r12
   add r14, r13
-.loc 1 257 0
+.loc 1 260 0
+  mov r12, 0
+.loc 1 259 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
-.loc 1 256 0
-.loc 1 257 0
+  mov DWORD PTR [rcx], eax
+.loc 1 260 0
   lea r12, [rbp-124]
   mov rdi, rbx
   mov rsi, r12
@@ -3556,7 +3614,7 @@ _caustic_assembler_asm_defs_cst_operand_mem_sib:
   cld
   rep movsb
   mov rax, rbx
-  add rsp, 132
+  add rsp, 128
   pop r14
   pop r13
   pop r12
@@ -3565,7 +3623,7 @@ _caustic_assembler_asm_defs_cst_operand_mem_sib:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 132
+  add rsp, 128
   pop r14
   pop r13
   pop r12
@@ -3580,27 +3638,25 @@ _caustic_assembler_asm_defs_cst_operand_label:
   push r13
   push r14
   sub rsp, 112
-.loc 1 258 0
+.loc 1 261 0
   mov rbx, rdi
-.loc 1 2009 0
+.loc 1 2029 0
   mov r12, rsi
   mov rax, r12
   mov QWORD PTR [rbp-56], rax
-.loc 1 2014 0
+.loc 1 2034 0
   mov r12, rdx
   mov rax, r12
   mov DWORD PTR [rbp-60], eax
-.loc 1 261 0
+.loc 1 265 0
   lea r12, [rbp-112]
-.loc 1 262 0
   lea r13, [rip+_caustic_assembler_asm_defs_cst_OP_LABEL]
   mov r14, r13
   movsxd r14, DWORD PTR [r14]
-.loc 1 261 0
   mov rax, r14
   mov rcx, r12
   mov DWORD PTR [rcx], eax
-.loc 1 263 0
+.loc 1 266 0
   lea r12, [rbp-112]
   mov r13, 4
   mov r14, r12
@@ -3611,76 +3667,76 @@ _caustic_assembler_asm_defs_cst_operand_label:
   mov rax, r13
   mov rcx, r14
   mov DWORD PTR [rcx], eax
+.loc 1 267 0
   lea r12, [rbp-112]
   mov r13, 8
   mov r14, r12
   add r14, r13
-.loc 1 264 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
-.loc 1 263 0
-.loc 1 264 0
+  mov QWORD PTR [rcx], rax
+.loc 1 268 0
   lea r12, [rbp-112]
   mov r13, 16
   mov r14, r12
   add r14, r13
-.loc 1 265 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 264 0
   mov rax, r13
   mov rcx, r14
   mov DWORD PTR [rcx], eax
-.loc 1 265 0
+.loc 1 269 0
   lea r12, [rbp-112]
+.loc 1 270 0
   mov r13, 20
   mov r14, r12
   add r14, r13
-.loc 1 266 0
+.loc 1 272 0
+  mov r12, 0
+.loc 1 270 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
-.loc 1 265 0
-.loc 1 266 0
+  mov QWORD PTR [rcx], rax
+.loc 1 272 0
   lea r12, [rbp-112]
   mov r13, 28
   mov r14, r12
   add r14, r13
-.loc 1 267 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
-.loc 1 266 0
-.loc 1 267 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-112]
   mov r13, 32
   mov r14, r12
   add r14, r13
-.loc 1 268 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 267 0
   mov rax, r13
   mov rcx, r14
   mov DWORD PTR [rcx], eax
-.loc 1 268 0
   lea r12, [rbp-112]
   mov r13, 36
   mov r14, r12
   add r14, r13
-.loc 1 272 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
-.loc 1 268 0
-.loc 1 272 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-112]
   mov r13, 40
   mov r14, r12
   add r14, r13
+.loc 1 273 0
   mov r12, QWORD PTR [rbp-56]
+.loc 1 272 0
   mov rax, r12
   mov rcx, r14
   mov QWORD PTR [rcx], rax
+.loc 1 273 0
   lea r12, [rbp-112]
   mov r13, 48
   mov r14, r12
@@ -3720,17 +3776,17 @@ _caustic_assembler_asm_defs_cst_operand_rip_label:
   push r13
   push r14
   sub rsp, 112
-.loc 1 272 0
+.loc 1 273 0
   mov rbx, rdi
-.loc 1 2094 0
+.loc 1 2114 0
   mov r12, rsi
   mov rax, r12
   mov QWORD PTR [rbp-56], rax
-.loc 1 2099 0
+.loc 1 2119 0
   mov r12, rdx
   mov rax, r12
   mov DWORD PTR [rbp-60], eax
-.loc 1 273 0
+.loc 1 274 0
   lea r12, [rbp-112]
   lea r13, [rip+_caustic_assembler_asm_defs_cst_OP_RIP_LABEL]
   mov r14, r13
@@ -3749,12 +3805,16 @@ _caustic_assembler_asm_defs_cst_operand_rip_label:
   mov rcx, r14
   mov DWORD PTR [rcx], eax
   lea r12, [rbp-112]
-.loc 1 274 0
   mov r13, 8
   mov r14, r12
   add r14, r13
+.loc 1 275 0
+  mov r12, 0
+.loc 1 274 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
+.loc 1 277 0
   lea r12, [rbp-112]
   mov r13, 16
   mov r14, r12
@@ -3769,17 +3829,19 @@ _caustic_assembler_asm_defs_cst_operand_rip_label:
   mov r13, 20
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rbp-112]
   mov r13, 28
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
-.loc 1 275 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-112]
-.loc 1 277 0
   mov r13, 32
   mov r14, r12
   add r14, r13
@@ -3793,8 +3855,13 @@ _caustic_assembler_asm_defs_cst_operand_rip_label:
   mov r13, 36
   mov r14, r12
   add r14, r13
+.loc 1 278 0
+  mov r12, 0
+.loc 1 277 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
+.loc 1 278 0
   lea r12, [rbp-112]
   mov r13, 40
   mov r14, r12
@@ -3862,15 +3929,17 @@ _caustic_assembler_lexer_cst_tl_init:
   jge .L38
 .loc 1 36 0
   lea r12, [rbp-56]
+  mov r13, 8192
+  mov rax, r13
   mov rcx, r12
-  mov DWORD PTR [rcx], 8192
+  mov DWORD PTR [rcx], eax
 .loc 1 35 0
   jmp .L39
 .L38:
 .L39:
 .loc 1 37 0
   lea r12, [rbp-72]
-  mov r10, r12
+  xor r10, r10
 .loc 1 41 0
   movsxd r13, DWORD PTR [rbp-56]
   mov r14, r13
@@ -3889,8 +3958,10 @@ _caustic_assembler_lexer_cst_tl_init:
   mov r13, 8
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
   lea r12, [rbp-72]
   mov r13, 12
   mov r14, r12
@@ -3935,7 +4006,7 @@ _caustic_assembler_lexer_cst_tl_push:
   push r13
   push r14
   push r15
-  sub rsp, 124
+  sub rsp, 120
 .loc 1 307 0
   mov rbx, rdi
   mov rax, rbx
@@ -4201,7 +4272,7 @@ _caustic_assembler_lexer_cst_tl_push:
   mov DWORD PTR [rcx], eax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 124
+  add rsp, 120
   pop r15
   pop r14
   pop r13
@@ -4217,7 +4288,7 @@ _caustic_assembler_lexer_cst_tl_next:
   push r13
   push r14
   push r15
-  sub rsp, 84
+  sub rsp, 88
 .loc 1 527 0
   mov rbx, rdi
   mov rax, rbx
@@ -4362,7 +4433,7 @@ _caustic_assembler_lexer_cst_tl_next:
 .loc 1 76 0
   mov rbx, QWORD PTR [rbp-76]
   mov rax, rbx
-  add rsp, 84
+  add rsp, 88
   pop r15
   pop r14
   pop r13
@@ -4372,7 +4443,7 @@ _caustic_assembler_lexer_cst_tl_next:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 84
+  add rsp, 88
   pop r15
   pop r14
   pop r13
@@ -4387,7 +4458,7 @@ _caustic_assembler_lexer_cst_tl_get:
   push r12
   push r13
   push r14
-  sub rsp, 68
+  sub rsp, 64
 .loc 1 683 0
   mov rbx, rdi
   mov rax, rbx
@@ -4413,7 +4484,7 @@ _caustic_assembler_lexer_cst_tl_get:
   add r12, r14
   mov rbx, r12
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -4422,7 +4493,7 @@ _caustic_assembler_lexer_cst_tl_get:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -4436,7 +4507,7 @@ _caustic_assembler_lexer_cst_make_tok:
   push r12
   push r13
   push r14
-  sub rsp, 116
+  sub rsp, 112
 .loc 1 83 0
   mov rbx, rdi
 .loc 1 728 0
@@ -4496,8 +4567,10 @@ _caustic_assembler_lexer_cst_make_tok:
   mov r13, 20
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rbp-108]
   mov r13, 28
   mov r14, r12
@@ -4526,9 +4599,11 @@ _caustic_assembler_lexer_cst_make_tok:
   mov r14, r12
   add r14, r13
 .loc 1 92 0
-  mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov r12, 0
 .loc 1 91 0
+  mov rax, r12
+  mov rcx, r14
+  mov DWORD PTR [rcx], eax
 .loc 1 92 0
   lea r12, [rbp-108]
   mov rdi, rbx
@@ -4537,7 +4612,7 @@ _caustic_assembler_lexer_cst_make_tok:
   cld
   rep movsb
   mov rax, rbx
-  add rsp, 116
+  add rsp, 112
   pop r14
   pop r13
   pop r12
@@ -4546,7 +4621,7 @@ _caustic_assembler_lexer_cst_make_tok:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 116
+  add rsp, 112
   pop r14
   pop r13
   pop r12
@@ -4561,10 +4636,12 @@ _caustic_assembler_lexer_cst_init_char_tab:
   push r13
   push r14
   push r15
-  sub rsp, 92
+  sub rsp, 88
 .loc 1 102 0
-  mov DWORD PTR [rbp-52], 0
+  mov rbx, 0
 .loc 1 95 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-52], eax
 .L44:
 .loc 1 103 0
   movsxd rbx, DWORD PTR [rbp-52]
@@ -4580,9 +4657,11 @@ _caustic_assembler_lexer_cst_init_char_tab:
   add rax, r8
   mov QWORD PTR [rbp-60], rax
 .loc 1 106 0
-  mov rcx, QWORD PTR [rbp-60]
-  mov BYTE PTR [rcx], 0
+  mov r10, 0
 .loc 1 104 0
+  mov rax, r10
+  mov rcx, QWORD PTR [rbp-60]
+  mov BYTE PTR [rcx], al
 .loc 1 107 0
   lea rsi, [rbp-52]
   movsxd rdi, DWORD PTR [rbp-52]
@@ -4600,9 +4679,11 @@ _caustic_assembler_lexer_cst_init_char_tab:
 .loc 1 108 0
   lea rbx, [rbp-52]
 .loc 1 109 0
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 65
+  mov r12, 65
 .loc 1 108 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
 .L46:
 .loc 1 110 0
   movsxd rbx, DWORD PTR [rbp-52]
@@ -4620,9 +4701,11 @@ _caustic_assembler_lexer_cst_init_char_tab:
   add rax, r8
   mov QWORD PTR [rbp-68], rax
 .loc 1 112 0
-  mov rcx, QWORD PTR [rbp-68]
-  mov BYTE PTR [rcx], 1
+  mov r10, 1
 .loc 1 111 0
+  mov rax, r10
+  mov rcx, QWORD PTR [rbp-68]
+  mov BYTE PTR [rcx], al
 .loc 1 113 0
   lea rsi, [rbp-52]
   movsxd rdi, DWORD PTR [rbp-52]
@@ -4640,9 +4723,11 @@ _caustic_assembler_lexer_cst_init_char_tab:
 .loc 1 114 0
   lea rbx, [rbp-52]
 .loc 1 115 0
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 97
+  mov r12, 97
 .loc 1 114 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
 .L48:
 .loc 1 117 0
   movsxd rbx, DWORD PTR [rbp-52]
@@ -4660,9 +4745,11 @@ _caustic_assembler_lexer_cst_init_char_tab:
   add rax, r8
   mov QWORD PTR [rbp-76], rax
 .loc 1 119 0
-  mov rcx, QWORD PTR [rbp-76]
-  mov BYTE PTR [rcx], 1
+  mov r10, 1
 .loc 1 118 0
+  mov rax, r10
+  mov rcx, QWORD PTR [rbp-76]
+  mov BYTE PTR [rcx], al
 .loc 1 120 0
   lea rsi, [rbp-52]
   movsxd rdi, DWORD PTR [rbp-52]
@@ -4683,15 +4770,19 @@ _caustic_assembler_lexer_cst_init_char_tab:
   mov r13, rbx
   add r13, r12
 .loc 1 123 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 122 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 123 0
   lea rbx, [rbp-52]
 .loc 1 124 0
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 48
+  mov r12, 48
 .loc 1 123 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
 .L50:
 .loc 1 125 0
   movsxd rbx, DWORD PTR [rbp-52]
@@ -4707,9 +4798,11 @@ _caustic_assembler_lexer_cst_init_char_tab:
   add rax, r8
   mov QWORD PTR [rbp-84], rax
 .loc 1 128 0
-  mov rcx, QWORD PTR [rbp-84]
-  mov BYTE PTR [rcx], 2
+  mov r10, 2
 .loc 1 126 0
+  mov rax, r10
+  mov rcx, QWORD PTR [rbp-84]
+  mov BYTE PTR [rcx], al
 .loc 1 128 0
   lea rsi, [rbp-52]
 .loc 1 129 0
@@ -4732,16 +4825,20 @@ _caustic_assembler_lexer_cst_init_char_tab:
   mov r13, rbx
   add r13, r12
 .loc 1 131 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 4
+  mov rbx, 4
 .loc 1 130 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 132 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_char_tab_ready]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 92
+  add rsp, 88
   pop r15
   pop r14
   pop r13
@@ -4755,7 +4852,7 @@ _caustic_assembler_lexer_cst_is_alpha:
   push rbx
   push r12
   push r13
-  sub rsp, 57
+  sub rsp, 56
 .loc 1 966 0
   mov rbx, rdi
   mov rax, rbx
@@ -4781,7 +4878,7 @@ _caustic_assembler_lexer_cst_is_alpha:
 .loc 1 141 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 57
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4794,7 +4891,7 @@ _caustic_assembler_lexer_cst_is_alpha:
 .loc 1 142 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 57
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4802,7 +4899,7 @@ _caustic_assembler_lexer_cst_is_alpha:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 57
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4814,7 +4911,7 @@ _caustic_assembler_lexer_cst_is_digit:
   push rbx
   push r12
   push r13
-  sub rsp, 57
+  sub rsp, 56
 .loc 1 999 0
   mov rbx, rdi
   mov rax, rbx
@@ -4837,7 +4934,7 @@ _caustic_assembler_lexer_cst_is_digit:
 .loc 1 148 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 57
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4850,7 +4947,7 @@ _caustic_assembler_lexer_cst_is_digit:
 .loc 1 149 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 57
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4858,7 +4955,7 @@ _caustic_assembler_lexer_cst_is_digit:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 57
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4870,7 +4967,7 @@ _caustic_assembler_lexer_cst_is_alnum:
   push rbx
   push r12
   push r13
-  sub rsp, 58
+  sub rsp, 56
 .loc 1 1032 0
   mov rbx, rdi
   mov rax, rbx
@@ -4909,7 +5006,7 @@ _caustic_assembler_lexer_cst_is_alnum:
 .loc 1 152 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 58
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4922,7 +5019,7 @@ _caustic_assembler_lexer_cst_is_alnum:
 .loc 1 153 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 58
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4930,7 +5027,7 @@ _caustic_assembler_lexer_cst_is_alnum:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 58
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4942,7 +5039,7 @@ _caustic_assembler_lexer_cst_is_alnum_dot:
   push rbx
   push r12
   push r13
-  sub rsp, 58
+  sub rsp, 56
 .loc 1 1077 0
   mov rbx, rdi
   mov rax, rbx
@@ -4968,7 +5065,7 @@ _caustic_assembler_lexer_cst_is_alnum_dot:
   je .L60
   mov rbx, 1
   mov rax, rbx
-  add rsp, 58
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4979,7 +5076,7 @@ _caustic_assembler_lexer_cst_is_alnum_dot:
 .L61:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 58
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -4987,7 +5084,7 @@ _caustic_assembler_lexer_cst_is_alnum_dot:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 58
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -5001,7 +5098,7 @@ _caustic_assembler_lexer_cst_parse_number_fast:
   push r13
   push r14
   push r15
-  sub rsp, 681
+  sub rsp, 680
 .loc 1 1118 0
   mov rbx, rdi
   mov rax, rbx
@@ -5023,7 +5120,9 @@ _caustic_assembler_lexer_cst_parse_number_fast:
   mov rax, rbx
   mov QWORD PTR [rbp-88], rax
 .loc 1 163 0
-  mov QWORD PTR [rbp-96], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-96], rax
 .loc 1 164 0
   mov rbx, QWORD PTR [rbp-88]
   mov r12, 1
@@ -5317,7 +5416,7 @@ _caustic_assembler_lexer_cst_parse_number_fast:
 .loc 1 181 0
   mov rbx, QWORD PTR [rbp-88]
   mov rax, rbx
-  add rsp, 681
+  add rsp, 680
   pop r15
   pop r14
   pop r13
@@ -5444,7 +5543,7 @@ _caustic_assembler_lexer_cst_parse_number_fast:
 .loc 1 188 0
   mov rbx, QWORD PTR [rbp-88]
   mov rax, rbx
-  add rsp, 681
+  add rsp, 680
   pop r15
   pop r14
   pop r13
@@ -5454,7 +5553,7 @@ _caustic_assembler_lexer_cst_parse_number_fast:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 681
+  add rsp, 680
   pop r15
   pop r14
   pop r13
@@ -5470,10 +5569,12 @@ _caustic_assembler_lexer_cst_init_ri_first:
   push r13
   push r14
   push r15
-  sub rsp, 68
+  sub rsp, 72
 .loc 1 193 0
-  mov DWORD PTR [rbp-52], 0
+  mov rbx, 0
 .loc 1 192 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-52], eax
 .L90:
 .loc 1 194 0
   movsxd rbx, DWORD PTR [rbp-52]
@@ -5487,9 +5588,11 @@ _caustic_assembler_lexer_cst_init_ri_first:
   add rax, r8
   mov QWORD PTR [rbp-60], rax
 .loc 1 195 0
-  mov rcx, QWORD PTR [rbp-60]
-  mov BYTE PTR [rcx], 0
+  mov r10, 0
 .loc 1 194 0
+  mov rax, r10
+  mov rcx, QWORD PTR [rbp-60]
+  mov BYTE PTR [rcx], al
 .loc 1 195 0
   lea rsi, [rbp-52]
   movsxd rdi, DWORD PTR [rbp-52]
@@ -5512,47 +5615,59 @@ _caustic_assembler_lexer_cst_init_ri_first:
   mov r13, rbx
   add r13, r12
 .loc 1 197 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 196 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 197 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 98
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov BYTE PTR [rcx], al
 .loc 1 198 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 99
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov BYTE PTR [rcx], al
 .loc 1 199 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 100
   mov r13, rbx
   add r13, r12
 .loc 1 200 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 199 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 200 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 101
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov BYTE PTR [rcx], al
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 105
   mov r13, rbx
   add r13, r12
 .loc 1 201 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 200 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 201 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
 .loc 1 202 0
@@ -5561,31 +5676,39 @@ _caustic_assembler_lexer_cst_init_ri_first:
   mov r13, rbx
   add r13, r12
 .loc 1 202 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 201 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 202 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
 .loc 1 203 0
   mov r12, 108
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov BYTE PTR [rcx], al
 .loc 1 204 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 109
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov BYTE PTR [rcx], al
 .loc 1 205 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 110
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov BYTE PTR [rcx], al
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
 .loc 1 206 0
   mov r12, 111
@@ -5593,22 +5716,28 @@ _caustic_assembler_lexer_cst_init_ri_first:
   mov r13, rbx
   add r13, r12
 .loc 1 207 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 205 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 211 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 112
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov BYTE PTR [rcx], al
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 114
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov BYTE PTR [rcx], al
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
 .loc 1 212 0
   mov r12, 115
@@ -5616,34 +5745,42 @@ _caustic_assembler_lexer_cst_init_ri_first:
   mov r13, rbx
   add r13, r12
 .loc 1 212 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 211 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 212 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 116
   mov r13, rbx
   add r13, r12
 .loc 1 213 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 212 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 213 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov r12, 120
   mov r13, rbx
   add r13, r12
 .loc 1 214 0
-  mov rcx, r13
-  mov BYTE PTR [rcx], 1
+  mov rbx, 1
 .loc 1 213 0
+  mov rax, rbx
+  mov rcx, r13
+  mov BYTE PTR [rcx], al
 .loc 1 214 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ri_first_ready]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 72
   pop r15
   pop r14
   pop r13
@@ -5658,7 +5795,7 @@ _caustic_assembler_lexer_cst_ht_hash:
   push r12
   push r13
   push r14
-  sub rsp, 84
+  sub rsp, 80
 .loc 1 1586 0
   mov rbx, rdi
   mov rax, rbx
@@ -5742,7 +5879,7 @@ _caustic_assembler_lexer_cst_ht_hash:
   and r13, r12
 .loc 1 226 0
   mov rax, r13
-  add rsp, 84
+  add rsp, 80
   pop r14
   pop r13
   pop r12
@@ -5751,7 +5888,7 @@ _caustic_assembler_lexer_cst_ht_hash:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 84
+  add rsp, 80
   pop r14
   pop r13
   pop r12
@@ -5824,8 +5961,10 @@ _caustic_assembler_lexer_cst_ht_insert:
   mov rax, rbx
   mov DWORD PTR [rbp-84], eax
 .loc 1 239 0
-  mov DWORD PTR [rbp-88], 0
+  mov rbx, 0
 .loc 1 237 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-88], eax
 .L92:
 .loc 1 239 0
   movsxd rax, DWORD PTR [rbp-88]
@@ -6154,7 +6293,7 @@ _caustic_assembler_lexer_cst_ht_lookup:
   push r13
   push r14
   push r15
-  sub rsp, 1028
+  sub rsp, 1032
 .loc 1 2006 0
   mov rbx, rdi
   mov rax, rbx
@@ -6190,14 +6329,20 @@ _caustic_assembler_lexer_cst_ht_lookup:
   mov rax, r12
   mov DWORD PTR [rbp-68], eax
 .loc 1 266 0
-  mov DWORD PTR [rbp-72], 0
+  mov rbx, 0
 .loc 1 265 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-72], eax
 .loc 1 268 0
-  mov DWORD PTR [rbp-76], 0
+  mov rbx, 0
 .loc 1 267 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-76], eax
 .loc 1 272 0
-  mov DWORD PTR [rbp-80], 0
+  mov rbx, 0
 .loc 1 268 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-80], eax
 .loc 1 272 0
   movsxd rbx, DWORD PTR [rbp-60]
   mov r12, 3
@@ -6285,7 +6430,9 @@ _caustic_assembler_lexer_cst_ht_lookup:
   mov rax, rbx
   mov DWORD PTR [rbp-84], eax
 .loc 1 277 0
-  mov DWORD PTR [rbp-88], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-88], eax
 .L102:
   movsxd rax, DWORD PTR [rbp-88]
   mov QWORD PTR [rbp-172], rax
@@ -6343,7 +6490,7 @@ _caustic_assembler_lexer_cst_ht_lookup:
   jne .L104
   mov QWORD PTR [rbp-260], 0
   mov rax, QWORD PTR [rbp-260]
-  add rsp, 1028
+  add rsp, 1032
   pop r15
   pop r14
   pop r13
@@ -6626,7 +6773,7 @@ _caustic_assembler_lexer_cst_ht_lookup:
   add rax, QWORD PTR [rbp-940]
   mov QWORD PTR [rbp-948], rax
   mov rax, QWORD PTR [rbp-948]
-  add rsp, 1028
+  add rsp, 1032
   pop r15
   pop r14
   pop r13
@@ -6687,7 +6834,7 @@ _caustic_assembler_lexer_cst_ht_lookup:
 .loc 1 304 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 1028
+  add rsp, 1032
   pop r15
   pop r14
   pop r13
@@ -6697,7 +6844,7 @@ _caustic_assembler_lexer_cst_ht_lookup:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 1028
+  add rsp, 1032
   pop r15
   pop r14
   pop r13
@@ -6713,10 +6860,10 @@ _caustic_assembler_lexer_cst_init_ht:
   push r13
   push r14
   push r15
-  sub rsp, 3480
+  sub rsp, 3528
 .loc 1 305 0
   lea rbx, [rip+_caustic_assembler_lexer_cst_ht_data]
-  mov r10, rbx
+  xor r10, r10
 .loc 1 306 0
   lea r12, [rip+_caustic_assembler_lexer_cst_HT_SIZE]
   mov r13, r12
@@ -10498,14 +10645,14 @@ _caustic_assembler_lexer_cst_init_ht:
   mov rbx, 99
   mov r12, 118
   mov r13, 116
-  mov QWORD PTR [rbp-3480], 116
+  mov QWORD PTR [rbp-3480], 115
 .loc 1 670 0
-  mov QWORD PTR [rbp-3464], 115
+  mov QWORD PTR [rbp-3464], 100
 .loc 1 672 0
-  mov QWORD PTR [rbp-3472], 9
+  mov QWORD PTR [rbp-3472], 8
 .loc 1 673 0
   mov r15, 2
-  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSD2SS]
   mov r14, r8
   movsxd r14, DWORD PTR [r14]
 .loc 1 669 0
@@ -10522,15 +10669,69 @@ _caustic_assembler_lexer_cst_init_ht:
   call _caustic_assembler_lexer_cst_ht_insert
   mov rbx, rax
   add rsp, 16
-.loc 1 675 0
-  lea rbx, [rip+_caustic_assembler_lexer_cst_ht_ready]
 .loc 1 677 0
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
+  mov rbx, 99
+.loc 1 678 0
+  mov r12, 118
+.loc 1 682 0
+  mov r13, 116
+  mov QWORD PTR [rbp-3504], 115
+  mov QWORD PTR [rbp-3488], 115
+  mov QWORD PTR [rbp-3496], 8
+  mov r15, 2
+.loc 1 683 0
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSS2SD]
+  mov r14, r8
+  movsxd r14, DWORD PTR [r14]
 .loc 1 675 0
+  mov rax, r14
+  push rax
+  mov rax, r15
+  push rax
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, r13
+  mov rcx, QWORD PTR [rbp-3504]
+  mov r8, QWORD PTR [rbp-3488]
+  mov r9, QWORD PTR [rbp-3496]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 683 0
+  mov rbx, 99
+  mov r12, 118
+  mov r13, 116
+  mov QWORD PTR [rbp-3528], 116
+.loc 1 684 0
+  mov QWORD PTR [rbp-3512], 115
+  mov QWORD PTR [rbp-3520], 9
+  mov r15, 2
+  lea r8, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
+  mov r14, r8
+  movsxd r14, DWORD PTR [r14]
+.loc 1 683 0
+  mov rax, r14
+  push rax
+  mov rax, r15
+  push rax
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, r13
+  mov rcx, QWORD PTR [rbp-3528]
+  mov r8, QWORD PTR [rbp-3512]
+  mov r9, QWORD PTR [rbp-3520]
+  call _caustic_assembler_lexer_cst_ht_insert
+  mov rbx, rax
+  add rsp, 16
+.loc 1 684 0
+  lea rbx, [rip+_caustic_assembler_lexer_cst_ht_ready]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 3480
+  add rsp, 3528
   pop r15
   pop r14
   pop r13
@@ -10546,18 +10747,18 @@ _caustic_assembler_lexer_cst_tokenize:
   push r13
   push r14
   push r15
-  sub rsp, 14418
-.loc 1 683 0
+  sub rsp, 14424
+.loc 1 685 0
   mov QWORD PTR [rbp-354], rdi
-.loc 1 5528 0
+.loc 1 5570 0
   mov r12, rsi
   mov rax, r12
   mov QWORD PTR [rbp-56], rax
-.loc 1 5533 0
+.loc 1 5575 0
   mov r12, rdx
   mov rax, r12
   mov QWORD PTR [rbp-64], rax
-.loc 1 684 0
+.loc 1 689 0
   lea r12, [rip+_caustic_assembler_lexer_cst_char_tab_ready]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
@@ -10565,28 +10766,32 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, r13
   cmp rax, r12
   jne .L118
+.loc 1 688 0
+.loc 1 689 0
   call _caustic_assembler_lexer_cst_init_char_tab
   mov r12, rax
+.loc 1 688 0
   jmp .L119
 .L118:
 .L119:
+.loc 1 689 0
   lea r12, [rip+_caustic_assembler_lexer_cst_ri_first_ready]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 685 0
+.loc 1 690 0
   mov r12, 0
-.loc 1 684 0
+.loc 1 689 0
   mov rax, r13
   cmp rax, r12
   jne .L120
-.loc 1 685 0
+.loc 1 690 0
   call _caustic_assembler_lexer_cst_init_ri_first
   mov r12, rax
-.loc 1 684 0
+.loc 1 689 0
   jmp .L121
 .L120:
 .L121:
-.loc 1 685 0
+.loc 1 691 0
   lea r12, [rip+_caustic_assembler_lexer_cst_ht_ready]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
@@ -10594,16 +10799,19 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, r13
   cmp rax, r12
   jne .L122
-.loc 1 686 0
+.loc 1 690 0
+.loc 1 691 0
   call _caustic_assembler_lexer_cst_init_ht
   mov r12, rax
-.loc 1 685 0
+.loc 1 690 0
   jmp .L123
 .L122:
 .L123:
-.loc 1 689 0
+.loc 1 691 0
   mov r12, QWORD PTR [rbp-64]
+.loc 1 692 0
   mov r13, 3
+.loc 1 691 0
   mov rax, r12
   mov rcx, r13
   push rdx
@@ -10611,37 +10819,41 @@ _caustic_assembler_lexer_cst_tokenize:
   idiv rcx
   pop rdx
   mov r14, rax
-.loc 1 688 0
   mov r12, r14
   movsxd r12, r12d
-.loc 1 689 0
+.loc 1 692 0
   mov r13, 4096
-.loc 1 688 0
+.loc 1 691 0
   mov r14, r12
   add r14, r13
   mov rax, r14
   mov DWORD PTR [rbp-68], eax
-.loc 1 689 0
+.loc 1 693 0
   xor r10, r10
-.loc 1 690 0
+.loc 1 694 0
   lea r12, [rbp-14362]
   movsxd r13, DWORD PTR [rbp-68]
   mov rdi, r12
   mov rsi, r13
   call _caustic_assembler_lexer_cst_tl_init
   mov r13, rax
-.loc 1 689 0
+.loc 1 693 0
   lea r13, [rbp-84]
   mov rdi, r13
   mov rsi, r12
   mov rcx, 16
   cld
   rep movsb
-.loc 1 691 0
-  mov QWORD PTR [rbp-92], 0
-.loc 1 690 0
-.loc 1 691 0
-  mov DWORD PTR [rbp-96], 1
+.loc 1 694 0
+  mov r12, 0
+  mov rax, r12
+  mov QWORD PTR [rbp-92], rax
+.loc 1 697 0
+  mov r12, 1
+.loc 1 695 0
+  mov rax, r12
+  mov DWORD PTR [rbp-96], eax
+.loc 1 697 0
   lea r12, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov r13, 0
   mov r14, 3
@@ -10650,11 +10862,11 @@ _caustic_assembler_lexer_cst_tokenize:
   shl r8, cl
   mov r13, r12
   add r13, r8
-.loc 1 692 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
-.loc 1 691 0
-.loc 1 692 0
+  mov QWORD PTR [rcx], rax
+.loc 1 698 0
   lea r12, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov r13, 1
   mov r14, 3
@@ -10663,11 +10875,10 @@ _caustic_assembler_lexer_cst_tokenize:
   shl r8, cl
   mov r13, r12
   add r13, r8
-.loc 1 693 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
-.loc 1 692 0
-.loc 1 693 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov r13, 2
   mov r14, 3
@@ -10676,11 +10887,11 @@ _caustic_assembler_lexer_cst_tokenize:
   shl r8, cl
   mov r13, r12
   add r13, r8
-.loc 1 694 0
+  mov r12, 0
+  mov rax, r12
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
-.loc 1 693 0
-.loc 1 694 0
+  mov QWORD PTR [rcx], rax
+.loc 1 699 0
   lea r12, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov r13, 3
   mov r14, 3
@@ -10689,8 +10900,10 @@ _caustic_assembler_lexer_cst_tokenize:
   shl r8, cl
   mov r13, r12
   add r13, r8
+  mov r12, 0
+  mov rax, r12
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov r13, 4
   mov r14, 3
@@ -10699,13 +10912,14 @@ _caustic_assembler_lexer_cst_tokenize:
   shl r8, cl
   mov r13, r12
   add r13, r8
-.loc 1 695 0
+.loc 1 700 0
+  mov r12, 0
+.loc 1 699 0
+  mov rax, r12
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
-.loc 1 694 0
-.loc 1 696 0
+  mov QWORD PTR [rcx], rax
+.loc 1 700 0
   lea r12, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
-.loc 1 697 0
   mov r13, 5
   mov r14, 3
   mov r8, r13
@@ -10713,8 +10927,10 @@ _caustic_assembler_lexer_cst_tokenize:
   shl r8, cl
   mov r13, r12
   add r13, r8
+  mov r12, 0
+  mov rax, r12
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   lea r12, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov r13, 6
   mov r14, 3
@@ -10723,9 +10939,13 @@ _caustic_assembler_lexer_cst_tokenize:
   shl r8, cl
   mov r13, r12
   add r13, r8
+.loc 1 701 0
+  mov r12, 0
+.loc 1 700 0
+  mov rax, r12
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
-.loc 1 698 0
+  mov QWORD PTR [rcx], rax
+.loc 1 701 0
   lea r12, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov r13, 7
   mov r14, 3
@@ -10734,21 +10954,21 @@ _caustic_assembler_lexer_cst_tokenize:
   shl r8, cl
   mov r13, r12
   add r13, r8
+  mov r12, 0
+  mov rax, r12
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
-.loc 1 699 0
+  mov QWORD PTR [rcx], rax
   mov r12, QWORD PTR [rbp-56]
-.loc 1 698 0
   mov rax, r12
   mov QWORD PTR [rbp-104], rax
-.loc 1 700 0
+.loc 1 705 0
   mov r12, QWORD PTR [rbp-56]
-.loc 1 699 0
   mov r13, r12
+.loc 1 701 0
   mov rax, r13
   mov QWORD PTR [rbp-112], rax
 .L124:
-.loc 1 700 0
+.loc 1 705 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-506], rax
   mov rax, QWORD PTR [rbp-64]
@@ -10756,7 +10976,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-506]
   cmp rax, QWORD PTR [rbp-578]
   jge .L125
-.loc 1 701 0
+.loc 1 706 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-778], rax
   mov rax, QWORD PTR [rbp-92]
@@ -10767,10 +10987,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-370]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-378], rax
-.loc 1 700 0
+.loc 1 705 0
   mov rax, QWORD PTR [rbp-378]
   mov BYTE PTR [rbp-113], al
-.loc 1 701 0
+.loc 1 707 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-402], rax
   mov QWORD PTR [rbp-410], 32
@@ -10793,9 +11013,9 @@ _caustic_assembler_lexer_cst_tokenize:
   jnz .L128
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-450], rax
-.loc 1 702 0
+.loc 1 708 0
   mov QWORD PTR [rbp-458], 13
-.loc 1 701 0
+.loc 1 707 0
   mov rax, QWORD PTR [rbp-450]
   cmp rax, QWORD PTR [rbp-458]
   je .L128
@@ -10804,13 +11024,13 @@ _caustic_assembler_lexer_cst_tokenize:
 .L128:
   mov QWORD PTR [rbp-386], 1
 .L129:
+.loc 1 706 0
   mov rax, QWORD PTR [rbp-386]
   test rax, rax
   jz .L126
-.loc 1 703 0
+.loc 1 708 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-474], rax
-.loc 1 705 0
   mov QWORD PTR [rbp-482], 0
   mov QWORD PTR [rbp-490], 3
   mov rax, QWORD PTR [rbp-482]
@@ -10822,7 +11042,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov QWORD PTR [rbp-866], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-514], rax
+.loc 1 709 0
   mov QWORD PTR [rbp-522], 0
+.loc 1 708 0
   mov QWORD PTR [rbp-530], 3
   mov rax, QWORD PTR [rbp-522]
   mov rcx, QWORD PTR [rbp-530]
@@ -10834,13 +11056,16 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-546]
   mov rax, QWORD PTR [rax]
   mov QWORD PTR [rbp-554], rax
+.loc 1 709 0
   mov QWORD PTR [rbp-562], 1
+.loc 1 708 0
   mov rax, QWORD PTR [rbp-554]
   add rax, QWORD PTR [rbp-562]
   mov QWORD PTR [rbp-570], rax
   mov rax, QWORD PTR [rbp-570]
   mov rcx, QWORD PTR [rbp-866]
   mov QWORD PTR [rcx], rax
+.loc 1 709 0
   lea r12, [rbp-92]
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-586], rax
@@ -10852,7 +11077,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rcx, r12
   mov QWORD PTR [rcx], rax
 .L132:
-.loc 1 706 0
+.loc 1 710 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-618], rax
   mov rax, QWORD PTR [rbp-64]
@@ -10870,9 +11095,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-658]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-666], rax
-.loc 1 707 0
+.loc 1 712 0
   mov QWORD PTR [rbp-674], 32
-.loc 1 706 0
+.loc 1 710 0
   mov rax, QWORD PTR [rbp-666]
   cmp rax, QWORD PTR [rbp-674]
   jne .L134
@@ -10881,28 +11106,29 @@ _caustic_assembler_lexer_cst_tokenize:
 .L134:
   mov QWORD PTR [rbp-610], 0
 .L135:
-.loc 1 705 0
   mov rax, QWORD PTR [rbp-610]
   test rax, rax
   jz .L133
-.loc 1 707 0
+.loc 1 712 0
   lea r13, [rbp-92]
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-698], rax
+.loc 1 713 0
   mov QWORD PTR [rbp-706], 1
+.loc 1 712 0
   mov rax, QWORD PTR [rbp-698]
   add rax, QWORD PTR [rbp-706]
   mov QWORD PTR [rbp-714], rax
   mov rax, QWORD PTR [rbp-714]
   mov rcx, r13
   mov QWORD PTR [rcx], rax
-.loc 1 705 0
+.loc 1 710 0
   jmp .L132
 .L133:
-.loc 1 701 0
+.loc 1 706 0
   jmp .L127
 .L126:
-.loc 1 708 0
+.loc 1 713 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-722], rax
   mov QWORD PTR [rbp-730], 10
@@ -10911,8 +11137,9 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L136
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-746], rax
-.loc 1 709 0
+.loc 1 715 0
   mov QWORD PTR [rbp-754], 1
+.loc 1 713 0
   mov QWORD PTR [rbp-762], 3
   mov rax, QWORD PTR [rbp-754]
   mov rcx, QWORD PTR [rbp-762]
@@ -10920,6 +11147,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov QWORD PTR [rbp-770], rax
   mov r14, QWORD PTR [rbp-746]
   add r14, QWORD PTR [rbp-770]
+.loc 1 715 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-786], rax
   mov QWORD PTR [rbp-794], 1
@@ -10938,21 +11166,22 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-826]
   add rax, QWORD PTR [rbp-834]
   mov QWORD PTR [rbp-842], rax
+.loc 1 713 0
   mov rax, QWORD PTR [rbp-842]
   mov rcx, r14
   mov QWORD PTR [rcx], rax
-.loc 1 710 0
+.loc 1 716 0
   xor r10, r10
-.loc 1 712 0
+.loc 1 717 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-850], rax
-.loc 1 710 0
+.loc 1 716 0
   mov rdi, QWORD PTR [rbp-850]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-858], rax
   mov rax, QWORD PTR [rbp-858]
   mov QWORD PTR [rbp-121], rax
-.loc 1 712 0
+.loc 1 717 0
   mov r15, QWORD PTR [rbp-121]
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_NEWLINE]
   mov QWORD PTR [rbp-882], rax
@@ -10962,13 +11191,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-874]
   mov rcx, r15
   mov DWORD PTR [rcx], eax
-.loc 1 713 0
   mov rax, QWORD PTR [rbp-121]
   mov QWORD PTR [rbp-890], rax
   mov QWORD PTR [rbp-898], 4
   mov rax, QWORD PTR [rbp-890]
   add rax, QWORD PTR [rbp-898]
   mov QWORD PTR [rbp-906], rax
+.loc 1 718 0
   mov rax, QWORD PTR [rbp-112]
   mov QWORD PTR [rbp-914], rax
   mov rax, QWORD PTR [rbp-92]
@@ -10978,55 +11207,60 @@ _caustic_assembler_lexer_cst_tokenize:
   mov QWORD PTR [rbp-930], rax
   mov rax, QWORD PTR [rbp-930]
   mov QWORD PTR [rbp-938], rax
+.loc 1 717 0
   mov rax, QWORD PTR [rbp-938]
   mov rcx, QWORD PTR [rbp-906]
   mov QWORD PTR [rcx], rax
-.loc 1 715 0
+.loc 1 718 0
   mov rax, QWORD PTR [rbp-121]
   mov QWORD PTR [rbp-946], rax
   mov QWORD PTR [rbp-954], 12
   mov rax, QWORD PTR [rbp-946]
   add rax, QWORD PTR [rbp-954]
   mov QWORD PTR [rbp-962], rax
+  mov QWORD PTR [rbp-970], 1
+  mov rax, QWORD PTR [rbp-970]
   mov rcx, QWORD PTR [rbp-962]
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
+.loc 1 719 0
   mov rax, QWORD PTR [rbp-121]
   mov QWORD PTR [rbp-978], rax
   mov QWORD PTR [rbp-986], 16
   mov rax, QWORD PTR [rbp-978]
   add rax, QWORD PTR [rbp-986]
   mov QWORD PTR [rbp-994], rax
-.loc 1 716 0
   movsxd rax, DWORD PTR [rbp-96]
   mov QWORD PTR [rbp-1002], rax
-.loc 1 715 0
   mov rax, QWORD PTR [rbp-1002]
   mov rcx, QWORD PTR [rbp-994]
   mov DWORD PTR [rcx], eax
-.loc 1 716 0
   mov rax, QWORD PTR [rbp-121]
   mov QWORD PTR [rbp-1010], rax
   mov QWORD PTR [rbp-1018], 20
   mov rax, QWORD PTR [rbp-1010]
   add rax, QWORD PTR [rbp-1018]
   mov QWORD PTR [rbp-1026], rax
+  mov QWORD PTR [rbp-1034], 0
+  mov rax, QWORD PTR [rbp-1034]
   mov rcx, QWORD PTR [rbp-1026]
-  mov QWORD PTR [rcx], 0
-.loc 1 717 0
+  mov QWORD PTR [rcx], rax
   mov rax, QWORD PTR [rbp-121]
   mov QWORD PTR [rbp-1042], rax
   mov QWORD PTR [rbp-1050], 28
   mov rax, QWORD PTR [rbp-1042]
   add rax, QWORD PTR [rbp-1050]
   mov QWORD PTR [rbp-1058], rax
+.loc 1 720 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov QWORD PTR [rbp-1074], rax
   mov rax, QWORD PTR [rbp-1074]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-1066], rax
+.loc 1 719 0
   mov rax, QWORD PTR [rbp-1066]
   mov rcx, QWORD PTR [rbp-1058]
   mov DWORD PTR [rcx], eax
+.loc 1 720 0
   mov rax, QWORD PTR [rbp-121]
   mov QWORD PTR [rbp-1082], rax
   mov QWORD PTR [rbp-1090], 32
@@ -11041,15 +11275,17 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1106]
   mov rcx, QWORD PTR [rbp-1098]
   mov DWORD PTR [rcx], eax
-.loc 1 718 0
   mov rax, QWORD PTR [rbp-121]
   mov QWORD PTR [rbp-1122], rax
+.loc 1 721 0
   mov QWORD PTR [rbp-1130], 36
   mov rax, QWORD PTR [rbp-1122]
   add rax, QWORD PTR [rbp-1130]
   mov QWORD PTR [rbp-1138], rax
+  mov QWORD PTR [rbp-1146], 0
+  mov rax, QWORD PTR [rbp-1146]
   mov rcx, QWORD PTR [rbp-1138]
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
   lea rax, [rbp-96]
   mov QWORD PTR [rbp-1154], rax
   movsxd rax, DWORD PTR [rbp-96]
@@ -11063,30 +11299,30 @@ _caustic_assembler_lexer_cst_tokenize:
   mov DWORD PTR [rcx], eax
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-1186], rax
-.loc 1 719 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1194], rax
   mov QWORD PTR [rbp-1202], 1
   mov rax, QWORD PTR [rbp-1194]
   add rax, QWORD PTR [rbp-1202]
   mov QWORD PTR [rbp-1210], rax
-.loc 1 718 0
   mov rax, QWORD PTR [rbp-1210]
   mov rcx, QWORD PTR [rbp-1186]
   mov QWORD PTR [rcx], rax
-.loc 1 708 0
+.loc 1 713 0
   jmp .L137
 .L136:
-.loc 1 719 0
+.loc 1 721 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-1218], rax
+.loc 1 722 0
   mov QWORD PTR [rbp-1226], 35
+.loc 1 721 0
   mov rax, QWORD PTR [rbp-1218]
   cmp rax, QWORD PTR [rbp-1226]
   jne .L138
+.loc 1 723 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-1242], rax
-.loc 1 720 0
   mov QWORD PTR [rbp-1250], 2
   mov QWORD PTR [rbp-1258], 3
   mov rax, QWORD PTR [rbp-1250]
@@ -11110,7 +11346,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1314]
   mov rax, QWORD PTR [rax]
   mov QWORD PTR [rbp-1322], rax
+.loc 1 724 0
   mov QWORD PTR [rbp-1330], 1
+.loc 1 723 0
   mov rax, QWORD PTR [rbp-1322]
   add rax, QWORD PTR [rbp-1330]
   mov QWORD PTR [rbp-1338], rax
@@ -11118,16 +11356,15 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rcx, QWORD PTR [rbp-1274]
   mov QWORD PTR [rcx], rax
 .L140:
+.loc 1 724 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1354], rax
-.loc 1 721 0
   mov rax, QWORD PTR [rbp-64]
   mov QWORD PTR [rbp-1362], rax
-.loc 1 720 0
   mov rax, QWORD PTR [rbp-1354]
   cmp rax, QWORD PTR [rbp-1362]
   jge .L142
-.loc 1 721 0
+.loc 1 725 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-1378], rax
   mov rax, QWORD PTR [rbp-92]
@@ -11142,7 +11379,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1402]
   cmp rax, QWORD PTR [rbp-1410]
   je .L142
-.loc 1 720 0
+.loc 1 724 0
   mov QWORD PTR [rbp-1346], 1
   jmp .L143
 .L142:
@@ -11151,7 +11388,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1346]
   test rax, rax
   jz .L141
-.loc 1 721 0
+.loc 1 725 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-1426], rax
   mov rax, QWORD PTR [rbp-92]
@@ -11163,22 +11400,22 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1450]
   mov rcx, QWORD PTR [rbp-1426]
   mov QWORD PTR [rcx], rax
-.loc 1 720 0
+.loc 1 724 0
   jmp .L140
 .L141:
-.loc 1 719 0
+.loc 1 721 0
   jmp .L139
 .L138:
-.loc 1 721 0
+.loc 1 725 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-1474], rax
-.loc 1 722 0
+.loc 1 727 0
   mov QWORD PTR [rbp-1482], 47
-.loc 1 721 0
+.loc 1 725 0
   mov rax, QWORD PTR [rbp-1474]
   cmp rax, QWORD PTR [rbp-1482]
   jne .L148
-.loc 1 723 0
+.loc 1 727 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1498], rax
   mov QWORD PTR [rbp-1506], 1
@@ -11190,7 +11427,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1514]
   cmp rax, QWORD PTR [rbp-1522]
   jge .L148
-.loc 1 721 0
+.loc 1 725 0
   mov QWORD PTR [rbp-1466], 1
   jmp .L149
 .L148:
@@ -11199,14 +11436,12 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1466]
   test rax, rax
   jz .L146
-.loc 1 723 0
+.loc 1 727 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-1538], rax
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1546], rax
-.loc 1 724 0
   mov QWORD PTR [rbp-1554], 1
-.loc 1 723 0
   mov rax, QWORD PTR [rbp-1546]
   add rax, QWORD PTR [rbp-1554]
   mov QWORD PTR [rbp-1562], rax
@@ -11216,13 +11451,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1570]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-1578], rax
-.loc 1 724 0
   mov QWORD PTR [rbp-1586], 47
-.loc 1 723 0
   mov rax, QWORD PTR [rbp-1578]
   cmp rax, QWORD PTR [rbp-1586]
   jne .L146
-.loc 1 721 0
+.loc 1 725 0
   mov QWORD PTR [rbp-1458], 1
   jmp .L147
 .L146:
@@ -11231,12 +11464,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1458]
   test rax, rax
   jz .L144
-.loc 1 724 0
+.loc 1 727 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-1602], rax
-.loc 1 725 0
   mov QWORD PTR [rbp-1610], 2
-.loc 1 724 0
   mov QWORD PTR [rbp-1618], 3
   mov rax, QWORD PTR [rbp-1610]
   mov rcx, QWORD PTR [rbp-1618]
@@ -11245,7 +11476,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1602]
   add rax, QWORD PTR [rbp-1626]
   mov QWORD PTR [rbp-1634], rax
-.loc 1 725 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-1642], rax
   mov QWORD PTR [rbp-1650], 2
@@ -11260,16 +11490,17 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1674]
   mov rax, QWORD PTR [rax]
   mov QWORD PTR [rbp-1682], rax
+.loc 1 728 0
   mov QWORD PTR [rbp-1690], 1
+.loc 1 727 0
   mov rax, QWORD PTR [rbp-1682]
   add rax, QWORD PTR [rbp-1690]
   mov QWORD PTR [rbp-1698], rax
-.loc 1 724 0
   mov rax, QWORD PTR [rbp-1698]
   mov rcx, QWORD PTR [rbp-1634]
   mov QWORD PTR [rcx], rax
 .L150:
-.loc 1 725 0
+.loc 1 728 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1714], rax
   mov rax, QWORD PTR [rbp-64]
@@ -11287,9 +11518,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1754]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-1762], rax
-.loc 1 726 0
   mov QWORD PTR [rbp-1770], 10
-.loc 1 725 0
   mov rax, QWORD PTR [rbp-1762]
   cmp rax, QWORD PTR [rbp-1770]
   je .L152
@@ -11301,50 +11530,52 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1706]
   test rax, rax
   jz .L151
-.loc 1 727 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-1786], rax
+.loc 1 729 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1794], rax
   mov QWORD PTR [rbp-1802], 1
   mov rax, QWORD PTR [rbp-1794]
   add rax, QWORD PTR [rbp-1802]
   mov QWORD PTR [rbp-1810], rax
+.loc 1 728 0
   mov rax, QWORD PTR [rbp-1810]
   mov rcx, QWORD PTR [rbp-1786]
   mov QWORD PTR [rcx], rax
-.loc 1 725 0
   jmp .L150
 .L151:
-.loc 1 721 0
+.loc 1 725 0
   jmp .L145
 .L144:
-.loc 1 727 0
+.loc 1 729 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-1818], rax
+.loc 1 730 0
   mov QWORD PTR [rbp-1826], 34
+.loc 1 729 0
   mov rax, QWORD PTR [rbp-1818]
   cmp rax, QWORD PTR [rbp-1826]
   jne .L154
+.loc 1 731 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1842], rax
+.loc 1 730 0
   mov rax, QWORD PTR [rbp-1842]
   mov QWORD PTR [rbp-129], rax
+.loc 1 731 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-1850], rax
-.loc 1 728 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1858], rax
   mov QWORD PTR [rbp-1866], 1
   mov rax, QWORD PTR [rbp-1858]
   add rax, QWORD PTR [rbp-1866]
   mov QWORD PTR [rbp-1874], rax
-.loc 1 727 0
   mov rax, QWORD PTR [rbp-1874]
   mov rcx, QWORD PTR [rbp-1850]
   mov QWORD PTR [rcx], rax
 .L156:
-.loc 1 728 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1890], rax
   mov rax, QWORD PTR [rbp-64]
@@ -11374,7 +11605,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1882]
   test rax, rax
   jz .L157
-.loc 1 729 0
+.loc 1 732 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-1962], rax
   mov rax, QWORD PTR [rbp-92]
@@ -11389,23 +11620,24 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-1986]
   cmp rax, QWORD PTR [rbp-1994]
   jne .L160
+.loc 1 731 0
+.loc 1 732 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-2010], rax
-.loc 1 730 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-2018], rax
   mov QWORD PTR [rbp-2026], 1
   mov rax, QWORD PTR [rbp-2018]
   add rax, QWORD PTR [rbp-2026]
   mov QWORD PTR [rbp-2034], rax
-.loc 1 729 0
   mov rax, QWORD PTR [rbp-2034]
   mov rcx, QWORD PTR [rbp-2010]
   mov QWORD PTR [rcx], rax
+.loc 1 731 0
   jmp .L161
 .L160:
 .L161:
-.loc 1 731 0
+.loc 1 732 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-2042], rax
   mov rax, QWORD PTR [rbp-92]
@@ -11417,10 +11649,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2066]
   mov rcx, QWORD PTR [rbp-2042]
   mov QWORD PTR [rcx], rax
-.loc 1 728 0
+.loc 1 731 0
   jmp .L156
 .L157:
-.loc 1 731 0
+.loc 1 732 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-2074], rax
   mov rax, QWORD PTR [rbp-64]
@@ -11428,6 +11660,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2074]
   cmp rax, QWORD PTR [rbp-2082]
   jge .L162
+.loc 1 733 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-2098], rax
   mov rax, QWORD PTR [rbp-92]
@@ -11439,20 +11672,19 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2122]
   mov rcx, QWORD PTR [rbp-2098]
   mov QWORD PTR [rcx], rax
+.loc 1 732 0
   jmp .L163
 .L162:
 .L163:
+.loc 1 733 0
   xor r10, r10
-.loc 1 732 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-2130], rax
   mov rdi, QWORD PTR [rbp-2130]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-2138], rax
-.loc 1 731 0
   mov rax, QWORD PTR [rbp-2138]
   mov QWORD PTR [rbp-137], rax
-.loc 1 732 0
   mov rax, QWORD PTR [rbp-137]
   mov QWORD PTR [rbp-2146], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_STRING]
@@ -11463,6 +11695,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2154]
   mov rcx, QWORD PTR [rbp-2146]
   mov DWORD PTR [rcx], eax
+.loc 1 734 0
   mov rax, QWORD PTR [rbp-137]
   mov QWORD PTR [rbp-2170], rax
   mov QWORD PTR [rbp-2178], 4
@@ -11481,7 +11714,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2218]
   mov rcx, QWORD PTR [rbp-2186]
   mov QWORD PTR [rcx], rax
-.loc 1 733 0
   mov rax, QWORD PTR [rbp-137]
   mov QWORD PTR [rbp-2226], rax
   mov QWORD PTR [rbp-2234], 12
@@ -11501,8 +11733,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2274]
   mov rcx, QWORD PTR [rbp-2242]
   mov DWORD PTR [rcx], eax
+.loc 1 736 0
   mov rax, QWORD PTR [rbp-137]
   mov QWORD PTR [rbp-2282], rax
+.loc 1 737 0
   mov QWORD PTR [rbp-2290], 16
   mov rax, QWORD PTR [rbp-2282]
   add rax, QWORD PTR [rbp-2290]
@@ -11518,67 +11752,68 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2314]
   add rax, QWORD PTR [rbp-2322]
   mov QWORD PTR [rbp-2330], rax
+  mov QWORD PTR [rbp-2338], 0
+  mov rax, QWORD PTR [rbp-2338]
   mov rcx, QWORD PTR [rbp-2330]
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
+.loc 1 738 0
   mov rax, QWORD PTR [rbp-137]
   mov QWORD PTR [rbp-2346], rax
   mov QWORD PTR [rbp-2354], 28
   mov rax, QWORD PTR [rbp-2346]
   add rax, QWORD PTR [rbp-2354]
   mov QWORD PTR [rbp-2362], rax
-.loc 1 734 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov QWORD PTR [rbp-2378], rax
   mov rax, QWORD PTR [rbp-2378]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-2370], rax
-.loc 1 733 0
   mov rax, QWORD PTR [rbp-2370]
   mov rcx, QWORD PTR [rbp-2362]
   mov DWORD PTR [rcx], eax
-.loc 1 734 0
   mov rax, QWORD PTR [rbp-137]
   mov QWORD PTR [rbp-2386], rax
   mov QWORD PTR [rbp-2394], 32
   mov rax, QWORD PTR [rbp-2386]
   add rax, QWORD PTR [rbp-2394]
   mov QWORD PTR [rbp-2402], rax
+.loc 1 739 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
   mov QWORD PTR [rbp-2418], rax
   mov rax, QWORD PTR [rbp-2418]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-2410], rax
+.loc 1 738 0
   mov rax, QWORD PTR [rbp-2410]
   mov rcx, QWORD PTR [rbp-2402]
   mov DWORD PTR [rcx], eax
+.loc 1 740 0
   mov rax, QWORD PTR [rbp-137]
   mov QWORD PTR [rbp-2426], rax
   mov QWORD PTR [rbp-2434], 36
   mov rax, QWORD PTR [rbp-2426]
   add rax, QWORD PTR [rbp-2434]
   mov QWORD PTR [rbp-2442], rax
+  mov QWORD PTR [rbp-2450], 0
+  mov rax, QWORD PTR [rbp-2450]
   mov rcx, QWORD PTR [rbp-2442]
-  mov DWORD PTR [rcx], 0
-.loc 1 727 0
+  mov DWORD PTR [rcx], eax
+.loc 1 729 0
   jmp .L155
 .L154:
-.loc 1 734 0
+.loc 1 741 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2506], rax
   mov QWORD PTR [rbp-2514], 44
   mov rax, QWORD PTR [rbp-2506]
   cmp rax, QWORD PTR [rbp-2514]
   je .L176
-.loc 1 736 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2530], rax
-.loc 1 737 0
   mov QWORD PTR [rbp-2538], 58
-.loc 1 736 0
   mov rax, QWORD PTR [rbp-2530]
   cmp rax, QWORD PTR [rbp-2538]
   je .L176
-.loc 1 734 0
   mov QWORD PTR [rbp-2498], 0
   jmp .L177
 .L176:
@@ -11587,14 +11822,14 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2498]
   test rax, rax
   jnz .L174
-.loc 1 737 0
+.loc 1 743 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2554], rax
   mov QWORD PTR [rbp-2562], 91
   mov rax, QWORD PTR [rbp-2554]
   cmp rax, QWORD PTR [rbp-2562]
   je .L174
-.loc 1 734 0
+.loc 1 741 0
   mov QWORD PTR [rbp-2490], 0
   jmp .L175
 .L174:
@@ -11603,14 +11838,16 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2490]
   test rax, rax
   jnz .L172
-.loc 1 737 0
+.loc 1 743 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2578], rax
+.loc 1 744 0
   mov QWORD PTR [rbp-2586], 93
+.loc 1 743 0
   mov rax, QWORD PTR [rbp-2578]
   cmp rax, QWORD PTR [rbp-2586]
   je .L172
-.loc 1 734 0
+.loc 1 741 0
   mov QWORD PTR [rbp-2482], 0
   jmp .L173
 .L172:
@@ -11619,14 +11856,14 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2482]
   test rax, rax
   jnz .L170
-.loc 1 738 0
+.loc 1 749 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2602], rax
   mov QWORD PTR [rbp-2610], 43
   mov rax, QWORD PTR [rbp-2602]
   cmp rax, QWORD PTR [rbp-2610]
   je .L170
-.loc 1 734 0
+.loc 1 741 0
   mov QWORD PTR [rbp-2474], 0
   jmp .L171
 .L170:
@@ -11635,14 +11872,14 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2474]
   test rax, rax
   jnz .L168
-.loc 1 738 0
+.loc 1 749 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2626], rax
   mov QWORD PTR [rbp-2634], 42
   mov rax, QWORD PTR [rbp-2626]
   cmp rax, QWORD PTR [rbp-2634]
   je .L168
-.loc 1 734 0
+.loc 1 741 0
   mov QWORD PTR [rbp-2466], 0
   jmp .L169
 .L168:
@@ -11651,16 +11888,14 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2466]
   test rax, rax
   jnz .L166
-.loc 1 738 0
+.loc 1 749 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2650], rax
-.loc 1 739 0
   mov QWORD PTR [rbp-2658], 45
-.loc 1 738 0
   mov rax, QWORD PTR [rbp-2650]
   cmp rax, QWORD PTR [rbp-2658]
   je .L166
-.loc 1 734 0
+.loc 1 741 0
   mov QWORD PTR [rbp-2458], 0
   jmp .L167
 .L166:
@@ -11669,7 +11904,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2458]
   test rax, rax
   jz .L164
-.loc 1 739 0
+.loc 1 749 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-2674], rax
   mov QWORD PTR [rbp-2682], 3
@@ -11681,7 +11916,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2674]
   add rax, QWORD PTR [rbp-2698]
   mov QWORD PTR [rbp-2706], rax
-.loc 1 740 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-2714], rax
   mov QWORD PTR [rbp-2722], 3
@@ -11696,33 +11930,29 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2746]
   mov rax, QWORD PTR [rax]
   mov QWORD PTR [rbp-2754], rax
-.loc 1 741 0
   mov QWORD PTR [rbp-2762], 1
-.loc 1 740 0
   mov rax, QWORD PTR [rbp-2754]
   add rax, QWORD PTR [rbp-2762]
   mov QWORD PTR [rbp-2770], rax
-.loc 1 739 0
   mov rax, QWORD PTR [rbp-2770]
   mov rcx, QWORD PTR [rbp-2706]
   mov QWORD PTR [rcx], rax
-.loc 1 742 0
+.loc 1 750 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_COMMA]
   mov QWORD PTR [rbp-2786], rax
   mov rax, QWORD PTR [rbp-2786]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-2778], rax
-.loc 1 741 0
+.loc 1 749 0
   mov rax, QWORD PTR [rbp-2778]
   mov DWORD PTR [rbp-141], eax
-.loc 1 743 0
+.loc 1 750 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2794], rax
   mov QWORD PTR [rbp-2802], 58
   mov rax, QWORD PTR [rbp-2794]
   cmp rax, QWORD PTR [rbp-2802]
   jne .L178
-.loc 1 749 0
   lea rax, [rbp-141]
   mov QWORD PTR [rbp-2818], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_COLON]
@@ -11733,28 +11963,33 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-2826]
   mov rcx, QWORD PTR [rbp-2818]
   mov DWORD PTR [rcx], eax
-.loc 1 743 0
   jmp .L179
 .L178:
-.loc 1 749 0
+.loc 1 751 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2842], rax
   mov QWORD PTR [rbp-2850], 91
   mov rax, QWORD PTR [rbp-2842]
   cmp rax, QWORD PTR [rbp-2850]
   jne .L180
+.loc 1 750 0
+.loc 1 751 0
   lea rax, [rbp-141]
   mov QWORD PTR [rbp-2866], rax
+.loc 1 752 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_LBRACKET]
   mov QWORD PTR [rbp-2882], rax
   mov rax, QWORD PTR [rbp-2882]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-2874], rax
+.loc 1 751 0
   mov rax, QWORD PTR [rbp-2874]
   mov rcx, QWORD PTR [rbp-2866]
   mov DWORD PTR [rcx], eax
+.loc 1 750 0
   jmp .L181
 .L180:
+.loc 1 752 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2890], rax
   mov QWORD PTR [rbp-2898], 93
@@ -11763,19 +11998,17 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L182
   lea rax, [rbp-141]
   mov QWORD PTR [rbp-2914], rax
-.loc 1 750 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_RBRACKET]
   mov QWORD PTR [rbp-2930], rax
   mov rax, QWORD PTR [rbp-2930]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-2922], rax
-.loc 1 749 0
   mov rax, QWORD PTR [rbp-2922]
   mov rcx, QWORD PTR [rbp-2914]
   mov DWORD PTR [rcx], eax
   jmp .L183
 .L182:
-.loc 1 750 0
+.loc 1 753 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2938], rax
   mov QWORD PTR [rbp-2946], 43
@@ -11784,25 +12017,27 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L184
   lea rax, [rbp-141]
   mov QWORD PTR [rbp-2962], rax
+.loc 1 754 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_PLUS]
   mov QWORD PTR [rbp-2978], rax
   mov rax, QWORD PTR [rbp-2978]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-2970], rax
+.loc 1 753 0
   mov rax, QWORD PTR [rbp-2970]
   mov rcx, QWORD PTR [rbp-2962]
   mov DWORD PTR [rcx], eax
   jmp .L185
 .L184:
+.loc 1 755 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-2986], rax
-.loc 1 751 0
   mov QWORD PTR [rbp-2994], 42
-.loc 1 750 0
   mov rax, QWORD PTR [rbp-2986]
   cmp rax, QWORD PTR [rbp-2994]
   jne .L186
-.loc 1 751 0
+.loc 1 754 0
+.loc 1 757 0
   lea rax, [rbp-141]
   mov QWORD PTR [rbp-3010], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_STAR]
@@ -11813,26 +12048,32 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3018]
   mov rcx, QWORD PTR [rbp-3010]
   mov DWORD PTR [rcx], eax
-.loc 1 750 0
+.loc 1 754 0
   jmp .L187
 .L186:
-.loc 1 752 0
+.loc 1 758 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-3034], rax
+.loc 1 759 0
   mov QWORD PTR [rbp-3042], 45
+.loc 1 758 0
   mov rax, QWORD PTR [rbp-3034]
   cmp rax, QWORD PTR [rbp-3042]
   jne .L188
+.loc 1 760 0
   lea rax, [rbp-141]
   mov QWORD PTR [rbp-3058], rax
+.loc 1 761 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_MINUS]
   mov QWORD PTR [rbp-3074], rax
   mov rax, QWORD PTR [rbp-3074]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-3066], rax
+.loc 1 760 0
   mov rax, QWORD PTR [rbp-3066]
   mov rcx, QWORD PTR [rbp-3058]
   mov DWORD PTR [rcx], eax
+.loc 1 758 0
   jmp .L189
 .L188:
 .L189:
@@ -11841,17 +12082,15 @@ _caustic_assembler_lexer_cst_tokenize:
 .L183:
 .L181:
 .L179:
+.loc 1 761 0
   xor r10, r10
-.loc 1 753 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-3082], rax
   mov rdi, QWORD PTR [rbp-3082]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-3090], rax
-.loc 1 752 0
   mov rax, QWORD PTR [rbp-3090]
   mov QWORD PTR [rbp-149], rax
-.loc 1 754 0
   mov rax, QWORD PTR [rbp-149]
   mov QWORD PTR [rbp-3098], rax
   movsxd rax, DWORD PTR [rbp-141]
@@ -11859,43 +12098,41 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3106]
   mov rcx, QWORD PTR [rbp-3098]
   mov DWORD PTR [rcx], eax
-.loc 1 755 0
   mov rax, QWORD PTR [rbp-149]
   mov QWORD PTR [rbp-3114], rax
   mov QWORD PTR [rbp-3122], 4
   mov rax, QWORD PTR [rbp-3114]
   add rax, QWORD PTR [rbp-3122]
   mov QWORD PTR [rbp-3130], rax
-.loc 1 757 0
+.loc 1 763 0
   mov rax, QWORD PTR [rbp-112]
   mov QWORD PTR [rbp-3138], rax
-.loc 1 758 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-3146], rax
-.loc 1 757 0
   mov rax, QWORD PTR [rbp-3138]
   add rax, QWORD PTR [rbp-3146]
   mov QWORD PTR [rbp-3154], rax
-.loc 1 756 0
+.loc 1 762 0
   mov rax, QWORD PTR [rbp-3154]
   mov QWORD PTR [rbp-3162], rax
-.loc 1 755 0
+.loc 1 761 0
   mov rax, QWORD PTR [rbp-3162]
   mov rcx, QWORD PTR [rbp-3130]
   mov QWORD PTR [rcx], rax
-.loc 1 758 0
+.loc 1 764 0
   mov rax, QWORD PTR [rbp-149]
   mov QWORD PTR [rbp-3170], rax
-.loc 1 759 0
   mov QWORD PTR [rbp-3178], 12
   mov rax, QWORD PTR [rbp-3170]
   add rax, QWORD PTR [rbp-3178]
   mov QWORD PTR [rbp-3186], rax
-.loc 1 760 0
+.loc 1 767 0
+  mov QWORD PTR [rbp-3194], 1
+.loc 1 764 0
+  mov rax, QWORD PTR [rbp-3194]
   mov rcx, QWORD PTR [rbp-3186]
-  mov DWORD PTR [rcx], 1
-.loc 1 759 0
-.loc 1 761 0
+  mov DWORD PTR [rcx], eax
+.loc 1 767 0
   mov rax, QWORD PTR [rbp-149]
   mov QWORD PTR [rbp-3202], rax
   mov QWORD PTR [rbp-3210], 16
@@ -11913,8 +12150,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3234]
   add rax, QWORD PTR [rbp-3242]
   mov QWORD PTR [rbp-3250], rax
+  mov QWORD PTR [rbp-3258], 0
+  mov rax, QWORD PTR [rbp-3258]
   mov rcx, QWORD PTR [rbp-3250]
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   mov rax, QWORD PTR [rbp-149]
   mov QWORD PTR [rbp-3266], rax
   mov QWORD PTR [rbp-3274], 28
@@ -11929,6 +12168,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3290]
   mov rcx, QWORD PTR [rbp-3282]
   mov DWORD PTR [rcx], eax
+.loc 1 768 0
   mov rax, QWORD PTR [rbp-149]
   mov QWORD PTR [rbp-3306], rax
   mov QWORD PTR [rbp-3314], 32
@@ -11943,35 +12183,31 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3330]
   mov rcx, QWORD PTR [rbp-3322]
   mov DWORD PTR [rcx], eax
-.loc 1 762 0
   mov rax, QWORD PTR [rbp-149]
   mov QWORD PTR [rbp-3346], rax
   mov QWORD PTR [rbp-3354], 36
   mov rax, QWORD PTR [rbp-3346]
   add rax, QWORD PTR [rbp-3354]
   mov QWORD PTR [rbp-3362], rax
-.loc 1 763 0
+  mov QWORD PTR [rbp-3370], 0
+  mov rax, QWORD PTR [rbp-3370]
   mov rcx, QWORD PTR [rbp-3362]
-  mov DWORD PTR [rcx], 0
-.loc 1 762 0
-.loc 1 763 0
+  mov DWORD PTR [rcx], eax
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-3378], rax
-.loc 1 764 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-3386], rax
   mov QWORD PTR [rbp-3394], 1
   mov rax, QWORD PTR [rbp-3386]
   add rax, QWORD PTR [rbp-3394]
   mov QWORD PTR [rbp-3402], rax
-.loc 1 763 0
   mov rax, QWORD PTR [rbp-3402]
   mov rcx, QWORD PTR [rbp-3378]
   mov QWORD PTR [rcx], rax
-.loc 1 734 0
+.loc 1 741 0
   jmp .L165
 .L164:
-.loc 1 767 0
+.loc 1 769 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-3418], rax
   mov QWORD PTR [rbp-3426], 48
@@ -11989,9 +12225,11 @@ _caustic_assembler_lexer_cst_tokenize:
 .L192:
   mov QWORD PTR [rbp-3410], 0
 .L193:
+.loc 1 768 0
   mov rax, QWORD PTR [rbp-3410]
   test rax, rax
   jz .L190
+.loc 1 769 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-3466], rax
   mov QWORD PTR [rbp-3474], 4
@@ -12017,52 +12255,61 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3538]
   mov rax, QWORD PTR [rax]
   mov QWORD PTR [rbp-3546], rax
-.loc 1 768 0
+.loc 1 770 0
   mov QWORD PTR [rbp-3554], 1
-.loc 1 767 0
+.loc 1 769 0
   mov rax, QWORD PTR [rbp-3546]
   add rax, QWORD PTR [rbp-3554]
   mov QWORD PTR [rbp-3562], rax
   mov rax, QWORD PTR [rbp-3562]
   mov rcx, QWORD PTR [rbp-3498]
   mov QWORD PTR [rcx], rax
-.loc 1 768 0
+.loc 1 771 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-3570], rax
+.loc 1 770 0
   mov rax, QWORD PTR [rbp-3570]
   mov QWORD PTR [rbp-157], rax
-  mov QWORD PTR [rbp-165], 0
+.loc 1 771 0
+  mov QWORD PTR [rbp-3578], 0
+  mov rax, QWORD PTR [rbp-3578]
+  mov QWORD PTR [rbp-165], rax
+.loc 1 772 0
   xor r10, r10
-.loc 1 769 0
+.loc 1 773 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-3586], rax
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-3594], rax
+.loc 1 774 0
   mov rax, QWORD PTR [rbp-64]
   mov QWORD PTR [rbp-3602], rax
+.loc 1 775 0
   lea rax, [rbp-165]
   mov QWORD PTR [rbp-3610], rax
+.loc 1 773 0
   mov rdi, QWORD PTR [rbp-3586]
   mov rsi, QWORD PTR [rbp-3594]
   mov rdx, QWORD PTR [rbp-3602]
   mov rcx, QWORD PTR [rbp-3610]
   call _caustic_assembler_lexer_cst_parse_number_fast
   mov QWORD PTR [rbp-3618], rax
-.loc 1 768 0
+.loc 1 772 0
   mov rax, QWORD PTR [rbp-3618]
   mov QWORD PTR [rbp-173], rax
-.loc 1 769 0
+.loc 1 775 0
   xor r10, r10
-.loc 1 770 0
+.loc 1 778 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-3626], rax
+.loc 1 776 0
   mov rdi, QWORD PTR [rbp-3626]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-3634], rax
-.loc 1 769 0
+.loc 1 775 0
   mov rax, QWORD PTR [rbp-3634]
   mov QWORD PTR [rbp-181], rax
-.loc 1 771 0
+.loc 1 778 0
   mov rax, QWORD PTR [rbp-181]
   mov QWORD PTR [rbp-3642], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_NUMBER]
@@ -12079,30 +12326,25 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3666]
   add rax, QWORD PTR [rbp-3674]
   mov QWORD PTR [rbp-3682], rax
-.loc 1 772 0
   mov rax, QWORD PTR [rbp-112]
   mov QWORD PTR [rbp-3690], rax
-.loc 1 773 0
   mov rax, QWORD PTR [rbp-157]
   mov QWORD PTR [rbp-3698], rax
-.loc 1 772 0
   mov rax, QWORD PTR [rbp-3690]
   add rax, QWORD PTR [rbp-3698]
   mov QWORD PTR [rbp-3706], rax
   mov rax, QWORD PTR [rbp-3706]
   mov QWORD PTR [rbp-3714], rax
-.loc 1 771 0
   mov rax, QWORD PTR [rbp-3714]
   mov rcx, QWORD PTR [rbp-3682]
   mov QWORD PTR [rcx], rax
-.loc 1 773 0
+.loc 1 779 0
   mov rax, QWORD PTR [rbp-181]
   mov QWORD PTR [rbp-3722], rax
   mov QWORD PTR [rbp-3730], 12
   mov rax, QWORD PTR [rbp-3722]
   add rax, QWORD PTR [rbp-3730]
   mov QWORD PTR [rbp-3738], rax
-.loc 1 775 0
   mov rax, QWORD PTR [rbp-173]
   mov QWORD PTR [rbp-3746], rax
   mov rax, QWORD PTR [rbp-157]
@@ -12110,29 +12352,24 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3746]
   sub rax, QWORD PTR [rbp-3754]
   mov QWORD PTR [rbp-3762], rax
-.loc 1 774 0
   mov rax, QWORD PTR [rbp-3762]
   movsxd rax, eax
   mov QWORD PTR [rbp-3770], rax
-.loc 1 773 0
   mov rax, QWORD PTR [rbp-3770]
   mov rcx, QWORD PTR [rbp-3738]
   mov DWORD PTR [rcx], eax
-.loc 1 776 0
   mov rax, QWORD PTR [rbp-181]
   mov QWORD PTR [rbp-3778], rax
   mov QWORD PTR [rbp-3786], 16
   mov rax, QWORD PTR [rbp-3778]
   add rax, QWORD PTR [rbp-3786]
   mov QWORD PTR [rbp-3794], rax
-.loc 1 777 0
   movsxd rax, DWORD PTR [rbp-96]
   mov QWORD PTR [rbp-3802], rax
-.loc 1 776 0
   mov rax, QWORD PTR [rbp-3802]
   mov rcx, QWORD PTR [rbp-3794]
   mov DWORD PTR [rcx], eax
-.loc 1 778 0
+.loc 1 780 0
   mov rax, QWORD PTR [rbp-181]
   mov QWORD PTR [rbp-3810], rax
   mov QWORD PTR [rbp-3818], 20
@@ -12164,23 +12401,27 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3882]
   add rax, QWORD PTR [rbp-3890]
   mov QWORD PTR [rbp-3898], rax
+.loc 1 782 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
   mov QWORD PTR [rbp-3914], rax
   mov rax, QWORD PTR [rbp-3914]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-3906], rax
+.loc 1 780 0
   mov rax, QWORD PTR [rbp-3906]
   mov rcx, QWORD PTR [rbp-3898]
   mov DWORD PTR [rcx], eax
-.loc 1 779 0
+.loc 1 782 0
   mov rax, QWORD PTR [rbp-181]
   mov QWORD PTR [rbp-3922], rax
   mov QWORD PTR [rbp-3930], 36
   mov rax, QWORD PTR [rbp-3922]
   add rax, QWORD PTR [rbp-3930]
   mov QWORD PTR [rbp-3938], rax
+  mov QWORD PTR [rbp-3946], 0
+  mov rax, QWORD PTR [rbp-3946]
   mov rcx, QWORD PTR [rbp-3938]
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-3954], rax
   mov rax, QWORD PTR [rbp-173]
@@ -12188,17 +12429,18 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-3962]
   mov rcx, QWORD PTR [rbp-3954]
   mov QWORD PTR [rcx], rax
-.loc 1 767 0
+.loc 1 768 0
   jmp .L191
 .L190:
-.loc 1 779 0
+.loc 1 783 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-3970], rax
   mov QWORD PTR [rbp-3978], 46
   mov rax, QWORD PTR [rbp-3970]
   cmp rax, QWORD PTR [rbp-3978]
   jne .L194
-.loc 1 780 0
+.loc 1 782 0
+.loc 1 783 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-3994], rax
   mov QWORD PTR [rbp-4002], 5
@@ -12231,11 +12473,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4090]
   mov rcx, QWORD PTR [rbp-4026]
   mov QWORD PTR [rcx], rax
+.loc 1 785 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-4098], rax
+.loc 1 784 0
   mov rax, QWORD PTR [rbp-4098]
   mov QWORD PTR [rbp-189], rax
-.loc 1 782 0
+.loc 1 785 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-4106], rax
   mov rax, QWORD PTR [rbp-92]
@@ -12257,7 +12501,6 @@ _caustic_assembler_lexer_cst_tokenize:
   jge .L198
   lea rax, [rip+_caustic_assembler_lexer_cst_char_tab]
   mov QWORD PTR [rbp-4170], rax
-.loc 1 783 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-4178], rax
   mov rax, QWORD PTR [rbp-92]
@@ -12268,7 +12511,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4194]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-4202], rax
-.loc 1 782 0
   mov rax, QWORD PTR [rbp-4202]
   movsxd rax, eax
   mov QWORD PTR [rbp-4210], rax
@@ -12278,9 +12520,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4218]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-4226], rax
-.loc 1 783 0
+.loc 1 787 0
   mov QWORD PTR [rbp-4234], 0
-.loc 1 782 0
+.loc 1 785 0
   mov rax, QWORD PTR [rbp-4226]
   cmp rax, QWORD PTR [rbp-4234]
   je .L198
@@ -12292,7 +12534,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4138]
   test rax, rax
   jz .L197
-.loc 1 783 0
+.loc 1 787 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-4250], rax
   mov rax, QWORD PTR [rbp-92]
@@ -12304,10 +12546,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4274]
   mov rcx, QWORD PTR [rbp-4250]
   mov QWORD PTR [rcx], rax
-.loc 1 782 0
+.loc 1 785 0
   jmp .L196
 .L197:
-.loc 1 785 0
+.loc 1 787 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-4282], rax
   mov rax, QWORD PTR [rbp-189]
@@ -12318,16 +12560,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4298]
   movsxd rax, eax
   mov QWORD PTR [rbp-4306], rax
-.loc 1 784 0
   mov rax, QWORD PTR [rbp-4306]
   mov DWORD PTR [rbp-193], eax
-.loc 1 785 0
+.loc 1 789 0
   mov rax, QWORD PTR [rbp-112]
   mov QWORD PTR [rbp-4314], rax
-.loc 1 786 0
   mov rax, QWORD PTR [rbp-189]
   mov QWORD PTR [rbp-4322], rax
-.loc 1 785 0
   mov rax, QWORD PTR [rbp-4314]
   add rax, QWORD PTR [rbp-4322]
   mov QWORD PTR [rbp-4330], rax
@@ -12335,8 +12574,12 @@ _caustic_assembler_lexer_cst_tokenize:
   mov QWORD PTR [rbp-4338], rax
   mov rax, QWORD PTR [rbp-4338]
   mov QWORD PTR [rbp-201], rax
-.loc 1 787 0
-  mov DWORD PTR [rbp-205], 0
+.loc 1 792 0
+  mov QWORD PTR [rbp-4346], 0
+.loc 1 789 0
+  mov rax, QWORD PTR [rbp-4346]
+  mov DWORD PTR [rbp-205], eax
+.loc 1 792 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-4362], rax
   mov QWORD PTR [rbp-4370], 4
@@ -12357,7 +12600,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4354]
   test rax, rax
   jz .L200
-.loc 1 789 0
+.loc 1 793 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-4410], rax
   mov QWORD PTR [rbp-4418], 1
@@ -12367,22 +12610,24 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4426]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-4434], rax
-.loc 1 787 0
+.loc 1 792 0
   mov rax, QWORD PTR [rbp-4434]
   mov BYTE PTR [rbp-206], al
-.loc 1 789 0
+.loc 1 793 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-4474], rax
   mov QWORD PTR [rbp-4482], 116
   mov rax, QWORD PTR [rbp-4474]
   cmp rax, QWORD PTR [rbp-4482]
   jne .L212
+.loc 1 794 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-4498], rax
   mov QWORD PTR [rbp-4506], 5
   mov rax, QWORD PTR [rbp-4498]
   cmp rax, QWORD PTR [rbp-4506]
   jne .L212
+.loc 1 793 0
   mov QWORD PTR [rbp-4466], 1
   jmp .L213
 .L212:
@@ -12391,6 +12636,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4466]
   test rax, rax
   jz .L210
+.loc 1 794 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-4522], rax
   mov QWORD PTR [rbp-4530], 2
@@ -12400,12 +12646,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4538]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-4546], rax
-.loc 1 792 0
   mov QWORD PTR [rbp-4554], 101
-.loc 1 789 0
   mov rax, QWORD PTR [rbp-4546]
   cmp rax, QWORD PTR [rbp-4554]
   jne .L210
+.loc 1 793 0
   mov QWORD PTR [rbp-4458], 1
   jmp .L211
 .L210:
@@ -12414,7 +12659,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4458]
   test rax, rax
   jz .L208
-.loc 1 792 0
+.loc 1 794 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-4570], rax
   mov QWORD PTR [rbp-4578], 3
@@ -12424,11 +12669,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4586]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-4594], rax
+.loc 1 795 0
   mov QWORD PTR [rbp-4602], 120
+.loc 1 794 0
   mov rax, QWORD PTR [rbp-4594]
   cmp rax, QWORD PTR [rbp-4602]
   jne .L208
-.loc 1 789 0
+.loc 1 793 0
   mov QWORD PTR [rbp-4450], 1
   jmp .L209
 .L208:
@@ -12437,7 +12684,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4450]
   test rax, rax
   jz .L206
-.loc 1 792 0
+.loc 1 795 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-4618], rax
   mov QWORD PTR [rbp-4626], 4
@@ -12451,7 +12698,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4642]
   cmp rax, QWORD PTR [rbp-4650]
   jne .L206
-.loc 1 789 0
+.loc 1 793 0
   mov QWORD PTR [rbp-4442], 1
   jmp .L207
 .L206:
@@ -12460,15 +12707,17 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4442]
   test rax, rax
   jz .L204
-.loc 1 792 0
+.loc 1 795 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-4666], rax
+  mov QWORD PTR [rbp-4674], 1
+  mov rax, QWORD PTR [rbp-4674]
   mov rcx, QWORD PTR [rbp-4666]
-  mov DWORD PTR [rcx], 1
-.loc 1 789 0
+  mov DWORD PTR [rcx], eax
+.loc 1 793 0
   jmp .L205
 .L204:
-.loc 1 793 0
+.loc 1 798 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-4714], rax
   mov QWORD PTR [rbp-4722], 100
@@ -12477,7 +12726,9 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L222
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-4738], rax
+.loc 1 799 0
   mov QWORD PTR [rbp-4746], 5
+.loc 1 798 0
   mov rax, QWORD PTR [rbp-4738]
   cmp rax, QWORD PTR [rbp-4746]
   jne .L222
@@ -12489,7 +12740,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4706]
   test rax, rax
   jz .L220
-.loc 1 794 0
+.loc 1 799 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-4762], rax
   mov QWORD PTR [rbp-4770], 2
@@ -12503,7 +12754,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4786]
   cmp rax, QWORD PTR [rbp-4794]
   jne .L220
-.loc 1 793 0
+.loc 1 798 0
   mov QWORD PTR [rbp-4698], 1
   jmp .L221
 .L220:
@@ -12512,7 +12763,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4698]
   test rax, rax
   jz .L218
-.loc 1 794 0
+.loc 1 800 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-4810], rax
   mov QWORD PTR [rbp-4818], 3
@@ -12526,7 +12777,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4834]
   cmp rax, QWORD PTR [rbp-4842]
   jne .L218
-.loc 1 793 0
+.loc 1 798 0
   mov QWORD PTR [rbp-4690], 1
   jmp .L219
 .L218:
@@ -12535,7 +12786,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4690]
   test rax, rax
   jz .L216
-.loc 1 795 0
+.loc 1 800 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-4858], rax
   mov QWORD PTR [rbp-4866], 4
@@ -12545,11 +12796,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4874]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-4882], rax
+.loc 1 801 0
   mov QWORD PTR [rbp-4890], 97
+.loc 1 800 0
   mov rax, QWORD PTR [rbp-4882]
   cmp rax, QWORD PTR [rbp-4890]
   jne .L216
-.loc 1 793 0
+.loc 1 798 0
   mov QWORD PTR [rbp-4682], 1
   jmp .L217
 .L216:
@@ -12558,15 +12811,17 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4682]
   test rax, rax
   jz .L214
-.loc 1 795 0
+.loc 1 801 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-4906], rax
+  mov QWORD PTR [rbp-4914], 1
+  mov rax, QWORD PTR [rbp-4914]
   mov rcx, QWORD PTR [rbp-4906]
-  mov DWORD PTR [rcx], 1
-.loc 1 793 0
+  mov DWORD PTR [rcx], eax
+.loc 1 798 0
   jmp .L215
 .L214:
-.loc 1 798 0
+.loc 1 802 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-4946], rax
   mov QWORD PTR [rbp-4954], 98
@@ -12589,7 +12844,6 @@ _caustic_assembler_lexer_cst_tokenize:
   jz .L228
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-4994], rax
-.loc 1 799 0
   mov QWORD PTR [rbp-5002], 2
   mov rax, QWORD PTR [rbp-4994]
   add rax, QWORD PTR [rbp-5002]
@@ -12597,11 +12851,12 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5010]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-5018], rax
+.loc 1 803 0
   mov QWORD PTR [rbp-5026], 115
+.loc 1 802 0
   mov rax, QWORD PTR [rbp-5018]
   cmp rax, QWORD PTR [rbp-5026]
   jne .L228
-.loc 1 798 0
   mov QWORD PTR [rbp-4930], 1
   jmp .L229
 .L228:
@@ -12610,7 +12865,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-4930]
   test rax, rax
   jz .L226
-.loc 1 799 0
+.loc 1 805 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5042], rax
   mov QWORD PTR [rbp-5050], 3
@@ -12620,46 +12875,45 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5058]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-5066], rax
-.loc 1 800 0
   mov QWORD PTR [rbp-5074], 115
-.loc 1 799 0
   mov rax, QWORD PTR [rbp-5066]
   cmp rax, QWORD PTR [rbp-5074]
   jne .L226
-.loc 1 798 0
+.loc 1 802 0
   mov QWORD PTR [rbp-4922], 1
   jmp .L227
 .L226:
   mov QWORD PTR [rbp-4922], 0
 .L227:
-.loc 1 795 0
   mov rax, QWORD PTR [rbp-4922]
   test rax, rax
   jz .L224
-.loc 1 800 0
+.loc 1 805 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-5090], rax
+  mov QWORD PTR [rbp-5098], 1
+  mov rax, QWORD PTR [rbp-5098]
   mov rcx, QWORD PTR [rbp-5090]
-  mov DWORD PTR [rcx], 1
-.loc 1 795 0
+  mov DWORD PTR [rcx], eax
+.loc 1 802 0
   jmp .L225
 .L224:
-.loc 1 801 0
+.loc 1 805 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-5106], rax
+.loc 1 806 0
   mov QWORD PTR [rbp-5114], 103
+.loc 1 805 0
   mov rax, QWORD PTR [rbp-5106]
   cmp rax, QWORD PTR [rbp-5114]
   jne .L232
+.loc 1 806 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-5162], rax
-.loc 1 802 0
   mov QWORD PTR [rbp-5170], 6
-.loc 1 801 0
   mov rax, QWORD PTR [rbp-5162]
   cmp rax, QWORD PTR [rbp-5170]
   jne .L242
-.loc 1 802 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5186], rax
   mov QWORD PTR [rbp-5194], 2
@@ -12673,7 +12927,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5210]
   cmp rax, QWORD PTR [rbp-5218]
   jne .L242
-.loc 1 801 0
   mov QWORD PTR [rbp-5154], 1
   jmp .L243
 .L242:
@@ -12682,9 +12935,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5154]
   test rax, rax
   jz .L240
-.loc 1 802 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5234], rax
+.loc 1 807 0
   mov QWORD PTR [rbp-5242], 3
   mov rax, QWORD PTR [rbp-5234]
   add rax, QWORD PTR [rbp-5242]
@@ -12696,7 +12949,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5258]
   cmp rax, QWORD PTR [rbp-5266]
   jne .L240
-.loc 1 801 0
+.loc 1 806 0
   mov QWORD PTR [rbp-5146], 1
   jmp .L241
 .L240:
@@ -12705,7 +12958,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5146]
   test rax, rax
   jz .L238
-.loc 1 805 0
+.loc 1 807 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5282], rax
   mov QWORD PTR [rbp-5290], 4
@@ -12719,7 +12972,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5306]
   cmp rax, QWORD PTR [rbp-5314]
   jne .L238
-.loc 1 801 0
+.loc 1 806 0
   mov QWORD PTR [rbp-5138], 1
   jmp .L239
 .L238:
@@ -12728,7 +12981,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5138]
   test rax, rax
   jz .L236
-.loc 1 805 0
+.loc 1 807 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5330], rax
   mov QWORD PTR [rbp-5338], 5
@@ -12742,7 +12995,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5354]
   cmp rax, QWORD PTR [rbp-5362]
   jne .L236
-.loc 1 801 0
+.loc 1 806 0
   mov QWORD PTR [rbp-5130], 1
   jmp .L237
 .L236:
@@ -12751,15 +13004,17 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5130]
   test rax, rax
   jz .L234
-.loc 1 805 0
+.loc 1 807 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-5378], rax
+  mov QWORD PTR [rbp-5386], 1
+  mov rax, QWORD PTR [rbp-5386]
   mov rcx, QWORD PTR [rbp-5378]
-  mov DWORD PTR [rcx], 1
-.loc 1 801 0
+  mov DWORD PTR [rcx], eax
+.loc 1 806 0
   jmp .L235
 .L234:
-.loc 1 806 0
+.loc 1 808 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-5434], rax
   mov QWORD PTR [rbp-5442], 7
@@ -12789,18 +13044,16 @@ _caustic_assembler_lexer_cst_tokenize:
   jz .L252
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5506], rax
-.loc 1 807 0
   mov QWORD PTR [rbp-5514], 3
-.loc 1 806 0
   mov rax, QWORD PTR [rbp-5506]
   add rax, QWORD PTR [rbp-5514]
   mov QWORD PTR [rbp-5522], rax
   mov rax, QWORD PTR [rbp-5522]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-5530], rax
-.loc 1 807 0
+.loc 1 809 0
   mov QWORD PTR [rbp-5538], 111
-.loc 1 806 0
+.loc 1 808 0
   mov rax, QWORD PTR [rbp-5530]
   cmp rax, QWORD PTR [rbp-5538]
   jne .L252
@@ -12812,7 +13065,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5418]
   test rax, rax
   jz .L250
-.loc 1 807 0
+.loc 1 809 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5554], rax
   mov QWORD PTR [rbp-5562], 4
@@ -12822,11 +13075,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5570]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-5578], rax
+.loc 1 810 0
   mov QWORD PTR [rbp-5586], 98
+.loc 1 809 0
   mov rax, QWORD PTR [rbp-5578]
   cmp rax, QWORD PTR [rbp-5586]
   jne .L250
-.loc 1 806 0
+.loc 1 808 0
   mov QWORD PTR [rbp-5410], 1
   jmp .L251
 .L250:
@@ -12835,7 +13090,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5410]
   test rax, rax
   jz .L248
-.loc 1 807 0
+.loc 1 810 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5602], rax
   mov QWORD PTR [rbp-5610], 5
@@ -12849,7 +13104,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5626]
   cmp rax, QWORD PTR [rbp-5634]
   jne .L248
-.loc 1 806 0
+.loc 1 808 0
   mov QWORD PTR [rbp-5402], 1
   jmp .L249
 .L248:
@@ -12858,21 +13113,25 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5402]
   test rax, rax
   jz .L246
-.loc 1 807 0
+.loc 1 810 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5650], rax
+.loc 1 811 0
   mov QWORD PTR [rbp-5658], 6
+.loc 1 810 0
   mov rax, QWORD PTR [rbp-5650]
   add rax, QWORD PTR [rbp-5658]
   mov QWORD PTR [rbp-5666], rax
   mov rax, QWORD PTR [rbp-5666]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-5674], rax
+.loc 1 811 0
   mov QWORD PTR [rbp-5682], 108
+.loc 1 810 0
   mov rax, QWORD PTR [rbp-5674]
   cmp rax, QWORD PTR [rbp-5682]
   jne .L246
-.loc 1 806 0
+.loc 1 808 0
   mov QWORD PTR [rbp-5394], 1
   jmp .L247
 .L246:
@@ -12881,20 +13140,22 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5394]
   test rax, rax
   jz .L244
-.loc 1 808 0
+.loc 1 811 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-5698], rax
+  mov QWORD PTR [rbp-5706], 1
+  mov rax, QWORD PTR [rbp-5706]
   mov rcx, QWORD PTR [rbp-5698]
-  mov DWORD PTR [rcx], 1
-.loc 1 806 0
+  mov DWORD PTR [rcx], eax
+.loc 1 808 0
   jmp .L245
 .L244:
 .L245:
 .L235:
-.loc 1 801 0
+.loc 1 805 0
   jmp .L233
 .L232:
-.loc 1 808 0
+.loc 1 811 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-5714], rax
   mov QWORD PTR [rbp-5722], 115
@@ -12903,13 +13164,13 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L256
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-5778], rax
-.loc 1 809 0
+.loc 1 812 0
   mov QWORD PTR [rbp-5786], 7
-.loc 1 808 0
+.loc 1 811 0
   mov rax, QWORD PTR [rbp-5778]
   cmp rax, QWORD PTR [rbp-5786]
   jne .L268
-.loc 1 809 0
+.loc 1 812 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5802], rax
   mov QWORD PTR [rbp-5810], 2
@@ -12919,13 +13180,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5818]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-5826], rax
-.loc 1 810 0
   mov QWORD PTR [rbp-5834], 116
-.loc 1 809 0
   mov rax, QWORD PTR [rbp-5826]
   cmp rax, QWORD PTR [rbp-5834]
   jne .L268
-.loc 1 808 0
+.loc 1 811 0
   mov QWORD PTR [rbp-5770], 1
   jmp .L269
 .L268:
@@ -12934,7 +13193,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5770]
   test rax, rax
   jz .L266
-.loc 1 810 0
+.loc 1 812 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5850], rax
   mov QWORD PTR [rbp-5858], 3
@@ -12948,7 +13207,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5874]
   cmp rax, QWORD PTR [rbp-5882]
   jne .L266
-.loc 1 808 0
+.loc 1 811 0
   mov QWORD PTR [rbp-5762], 1
   jmp .L267
 .L266:
@@ -12957,25 +13216,21 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5762]
   test rax, rax
   jz .L264
-.loc 1 810 0
+.loc 1 812 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5898], rax
-.loc 1 811 0
   mov QWORD PTR [rbp-5906], 4
-.loc 1 810 0
   mov rax, QWORD PTR [rbp-5898]
   add rax, QWORD PTR [rbp-5906]
   mov QWORD PTR [rbp-5914], rax
   mov rax, QWORD PTR [rbp-5914]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-5922], rax
-.loc 1 811 0
   mov QWORD PTR [rbp-5930], 105
-.loc 1 810 0
   mov rax, QWORD PTR [rbp-5922]
   cmp rax, QWORD PTR [rbp-5930]
   jne .L264
-.loc 1 808 0
+.loc 1 811 0
   mov QWORD PTR [rbp-5754], 1
   jmp .L265
 .L264:
@@ -12984,7 +13239,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5754]
   test rax, rax
   jz .L262
-.loc 1 811 0
+.loc 1 813 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5946], rax
   mov QWORD PTR [rbp-5954], 5
@@ -12994,11 +13249,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5962]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-5970], rax
+.loc 1 814 0
   mov QWORD PTR [rbp-5978], 110
+.loc 1 813 0
   mov rax, QWORD PTR [rbp-5970]
   cmp rax, QWORD PTR [rbp-5978]
   jne .L262
-.loc 1 808 0
+.loc 1 811 0
   mov QWORD PTR [rbp-5746], 1
   jmp .L263
 .L262:
@@ -13007,7 +13264,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5746]
   test rax, rax
   jz .L260
-.loc 1 811 0
+.loc 1 814 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-5994], rax
   mov QWORD PTR [rbp-6002], 6
@@ -13021,7 +13278,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6018]
   cmp rax, QWORD PTR [rbp-6026]
   jne .L260
-.loc 1 808 0
+.loc 1 811 0
   mov QWORD PTR [rbp-5738], 1
   jmp .L261
 .L260:
@@ -13030,23 +13287,27 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-5738]
   test rax, rax
   jz .L258
-.loc 1 811 0
+.loc 1 814 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-6042], rax
+  mov QWORD PTR [rbp-6050], 1
+  mov rax, QWORD PTR [rbp-6050]
   mov rcx, QWORD PTR [rbp-6042]
-  mov DWORD PTR [rcx], 1
-.loc 1 808 0
+  mov DWORD PTR [rcx], eax
+.loc 1 811 0
   jmp .L259
 .L258:
-.loc 1 812 0
+.loc 1 814 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-6106], rax
   mov QWORD PTR [rbp-6114], 8
   mov rax, QWORD PTR [rbp-6106]
   cmp rax, QWORD PTR [rbp-6114]
   jne .L282
+.loc 1 816 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6130], rax
+.loc 1 818 0
   mov QWORD PTR [rbp-6138], 2
   mov rax, QWORD PTR [rbp-6130]
   add rax, QWORD PTR [rbp-6138]
@@ -13058,6 +13319,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6154]
   cmp rax, QWORD PTR [rbp-6162]
   jne .L282
+.loc 1 814 0
   mov QWORD PTR [rbp-6098], 1
   jmp .L283
 .L282:
@@ -13066,6 +13328,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6098]
   test rax, rax
   jz .L280
+.loc 1 818 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6178], rax
   mov QWORD PTR [rbp-6186], 3
@@ -13079,6 +13342,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6202]
   cmp rax, QWORD PTR [rbp-6210]
   jne .L280
+.loc 1 814 0
   mov QWORD PTR [rbp-6090], 1
   jmp .L281
 .L280:
@@ -13087,9 +13351,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6090]
   test rax, rax
   jz .L278
+.loc 1 818 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6226], rax
-.loc 1 813 0
   mov QWORD PTR [rbp-6234], 4
   mov rax, QWORD PTR [rbp-6226]
   add rax, QWORD PTR [rbp-6234]
@@ -13097,13 +13361,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6242]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-6250], rax
-.loc 1 814 0
   mov QWORD PTR [rbp-6258], 116
-.loc 1 813 0
   mov rax, QWORD PTR [rbp-6250]
   cmp rax, QWORD PTR [rbp-6258]
   jne .L278
-.loc 1 812 0
+.loc 1 814 0
   mov QWORD PTR [rbp-6082], 1
   jmp .L279
 .L278:
@@ -13112,7 +13374,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6082]
   test rax, rax
   jz .L276
-.loc 1 814 0
+.loc 1 818 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6274], rax
   mov QWORD PTR [rbp-6282], 5
@@ -13122,11 +13384,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6290]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-6298], rax
+.loc 1 819 0
   mov QWORD PTR [rbp-6306], 105
+.loc 1 818 0
   mov rax, QWORD PTR [rbp-6298]
   cmp rax, QWORD PTR [rbp-6306]
   jne .L276
-.loc 1 812 0
+.loc 1 814 0
   mov QWORD PTR [rbp-6074], 1
   jmp .L277
 .L276:
@@ -13135,7 +13399,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6074]
   test rax, rax
   jz .L274
-.loc 1 814 0
+.loc 1 819 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6322], rax
   mov QWORD PTR [rbp-6330], 6
@@ -13145,11 +13409,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6338]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-6346], rax
+.loc 1 820 0
   mov QWORD PTR [rbp-6354], 111
+.loc 1 819 0
   mov rax, QWORD PTR [rbp-6346]
   cmp rax, QWORD PTR [rbp-6354]
   jne .L274
-.loc 1 812 0
+.loc 1 814 0
   mov QWORD PTR [rbp-6066], 1
   jmp .L275
 .L274:
@@ -13158,7 +13424,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6066]
   test rax, rax
   jz .L272
-.loc 1 814 0
+.loc 1 820 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6370], rax
   mov QWORD PTR [rbp-6378], 7
@@ -13172,7 +13438,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6394]
   cmp rax, QWORD PTR [rbp-6402]
   jne .L272
-.loc 1 812 0
+.loc 1 814 0
   mov QWORD PTR [rbp-6058], 1
   jmp .L273
 .L272:
@@ -13181,32 +13447,38 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6058]
   test rax, rax
   jz .L270
-.loc 1 818 0
+.loc 1 820 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-6418], rax
+  mov QWORD PTR [rbp-6426], 1
+  mov rax, QWORD PTR [rbp-6426]
   mov rcx, QWORD PTR [rbp-6418]
-  mov DWORD PTR [rcx], 1
-.loc 1 812 0
+  mov DWORD PTR [rcx], eax
+.loc 1 814 0
   jmp .L271
 .L270:
 .L271:
 .L259:
-.loc 1 808 0
+.loc 1 811 0
   jmp .L257
 .L256:
-.loc 1 818 0
+.loc 1 820 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-6466], rax
+.loc 1 821 0
   mov QWORD PTR [rbp-6474], 98
+.loc 1 820 0
   mov rax, QWORD PTR [rbp-6466]
   cmp rax, QWORD PTR [rbp-6474]
   jne .L292
+.loc 1 821 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-6490], rax
   mov QWORD PTR [rbp-6498], 5
   mov rax, QWORD PTR [rbp-6490]
   cmp rax, QWORD PTR [rbp-6498]
   jne .L292
+.loc 1 820 0
   mov QWORD PTR [rbp-6458], 1
   jmp .L293
 .L292:
@@ -13215,19 +13487,25 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6458]
   test rax, rax
   jz .L290
+.loc 1 821 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6514], rax
+.loc 1 822 0
   mov QWORD PTR [rbp-6522], 2
+.loc 1 821 0
   mov rax, QWORD PTR [rbp-6514]
   add rax, QWORD PTR [rbp-6522]
   mov QWORD PTR [rbp-6530], rax
   mov rax, QWORD PTR [rbp-6530]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-6538], rax
+.loc 1 823 0
   mov QWORD PTR [rbp-6546], 121
+.loc 1 821 0
   mov rax, QWORD PTR [rbp-6538]
   cmp rax, QWORD PTR [rbp-6546]
   jne .L290
+.loc 1 820 0
   mov QWORD PTR [rbp-6450], 1
   jmp .L291
 .L290:
@@ -13236,7 +13514,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6450]
   test rax, rax
   jz .L288
-.loc 1 819 0
+.loc 1 823 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6562], rax
   mov QWORD PTR [rbp-6570], 3
@@ -13250,7 +13528,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6586]
   cmp rax, QWORD PTR [rbp-6594]
   jne .L288
-.loc 1 818 0
+.loc 1 820 0
   mov QWORD PTR [rbp-6442], 1
   jmp .L289
 .L288:
@@ -13259,10 +13537,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6442]
   test rax, rax
   jz .L286
-.loc 1 819 0
+.loc 1 824 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6610], rax
-.loc 1 820 0
   mov QWORD PTR [rbp-6618], 4
   mov rax, QWORD PTR [rbp-6610]
   add rax, QWORD PTR [rbp-6618]
@@ -13274,7 +13551,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6634]
   cmp rax, QWORD PTR [rbp-6642]
   jne .L286
-.loc 1 818 0
+.loc 1 820 0
   mov QWORD PTR [rbp-6434], 1
   jmp .L287
 .L286:
@@ -13283,29 +13560,31 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6434]
   test rax, rax
   jz .L284
-.loc 1 820 0
+.loc 1 824 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-6658], rax
+  mov QWORD PTR [rbp-6666], 1
+  mov rax, QWORD PTR [rbp-6666]
   mov rcx, QWORD PTR [rbp-6658]
-  mov DWORD PTR [rcx], 1
-.loc 1 818 0
+  mov DWORD PTR [rcx], eax
+.loc 1 820 0
   jmp .L285
 .L284:
-.loc 1 820 0
+.loc 1 824 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-6706], rax
   mov QWORD PTR [rbp-6714], 119
   mov rax, QWORD PTR [rbp-6706]
   cmp rax, QWORD PTR [rbp-6714]
   jne .L302
+.loc 1 826 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-6730], rax
-.loc 1 821 0
   mov QWORD PTR [rbp-6738], 5
-.loc 1 820 0
   mov rax, QWORD PTR [rbp-6730]
   cmp rax, QWORD PTR [rbp-6738]
   jne .L302
+.loc 1 824 0
   mov QWORD PTR [rbp-6698], 1
   jmp .L303
 .L302:
@@ -13314,7 +13593,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6698]
   test rax, rax
   jz .L300
-.loc 1 821 0
+.loc 1 826 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6754], rax
   mov QWORD PTR [rbp-6762], 2
@@ -13328,7 +13607,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6778]
   cmp rax, QWORD PTR [rbp-6786]
   jne .L300
-.loc 1 820 0
+.loc 1 824 0
   mov QWORD PTR [rbp-6690], 1
   jmp .L301
 .L300:
@@ -13337,7 +13616,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6690]
   test rax, rax
   jz .L298
-.loc 1 823 0
+.loc 1 827 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6802], rax
   mov QWORD PTR [rbp-6810], 3
@@ -13351,7 +13630,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6826]
   cmp rax, QWORD PTR [rbp-6834]
   jne .L298
-.loc 1 820 0
+.loc 1 824 0
   mov QWORD PTR [rbp-6682], 1
   jmp .L299
 .L298:
@@ -13360,7 +13639,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6682]
   test rax, rax
   jz .L296
-.loc 1 823 0
+.loc 1 827 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6850], rax
   mov QWORD PTR [rbp-6858], 4
@@ -13370,13 +13649,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6866]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-6874], rax
-.loc 1 824 0
   mov QWORD PTR [rbp-6882], 100
-.loc 1 823 0
   mov rax, QWORD PTR [rbp-6874]
   cmp rax, QWORD PTR [rbp-6882]
   jne .L296
-.loc 1 820 0
+.loc 1 824 0
   mov QWORD PTR [rbp-6674], 1
   jmp .L297
 .L296:
@@ -13385,27 +13662,33 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6674]
   test rax, rax
   jz .L294
-.loc 1 824 0
+.loc 1 828 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-6898], rax
+.loc 1 829 0
+  mov QWORD PTR [rbp-6906], 1
+.loc 1 828 0
+  mov rax, QWORD PTR [rbp-6906]
   mov rcx, QWORD PTR [rbp-6898]
-  mov DWORD PTR [rcx], 1
-.loc 1 820 0
+  mov DWORD PTR [rcx], eax
+.loc 1 824 0
   jmp .L295
 .L294:
-.loc 1 824 0
+.loc 1 829 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-6946], rax
   mov QWORD PTR [rbp-6954], 108
   mov rax, QWORD PTR [rbp-6946]
   cmp rax, QWORD PTR [rbp-6954]
   jne .L312
+.loc 1 830 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-6970], rax
   mov QWORD PTR [rbp-6978], 5
   mov rax, QWORD PTR [rbp-6970]
   cmp rax, QWORD PTR [rbp-6978]
   jne .L312
+.loc 1 829 0
   mov QWORD PTR [rbp-6938], 1
   jmp .L313
 .L312:
@@ -13414,7 +13697,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6938]
   test rax, rax
   jz .L310
-.loc 1 826 0
+.loc 1 830 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-6994], rax
   mov QWORD PTR [rbp-7002], 2
@@ -13428,7 +13711,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7018]
   cmp rax, QWORD PTR [rbp-7026]
   jne .L310
-.loc 1 824 0
+.loc 1 829 0
   mov QWORD PTR [rbp-6930], 1
   jmp .L311
 .L310:
@@ -13437,7 +13720,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6930]
   test rax, rax
   jz .L308
-.loc 1 826 0
+.loc 1 830 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7042], rax
   mov QWORD PTR [rbp-7050], 3
@@ -13447,13 +13730,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7058]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-7066], rax
-.loc 1 827 0
+.loc 1 832 0
   mov QWORD PTR [rbp-7074], 110
-.loc 1 826 0
+.loc 1 830 0
   mov rax, QWORD PTR [rbp-7066]
   cmp rax, QWORD PTR [rbp-7074]
   jne .L308
-.loc 1 824 0
+.loc 1 829 0
   mov QWORD PTR [rbp-6922], 1
   jmp .L309
 .L308:
@@ -13462,7 +13745,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6922]
   test rax, rax
   jz .L306
-.loc 1 827 0
+.loc 1 832 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7090], rax
   mov QWORD PTR [rbp-7098], 4
@@ -13476,7 +13759,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7114]
   cmp rax, QWORD PTR [rbp-7122]
   jne .L306
-.loc 1 824 0
+.loc 1 829 0
   mov QWORD PTR [rbp-6914], 1
   jmp .L307
 .L306:
@@ -13485,27 +13768,31 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-6914]
   test rax, rax
   jz .L304
-.loc 1 827 0
+.loc 1 833 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-7138], rax
+  mov QWORD PTR [rbp-7146], 1
+  mov rax, QWORD PTR [rbp-7146]
   mov rcx, QWORD PTR [rbp-7138]
-  mov DWORD PTR [rcx], 1
-.loc 1 824 0
+  mov DWORD PTR [rcx], eax
+.loc 1 829 0
   jmp .L305
 .L304:
-.loc 1 829 0
+.loc 1 833 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-7186], rax
   mov QWORD PTR [rbp-7194], 113
   mov rax, QWORD PTR [rbp-7186]
   cmp rax, QWORD PTR [rbp-7194]
   jne .L322
+.loc 1 835 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-7210], rax
   mov QWORD PTR [rbp-7218], 5
   mov rax, QWORD PTR [rbp-7210]
   cmp rax, QWORD PTR [rbp-7218]
   jne .L322
+.loc 1 833 0
   mov QWORD PTR [rbp-7178], 1
   jmp .L323
 .L322:
@@ -13514,7 +13801,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7178]
   test rax, rax
   jz .L320
-.loc 1 830 0
+.loc 1 835 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7234], rax
   mov QWORD PTR [rbp-7242], 2
@@ -13528,7 +13815,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7258]
   cmp rax, QWORD PTR [rbp-7266]
   jne .L320
-.loc 1 829 0
+.loc 1 833 0
   mov QWORD PTR [rbp-7170], 1
   jmp .L321
 .L320:
@@ -13537,7 +13824,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7170]
   test rax, rax
   jz .L318
-.loc 1 830 0
+.loc 1 836 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7282], rax
   mov QWORD PTR [rbp-7290], 3
@@ -13551,7 +13838,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7306]
   cmp rax, QWORD PTR [rbp-7314]
   jne .L318
-.loc 1 829 0
+.loc 1 833 0
   mov QWORD PTR [rbp-7162], 1
   jmp .L319
 .L318:
@@ -13560,25 +13847,23 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7162]
   test rax, rax
   jz .L316
-.loc 1 830 0
+.loc 1 836 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7330], rax
-.loc 1 832 0
   mov QWORD PTR [rbp-7338], 4
-.loc 1 831 0
   mov rax, QWORD PTR [rbp-7330]
   add rax, QWORD PTR [rbp-7338]
   mov QWORD PTR [rbp-7346], rax
   mov rax, QWORD PTR [rbp-7346]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-7354], rax
-.loc 1 832 0
+.loc 1 838 0
   mov QWORD PTR [rbp-7362], 100
-.loc 1 831 0
+.loc 1 836 0
   mov rax, QWORD PTR [rbp-7354]
   cmp rax, QWORD PTR [rbp-7362]
   jne .L316
-.loc 1 829 0
+.loc 1 833 0
   mov QWORD PTR [rbp-7154], 1
   jmp .L317
 .L316:
@@ -13587,15 +13872,17 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7154]
   test rax, rax
   jz .L314
-.loc 1 832 0
+.loc 1 838 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-7378], rax
+  mov QWORD PTR [rbp-7386], 1
+  mov rax, QWORD PTR [rbp-7386]
   mov rcx, QWORD PTR [rbp-7378]
-  mov DWORD PTR [rcx], 1
-.loc 1 829 0
+  mov DWORD PTR [rcx], eax
+.loc 1 833 0
   jmp .L315
 .L314:
-.loc 1 833 0
+.loc 1 839 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-7426], rax
   mov QWORD PTR [rbp-7434], 122
@@ -13616,7 +13903,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7418]
   test rax, rax
   jz .L330
-.loc 1 835 0
+.loc 1 840 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7474], rax
   mov QWORD PTR [rbp-7482], 2
@@ -13630,7 +13917,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7498]
   cmp rax, QWORD PTR [rbp-7506]
   jne .L330
-.loc 1 833 0
+.loc 1 839 0
   mov QWORD PTR [rbp-7410], 1
   jmp .L331
 .L330:
@@ -13639,23 +13926,25 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7410]
   test rax, rax
   jz .L328
-.loc 1 835 0
+.loc 1 840 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7522], rax
+.loc 1 841 0
   mov QWORD PTR [rbp-7530], 3
+.loc 1 840 0
   mov rax, QWORD PTR [rbp-7522]
   add rax, QWORD PTR [rbp-7530]
   mov QWORD PTR [rbp-7538], rax
   mov rax, QWORD PTR [rbp-7538]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-7546], rax
-.loc 1 836 0
+.loc 1 842 0
   mov QWORD PTR [rbp-7554], 114
-.loc 1 835 0
+.loc 1 840 0
   mov rax, QWORD PTR [rbp-7546]
   cmp rax, QWORD PTR [rbp-7554]
   jne .L328
-.loc 1 833 0
+.loc 1 839 0
   mov QWORD PTR [rbp-7402], 1
   jmp .L329
 .L328:
@@ -13664,7 +13953,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7402]
   test rax, rax
   jz .L326
-.loc 1 836 0
+.loc 1 842 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7570], rax
   mov QWORD PTR [rbp-7578], 4
@@ -13678,7 +13967,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7594]
   cmp rax, QWORD PTR [rbp-7602]
   jne .L326
-.loc 1 833 0
+.loc 1 839 0
   mov QWORD PTR [rbp-7394], 1
   jmp .L327
 .L326:
@@ -13687,31 +13976,33 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7394]
   test rax, rax
   jz .L324
-.loc 1 838 0
+.loc 1 843 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-7618], rax
+  mov QWORD PTR [rbp-7626], 1
+  mov rax, QWORD PTR [rbp-7626]
   mov rcx, QWORD PTR [rbp-7618]
-  mov DWORD PTR [rcx], 1
-.loc 1 833 0
+  mov DWORD PTR [rcx], eax
+.loc 1 839 0
   jmp .L325
 .L324:
-.loc 1 838 0
+.loc 1 843 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-7674], rax
-.loc 1 839 0
+.loc 1 844 0
   mov QWORD PTR [rbp-7682], 97
-.loc 1 838 0
+.loc 1 843 0
   mov rax, QWORD PTR [rbp-7674]
   cmp rax, QWORD PTR [rbp-7682]
   jne .L344
-.loc 1 839 0
+.loc 1 844 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-7698], rax
   mov QWORD PTR [rbp-7706], 6
   mov rax, QWORD PTR [rbp-7698]
   cmp rax, QWORD PTR [rbp-7706]
   jne .L344
-.loc 1 838 0
+.loc 1 843 0
   mov QWORD PTR [rbp-7666], 1
   jmp .L345
 .L344:
@@ -13720,23 +14011,25 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7666]
   test rax, rax
   jz .L342
-.loc 1 839 0
+.loc 1 844 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7722], rax
+.loc 1 845 0
   mov QWORD PTR [rbp-7730], 2
+.loc 1 844 0
   mov rax, QWORD PTR [rbp-7722]
   add rax, QWORD PTR [rbp-7730]
   mov QWORD PTR [rbp-7738], rax
   mov rax, QWORD PTR [rbp-7738]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-7746], rax
-.loc 1 840 0
+.loc 1 845 0
   mov QWORD PTR [rbp-7754], 115
-.loc 1 839 0
+.loc 1 844 0
   mov rax, QWORD PTR [rbp-7746]
   cmp rax, QWORD PTR [rbp-7754]
   jne .L342
-.loc 1 838 0
+.loc 1 843 0
   mov QWORD PTR [rbp-7658], 1
   jmp .L343
 .L342:
@@ -13745,21 +14038,25 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7658]
   test rax, rax
   jz .L340
-.loc 1 840 0
+.loc 1 845 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7770], rax
+.loc 1 847 0
   mov QWORD PTR [rbp-7778], 3
+.loc 1 846 0
   mov rax, QWORD PTR [rbp-7770]
   add rax, QWORD PTR [rbp-7778]
   mov QWORD PTR [rbp-7786], rax
   mov rax, QWORD PTR [rbp-7786]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-7794], rax
+.loc 1 851 0
   mov QWORD PTR [rbp-7802], 99
+.loc 1 846 0
   mov rax, QWORD PTR [rbp-7794]
   cmp rax, QWORD PTR [rbp-7802]
   jne .L340
-.loc 1 838 0
+.loc 1 843 0
   mov QWORD PTR [rbp-7650], 1
   jmp .L341
 .L340:
@@ -13768,25 +14065,21 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7650]
   test rax, rax
   jz .L338
-.loc 1 841 0
+.loc 1 851 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7818], rax
-.loc 1 842 0
   mov QWORD PTR [rbp-7826], 4
-.loc 1 841 0
   mov rax, QWORD PTR [rbp-7818]
   add rax, QWORD PTR [rbp-7826]
   mov QWORD PTR [rbp-7834], rax
   mov rax, QWORD PTR [rbp-7834]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-7842], rax
-.loc 1 842 0
   mov QWORD PTR [rbp-7850], 105
-.loc 1 841 0
   mov rax, QWORD PTR [rbp-7842]
   cmp rax, QWORD PTR [rbp-7850]
   jne .L338
-.loc 1 838 0
+.loc 1 843 0
   mov QWORD PTR [rbp-7642], 1
   jmp .L339
 .L338:
@@ -13795,7 +14088,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7642]
   test rax, rax
   jz .L336
-.loc 1 842 0
+.loc 1 851 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-7866], rax
   mov QWORD PTR [rbp-7874], 5
@@ -13805,13 +14098,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7882]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-7890], rax
-.loc 1 843 0
   mov QWORD PTR [rbp-7898], 105
-.loc 1 842 0
   mov rax, QWORD PTR [rbp-7890]
   cmp rax, QWORD PTR [rbp-7898]
   jne .L336
-.loc 1 838 0
+.loc 1 843 0
   mov QWORD PTR [rbp-7634], 1
   jmp .L337
 .L336:
@@ -13820,15 +14111,17 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7634]
   test rax, rax
   jz .L334
-.loc 1 843 0
+.loc 1 851 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-7914], rax
+  mov QWORD PTR [rbp-7922], 1
+  mov rax, QWORD PTR [rbp-7922]
   mov rcx, QWORD PTR [rbp-7914]
-  mov DWORD PTR [rcx], 1
-.loc 1 838 0
+  mov DWORD PTR [rcx], eax
+.loc 1 843 0
   jmp .L335
 .L334:
-.loc 1 844 0
+.loc 1 852 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-7970], rax
   mov QWORD PTR [rbp-7978], 97
@@ -13849,7 +14142,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7962]
   test rax, rax
   jz .L354
-.loc 1 845 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8018], rax
   mov QWORD PTR [rbp-8026], 2
@@ -13859,13 +14151,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8034]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8042], rax
-.loc 1 846 0
   mov QWORD PTR [rbp-8050], 115
-.loc 1 845 0
   mov rax, QWORD PTR [rbp-8042]
   cmp rax, QWORD PTR [rbp-8050]
   jne .L354
-.loc 1 844 0
   mov QWORD PTR [rbp-7954], 1
   jmp .L355
 .L354:
@@ -13874,25 +14163,21 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7954]
   test rax, rax
   jz .L352
-.loc 1 848 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8066], rax
-.loc 1 851 0
+.loc 1 853 0
   mov QWORD PTR [rbp-8074], 3
-.loc 1 849 0
   mov rax, QWORD PTR [rbp-8066]
   add rax, QWORD PTR [rbp-8074]
   mov QWORD PTR [rbp-8082], rax
   mov rax, QWORD PTR [rbp-8082]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8090], rax
-.loc 1 851 0
   mov QWORD PTR [rbp-8098], 99
-.loc 1 849 0
   mov rax, QWORD PTR [rbp-8090]
   cmp rax, QWORD PTR [rbp-8098]
   jne .L352
-.loc 1 844 0
+.loc 1 852 0
   mov QWORD PTR [rbp-7946], 1
   jmp .L353
 .L352:
@@ -13901,7 +14186,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7946]
   test rax, rax
   jz .L350
-.loc 1 851 0
+.loc 1 853 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8114], rax
   mov QWORD PTR [rbp-8122], 4
@@ -13911,11 +14196,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8130]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8138], rax
+.loc 1 854 0
   mov QWORD PTR [rbp-8146], 105
+.loc 1 853 0
   mov rax, QWORD PTR [rbp-8138]
   cmp rax, QWORD PTR [rbp-8146]
   jne .L350
-.loc 1 844 0
+.loc 1 852 0
   mov QWORD PTR [rbp-7938], 1
   jmp .L351
 .L350:
@@ -13924,7 +14211,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7938]
   test rax, rax
   jz .L348
-.loc 1 851 0
+.loc 1 854 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8162], rax
   mov QWORD PTR [rbp-8170], 5
@@ -13938,7 +14225,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8186]
   cmp rax, QWORD PTR [rbp-8194]
   jne .L348
-.loc 1 844 0
+.loc 1 852 0
   mov QWORD PTR [rbp-7930], 1
   jmp .L349
 .L348:
@@ -13947,17 +14234,17 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-7930]
   test rax, rax
   jz .L346
-.loc 1 851 0
+.loc 1 856 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-8210], rax
-.loc 1 852 0
+  mov QWORD PTR [rbp-8218], 1
+  mov rax, QWORD PTR [rbp-8218]
   mov rcx, QWORD PTR [rbp-8210]
-  mov DWORD PTR [rcx], 1
-.loc 1 851 0
-.loc 1 844 0
+  mov DWORD PTR [rcx], eax
+.loc 1 852 0
   jmp .L347
 .L346:
-.loc 1 852 0
+.loc 1 857 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-8266], rax
   mov QWORD PTR [rbp-8274], 118
@@ -13987,9 +14274,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8330]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8338], rax
-.loc 1 853 0
   mov QWORD PTR [rbp-8346], 97
-.loc 1 852 0
   mov rax, QWORD PTR [rbp-8338]
   cmp rax, QWORD PTR [rbp-8346]
   jne .L366
@@ -14001,7 +14286,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8250]
   test rax, rax
   jz .L364
-.loc 1 853 0
+.loc 1 859 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8362], rax
   mov QWORD PTR [rbp-8370], 3
@@ -14015,7 +14300,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8386]
   cmp rax, QWORD PTR [rbp-8394]
   jne .L364
-.loc 1 852 0
+.loc 1 857 0
   mov QWORD PTR [rbp-8242], 1
   jmp .L365
 .L364:
@@ -14024,10 +14309,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8242]
   test rax, rax
   jz .L362
-.loc 1 853 0
+.loc 1 859 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8410], rax
-.loc 1 854 0
+.loc 1 860 0
   mov QWORD PTR [rbp-8418], 4
   mov rax, QWORD PTR [rbp-8410]
   add rax, QWORD PTR [rbp-8418]
@@ -14039,7 +14324,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8434]
   cmp rax, QWORD PTR [rbp-8442]
   jne .L362
-.loc 1 852 0
+.loc 1 857 0
   mov QWORD PTR [rbp-8234], 1
   jmp .L363
 .L362:
@@ -14048,7 +14333,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8234]
   test rax, rax
   jz .L360
-.loc 1 854 0
+.loc 1 860 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8458], rax
   mov QWORD PTR [rbp-8466], 5
@@ -14058,30 +14343,33 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8474]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8482], rax
-.loc 1 856 0
+.loc 1 861 0
   mov QWORD PTR [rbp-8490], 101
-.loc 1 854 0
+.loc 1 860 0
   mov rax, QWORD PTR [rbp-8482]
   cmp rax, QWORD PTR [rbp-8490]
   jne .L360
-.loc 1 852 0
+.loc 1 857 0
   mov QWORD PTR [rbp-8226], 1
   jmp .L361
 .L360:
   mov QWORD PTR [rbp-8226], 0
 .L361:
+.loc 1 856 0
   mov rax, QWORD PTR [rbp-8226]
   test rax, rax
   jz .L358
-.loc 1 856 0
+.loc 1 862 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-8506], rax
+  mov QWORD PTR [rbp-8514], 1
+  mov rax, QWORD PTR [rbp-8514]
   mov rcx, QWORD PTR [rbp-8506]
-  mov DWORD PTR [rcx], 1
-.loc 1 852 0
+  mov DWORD PTR [rcx], eax
+.loc 1 856 0
   jmp .L359
 .L358:
-.loc 1 857 0
+.loc 1 863 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-8570], rax
   mov QWORD PTR [rbp-8578], 114
@@ -14111,9 +14399,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8634]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8642], rax
-.loc 1 859 0
+.loc 1 864 0
   mov QWORD PTR [rbp-8650], 111
-.loc 1 857 0
+.loc 1 863 0
   mov rax, QWORD PTR [rbp-8642]
   cmp rax, QWORD PTR [rbp-8650]
   jne .L380
@@ -14125,7 +14413,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8554]
   test rax, rax
   jz .L378
-.loc 1 859 0
+.loc 1 864 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8666], rax
   mov QWORD PTR [rbp-8674], 3
@@ -14135,13 +14423,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8682]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8690], rax
-.loc 1 860 0
   mov QWORD PTR [rbp-8698], 100
-.loc 1 859 0
   mov rax, QWORD PTR [rbp-8690]
   cmp rax, QWORD PTR [rbp-8698]
   jne .L378
-.loc 1 857 0
+.loc 1 863 0
   mov QWORD PTR [rbp-8546], 1
   jmp .L379
 .L378:
@@ -14150,7 +14436,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8546]
   test rax, rax
   jz .L376
-.loc 1 860 0
+.loc 1 864 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8714], rax
   mov QWORD PTR [rbp-8722], 4
@@ -14160,11 +14446,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8730]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8738], rax
+.loc 1 865 0
   mov QWORD PTR [rbp-8746], 97
+.loc 1 864 0
   mov rax, QWORD PTR [rbp-8738]
   cmp rax, QWORD PTR [rbp-8746]
   jne .L376
-.loc 1 857 0
+.loc 1 863 0
   mov QWORD PTR [rbp-8538], 1
   jmp .L377
 .L376:
@@ -14173,25 +14461,21 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8538]
   test rax, rax
   jz .L374
-.loc 1 860 0
+.loc 1 865 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8762], rax
-.loc 1 861 0
   mov QWORD PTR [rbp-8770], 5
-.loc 1 860 0
   mov rax, QWORD PTR [rbp-8762]
   add rax, QWORD PTR [rbp-8770]
   mov QWORD PTR [rbp-8778], rax
   mov rax, QWORD PTR [rbp-8778]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8786], rax
-.loc 1 862 0
   mov QWORD PTR [rbp-8794], 116
-.loc 1 860 0
   mov rax, QWORD PTR [rbp-8786]
   cmp rax, QWORD PTR [rbp-8794]
   jne .L374
-.loc 1 857 0
+.loc 1 863 0
   mov QWORD PTR [rbp-8530], 1
   jmp .L375
 .L374:
@@ -14200,7 +14484,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8530]
   test rax, rax
   jz .L372
-.loc 1 862 0
+.loc 1 865 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-8810], rax
   mov QWORD PTR [rbp-8818], 6
@@ -14210,65 +14494,76 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8826]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-8834], rax
+.loc 1 866 0
   mov QWORD PTR [rbp-8842], 97
+.loc 1 865 0
   mov rax, QWORD PTR [rbp-8834]
   cmp rax, QWORD PTR [rbp-8842]
   jne .L372
-.loc 1 857 0
+.loc 1 863 0
   mov QWORD PTR [rbp-8522], 1
   jmp .L373
 .L372:
   mov QWORD PTR [rbp-8522], 0
 .L373:
+.loc 1 862 0
   mov rax, QWORD PTR [rbp-8522]
   test rax, rax
   jz .L370
-.loc 1 863 0
+.loc 1 866 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-8858], rax
+  mov QWORD PTR [rbp-8866], 1
+  mov rax, QWORD PTR [rbp-8866]
   mov rcx, QWORD PTR [rbp-8858]
-  mov DWORD PTR [rcx], 1
-.loc 1 857 0
+  mov DWORD PTR [rcx], eax
+.loc 1 862 0
   jmp .L371
 .L370:
-.loc 1 863 0
+.loc 1 868 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-8874], rax
   mov QWORD PTR [rbp-8882], 105
   mov rax, QWORD PTR [rbp-8874]
   cmp rax, QWORD PTR [rbp-8882]
   jne .L384
-.loc 1 864 0
+.loc 1 867 0
+.loc 1 874 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-8898], rax
   mov QWORD PTR [rbp-8906], 14
   mov rax, QWORD PTR [rbp-8898]
   cmp rax, QWORD PTR [rbp-8906]
   jne .L386
+.loc 1 869 0
+.loc 1 874 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-8922], rax
+  mov QWORD PTR [rbp-8930], 1
+  mov rax, QWORD PTR [rbp-8930]
   mov rcx, QWORD PTR [rbp-8922]
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
+.loc 1 869 0
   jmp .L387
 .L386:
 .L387:
-.loc 1 863 0
+.loc 1 867 0
   jmp .L385
 .L384:
-.loc 1 865 0
+.loc 1 875 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-8938], rax
   mov QWORD PTR [rbp-8946], 102
   mov rax, QWORD PTR [rbp-8938]
   cmp rax, QWORD PTR [rbp-8946]
   jne .L388
+.loc 1 877 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-8986], rax
   mov QWORD PTR [rbp-8994], 5
   mov rax, QWORD PTR [rbp-8986]
   cmp rax, QWORD PTR [rbp-8994]
   jne .L396
-.loc 1 866 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-9010], rax
   mov QWORD PTR [rbp-9018], 2
@@ -14278,11 +14573,12 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9026]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-9034], rax
+.loc 1 878 0
   mov QWORD PTR [rbp-9042], 105
+.loc 1 877 0
   mov rax, QWORD PTR [rbp-9034]
   cmp rax, QWORD PTR [rbp-9042]
   jne .L396
-.loc 1 865 0
   mov QWORD PTR [rbp-8978], 1
   jmp .L397
 .L396:
@@ -14291,25 +14587,23 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8978]
   test rax, rax
   jz .L394
-.loc 1 866 0
+.loc 1 878 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-9058], rax
-.loc 1 868 0
   mov QWORD PTR [rbp-9066], 3
-.loc 1 867 0
   mov rax, QWORD PTR [rbp-9058]
   add rax, QWORD PTR [rbp-9066]
   mov QWORD PTR [rbp-9074], rax
   mov rax, QWORD PTR [rbp-9074]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-9082], rax
-.loc 1 868 0
+.loc 1 879 0
   mov QWORD PTR [rbp-9090], 108
-.loc 1 867 0
+.loc 1 878 0
   mov rax, QWORD PTR [rbp-9082]
   cmp rax, QWORD PTR [rbp-9090]
   jne .L394
-.loc 1 865 0
+.loc 1 877 0
   mov QWORD PTR [rbp-8970], 1
   jmp .L395
 .L394:
@@ -14318,52 +14612,51 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-8970]
   test rax, rax
   jz .L392
-.loc 1 868 0
+.loc 1 879 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-9106], rax
-.loc 1 870 0
   mov QWORD PTR [rbp-9114], 4
-.loc 1 869 0
   mov rax, QWORD PTR [rbp-9106]
   add rax, QWORD PTR [rbp-9114]
   mov QWORD PTR [rbp-9122], rax
   mov rax, QWORD PTR [rbp-9122]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-9130], rax
-.loc 1 874 0
   mov QWORD PTR [rbp-9138], 101
-.loc 1 869 0
   mov rax, QWORD PTR [rbp-9130]
   cmp rax, QWORD PTR [rbp-9138]
   jne .L392
-.loc 1 865 0
+.loc 1 877 0
   mov QWORD PTR [rbp-8962], 1
   jmp .L393
 .L392:
   mov QWORD PTR [rbp-8962], 0
 .L393:
+.loc 1 875 0
   mov rax, QWORD PTR [rbp-8962]
   test rax, rax
   jz .L390
-.loc 1 874 0
+.loc 1 880 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-9154], rax
+  mov QWORD PTR [rbp-9162], 1
+  mov rax, QWORD PTR [rbp-9162]
   mov rcx, QWORD PTR [rbp-9154]
-  mov DWORD PTR [rcx], 1
-.loc 1 865 0
+  mov DWORD PTR [rcx], eax
+.loc 1 875 0
   jmp .L391
 .L390:
 .L391:
   jmp .L389
 .L388:
-.loc 1 875 0
+.loc 1 880 0
   movzx rax, BYTE PTR [rbp-206]
   mov QWORD PTR [rbp-9170], rax
   mov QWORD PTR [rbp-9178], 108
   mov rax, QWORD PTR [rbp-9170]
   cmp rax, QWORD PTR [rbp-9178]
   jne .L398
-.loc 1 877 0
+.loc 1 883 0
   movsxd rax, DWORD PTR [rbp-193]
   mov QWORD PTR [rbp-9210], rax
   mov QWORD PTR [rbp-9218], 4
@@ -14379,9 +14672,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9250]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-9258], rax
-.loc 1 878 0
+.loc 1 884 0
   mov QWORD PTR [rbp-9266], 111
-.loc 1 877 0
+.loc 1 883 0
   mov rax, QWORD PTR [rbp-9258]
   cmp rax, QWORD PTR [rbp-9266]
   jne .L404
@@ -14393,7 +14686,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9202]
   test rax, rax
   jz .L402
-.loc 1 878 0
+.loc 1 884 0
   mov rax, QWORD PTR [rbp-201]
   mov QWORD PTR [rbp-9282], rax
   mov QWORD PTR [rbp-9290], 3
@@ -14403,28 +14696,28 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9298]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-9306], rax
-.loc 1 879 0
   mov QWORD PTR [rbp-9314], 99
-.loc 1 878 0
   mov rax, QWORD PTR [rbp-9306]
   cmp rax, QWORD PTR [rbp-9314]
   jne .L402
-.loc 1 877 0
+.loc 1 883 0
   mov QWORD PTR [rbp-9194], 1
   jmp .L403
 .L402:
   mov QWORD PTR [rbp-9194], 0
 .L403:
-.loc 1 875 0
+.loc 1 880 0
   mov rax, QWORD PTR [rbp-9194]
   test rax, rax
   jz .L400
-.loc 1 879 0
+.loc 1 884 0
   lea rax, [rbp-205]
   mov QWORD PTR [rbp-9330], rax
+  mov QWORD PTR [rbp-9338], 1
+  mov rax, QWORD PTR [rbp-9338]
   mov rcx, QWORD PTR [rbp-9330]
-  mov DWORD PTR [rcx], 1
-.loc 1 875 0
+  mov DWORD PTR [rcx], eax
+.loc 1 880 0
   jmp .L401
 .L400:
 .L401:
@@ -14447,11 +14740,11 @@ _caustic_assembler_lexer_cst_tokenize:
 .L225:
 .L215:
 .L205:
-.loc 1 787 0
+.loc 1 792 0
   jmp .L201
 .L200:
 .L201:
-.loc 1 880 0
+.loc 1 884 0
   xor r10, r10
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-9346], rax
@@ -14460,33 +14753,30 @@ _caustic_assembler_lexer_cst_tokenize:
   mov QWORD PTR [rbp-9354], rax
   mov rax, QWORD PTR [rbp-9354]
   mov QWORD PTR [rbp-214], rax
-.loc 1 881 0
+.loc 1 885 0
   movsxd rax, DWORD PTR [rbp-205]
   mov QWORD PTR [rbp-9362], rax
-.loc 1 883 0
+.loc 1 886 0
   mov QWORD PTR [rbp-9370], 1
-.loc 1 881 0
+.loc 1 885 0
   mov rax, QWORD PTR [rbp-9362]
   cmp rax, QWORD PTR [rbp-9370]
   jne .L406
-.loc 1 880 0
-.loc 1 883 0
+.loc 1 886 0
   mov rax, QWORD PTR [rbp-214]
   mov QWORD PTR [rbp-9386], rax
-.loc 1 884 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_DIRECTIVE]
   mov QWORD PTR [rbp-9402], rax
   mov rax, QWORD PTR [rbp-9402]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-9394], rax
-.loc 1 883 0
   mov rax, QWORD PTR [rbp-9394]
   mov rcx, QWORD PTR [rbp-9386]
   mov DWORD PTR [rcx], eax
-.loc 1 880 0
+.loc 1 885 0
   jmp .L407
 .L406:
-.loc 1 884 0
+.loc 1 886 0
   mov rax, QWORD PTR [rbp-214]
   mov QWORD PTR [rbp-9410], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
@@ -14500,6 +14790,7 @@ _caustic_assembler_lexer_cst_tokenize:
 .L407:
   mov rax, QWORD PTR [rbp-214]
   mov QWORD PTR [rbp-9434], rax
+.loc 1 887 0
   mov QWORD PTR [rbp-9442], 4
   mov rax, QWORD PTR [rbp-9434]
   add rax, QWORD PTR [rbp-9442]
@@ -14531,16 +14822,19 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9522]
   mov rcx, QWORD PTR [rbp-9514]
   mov DWORD PTR [rcx], eax
-.loc 1 885 0
   mov rax, QWORD PTR [rbp-214]
   mov QWORD PTR [rbp-9530], rax
   mov QWORD PTR [rbp-9538], 20
   mov rax, QWORD PTR [rbp-9530]
   add rax, QWORD PTR [rbp-9538]
   mov QWORD PTR [rbp-9546], rax
+.loc 1 888 0
+  mov QWORD PTR [rbp-9554], 0
+.loc 1 887 0
+  mov rax, QWORD PTR [rbp-9554]
   mov rcx, QWORD PTR [rbp-9546]
-  mov QWORD PTR [rcx], 0
-.loc 1 886 0
+  mov QWORD PTR [rcx], rax
+.loc 1 888 0
   mov rax, QWORD PTR [rbp-214]
   mov QWORD PTR [rbp-9562], rax
   mov QWORD PTR [rbp-9570], 28
@@ -14571,18 +14865,19 @@ _caustic_assembler_lexer_cst_tokenize:
   mov DWORD PTR [rcx], eax
   mov rax, QWORD PTR [rbp-214]
   mov QWORD PTR [rbp-9642], rax
+.loc 1 889 0
   mov QWORD PTR [rbp-9650], 36
   mov rax, QWORD PTR [rbp-9642]
   add rax, QWORD PTR [rbp-9650]
   mov QWORD PTR [rbp-9658], rax
-.loc 1 887 0
+  mov QWORD PTR [rbp-9666], 0
+  mov rax, QWORD PTR [rbp-9666]
   mov rcx, QWORD PTR [rbp-9658]
-  mov DWORD PTR [rcx], 0
-.loc 1 886 0
-.loc 1 779 0
+  mov DWORD PTR [rcx], eax
+.loc 1 782 0
   jmp .L195
 .L194:
-.loc 1 887 0
+.loc 1 889 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-9698], rax
   mov QWORD PTR [rbp-9706], 65
@@ -14603,27 +14898,25 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9690]
   test rax, rax
   jnz .L412
+.loc 1 890 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-9754], rax
-.loc 1 888 0
   mov QWORD PTR [rbp-9762], 97
-.loc 1 887 0
   mov rax, QWORD PTR [rbp-9754]
   cmp rax, QWORD PTR [rbp-9762]
   jb .L416
-.loc 1 888 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-9778], rax
   mov QWORD PTR [rbp-9786], 122
   mov rax, QWORD PTR [rbp-9778]
   cmp rax, QWORD PTR [rbp-9786]
   ja .L416
-.loc 1 887 0
   mov QWORD PTR [rbp-9746], 1
   jmp .L417
 .L416:
   mov QWORD PTR [rbp-9746], 0
 .L417:
+.loc 1 889 0
   mov rax, QWORD PTR [rbp-9746]
   test rax, rax
   jnz .L412
@@ -14635,14 +14928,14 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9682]
   test rax, rax
   jnz .L410
-.loc 1 888 0
+.loc 1 890 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-9802], rax
   mov QWORD PTR [rbp-9810], 95
   mov rax, QWORD PTR [rbp-9802]
   cmp rax, QWORD PTR [rbp-9810]
   je .L410
-.loc 1 887 0
+.loc 1 889 0
   mov QWORD PTR [rbp-9674], 0
   jmp .L411
 .L410:
@@ -14651,12 +14944,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9674]
   test rax, rax
   jz .L408
-.loc 1 888 0
+.loc 1 891 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-9826], rax
+.loc 1 890 0
   mov rax, QWORD PTR [rbp-9826]
   mov QWORD PTR [rbp-222], rax
-.loc 1 889 0
+.loc 1 891 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-9834], rax
   mov rax, QWORD PTR [rbp-92]
@@ -14678,18 +14972,18 @@ _caustic_assembler_lexer_cst_tokenize:
   jge .L420
   lea rax, [rip+_caustic_assembler_lexer_cst_char_tab]
   mov QWORD PTR [rbp-9898], rax
+.loc 1 896 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-9906], rax
-.loc 1 890 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-9914], rax
-.loc 1 889 0
   mov rax, QWORD PTR [rbp-9906]
   add rax, QWORD PTR [rbp-9914]
   mov QWORD PTR [rbp-9922], rax
   mov rax, QWORD PTR [rbp-9922]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-9930], rax
+.loc 1 891 0
   mov rax, QWORD PTR [rbp-9930]
   movsxd rax, eax
   mov QWORD PTR [rbp-9938], rax
@@ -14699,9 +14993,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9946]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-9954], rax
-.loc 1 890 0
+.loc 1 896 0
   mov QWORD PTR [rbp-9962], 0
-.loc 1 889 0
+.loc 1 891 0
   mov rax, QWORD PTR [rbp-9954]
   cmp rax, QWORD PTR [rbp-9962]
   je .L420
@@ -14713,22 +15007,24 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-9866]
   test rax, rax
   jz .L419
-.loc 1 890 0
+.loc 1 896 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-9978], rax
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-9986], rax
+.loc 1 897 0
   mov QWORD PTR [rbp-9994], 1
+.loc 1 896 0
   mov rax, QWORD PTR [rbp-9986]
   add rax, QWORD PTR [rbp-9994]
   mov QWORD PTR [rbp-10002], rax
   mov rax, QWORD PTR [rbp-10002]
   mov rcx, QWORD PTR [rbp-9978]
   mov QWORD PTR [rcx], rax
-.loc 1 889 0
+.loc 1 891 0
   jmp .L418
 .L419:
-.loc 1 891 0
+.loc 1 898 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-10010], rax
   mov rax, QWORD PTR [rbp-222]
@@ -14736,13 +15032,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10010]
   sub rax, QWORD PTR [rbp-10018]
   mov QWORD PTR [rbp-10026], rax
+.loc 1 897 0
   mov rax, QWORD PTR [rbp-10026]
   movsxd rax, eax
   mov QWORD PTR [rbp-10034], rax
-.loc 1 890 0
   mov rax, QWORD PTR [rbp-10034]
   mov DWORD PTR [rbp-226], eax
-.loc 1 896 0
+.loc 1 899 0
   mov rax, QWORD PTR [rbp-112]
   mov QWORD PTR [rbp-10042], rax
   mov rax, QWORD PTR [rbp-222]
@@ -14750,20 +15046,19 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10042]
   add rax, QWORD PTR [rbp-10050]
   mov QWORD PTR [rbp-10058], rax
-.loc 1 892 0
   mov rax, QWORD PTR [rbp-10058]
   mov QWORD PTR [rbp-10066], rax
-.loc 1 891 0
+.loc 1 898 0
   mov rax, QWORD PTR [rbp-10066]
   mov QWORD PTR [rbp-234], rax
-.loc 1 896 0
+.loc 1 900 0
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-10074], rax
   mov QWORD PTR [rbp-10082], 9
   mov rax, QWORD PTR [rbp-10074]
   cmp rax, QWORD PTR [rbp-10082]
   jg .L422
-.loc 1 897 0
+.loc 1 901 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-10098], rax
   mov QWORD PTR [rbp-10106], 6
@@ -14775,6 +15070,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10098]
   add rax, QWORD PTR [rbp-10122]
   mov QWORD PTR [rbp-10130], rax
+.loc 1 902 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-10138], rax
   mov QWORD PTR [rbp-10146], 6
@@ -14789,17 +15085,20 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10170]
   mov rax, QWORD PTR [rax]
   mov QWORD PTR [rbp-10178], rax
+.loc 1 903 0
   mov QWORD PTR [rbp-10186], 1
+.loc 1 902 0
   mov rax, QWORD PTR [rbp-10178]
   add rax, QWORD PTR [rbp-10186]
   mov QWORD PTR [rbp-10194], rax
+.loc 1 901 0
   mov rax, QWORD PTR [rbp-10194]
   mov rcx, QWORD PTR [rbp-10130]
   mov QWORD PTR [rcx], rax
-.loc 1 896 0
+.loc 1 900 0
   jmp .L423
 .L422:
-.loc 1 898 0
+.loc 1 906 0
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-10202], rax
   mov QWORD PTR [rbp-10210], 7
@@ -14813,7 +15112,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov QWORD PTR [rbp-10234], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_tok_prof_counts]
   mov QWORD PTR [rbp-10242], rax
+.loc 1 907 0
   mov QWORD PTR [rbp-10250], 7
+.loc 1 906 0
   mov QWORD PTR [rbp-10258], 3
   mov rax, QWORD PTR [rbp-10250]
   mov rcx, QWORD PTR [rbp-10258]
@@ -14825,9 +15126,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10274]
   mov rax, QWORD PTR [rax]
   mov QWORD PTR [rbp-10282], rax
-.loc 1 899 0
+.loc 1 907 0
   mov QWORD PTR [rbp-10290], 1
-.loc 1 898 0
+.loc 1 906 0
   mov rax, QWORD PTR [rbp-10282]
   add rax, QWORD PTR [rbp-10290]
   mov QWORD PTR [rbp-10298], rax
@@ -14835,7 +15136,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rcx, QWORD PTR [rbp-10234]
   mov QWORD PTR [rcx], rax
 .L423:
-.loc 1 899 0
+.loc 1 907 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-10330], rax
   mov QWORD PTR [rbp-10338], 66
@@ -14844,9 +15145,7 @@ _caustic_assembler_lexer_cst_tokenize:
   jb .L430
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-10354], rax
-.loc 1 900 0
   mov QWORD PTR [rbp-10362], 87
-.loc 1 899 0
   mov rax, QWORD PTR [rbp-10354]
   cmp rax, QWORD PTR [rbp-10362]
   ja .L430
@@ -14858,16 +15157,14 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10322]
   test rax, rax
   jz .L428
-.loc 1 900 0
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-10378], rax
-.loc 1 901 0
+.loc 1 908 0
   mov QWORD PTR [rbp-10386], 4
-.loc 1 900 0
+.loc 1 907 0
   mov rax, QWORD PTR [rbp-10378]
   cmp rax, QWORD PTR [rbp-10386]
   jl .L428
-.loc 1 899 0
   mov QWORD PTR [rbp-10314], 1
   jmp .L429
 .L428:
@@ -14876,14 +15173,14 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10314]
   test rax, rax
   jz .L426
-.loc 1 901 0
+.loc 1 908 0
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-10402], rax
   mov QWORD PTR [rbp-10410], 5
   mov rax, QWORD PTR [rbp-10402]
   cmp rax, QWORD PTR [rbp-10410]
   jg .L426
-.loc 1 899 0
+.loc 1 907 0
   mov QWORD PTR [rbp-10306], 1
   jmp .L427
 .L426:
@@ -14892,10 +15189,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10306]
   test rax, rax
   jz .L424
-.loc 1 906 0
-  mov DWORD PTR [rbp-238], 0
-.loc 1 902 0
-.loc 1 906 0
+.loc 1 908 0
+  mov QWORD PTR [rbp-10426], 0
+  mov rax, QWORD PTR [rbp-10426]
+  mov DWORD PTR [rbp-238], eax
+.loc 1 910 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-10474], rax
   mov QWORD PTR [rbp-10482], 81
@@ -14904,9 +15202,7 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L442
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-10498], rax
-.loc 1 907 0
   mov QWORD PTR [rbp-10506], 5
-.loc 1 906 0
   mov rax, QWORD PTR [rbp-10498]
   cmp rax, QWORD PTR [rbp-10506]
   jne .L442
@@ -14918,9 +15214,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10466]
   test rax, rax
   jz .L440
-.loc 1 907 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-10522], rax
+.loc 1 911 0
   mov QWORD PTR [rbp-10530], 1
   mov rax, QWORD PTR [rbp-10522]
   add rax, QWORD PTR [rbp-10530]
@@ -14932,7 +15228,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10546]
   cmp rax, QWORD PTR [rbp-10554]
   jne .L440
-.loc 1 906 0
+.loc 1 910 0
   mov QWORD PTR [rbp-10458], 1
   jmp .L441
 .L440:
@@ -14941,7 +15237,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10458]
   test rax, rax
   jz .L438
-.loc 1 907 0
+.loc 1 911 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-10570], rax
   mov QWORD PTR [rbp-10578], 2
@@ -14955,7 +15251,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10594]
   cmp rax, QWORD PTR [rbp-10602]
   jne .L438
-.loc 1 906 0
+.loc 1 910 0
   mov QWORD PTR [rbp-10450], 1
   jmp .L439
 .L438:
@@ -14964,7 +15260,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10450]
   test rax, rax
   jz .L436
-.loc 1 908 0
+.loc 1 911 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-10618], rax
   mov QWORD PTR [rbp-10626], 3
@@ -14974,11 +15270,13 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10634]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-10642], rax
+.loc 1 912 0
   mov QWORD PTR [rbp-10650], 82
+.loc 1 911 0
   mov rax, QWORD PTR [rbp-10642]
   cmp rax, QWORD PTR [rbp-10650]
   jne .L436
-.loc 1 906 0
+.loc 1 910 0
   mov QWORD PTR [rbp-10442], 1
   jmp .L437
 .L436:
@@ -14987,7 +15285,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10442]
   test rax, rax
   jz .L434
-.loc 1 908 0
+.loc 1 912 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-10666], rax
   mov QWORD PTR [rbp-10674], 4
@@ -15001,24 +15299,27 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10690]
   cmp rax, QWORD PTR [rbp-10698]
   jne .L434
-.loc 1 906 0
+.loc 1 910 0
   mov QWORD PTR [rbp-10434], 1
   jmp .L435
 .L434:
   mov QWORD PTR [rbp-10434], 0
 .L435:
+.loc 1 908 0
   mov rax, QWORD PTR [rbp-10434]
   test rax, rax
   jz .L432
-.loc 1 908 0
+.loc 1 912 0
   lea rax, [rbp-238]
   mov QWORD PTR [rbp-10714], rax
+  mov QWORD PTR [rbp-10722], 64
+  mov rax, QWORD PTR [rbp-10722]
   mov rcx, QWORD PTR [rbp-10714]
-  mov DWORD PTR [rcx], 64
-.loc 1 906 0
+  mov DWORD PTR [rcx], eax
+.loc 1 908 0
   jmp .L433
 .L432:
-.loc 1 910 0
+.loc 1 913 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-10770], rax
   mov QWORD PTR [rbp-10778], 68
@@ -15027,9 +15328,7 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L454
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-10794], rax
-.loc 1 911 0
   mov QWORD PTR [rbp-10802], 5
-.loc 1 910 0
   mov rax, QWORD PTR [rbp-10794]
   cmp rax, QWORD PTR [rbp-10802]
   jne .L454
@@ -15041,7 +15340,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10762]
   test rax, rax
   jz .L452
-.loc 1 911 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-10818], rax
   mov QWORD PTR [rbp-10826], 1
@@ -15055,7 +15353,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10842]
   cmp rax, QWORD PTR [rbp-10850]
   jne .L452
-.loc 1 910 0
   mov QWORD PTR [rbp-10754], 1
   jmp .L453
 .L452:
@@ -15064,7 +15361,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10754]
   test rax, rax
   jz .L450
-.loc 1 911 0
+.loc 1 915 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-10866], rax
   mov QWORD PTR [rbp-10874], 2
@@ -15078,7 +15375,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10890]
   cmp rax, QWORD PTR [rbp-10898]
   jne .L450
-.loc 1 910 0
+.loc 1 913 0
   mov QWORD PTR [rbp-10746], 1
   jmp .L451
 .L450:
@@ -15087,22 +15384,25 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10746]
   test rax, rax
   jz .L448
-.loc 1 911 0
+.loc 1 915 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-10914], rax
-.loc 1 912 0
+.loc 1 916 0
   mov QWORD PTR [rbp-10922], 3
+.loc 1 915 0
   mov rax, QWORD PTR [rbp-10914]
   add rax, QWORD PTR [rbp-10922]
   mov QWORD PTR [rbp-10930], rax
   mov rax, QWORD PTR [rbp-10930]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-10938], rax
+.loc 1 916 0
   mov QWORD PTR [rbp-10946], 82
+.loc 1 915 0
   mov rax, QWORD PTR [rbp-10938]
   cmp rax, QWORD PTR [rbp-10946]
   jne .L448
-.loc 1 910 0
+.loc 1 913 0
   mov QWORD PTR [rbp-10738], 1
   jmp .L449
 .L448:
@@ -15111,7 +15411,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10738]
   test rax, rax
   jz .L446
-.loc 1 912 0
+.loc 1 916 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-10962], rax
   mov QWORD PTR [rbp-10970], 4
@@ -15125,7 +15425,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10986]
   cmp rax, QWORD PTR [rbp-10994]
   jne .L446
-.loc 1 910 0
+.loc 1 913 0
   mov QWORD PTR [rbp-10730], 1
   jmp .L447
 .L446:
@@ -15134,27 +15434,35 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-10730]
   test rax, rax
   jz .L444
-.loc 1 913 0
+.loc 1 916 0
   lea rax, [rbp-238]
   mov QWORD PTR [rbp-11010], rax
+.loc 1 917 0
+  mov QWORD PTR [rbp-11018], 32
+.loc 1 916 0
+  mov rax, QWORD PTR [rbp-11018]
   mov rcx, QWORD PTR [rbp-11010]
-  mov DWORD PTR [rcx], 32
-.loc 1 910 0
+  mov DWORD PTR [rcx], eax
+.loc 1 913 0
   jmp .L445
 .L444:
-.loc 1 913 0
+.loc 1 917 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-11058], rax
+.loc 1 918 0
   mov QWORD PTR [rbp-11066], 87
+.loc 1 917 0
   mov rax, QWORD PTR [rbp-11058]
   cmp rax, QWORD PTR [rbp-11066]
   jne .L464
+.loc 1 918 0
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-11082], rax
   mov QWORD PTR [rbp-11090], 4
   mov rax, QWORD PTR [rbp-11082]
   cmp rax, QWORD PTR [rbp-11090]
   jne .L464
+.loc 1 917 0
   mov QWORD PTR [rbp-11050], 1
   jmp .L465
 .L464:
@@ -15163,6 +15471,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11050]
   test rax, rax
   jz .L462
+.loc 1 918 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-11106], rax
   mov QWORD PTR [rbp-11114], 1
@@ -15172,12 +15481,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11122]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-11130], rax
-.loc 1 915 0
   mov QWORD PTR [rbp-11138], 79
-.loc 1 913 0
   mov rax, QWORD PTR [rbp-11130]
   cmp rax, QWORD PTR [rbp-11138]
   jne .L462
+.loc 1 917 0
   mov QWORD PTR [rbp-11042], 1
   jmp .L463
 .L462:
@@ -15186,7 +15494,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11042]
   test rax, rax
   jz .L460
-.loc 1 915 0
+.loc 1 918 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-11154], rax
   mov QWORD PTR [rbp-11162], 2
@@ -15200,7 +15508,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11178]
   cmp rax, QWORD PTR [rbp-11186]
   jne .L460
-.loc 1 913 0
+.loc 1 917 0
   mov QWORD PTR [rbp-11034], 1
   jmp .L461
 .L460:
@@ -15209,7 +15517,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11034]
   test rax, rax
   jz .L458
-.loc 1 916 0
+.loc 1 920 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-11202], rax
   mov QWORD PTR [rbp-11210], 3
@@ -15223,7 +15531,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11226]
   cmp rax, QWORD PTR [rbp-11234]
   jne .L458
-.loc 1 913 0
+.loc 1 917 0
   mov QWORD PTR [rbp-11026], 1
   jmp .L459
 .L458:
@@ -15232,15 +15540,19 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11026]
   test rax, rax
   jz .L456
-.loc 1 916 0
+.loc 1 920 0
   lea rax, [rbp-238]
   mov QWORD PTR [rbp-11250], rax
+.loc 1 921 0
+  mov QWORD PTR [rbp-11258], 16
+.loc 1 920 0
+  mov rax, QWORD PTR [rbp-11258]
   mov rcx, QWORD PTR [rbp-11250]
-  mov DWORD PTR [rcx], 16
-.loc 1 913 0
+  mov DWORD PTR [rcx], eax
+.loc 1 917 0
   jmp .L457
 .L456:
-.loc 1 917 0
+.loc 1 921 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-11298], rax
   mov QWORD PTR [rbp-11306], 66
@@ -15249,9 +15561,7 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L474
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-11322], rax
-.loc 1 918 0
   mov QWORD PTR [rbp-11330], 4
-.loc 1 917 0
   mov rax, QWORD PTR [rbp-11322]
   cmp rax, QWORD PTR [rbp-11330]
   jne .L474
@@ -15263,7 +15573,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11290]
   test rax, rax
   jz .L472
-.loc 1 918 0
+.loc 1 922 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-11346], rax
   mov QWORD PTR [rbp-11354], 1
@@ -15277,7 +15587,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11370]
   cmp rax, QWORD PTR [rbp-11378]
   jne .L472
-.loc 1 917 0
+.loc 1 921 0
   mov QWORD PTR [rbp-11282], 1
   jmp .L473
 .L472:
@@ -15286,7 +15596,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11282]
   test rax, rax
   jz .L470
-.loc 1 918 0
+.loc 1 922 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-11394], rax
   mov QWORD PTR [rbp-11402], 2
@@ -15300,7 +15610,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11418]
   cmp rax, QWORD PTR [rbp-11426]
   jne .L470
-.loc 1 917 0
+.loc 1 921 0
   mov QWORD PTR [rbp-11274], 1
   jmp .L471
 .L470:
@@ -15309,9 +15619,10 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11274]
   test rax, rax
   jz .L468
-.loc 1 918 0
+.loc 1 922 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-11442], rax
+.loc 1 923 0
   mov QWORD PTR [rbp-11450], 3
   mov rax, QWORD PTR [rbp-11442]
   add rax, QWORD PTR [rbp-11450]
@@ -15319,13 +15630,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11458]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-11466], rax
-.loc 1 920 0
   mov QWORD PTR [rbp-11474], 69
-.loc 1 918 0
   mov rax, QWORD PTR [rbp-11466]
   cmp rax, QWORD PTR [rbp-11474]
   jne .L468
-.loc 1 917 0
+.loc 1 921 0
   mov QWORD PTR [rbp-11266], 1
   jmp .L469
 .L468:
@@ -15334,31 +15643,37 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11266]
   test rax, rax
   jz .L466
-.loc 1 920 0
+.loc 1 923 0
   lea rax, [rbp-238]
   mov QWORD PTR [rbp-11490], rax
+  mov QWORD PTR [rbp-11498], 8
+  mov rax, QWORD PTR [rbp-11498]
   mov rcx, QWORD PTR [rbp-11490]
-  mov DWORD PTR [rcx], 8
-.loc 1 917 0
+  mov DWORD PTR [rcx], eax
+.loc 1 921 0
   jmp .L467
 .L466:
 .L467:
 .L457:
 .L445:
 .L433:
-.loc 1 921 0
+.loc 1 923 0
   movsxd rax, DWORD PTR [rbp-238]
   mov QWORD PTR [rbp-11506], rax
+.loc 1 924 0
   mov QWORD PTR [rbp-11514], 0
+.loc 1 923 0
   mov rax, QWORD PTR [rbp-11506]
   cmp rax, QWORD PTR [rbp-11514]
   jle .L476
+.loc 1 925 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-11530], rax
+.loc 1 924 0
   mov rax, QWORD PTR [rbp-11530]
   mov QWORD PTR [rbp-246], rax
 .L478:
-.loc 1 922 0
+.loc 1 925 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-11546], rax
   mov rax, QWORD PTR [rbp-64]
@@ -15388,22 +15703,22 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11538]
   test rax, rax
   jz .L479
+.loc 1 926 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-11618], rax
-.loc 1 923 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-11626], rax
   mov QWORD PTR [rbp-11634], 1
   mov rax, QWORD PTR [rbp-11626]
   add rax, QWORD PTR [rbp-11634]
   mov QWORD PTR [rbp-11642], rax
-.loc 1 922 0
   mov rax, QWORD PTR [rbp-11642]
   mov rcx, QWORD PTR [rbp-11618]
   mov QWORD PTR [rcx], rax
+.loc 1 925 0
   jmp .L478
 .L479:
-.loc 1 923 0
+.loc 1 926 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-11674], rax
   mov QWORD PTR [rbp-11682], 3
@@ -15417,7 +15732,6 @@ _caustic_assembler_lexer_cst_tokenize:
   jg .L488
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-11714], rax
-.loc 1 924 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-11722], rax
   mov rax, QWORD PTR [rbp-11714]
@@ -15430,7 +15744,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11738]
   cmp rax, QWORD PTR [rbp-11746]
   jne .L488
-.loc 1 923 0
   mov QWORD PTR [rbp-11666], 1
   jmp .L489
 .L488:
@@ -15439,14 +15752,12 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11666]
   test rax, rax
   jz .L486
-.loc 1 924 0
+.loc 1 927 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-11762], rax
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-11770], rax
-.loc 1 925 0
   mov QWORD PTR [rbp-11778], 1
-.loc 1 924 0
   mov rax, QWORD PTR [rbp-11770]
   add rax, QWORD PTR [rbp-11778]
   mov QWORD PTR [rbp-11786], rax
@@ -15456,13 +15767,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11794]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-11802], rax
-.loc 1 925 0
   mov QWORD PTR [rbp-11810], 84
-.loc 1 924 0
   mov rax, QWORD PTR [rbp-11802]
   cmp rax, QWORD PTR [rbp-11810]
   jne .L486
-.loc 1 923 0
+.loc 1 926 0
   mov QWORD PTR [rbp-11658], 1
   jmp .L487
 .L486:
@@ -15471,7 +15780,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11658]
   test rax, rax
   jz .L484
-.loc 1 925 0
+.loc 1 927 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-11826], rax
   mov rax, QWORD PTR [rbp-92]
@@ -15490,7 +15799,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11866]
   cmp rax, QWORD PTR [rbp-11874]
   jne .L484
-.loc 1 923 0
+.loc 1 926 0
   mov QWORD PTR [rbp-11650], 1
   jmp .L485
 .L484:
@@ -15499,7 +15808,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-11650]
   test rax, rax
   jz .L482
-.loc 1 926 0
+.loc 1 929 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-11890], rax
   mov rax, QWORD PTR [rbp-92]
@@ -15512,43 +15821,47 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rcx, QWORD PTR [rbp-11890]
   mov QWORD PTR [rcx], rax
   xor r10, r10
+.loc 1 930 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-11922], rax
   mov rdi, QWORD PTR [rbp-11922]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-11930], rax
+.loc 1 929 0
   mov rax, QWORD PTR [rbp-11930]
   mov QWORD PTR [rbp-254], rax
+.loc 1 930 0
   mov rax, QWORD PTR [rbp-254]
   mov QWORD PTR [rbp-11938], rax
-.loc 1 927 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_SIZE_PREFIX]
   mov QWORD PTR [rbp-11954], rax
   mov rax, QWORD PTR [rbp-11954]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-11946], rax
-.loc 1 926 0
   mov rax, QWORD PTR [rbp-11946]
   mov rcx, QWORD PTR [rbp-11938]
   mov DWORD PTR [rcx], eax
-.loc 1 927 0
   mov rax, QWORD PTR [rbp-254]
   mov QWORD PTR [rbp-11962], rax
   mov QWORD PTR [rbp-11970], 4
   mov rax, QWORD PTR [rbp-11962]
   add rax, QWORD PTR [rbp-11970]
   mov QWORD PTR [rbp-11978], rax
+.loc 1 931 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-11986], rax
+.loc 1 930 0
   mov rax, QWORD PTR [rbp-11986]
   mov rcx, QWORD PTR [rbp-11978]
   mov QWORD PTR [rcx], rax
+.loc 1 931 0
   mov rax, QWORD PTR [rbp-254]
   mov QWORD PTR [rbp-11994], rax
   mov QWORD PTR [rbp-12002], 12
   mov rax, QWORD PTR [rbp-11994]
   add rax, QWORD PTR [rbp-12002]
   mov QWORD PTR [rbp-12010], rax
+.loc 1 933 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-12018], rax
   mov rax, QWORD PTR [rbp-222]
@@ -15556,13 +15869,15 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12018]
   sub rax, QWORD PTR [rbp-12026]
   mov QWORD PTR [rbp-12034], rax
+.loc 1 932 0
   mov rax, QWORD PTR [rbp-12034]
   movsxd rax, eax
   mov QWORD PTR [rbp-12042], rax
+.loc 1 931 0
   mov rax, QWORD PTR [rbp-12042]
   mov rcx, QWORD PTR [rbp-12010]
   mov DWORD PTR [rcx], eax
-.loc 1 929 0
+.loc 1 934 0
   mov rax, QWORD PTR [rbp-254]
   mov QWORD PTR [rbp-12050], rax
   mov QWORD PTR [rbp-12058], 16
@@ -15574,17 +15889,20 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12074]
   mov rcx, QWORD PTR [rbp-12066]
   mov DWORD PTR [rcx], eax
+.loc 1 935 0
   mov rax, QWORD PTR [rbp-254]
   mov QWORD PTR [rbp-12082], rax
   mov QWORD PTR [rbp-12090], 20
   mov rax, QWORD PTR [rbp-12082]
   add rax, QWORD PTR [rbp-12090]
   mov QWORD PTR [rbp-12098], rax
-.loc 1 930 0
+.loc 1 937 0
+  mov QWORD PTR [rbp-12106], 0
+.loc 1 935 0
+  mov rax, QWORD PTR [rbp-12106]
   mov rcx, QWORD PTR [rbp-12098]
-  mov QWORD PTR [rcx], 0
-.loc 1 929 0
-.loc 1 930 0
+  mov QWORD PTR [rcx], rax
+.loc 1 937 0
   mov rax, QWORD PTR [rbp-254]
   mov QWORD PTR [rbp-12114], rax
   mov QWORD PTR [rbp-12122], 28
@@ -15605,34 +15923,29 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12154]
   add rax, QWORD PTR [rbp-12162]
   mov QWORD PTR [rbp-12170], rax
-.loc 1 931 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
   mov QWORD PTR [rbp-12186], rax
   mov rax, QWORD PTR [rbp-12186]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-12178], rax
-.loc 1 930 0
   mov rax, QWORD PTR [rbp-12178]
   mov rcx, QWORD PTR [rbp-12170]
   mov DWORD PTR [rcx], eax
-.loc 1 931 0
   mov rax, QWORD PTR [rbp-254]
   mov QWORD PTR [rbp-12194], rax
   mov QWORD PTR [rbp-12202], 36
   mov rax, QWORD PTR [rbp-12194]
   add rax, QWORD PTR [rbp-12202]
   mov QWORD PTR [rbp-12210], rax
-.loc 1 932 0
   movsxd rax, DWORD PTR [rbp-238]
   mov QWORD PTR [rbp-12218], rax
-.loc 1 931 0
   mov rax, QWORD PTR [rbp-12218]
   mov rcx, QWORD PTR [rbp-12210]
   mov DWORD PTR [rcx], eax
-.loc 1 923 0
+.loc 1 926 0
   jmp .L483
 .L482:
-.loc 1 933 0
+.loc 1 938 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-12226], rax
   mov rax, QWORD PTR [rbp-246]
@@ -15640,18 +15953,15 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12234]
   mov rcx, QWORD PTR [rbp-12226]
   mov QWORD PTR [rcx], rax
+.loc 1 939 0
   xor r10, r10
-.loc 1 937 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-12242], rax
-.loc 1 935 0
   mov rdi, QWORD PTR [rbp-12242]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-12250], rax
-.loc 1 933 0
   mov rax, QWORD PTR [rbp-12250]
   mov QWORD PTR [rbp-262], rax
-.loc 1 937 0
   mov rax, QWORD PTR [rbp-262]
   mov QWORD PTR [rbp-12258], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
@@ -15662,55 +15972,59 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12266]
   mov rcx, QWORD PTR [rbp-12258]
   mov DWORD PTR [rcx], eax
+.loc 1 940 0
   mov rax, QWORD PTR [rbp-262]
   mov QWORD PTR [rbp-12282], rax
   mov QWORD PTR [rbp-12290], 4
   mov rax, QWORD PTR [rbp-12282]
   add rax, QWORD PTR [rbp-12290]
   mov QWORD PTR [rbp-12298], rax
+.loc 1 945 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-12306], rax
+.loc 1 940 0
   mov rax, QWORD PTR [rbp-12306]
   mov rcx, QWORD PTR [rbp-12298]
   mov QWORD PTR [rcx], rax
+.loc 1 945 0
   mov rax, QWORD PTR [rbp-262]
   mov QWORD PTR [rbp-12314], rax
   mov QWORD PTR [rbp-12322], 12
   mov rax, QWORD PTR [rbp-12314]
   add rax, QWORD PTR [rbp-12322]
   mov QWORD PTR [rbp-12330], rax
+.loc 1 946 0
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-12338], rax
+.loc 1 945 0
   mov rax, QWORD PTR [rbp-12338]
   mov rcx, QWORD PTR [rbp-12330]
   mov DWORD PTR [rcx], eax
+.loc 1 946 0
   mov rax, QWORD PTR [rbp-262]
   mov QWORD PTR [rbp-12346], rax
   mov QWORD PTR [rbp-12354], 16
   mov rax, QWORD PTR [rbp-12346]
   add rax, QWORD PTR [rbp-12354]
   mov QWORD PTR [rbp-12362], rax
-.loc 1 938 0
   movsxd rax, DWORD PTR [rbp-96]
   mov QWORD PTR [rbp-12370], rax
-.loc 1 937 0
   mov rax, QWORD PTR [rbp-12370]
   mov rcx, QWORD PTR [rbp-12362]
   mov DWORD PTR [rcx], eax
-.loc 1 938 0
   mov rax, QWORD PTR [rbp-262]
   mov QWORD PTR [rbp-12378], rax
   mov QWORD PTR [rbp-12386], 20
   mov rax, QWORD PTR [rbp-12378]
   add rax, QWORD PTR [rbp-12386]
   mov QWORD PTR [rbp-12394], rax
-.loc 1 939 0
+  mov QWORD PTR [rbp-12402], 0
+  mov rax, QWORD PTR [rbp-12402]
   mov rcx, QWORD PTR [rbp-12394]
-  mov QWORD PTR [rcx], 0
-.loc 1 938 0
-.loc 1 939 0
+  mov QWORD PTR [rcx], rax
   mov rax, QWORD PTR [rbp-262]
   mov QWORD PTR [rbp-12410], rax
+.loc 1 947 0
   mov QWORD PTR [rbp-12418], 28
   mov rax, QWORD PTR [rbp-12410]
   add rax, QWORD PTR [rbp-12418]
@@ -15737,48 +16051,46 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12474]
   mov rcx, QWORD PTR [rbp-12466]
   mov DWORD PTR [rcx], eax
+.loc 1 948 0
   mov rax, QWORD PTR [rbp-262]
   mov QWORD PTR [rbp-12490], rax
-.loc 1 940 0
   mov QWORD PTR [rbp-12498], 36
   mov rax, QWORD PTR [rbp-12490]
   add rax, QWORD PTR [rbp-12498]
   mov QWORD PTR [rbp-12506], rax
-.loc 1 941 0
+  mov QWORD PTR [rbp-12514], 0
+  mov rax, QWORD PTR [rbp-12514]
   mov rcx, QWORD PTR [rbp-12506]
-  mov DWORD PTR [rcx], 0
-.loc 1 940 0
+  mov DWORD PTR [rcx], eax
 .L483:
-.loc 1 921 0
+.loc 1 923 0
   jmp .L477
 .L476:
-.loc 1 945 0
+.loc 1 948 0
   xor r10, r10
-.loc 1 946 0
+.loc 1 949 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-12522], rax
   mov rdi, QWORD PTR [rbp-12522]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-12530], rax
-.loc 1 945 0
+.loc 1 948 0
   mov rax, QWORD PTR [rbp-12530]
   mov QWORD PTR [rbp-270], rax
-.loc 1 946 0
+.loc 1 949 0
   mov rax, QWORD PTR [rbp-270]
   mov QWORD PTR [rbp-12538], rax
-.loc 1 947 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
   mov QWORD PTR [rbp-12554], rax
   mov rax, QWORD PTR [rbp-12554]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-12546], rax
-.loc 1 946 0
   mov rax, QWORD PTR [rbp-12546]
   mov rcx, QWORD PTR [rbp-12538]
   mov DWORD PTR [rcx], eax
-.loc 1 947 0
   mov rax, QWORD PTR [rbp-270]
   mov QWORD PTR [rbp-12562], rax
+.loc 1 950 0
   mov QWORD PTR [rbp-12570], 4
   mov rax, QWORD PTR [rbp-12562]
   add rax, QWORD PTR [rbp-12570]
@@ -15801,41 +16113,43 @@ _caustic_assembler_lexer_cst_tokenize:
   mov DWORD PTR [rcx], eax
   mov rax, QWORD PTR [rbp-270]
   mov QWORD PTR [rbp-12626], rax
-.loc 1 948 0
   mov QWORD PTR [rbp-12634], 16
   mov rax, QWORD PTR [rbp-12626]
   add rax, QWORD PTR [rbp-12634]
   mov QWORD PTR [rbp-12642], rax
+.loc 1 951 0
   movsxd rax, DWORD PTR [rbp-96]
   mov QWORD PTR [rbp-12650], rax
+.loc 1 950 0
   mov rax, QWORD PTR [rbp-12650]
   mov rcx, QWORD PTR [rbp-12642]
   mov DWORD PTR [rcx], eax
+.loc 1 951 0
   mov rax, QWORD PTR [rbp-270]
   mov QWORD PTR [rbp-12658], rax
   mov QWORD PTR [rbp-12666], 20
   mov rax, QWORD PTR [rbp-12658]
   add rax, QWORD PTR [rbp-12666]
   mov QWORD PTR [rbp-12674], rax
+  mov QWORD PTR [rbp-12682], 0
+  mov rax, QWORD PTR [rbp-12682]
   mov rcx, QWORD PTR [rbp-12674]
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   mov rax, QWORD PTR [rbp-270]
   mov QWORD PTR [rbp-12690], rax
   mov QWORD PTR [rbp-12698], 28
   mov rax, QWORD PTR [rbp-12690]
   add rax, QWORD PTR [rbp-12698]
   mov QWORD PTR [rbp-12706], rax
-.loc 1 949 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov QWORD PTR [rbp-12722], rax
   mov rax, QWORD PTR [rbp-12722]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-12714], rax
-.loc 1 948 0
   mov rax, QWORD PTR [rbp-12714]
   mov rcx, QWORD PTR [rbp-12706]
   mov DWORD PTR [rcx], eax
-.loc 1 949 0
+.loc 1 952 0
   mov rax, QWORD PTR [rbp-270]
   mov QWORD PTR [rbp-12730], rax
   mov QWORD PTR [rbp-12738], 32
@@ -15856,15 +16170,15 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12770]
   add rax, QWORD PTR [rbp-12778]
   mov QWORD PTR [rbp-12786], rax
-.loc 1 950 0
+  mov QWORD PTR [rbp-12794], 0
+  mov rax, QWORD PTR [rbp-12794]
   mov rcx, QWORD PTR [rbp-12786]
-  mov DWORD PTR [rcx], 0
-.loc 1 949 0
+  mov DWORD PTR [rcx], eax
 .L477:
-.loc 1 899 0
+.loc 1 907 0
   jmp .L425
 .L424:
-.loc 1 950 0
+.loc 1 953 0
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-12810], rax
   mov QWORD PTR [rbp-12818], 9
@@ -15873,10 +16187,10 @@ _caustic_assembler_lexer_cst_tokenize:
   jg .L492
   lea rax, [rip+_caustic_assembler_lexer_cst_ri_first]
   mov QWORD PTR [rbp-12834], rax
-.loc 1 951 0
+.loc 1 954 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-12842], rax
-.loc 1 950 0
+.loc 1 953 0
   mov rax, QWORD PTR [rbp-12842]
   movsxd rax, eax
   mov QWORD PTR [rbp-12850], rax
@@ -15886,9 +16200,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12858]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-12866], rax
-.loc 1 951 0
+.loc 1 954 0
   mov QWORD PTR [rbp-12874], 0
-.loc 1 950 0
+.loc 1 953 0
   mov rax, QWORD PTR [rbp-12866]
   cmp rax, QWORD PTR [rbp-12874]
   je .L492
@@ -15900,21 +16214,19 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12802]
   test rax, rax
   jz .L490
-.loc 1 951 0
+.loc 1 957 0
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-12906], rax
   mov QWORD PTR [rbp-12914], 8
   mov rax, QWORD PTR [rbp-12906]
   cmp rax, QWORD PTR [rbp-12914]
   jne .L498
-.loc 1 952 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-12930], rax
   mov QWORD PTR [rbp-12938], 110
   mov rax, QWORD PTR [rbp-12930]
   cmp rax, QWORD PTR [rbp-12938]
   jne .L498
-.loc 1 951 0
   mov QWORD PTR [rbp-12898], 1
   jmp .L499
 .L498:
@@ -15923,7 +16235,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12898]
   test rax, rax
   jz .L496
-.loc 1 952 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-12954], rax
   mov QWORD PTR [rbp-12962], 1
@@ -15937,7 +16248,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-12978]
   cmp rax, QWORD PTR [rbp-12986]
   jne .L496
-.loc 1 951 0
   mov QWORD PTR [rbp-12890], 1
   jmp .L497
 .L496:
@@ -15948,7 +16258,7 @@ _caustic_assembler_lexer_cst_tokenize:
   jz .L494
   jmp .L495
 .L494:
-.loc 1 953 0
+.loc 1 958 0
   xor r10, r10
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-13002], rax
@@ -15959,19 +16269,19 @@ _caustic_assembler_lexer_cst_tokenize:
   mov QWORD PTR [rbp-278], rax
   mov rax, QWORD PTR [rbp-278]
   mov QWORD PTR [rbp-13018], rax
-.loc 1 954 0
+.loc 1 959 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
   mov QWORD PTR [rbp-13034], rax
   mov rax, QWORD PTR [rbp-13034]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-13026], rax
+.loc 1 958 0
   mov rax, QWORD PTR [rbp-13026]
   mov rcx, QWORD PTR [rbp-13018]
   mov DWORD PTR [rcx], eax
-.loc 1 955 0
+.loc 1 959 0
   mov rax, QWORD PTR [rbp-278]
   mov QWORD PTR [rbp-13042], rax
-.loc 1 957 0
   mov QWORD PTR [rbp-13050], 4
   mov rax, QWORD PTR [rbp-13042]
   add rax, QWORD PTR [rbp-13050]
@@ -15998,20 +16308,24 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13106]
   add rax, QWORD PTR [rbp-13114]
   mov QWORD PTR [rbp-13122], rax
+.loc 1 960 0
   movsxd rax, DWORD PTR [rbp-96]
   mov QWORD PTR [rbp-13130], rax
+.loc 1 959 0
   mov rax, QWORD PTR [rbp-13130]
   mov rcx, QWORD PTR [rbp-13122]
   mov DWORD PTR [rcx], eax
-.loc 1 958 0
+.loc 1 960 0
   mov rax, QWORD PTR [rbp-278]
   mov QWORD PTR [rbp-13138], rax
   mov QWORD PTR [rbp-13146], 20
   mov rax, QWORD PTR [rbp-13138]
   add rax, QWORD PTR [rbp-13146]
   mov QWORD PTR [rbp-13154], rax
+  mov QWORD PTR [rbp-13162], 0
+  mov rax, QWORD PTR [rbp-13162]
   mov rcx, QWORD PTR [rbp-13154]
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   mov rax, QWORD PTR [rbp-278]
   mov QWORD PTR [rbp-13170], rax
   mov QWORD PTR [rbp-13178], 28
@@ -16026,6 +16340,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13194]
   mov rcx, QWORD PTR [rbp-13186]
   mov DWORD PTR [rcx], eax
+.loc 1 961 0
   mov rax, QWORD PTR [rbp-278]
   mov QWORD PTR [rbp-13210], rax
   mov QWORD PTR [rbp-13218], 32
@@ -16040,22 +16355,22 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13234]
   mov rcx, QWORD PTR [rbp-13226]
   mov DWORD PTR [rcx], eax
-.loc 1 959 0
   mov rax, QWORD PTR [rbp-278]
   mov QWORD PTR [rbp-13250], rax
   mov QWORD PTR [rbp-13258], 36
   mov rax, QWORD PTR [rbp-13250]
   add rax, QWORD PTR [rbp-13258]
   mov QWORD PTR [rbp-13266], rax
+  mov QWORD PTR [rbp-13274], 0
+  mov rax, QWORD PTR [rbp-13274]
   mov rcx, QWORD PTR [rbp-13266]
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .L495:
-.loc 1 950 0
+.loc 1 953 0
   jmp .L491
 .L490:
-.loc 1 959 0
+.loc 1 962 0
   xor r10, r10
-.loc 1 960 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-13282], rax
   movsxd rax, DWORD PTR [rbp-226]
@@ -16064,10 +16379,9 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rsi, QWORD PTR [rbp-13290]
   call _caustic_assembler_lexer_cst_ht_lookup
   mov QWORD PTR [rbp-13298], rax
-.loc 1 959 0
   mov rax, QWORD PTR [rbp-13298]
   mov DWORD PTR [rbp-282], eax
-.loc 1 960 0
+.loc 1 963 0
   movsxd rax, DWORD PTR [rbp-282]
   mov QWORD PTR [rbp-13306], rax
   mov QWORD PTR [rbp-13314], 0
@@ -16076,20 +16390,16 @@ _caustic_assembler_lexer_cst_tokenize:
   jne .L500
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-13354], rax
-.loc 1 961 0
   mov QWORD PTR [rbp-13362], 3
-.loc 1 960 0
   mov rax, QWORD PTR [rbp-13354]
   cmp rax, QWORD PTR [rbp-13362]
   jne .L508
-.loc 1 961 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-13378], rax
   mov QWORD PTR [rbp-13386], 80
   mov rax, QWORD PTR [rbp-13378]
   cmp rax, QWORD PTR [rbp-13386]
   jne .L508
-.loc 1 960 0
   mov QWORD PTR [rbp-13346], 1
   jmp .L509
 .L508:
@@ -16098,7 +16408,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13346]
   test rax, rax
   jz .L506
-.loc 1 961 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-13402], rax
   mov QWORD PTR [rbp-13410], 1
@@ -16108,11 +16417,12 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13418]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-13426], rax
+.loc 1 964 0
   mov QWORD PTR [rbp-13434], 84
+.loc 1 963 0
   mov rax, QWORD PTR [rbp-13426]
   cmp rax, QWORD PTR [rbp-13434]
   jne .L506
-.loc 1 960 0
   mov QWORD PTR [rbp-13338], 1
   jmp .L507
 .L506:
@@ -16121,7 +16431,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13338]
   test rax, rax
   jz .L504
-.loc 1 961 0
+.loc 1 966 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-13450], rax
   mov QWORD PTR [rbp-13458], 2
@@ -16131,13 +16441,11 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13466]
   movzx rax, BYTE PTR [rax]
   mov QWORD PTR [rbp-13474], rax
-.loc 1 962 0
   mov QWORD PTR [rbp-13482], 82
-.loc 1 961 0
   mov rax, QWORD PTR [rbp-13474]
   cmp rax, QWORD PTR [rbp-13482]
   jne .L504
-.loc 1 960 0
+.loc 1 963 0
   mov QWORD PTR [rbp-13330], 1
   jmp .L505
 .L504:
@@ -16148,21 +16456,23 @@ _caustic_assembler_lexer_cst_tokenize:
   jz .L502
   jmp .L503
 .L502:
-.loc 1 962 0
+.loc 1 966 0
   movsxd rax, DWORD PTR [rbp-226]
   mov QWORD PTR [rbp-13514], rax
+.loc 1 967 0
   mov QWORD PTR [rbp-13522], 8
+.loc 1 966 0
   mov rax, QWORD PTR [rbp-13514]
   cmp rax, QWORD PTR [rbp-13522]
   jne .L514
+.loc 1 967 0
   movzx rax, BYTE PTR [rbp-113]
   mov QWORD PTR [rbp-13538], rax
-.loc 1 963 0
   mov QWORD PTR [rbp-13546], 110
-.loc 1 962 0
   mov rax, QWORD PTR [rbp-13538]
   cmp rax, QWORD PTR [rbp-13546]
   jne .L514
+.loc 1 966 0
   mov QWORD PTR [rbp-13506], 1
   jmp .L515
 .L514:
@@ -16171,7 +16481,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13506]
   test rax, rax
   jz .L512
-.loc 1 963 0
+.loc 1 968 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-13562], rax
   mov QWORD PTR [rbp-13570], 1
@@ -16185,7 +16495,7 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13586]
   cmp rax, QWORD PTR [rbp-13594]
   jne .L512
-.loc 1 962 0
+.loc 1 966 0
   mov QWORD PTR [rbp-13498], 1
   jmp .L513
 .L512:
@@ -16196,18 +16506,18 @@ _caustic_assembler_lexer_cst_tokenize:
   jz .L510
   jmp .L511
 .L510:
-.loc 1 963 0
+.loc 1 968 0
   xor r10, r10
-.loc 1 966 0
+.loc 1 972 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-13610], rax
-.loc 1 963 0
   mov rdi, QWORD PTR [rbp-13610]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-13618], rax
+.loc 1 968 0
   mov rax, QWORD PTR [rbp-13618]
   mov QWORD PTR [rbp-290], rax
-.loc 1 966 0
+.loc 1 972 0
   mov rax, QWORD PTR [rbp-290]
   mov QWORD PTR [rbp-13626], rax
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_IDENT]
@@ -16224,12 +16534,14 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13650]
   add rax, QWORD PTR [rbp-13658]
   mov QWORD PTR [rbp-13666], rax
+.loc 1 973 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-13674], rax
+.loc 1 972 0
   mov rax, QWORD PTR [rbp-13674]
   mov rcx, QWORD PTR [rbp-13666]
   mov QWORD PTR [rcx], rax
-.loc 1 967 0
+.loc 1 973 0
   mov rax, QWORD PTR [rbp-290]
   mov QWORD PTR [rbp-13682], rax
   mov QWORD PTR [rbp-13690], 12
@@ -16241,7 +16553,6 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13706]
   mov rcx, QWORD PTR [rbp-13698]
   mov DWORD PTR [rcx], eax
-.loc 1 968 0
   mov rax, QWORD PTR [rbp-290]
   mov QWORD PTR [rbp-13714], rax
   mov QWORD PTR [rbp-13722], 16
@@ -16259,26 +16570,28 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13746]
   add rax, QWORD PTR [rbp-13754]
   mov QWORD PTR [rbp-13762], rax
+.loc 1 976 0
+  mov QWORD PTR [rbp-13770], 0
+.loc 1 973 0
+  mov rax, QWORD PTR [rbp-13770]
   mov rcx, QWORD PTR [rbp-13762]
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
+.loc 1 976 0
   mov rax, QWORD PTR [rbp-290]
   mov QWORD PTR [rbp-13778], rax
-.loc 1 969 0
   mov QWORD PTR [rbp-13786], 28
   mov rax, QWORD PTR [rbp-13778]
   add rax, QWORD PTR [rbp-13786]
   mov QWORD PTR [rbp-13794], rax
-.loc 1 972 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov QWORD PTR [rbp-13810], rax
   mov rax, QWORD PTR [rbp-13810]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-13802], rax
-.loc 1 969 0
   mov rax, QWORD PTR [rbp-13802]
   mov rcx, QWORD PTR [rbp-13794]
   mov DWORD PTR [rcx], eax
-.loc 1 972 0
+.loc 1 977 0
   mov rax, QWORD PTR [rbp-290]
   mov QWORD PTR [rbp-13818], rax
   mov QWORD PTR [rbp-13826], 32
@@ -16293,162 +16606,162 @@ _caustic_assembler_lexer_cst_tokenize:
   mov rax, QWORD PTR [rbp-13842]
   mov rcx, QWORD PTR [rbp-13834]
   mov DWORD PTR [rcx], eax
+.loc 1 978 0
   mov rax, QWORD PTR [rbp-290]
   mov QWORD PTR [rbp-13858], rax
   mov QWORD PTR [rbp-13866], 36
   mov rax, QWORD PTR [rbp-13858]
   add rax, QWORD PTR [rbp-13866]
   mov QWORD PTR [rbp-13874], rax
-.loc 1 973 0
+  mov QWORD PTR [rbp-13882], 0
+  mov rax, QWORD PTR [rbp-13882]
   mov rcx, QWORD PTR [rbp-13874]
-  mov DWORD PTR [rcx], 0
-.loc 1 972 0
+  mov DWORD PTR [rcx], eax
 .L511:
 .L503:
-.loc 1 960 0
+.loc 1 963 0
   jmp .L501
 .L500:
-.loc 1 973 0
+.loc 1 978 0
   movsxd rax, DWORD PTR [rbp-282]
   mov QWORD PTR [rbp-13890], rax
+.loc 1 979 0
   mov QWORD PTR [rbp-13898], 16
+.loc 1 978 0
   mov rax, QWORD PTR [rbp-13890]
   mov rcx, QWORD PTR [rbp-13898]
   sar rax, cl
   mov QWORD PTR [rbp-13906], rax
   mov rax, QWORD PTR [rbp-13906]
   mov DWORD PTR [rbp-294], eax
-.loc 1 976 0
+.loc 1 979 0
   movsxd rax, DWORD PTR [rbp-282]
   mov QWORD PTR [rbp-13914], rax
   mov QWORD PTR [rbp-13922], 65535
   mov rax, QWORD PTR [rbp-13914]
   and rax, QWORD PTR [rbp-13922]
   mov QWORD PTR [rbp-13930], rax
-.loc 1 973 0
   mov rax, QWORD PTR [rbp-13930]
   mov DWORD PTR [rbp-298], eax
-.loc 1 976 0
   xor r10, r10
-.loc 1 977 0
+.loc 1 981 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-13938], rax
+.loc 1 980 0
   mov rdi, QWORD PTR [rbp-13938]
   call _caustic_assembler_lexer_cst_tl_next
   mov QWORD PTR [rbp-13946], rax
-.loc 1 976 0
+.loc 1 979 0
   mov rax, QWORD PTR [rbp-13946]
   mov QWORD PTR [rbp-306], rax
-.loc 1 978 0
+.loc 1 982 0
   movsxd rax, DWORD PTR [rbp-294]
   mov QWORD PTR [rbp-13954], rax
+.loc 1 984 0
   mov QWORD PTR [rbp-13962], 1
+.loc 1 982 0
   mov rax, QWORD PTR [rbp-13954]
   cmp rax, QWORD PTR [rbp-13962]
   jne .L516
+.loc 1 984 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-13978], rax
+.loc 1 988 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_REGISTER]
   mov QWORD PTR [rbp-13994], rax
   mov rax, QWORD PTR [rbp-13994]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-13986], rax
+.loc 1 984 0
   mov rax, QWORD PTR [rbp-13986]
   mov rcx, QWORD PTR [rbp-13978]
   mov DWORD PTR [rcx], eax
+.loc 1 988 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14002], rax
   mov QWORD PTR [rbp-14010], 28
   mov rax, QWORD PTR [rbp-14002]
   add rax, QWORD PTR [rbp-14010]
   mov QWORD PTR [rbp-14018], rax
-.loc 1 979 0
   movsxd rax, DWORD PTR [rbp-298]
   mov QWORD PTR [rbp-14026], rax
-.loc 1 978 0
   mov rax, QWORD PTR [rbp-14026]
   mov rcx, QWORD PTR [rbp-14018]
   mov DWORD PTR [rcx], eax
-.loc 1 979 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14034], rax
   mov QWORD PTR [rbp-14042], 32
   mov rax, QWORD PTR [rbp-14034]
   add rax, QWORD PTR [rbp-14042]
   mov QWORD PTR [rbp-14050], rax
+.loc 1 989 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
   mov QWORD PTR [rbp-14066], rax
   mov rax, QWORD PTR [rbp-14066]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-14058], rax
+.loc 1 988 0
   mov rax, QWORD PTR [rbp-14058]
   mov rcx, QWORD PTR [rbp-14050]
   mov DWORD PTR [rcx], eax
-.loc 1 978 0
+.loc 1 982 0
   jmp .L517
 .L516:
-.loc 1 979 0
+.loc 1 989 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14074], rax
-.loc 1 980 0
   lea rax, [rip+_caustic_assembler_lexer_cst_TK_INSTRUCTION]
   mov QWORD PTR [rbp-14090], rax
   mov rax, QWORD PTR [rbp-14090]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-14082], rax
-.loc 1 979 0
   mov rax, QWORD PTR [rbp-14082]
   mov rcx, QWORD PTR [rbp-14074]
   mov DWORD PTR [rcx], eax
-.loc 1 980 0
+.loc 1 990 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14098], rax
   mov QWORD PTR [rbp-14106], 28
   mov rax, QWORD PTR [rbp-14098]
   add rax, QWORD PTR [rbp-14106]
   mov QWORD PTR [rbp-14114], rax
-.loc 1 982 0
   lea rax, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov QWORD PTR [rbp-14130], rax
   mov rax, QWORD PTR [rbp-14130]
   movsxd rax, DWORD PTR [rax]
   mov QWORD PTR [rbp-14122], rax
-.loc 1 980 0
   mov rax, QWORD PTR [rbp-14122]
   mov rcx, QWORD PTR [rbp-14114]
   mov DWORD PTR [rcx], eax
-.loc 1 982 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14138], rax
-.loc 1 983 0
   mov QWORD PTR [rbp-14146], 32
   mov rax, QWORD PTR [rbp-14138]
   add rax, QWORD PTR [rbp-14146]
   mov QWORD PTR [rbp-14154], rax
-.loc 1 984 0
+.loc 1 991 0
   movsxd rax, DWORD PTR [rbp-298]
   mov QWORD PTR [rbp-14162], rax
-.loc 1 983 0
+.loc 1 990 0
   mov rax, QWORD PTR [rbp-14162]
   mov rcx, QWORD PTR [rbp-14154]
   mov DWORD PTR [rcx], eax
 .L517:
-.loc 1 984 0
+.loc 1 991 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14170], rax
-.loc 1 985 0
   mov QWORD PTR [rbp-14178], 4
   mov rax, QWORD PTR [rbp-14170]
   add rax, QWORD PTR [rbp-14178]
   mov QWORD PTR [rbp-14186], rax
-.loc 1 988 0
+.loc 1 993 0
   mov rax, QWORD PTR [rbp-234]
   mov QWORD PTR [rbp-14194], rax
-.loc 1 985 0
+.loc 1 991 0
   mov rax, QWORD PTR [rbp-14194]
   mov rcx, QWORD PTR [rbp-14186]
   mov QWORD PTR [rcx], rax
-.loc 1 988 0
+.loc 1 993 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14202], rax
   mov QWORD PTR [rbp-14210], 12
@@ -16462,48 +16775,52 @@ _caustic_assembler_lexer_cst_tokenize:
   mov DWORD PTR [rcx], eax
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14234], rax
-.loc 1 989 0
   mov QWORD PTR [rbp-14242], 16
   mov rax, QWORD PTR [rbp-14234]
   add rax, QWORD PTR [rbp-14242]
   mov QWORD PTR [rbp-14250], rax
+.loc 1 994 0
   movsxd rax, DWORD PTR [rbp-96]
   mov QWORD PTR [rbp-14258], rax
+.loc 1 993 0
   mov rax, QWORD PTR [rbp-14258]
   mov rcx, QWORD PTR [rbp-14250]
   mov DWORD PTR [rcx], eax
+.loc 1 994 0
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14266], rax
   mov QWORD PTR [rbp-14274], 20
   mov rax, QWORD PTR [rbp-14266]
   add rax, QWORD PTR [rbp-14274]
   mov QWORD PTR [rbp-14282], rax
+  mov QWORD PTR [rbp-14290], 0
+  mov rax, QWORD PTR [rbp-14290]
   mov rcx, QWORD PTR [rbp-14282]
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
   mov rax, QWORD PTR [rbp-306]
   mov QWORD PTR [rbp-14298], rax
   mov QWORD PTR [rbp-14306], 36
   mov rax, QWORD PTR [rbp-14298]
   add rax, QWORD PTR [rbp-14306]
   mov QWORD PTR [rbp-14314], rax
-.loc 1 990 0
+.loc 1 995 0
+  mov QWORD PTR [rbp-14322], 0
+.loc 1 994 0
+  mov rax, QWORD PTR [rbp-14322]
   mov rcx, QWORD PTR [rbp-14314]
-  mov DWORD PTR [rcx], 0
-.loc 1 989 0
+  mov DWORD PTR [rcx], eax
 .L501:
 .L491:
 .L425:
-.loc 1 887 0
+.loc 1 889 0
   jmp .L409
 .L408:
-.loc 1 990 0
+.loc 1 995 0
   lea rax, [rbp-92]
   mov QWORD PTR [rbp-14330], rax
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-14338], rax
-.loc 1 991 0
   mov QWORD PTR [rbp-14346], 1
-.loc 1 990 0
   mov rbx, QWORD PTR [rbp-14338]
   add rbx, QWORD PTR [rbp-14346]
   mov rax, rbx
@@ -16518,24 +16835,25 @@ _caustic_assembler_lexer_cst_tokenize:
 .L139:
 .L137:
 .L127:
-.loc 1 700 0
+.loc 1 705 0
   jmp .L124
 .L125:
-.loc 1 991 0
+.loc 1 996 0
   xor r10, r10
-.loc 1 993 0
+.loc 1 999 0
   lea rbx, [rbp-14402]
+.loc 1 1000 0
   lea r12, [rip+_caustic_assembler_lexer_cst_TK_EOF]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 994 0
+.loc 1 1001 0
   mov r12, 0
-.loc 1 993 0
+.loc 1 1000 0
   mov r14, r12
-.loc 1 994 0
+.loc 1 1001 0
   mov r12, 0
   movsxd r15, DWORD PTR [rbp-96]
-.loc 1 993 0
+.loc 1 999 0
   mov rdi, rbx
   mov rsi, r13
   mov rdx, r14
@@ -16543,23 +16861,23 @@ _caustic_assembler_lexer_cst_tokenize:
   mov r8, r15
   call _caustic_assembler_lexer_cst_make_tok
   mov r12, rax
-.loc 1 991 0
+.loc 1 996 0
   lea r12, [rbp-346]
   mov rdi, r12
   mov rsi, rbx
   mov rcx, 40
   cld
   rep movsb
-.loc 1 994 0
+.loc 1 1001 0
   lea rbx, [rbp-84]
-.loc 1 995 0
+.loc 1 1004 0
   lea r12, [rbp-346]
-.loc 1 994 0
+.loc 1 1001 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_lexer_cst_tl_push
   mov rbx, rax
-.loc 1 995 0
+.loc 1 1004 0
   lea rbx, [rbp-84]
   mov rdi, QWORD PTR [rbp-354]
   mov rsi, rbx
@@ -16567,7 +16885,7 @@ _caustic_assembler_lexer_cst_tokenize:
   cld
   rep movsb
   mov rax, QWORD PTR [rbp-354]
-  add rsp, 14418
+  add rsp, 14424
   pop r15
   pop r14
   pop r13
@@ -16577,7 +16895,7 @@ _caustic_assembler_lexer_cst_tokenize:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 14418
+  add rsp, 14424
   pop r15
   pop r14
   pop r13
@@ -16601,7 +16919,7 @@ _caustic_assembler_buf_cst_buf_init:
   mov QWORD PTR [rbp-56], rax
 .loc 1 10 0
   lea r12, [rbp-80]
-  mov r10, r12
+  xor r10, r10
 .loc 1 11 0
   mov r13, QWORD PTR [rbp-56]
 .loc 1 10 0
@@ -16616,8 +16934,10 @@ _caustic_assembler_buf_cst_buf_init:
   mov r13, 8
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
 .loc 1 12 0
   lea r12, [rbp-80]
   mov r13, 16
@@ -16813,7 +17133,7 @@ _caustic_assembler_buf_cst_buf_emit8:
   push r12
   push r13
   push r14
-  sub rsp, 68
+  sub rsp, 64
 .loc 1 184 0
   mov rbx, rdi
   mov rax, rbx
@@ -16870,7 +17190,7 @@ _caustic_assembler_buf_cst_buf_emit8:
   mov QWORD PTR [rcx], rax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -16884,7 +17204,7 @@ _caustic_assembler_buf_cst_buf_emit16_le:
   push r12
   push r13
   push r14
-  sub rsp, 68
+  sub rsp, 64
 .loc 1 233 0
   mov rbx, rdi
   mov rax, rbx
@@ -16977,7 +17297,7 @@ _caustic_assembler_buf_cst_buf_emit16_le:
   mov QWORD PTR [rcx], rax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -17717,7 +18037,7 @@ _caustic_assembler_encoder_cst_reg_code:
   push rbx
   push r12
   push r13
-  sub rsp, 60
+  sub rsp, 56
 .loc 1 23 0
   mov rbx, rdi
   mov rax, rbx
@@ -17743,7 +18063,7 @@ _caustic_assembler_encoder_cst_reg_code:
   pop rdx
   mov r12, rax
   mov rax, r12
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17765,7 +18085,7 @@ _caustic_assembler_encoder_cst_reg_code:
   pop rdx
   mov r13, rax
   mov rax, r13
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17773,7 +18093,7 @@ _caustic_assembler_encoder_cst_reg_code:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17785,7 +18105,7 @@ _caustic_assembler_encoder_cst_reg_ext:
   push rbx
   push r12
   push r13
-  sub rsp, 60
+  sub rsp, 56
 .loc 1 56 0
   mov rbx, rdi
   mov rax, rbx
@@ -17800,7 +18120,7 @@ _caustic_assembler_encoder_cst_reg_ext:
 .loc 1 13 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17833,7 +18153,7 @@ _caustic_assembler_encoder_cst_reg_ext:
 .loc 1 17 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17846,7 +18166,7 @@ _caustic_assembler_encoder_cst_reg_ext:
 .loc 1 18 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17878,7 +18198,7 @@ _caustic_assembler_encoder_cst_reg_ext:
 .loc 1 19 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17891,7 +18211,7 @@ _caustic_assembler_encoder_cst_reg_ext:
 .loc 1 20 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17899,7 +18219,7 @@ _caustic_assembler_encoder_cst_reg_ext:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17911,7 +18231,7 @@ _caustic_assembler_encoder_cst_reg_size:
   push rbx
   push r12
   push r13
-  sub rsp, 60
+  sub rsp, 56
 .loc 1 122 0
   mov rbx, rdi
   mov rax, rbx
@@ -17925,7 +18245,7 @@ _caustic_assembler_encoder_cst_reg_size:
 .loc 1 24 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17944,7 +18264,7 @@ _caustic_assembler_encoder_cst_reg_size:
 .loc 1 25 0
   mov rbx, 64
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17965,7 +18285,7 @@ _caustic_assembler_encoder_cst_reg_size:
 .loc 1 26 0
   mov rbx, 32
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -17986,7 +18306,7 @@ _caustic_assembler_encoder_cst_reg_size:
 .loc 1 27 0
   mov rbx, 16
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18006,7 +18326,7 @@ _caustic_assembler_encoder_cst_reg_size:
 .loc 1 28 0
   mov rbx, 8
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18020,7 +18340,7 @@ _caustic_assembler_encoder_cst_reg_size:
   mov rbx, 128
 .loc 1 28 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18028,7 +18348,7 @@ _caustic_assembler_encoder_cst_reg_size:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18040,7 +18360,7 @@ _caustic_assembler_encoder_cst_reg_base:
   push rbx
   push r12
   push r13
-  sub rsp, 60
+  sub rsp, 56
 .loc 1 191 0
   mov rbx, rdi
   mov rax, rbx
@@ -18054,7 +18374,7 @@ _caustic_assembler_encoder_cst_reg_base:
 .loc 1 31 0
   movsxd rbx, DWORD PTR [rbp-52]
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18073,7 +18393,7 @@ _caustic_assembler_encoder_cst_reg_base:
 .loc 1 32 0
   movsxd rbx, DWORD PTR [rbp-52]
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18095,7 +18415,7 @@ _caustic_assembler_encoder_cst_reg_base:
   pop rdx
   mov r13, rax
   mov rax, r13
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18103,7 +18423,7 @@ _caustic_assembler_encoder_cst_reg_base:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18115,7 +18435,7 @@ _caustic_assembler_encoder_cst_needs_rex_for_8bit:
   push rbx
   push r12
   push r13
-  sub rsp, 60
+  sub rsp, 56
 .loc 1 229 0
   mov rbx, rdi
   mov rax, rbx
@@ -18142,7 +18462,7 @@ _caustic_assembler_encoder_cst_needs_rex_for_8bit:
 .loc 1 35 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18155,7 +18475,7 @@ _caustic_assembler_encoder_cst_needs_rex_for_8bit:
 .loc 1 35 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18163,7 +18483,7 @@ _caustic_assembler_encoder_cst_needs_rex_for_8bit:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 60
+  add rsp, 56
   pop r13
   pop r12
   pop rbx
@@ -18177,7 +18497,7 @@ _caustic_assembler_encoder_cst_streq:
   push r13
   push r14
   push r15
-  sub rsp, 140
+  sub rsp, 136
 .loc 1 258 0
   mov rbx, rdi
   mov rax, rbx
@@ -18203,7 +18523,7 @@ _caustic_assembler_encoder_cst_streq:
 .loc 1 42 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 140
+  add rsp, 136
   pop r15
   pop r14
   pop r13
@@ -18216,8 +18536,10 @@ _caustic_assembler_encoder_cst_streq:
 .L552:
 .L553:
 .loc 1 43 0
-  mov DWORD PTR [rbp-76], 0
+  mov rbx, 0
 .loc 1 42 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-76], eax
 .L554:
 .loc 1 43 0
   movsxd rax, DWORD PTR [rbp-76]
@@ -18249,7 +18571,7 @@ _caustic_assembler_encoder_cst_streq:
 .loc 1 47 0
   mov QWORD PTR [rbp-108], 0
   mov rax, QWORD PTR [rbp-108]
-  add rsp, 140
+  add rsp, 136
   pop r15
   pop r14
   pop r13
@@ -18280,7 +18602,7 @@ _caustic_assembler_encoder_cst_streq:
 .loc 1 48 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 140
+  add rsp, 136
   pop r15
   pop r14
   pop r13
@@ -18290,7 +18612,7 @@ _caustic_assembler_encoder_cst_streq:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 140
+  add rsp, 136
   pop r15
   pop r14
   pop r13
@@ -18320,7 +18642,9 @@ _caustic_assembler_encoder_cst_streq_lit:
   mov rax, rbx
   mov QWORD PTR [rbp-68], rax
 .loc 1 52 0
-  mov DWORD PTR [rbp-72], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-72], eax
 .L558:
   mov rax, QWORD PTR [rbp-68]
   mov QWORD PTR [rbp-80], rax
@@ -18446,7 +18770,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   push rbx
   push r12
   push r13
-  sub rsp, 75
+  sub rsp, 72
 .loc 1 424 0
   mov rbx, rdi
   mov rax, rbx
@@ -18500,7 +18824,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18522,7 +18846,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 63 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18541,7 +18865,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18568,7 +18892,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18587,7 +18911,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18617,7 +18941,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18638,7 +18962,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18659,7 +18983,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18690,7 +19014,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18713,7 +19037,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18733,7 +19057,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18762,7 +19086,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 74 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18782,7 +19106,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18816,7 +19140,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18837,7 +19161,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18907,7 +19231,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 84 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18946,7 +19270,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -18982,7 +19306,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 90 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19017,7 +19341,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 91 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19053,7 +19377,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 93 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19089,7 +19413,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19131,7 +19455,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 103 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19171,7 +19495,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19206,7 +19530,7 @@ _caustic_assembler_encoder_cst_lookup_register:
 .loc 1 113 0
   mov rbx, 99
   mov rax, rbx
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19237,7 +19561,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 118 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19261,7 +19585,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 121 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19284,7 +19608,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19308,7 +19632,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 128 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19332,7 +19656,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 131 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19356,7 +19680,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 134 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19390,7 +19714,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19414,7 +19738,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 145 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19435,7 +19759,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19467,7 +19791,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19487,7 +19811,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19506,7 +19830,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19554,7 +19878,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19586,7 +19910,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19618,7 +19942,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19654,7 +19978,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19689,7 +20013,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 163 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19721,7 +20045,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19755,7 +20079,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19789,7 +20113,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19845,7 +20169,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19895,7 +20219,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19945,7 +20269,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -19995,7 +20319,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20083,7 +20407,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 186 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20106,7 +20430,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20129,7 +20453,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20152,7 +20476,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20176,7 +20500,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 193 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20198,7 +20522,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 194 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20226,7 +20550,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20249,7 +20573,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 199 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20271,7 +20595,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 200 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20292,7 +20616,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20313,7 +20637,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20336,7 +20660,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20367,7 +20691,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20390,7 +20714,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20411,7 +20735,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20433,7 +20757,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20454,7 +20778,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20476,7 +20800,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   movsxd r12, DWORD PTR [r12]
 .loc 1 220 0
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20578,7 +20902,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r13, rbx
   sub r13, r12
   mov rax, r13
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20716,7 +21040,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r13, rbx
   sub r13, r12
   mov rax, r13
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20741,7 +21065,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20749,7 +21073,7 @@ _caustic_assembler_encoder_cst_lookup_register:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 75
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20761,7 +21085,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   push rbx
   push r12
   push r13
-  sub rsp, 77
+  sub rsp, 72
 .loc 1 1751 0
   mov rbx, rdi
   mov rax, rbx
@@ -20817,7 +21141,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20853,7 +21177,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20872,7 +21196,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20890,7 +21214,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20909,7 +21233,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20927,7 +21251,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -20945,7 +21269,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21013,7 +21337,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 251 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21060,7 +21384,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21108,7 +21432,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21151,7 +21475,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 259 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21181,7 +21505,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21204,7 +21528,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21245,7 +21569,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21294,7 +21618,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21330,7 +21654,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21366,7 +21690,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21400,7 +21724,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21433,7 +21757,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21475,7 +21799,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21508,7 +21832,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 278 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21540,7 +21864,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21593,7 +21917,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21638,7 +21962,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21675,7 +21999,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21696,7 +22020,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21745,7 +22069,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21773,7 +22097,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 292 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21794,7 +22118,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21835,7 +22159,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 295 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21870,7 +22194,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 296 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21902,7 +22226,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21936,7 +22260,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -21993,7 +22317,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22099,7 +22423,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22168,7 +22492,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 310 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22232,7 +22556,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22312,7 +22636,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22384,7 +22708,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22405,7 +22729,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22427,7 +22751,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22447,7 +22771,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22467,7 +22791,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22545,7 +22869,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22617,7 +22941,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22644,7 +22968,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 336 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22752,7 +23076,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 345 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22777,7 +23101,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22827,7 +23151,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 348 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22928,7 +23252,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22961,7 +23285,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 357 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -22993,7 +23317,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23028,7 +23352,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23063,7 +23387,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 364 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23171,7 +23495,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23265,7 +23589,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23363,7 +23687,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23459,7 +23783,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23559,7 +23883,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 387 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23695,7 +24019,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -23845,7 +24169,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   movsxd r12, DWORD PTR [r12]
 .loc 1 403 0
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -24017,7 +24341,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -24027,29 +24351,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   jmp .L1151
 .L1150:
 .L1151:
-.loc 1 406 0
-  jmp .L1147
-.L1146:
 .loc 1 411 0
-  movsxd rbx, DWORD PTR [rbp-60]
-  mov r12, 9
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1166
-  movzx rbx, BYTE PTR [rbp-61]
-  mov r12, 99
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1166
-  mov rbx, 1
-  jmp .L1167
-.L1166:
-  mov rbx, 0
-.L1167:
-  mov rax, rbx
-  test rax, rax
-  jz .L1164
-.loc 1 412 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 1
   mov r13, rbx
@@ -24059,77 +24361,19 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, 118
   mov rax, rbx
   cmp rax, r12
-  jne .L1182
+  jne .L1176
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 2
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movzx rbx, BYTE PTR [rbx]
-  mov r12, 116
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1182
-  mov rbx, 1
-  jmp .L1183
-.L1182:
-  mov rbx, 0
-.L1183:
-  mov rax, rbx
-  test rax, rax
-  jz .L1180
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 3
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movzx rbx, BYTE PTR [rbx]
-.loc 1 413 0
-  mov r12, 116
 .loc 1 412 0
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1180
-  mov rbx, 1
-  jmp .L1181
-.L1180:
-  mov rbx, 0
-.L1181:
-  mov rax, rbx
-  test rax, rax
-  jz .L1178
-.loc 1 413 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movzx rbx, BYTE PTR [rbx]
-  mov r12, 115
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1178
-.loc 1 412 0
-  mov rbx, 1
-  jmp .L1179
-.L1178:
-  mov rbx, 0
-.L1179:
-  mov rax, rbx
-  test rax, rax
-  jz .L1176
-.loc 1 413 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 5
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movzx rbx, BYTE PTR [rbx]
-  mov r12, 100
+  mov r12, 116
+.loc 1 411 0
   mov rax, rbx
   cmp rax, r12
   jne .L1176
-.loc 1 412 0
   mov rbx, 1
   jmp .L1177
 .L1176:
@@ -24138,19 +24382,18 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov rax, rbx
   test rax, rax
   jz .L1174
-.loc 1 413 0
+.loc 1 412 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 414 0
-  mov r12, 6
+  mov r12, 3
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movzx rbx, BYTE PTR [rbx]
-  mov r12, 50
+  mov r12, 115
   mov rax, rbx
   cmp rax, r12
   jne .L1174
-.loc 1 412 0
+.loc 1 411 0
   mov rbx, 1
   jmp .L1175
 .L1174:
@@ -24159,7 +24402,71 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov rax, rbx
   test rax, rax
   jz .L1172
-.loc 1 414 0
+.loc 1 412 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+  mov r12, 100
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1172
+.loc 1 411 0
+  mov rbx, 1
+  jmp .L1173
+.L1172:
+  mov rbx, 0
+.L1173:
+  mov rax, rbx
+  test rax, rax
+  jz .L1170
+.loc 1 412 0
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 413 0
+  mov r12, 5
+.loc 1 412 0
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 413 0
+  mov r12, 50
+.loc 1 412 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1170
+.loc 1 411 0
+  mov rbx, 1
+  jmp .L1171
+.L1170:
+  mov rbx, 0
+.L1171:
+  mov rax, rbx
+  test rax, rax
+  jz .L1168
+.loc 1 413 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 6
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+  mov r12, 115
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1168
+.loc 1 411 0
+  mov rbx, 1
+  jmp .L1169
+.L1168:
+  mov rbx, 0
+.L1169:
+  mov rax, rbx
+  test rax, rax
+  jz .L1166
+.loc 1 413 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 7
   mov r13, rbx
@@ -24169,57 +24476,394 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   mov r12, 115
   mov rax, rbx
   cmp rax, r12
-  jne .L1172
-.loc 1 412 0
+  jne .L1166
+.loc 1 411 0
   mov rbx, 1
-  jmp .L1173
-.L1172:
+  jmp .L1167
+.L1166:
   mov rbx, 0
-.L1173:
+.L1167:
   mov rax, rbx
   test rax, rax
-  jz .L1170
-.loc 1 415 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 8
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movzx rbx, BYTE PTR [rbx]
-.loc 1 416 0
-  mov r12, 105
-.loc 1 415 0
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1170
-.loc 1 412 0
-  mov rbx, 1
-  jmp .L1171
-.L1170:
-  mov rbx, 0
-.L1171:
-  mov rax, rbx
-  test rax, rax
-  jz .L1168
-.loc 1 416 0
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
+  jz .L1164
+.loc 1 414 0
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSD2SS]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-.loc 1 412 0
-  jmp .L1169
-.L1168:
-.L1169:
 .loc 1 411 0
   jmp .L1165
 .L1164:
 .L1165:
+.loc 1 414 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 1
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 415 0
+  mov r12, 118
+.loc 1 414 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1190
+.loc 1 416 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 2
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+  mov r12, 116
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1190
+.loc 1 414 0
+  mov rbx, 1
+  jmp .L1191
+.L1190:
+  mov rbx, 0
+.L1191:
+  mov rax, rbx
+  test rax, rax
+  jz .L1188
+.loc 1 416 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 3
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 418 0
+  mov r12, 115
+.loc 1 416 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1188
+.loc 1 414 0
+  mov rbx, 1
+  jmp .L1189
+.L1188:
+  mov rbx, 0
+.L1189:
+  mov rax, rbx
+  test rax, rax
+  jz .L1186
+.loc 1 418 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 419 0
+  mov r12, 115
+.loc 1 418 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1186
+.loc 1 414 0
+  mov rbx, 1
+  jmp .L1187
+.L1186:
+  mov rbx, 0
+.L1187:
+  mov rax, rbx
+  test rax, rax
+  jz .L1184
+.loc 1 419 0
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 420 0
+  mov r12, 5
+.loc 1 419 0
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 421 0
+  mov r12, 50
+.loc 1 419 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1184
+.loc 1 414 0
+  mov rbx, 1
+  jmp .L1185
+.L1184:
+  mov rbx, 0
+.L1185:
+  mov rax, rbx
+  test rax, rax
+  jz .L1182
+.loc 1 421 0
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 422 0
+  mov r12, 6
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 427 0
+  mov r12, 115
+.loc 1 422 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1182
+.loc 1 414 0
+  mov rbx, 1
+  jmp .L1183
+.L1182:
+  mov rbx, 0
+.L1183:
+  mov rax, rbx
+  test rax, rax
+  jz .L1180
+.loc 1 427 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 7
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+  mov r12, 100
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1180
+.loc 1 414 0
+  mov rbx, 1
+  jmp .L1181
+.L1180:
+  mov rbx, 0
+.L1181:
+  mov rax, rbx
+  test rax, rax
+  jz .L1178
+.loc 1 427 0
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSS2SD]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  mov rax, r12
+  add rsp, 72
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 414 0
+  jmp .L1179
+.L1178:
+.L1179:
+.loc 1 406 0
+  jmp .L1147
+.L1146:
+.loc 1 428 0
+  movsxd rbx, DWORD PTR [rbp-60]
+  mov r12, 9
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1194
+  movzx rbx, BYTE PTR [rbp-61]
+  mov r12, 99
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1194
+  mov rbx, 1
+  jmp .L1195
+.L1194:
+  mov rbx, 0
+.L1195:
+  mov rax, rbx
+  test rax, rax
+  jz .L1192
+.loc 1 429 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 1
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 430 0
+  mov r12, 118
+.loc 1 429 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1210
+.loc 1 430 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 2
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+  mov r12, 116
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1210
+.loc 1 429 0
+  mov rbx, 1
+  jmp .L1211
+.L1210:
+  mov rbx, 0
+.L1211:
+  mov rax, rbx
+  test rax, rax
+  jz .L1208
+.loc 1 430 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 3
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+  mov r12, 116
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1208
+.loc 1 429 0
+  mov rbx, 1
+  jmp .L1209
+.L1208:
+  mov rbx, 0
+.L1209:
+  mov rax, rbx
+  test rax, rax
+  jz .L1206
+.loc 1 430 0
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 431 0
+  mov r12, 4
+.loc 1 430 0
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 431 0
+  mov r12, 115
+.loc 1 430 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1206
+.loc 1 429 0
+  mov rbx, 1
+  jmp .L1207
+.L1206:
+  mov rbx, 0
+.L1207:
+  mov rax, rbx
+  test rax, rax
+  jz .L1204
+.loc 1 431 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 5
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+  mov r12, 100
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1204
+.loc 1 429 0
+  mov rbx, 1
+  jmp .L1205
+.L1204:
+  mov rbx, 0
+.L1205:
+  mov rax, rbx
+  test rax, rax
+  jz .L1202
+.loc 1 431 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 6
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+  mov r12, 50
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1202
+.loc 1 429 0
+  mov rbx, 1
+  jmp .L1203
+.L1202:
+  mov rbx, 0
+.L1203:
+  mov rax, rbx
+  test rax, rax
+  jz .L1200
+.loc 1 431 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 7
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 432 0
+  mov r12, 115
+.loc 1 431 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1200
+.loc 1 429 0
+  mov rbx, 1
+  jmp .L1201
+.L1200:
+  mov rbx, 0
+.L1201:
+  mov rax, rbx
+  test rax, rax
+  jz .L1198
+.loc 1 432 0
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 433 0
+  mov r12, 8
+.loc 1 432 0
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movzx rbx, BYTE PTR [rbx]
+.loc 1 434 0
+  mov r12, 105
+.loc 1 432 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1198
+.loc 1 429 0
+  mov rbx, 1
+  jmp .L1199
+.L1198:
+  mov rbx, 0
+.L1199:
+  mov rax, rbx
+  test rax, rax
+  jz .L1196
+.loc 1 439 0
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  mov rax, r12
+  add rsp, 72
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 429 0
+  jmp .L1197
+.L1196:
+.L1197:
+.loc 1 428 0
+  jmp .L1193
+.L1192:
+.L1193:
 .L1147:
 .L1131:
 .L1117:
@@ -24227,12 +24871,12 @@ _caustic_assembler_encoder_cst_lookup_instruction:
 .L957:
 .L829:
 .L809:
-.loc 1 418 0
+.loc 1 439 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_INST_NONE]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   mov rax, r12
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -24240,7 +24884,7 @@ _caustic_assembler_encoder_cst_lookup_instruction:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 77
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -24253,20 +24897,20 @@ _caustic_assembler_encoder_cst_make_modrm:
   push r12
   push r13
   push r14
-  sub rsp, 68
-.loc 1 3489 0
+  sub rsp, 64
+.loc 1 3605 0
   mov rbx, rdi
   mov rax, rbx
   mov DWORD PTR [rbp-52], eax
-.loc 1 3493 0
+.loc 1 3609 0
   mov rbx, rsi
   mov rax, rbx
   mov DWORD PTR [rbp-56], eax
-.loc 1 3497 0
+.loc 1 3613 0
   mov rbx, rdx
   mov rax, rbx
   mov DWORD PTR [rbp-60], eax
-.loc 1 427 0
+.loc 1 440 0
   movsxd rbx, DWORD PTR [rbp-52]
   mov r12, 4
   mov rax, rbx
@@ -24277,13 +24921,14 @@ _caustic_assembler_encoder_cst_make_modrm:
   mov rax, rdx
   pop rdx
   mov r13, rax
+.loc 1 441 0
   mov rbx, 64
+.loc 1 440 0
   mov r12, r13
   imul r12, rbx
+.loc 1 441 0
   movsxd rbx, DWORD PTR [rbp-56]
-.loc 1 428 0
   mov r13, 8
-.loc 1 427 0
   mov rax, rbx
   mov rcx, r13
   push rdx
@@ -24292,18 +24937,15 @@ _caustic_assembler_encoder_cst_make_modrm:
   mov rax, rdx
   pop rdx
   mov r14, rax
-.loc 1 428 0
   mov rbx, 8
-.loc 1 427 0
   mov r13, r14
   imul r13, rbx
+.loc 1 440 0
   mov rbx, r12
   add rbx, r13
-.loc 1 428 0
+.loc 1 442 0
   movsxd r12, DWORD PTR [rbp-60]
-.loc 1 429 0
   mov r13, 8
-.loc 1 428 0
   mov rax, r12
   mov rcx, r13
   push rdx
@@ -24312,11 +24954,11 @@ _caustic_assembler_encoder_cst_make_modrm:
   mov rax, rdx
   pop rdx
   mov r14, rax
-.loc 1 427 0
+.loc 1 440 0
   mov r12, rbx
   add r12, r14
   mov rax, r12
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -24325,7 +24967,7 @@ _caustic_assembler_encoder_cst_make_modrm:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -24339,24 +24981,22 @@ _caustic_assembler_encoder_cst_make_sib:
   push r12
   push r13
   push r14
-  sub rsp, 68
-.loc 1 3535 0
+  sub rsp, 64
+.loc 1 3651 0
   mov rbx, rdi
   mov rax, rbx
   mov DWORD PTR [rbp-52], eax
-.loc 1 3539 0
+.loc 1 3655 0
   mov rbx, rsi
   mov rax, rbx
   mov DWORD PTR [rbp-56], eax
-.loc 1 3543 0
+.loc 1 3659 0
   mov rbx, rdx
   mov rax, rbx
   mov DWORD PTR [rbp-60], eax
-.loc 1 430 0
+.loc 1 445 0
   movsxd rbx, DWORD PTR [rbp-52]
-.loc 1 431 0
   mov r12, 4
-.loc 1 430 0
   mov rax, rbx
   mov rcx, r12
   push rdx
@@ -24365,12 +25005,9 @@ _caustic_assembler_encoder_cst_make_sib:
   mov rax, rdx
   pop rdx
   mov r13, rax
-.loc 1 431 0
   mov rbx, 64
-.loc 1 430 0
   mov r12, r13
   imul r12, rbx
-.loc 1 431 0
   movsxd rbx, DWORD PTR [rbp-56]
   mov r13, 8
   mov rax, rbx
@@ -24381,13 +25018,14 @@ _caustic_assembler_encoder_cst_make_sib:
   mov rax, rdx
   pop rdx
   mov r14, rax
+.loc 1 446 0
   mov rbx, 8
+.loc 1 445 0
   mov r13, r14
   imul r13, rbx
-.loc 1 430 0
   mov rbx, r12
   add rbx, r13
-.loc 1 431 0
+.loc 1 446 0
   movsxd r12, DWORD PTR [rbp-60]
   mov r13, 8
   mov rax, r12
@@ -24398,11 +25036,11 @@ _caustic_assembler_encoder_cst_make_sib:
   mov rax, rdx
   pop rdx
   mov r14, rax
-.loc 1 430 0
+.loc 1 445 0
   mov r12, rbx
   add r12, r14
   mov rax, r12
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -24411,7 +25049,7 @@ _caustic_assembler_encoder_cst_make_sib:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -24426,23 +25064,23 @@ _caustic_assembler_encoder_cst_make_rex:
   push r13
   push r14
   sub rsp, 64
-.loc 1 3581 0
+.loc 1 3697 0
   mov rbx, rdi
   mov rax, rbx
   mov DWORD PTR [rbp-52], eax
-.loc 1 3585 0
+.loc 1 3701 0
   mov rbx, rsi
   mov rax, rbx
   mov DWORD PTR [rbp-56], eax
-.loc 1 3589 0
+.loc 1 3705 0
   mov rbx, rdx
   mov rax, rbx
   mov DWORD PTR [rbp-60], eax
-.loc 1 3593 0
+.loc 1 3709 0
   mov rbx, rcx
   mov rax, rbx
   mov DWORD PTR [rbp-64], eax
-.loc 1 439 0
+.loc 1 455 0
   mov rbx, 64
   movsxd r12, DWORD PTR [rbp-52]
   mov r13, 8
@@ -24456,17 +25094,13 @@ _caustic_assembler_encoder_cst_make_rex:
   imul r14, r13
   mov rbx, r12
   add rbx, r14
-.loc 1 440 0
   movsxd r12, DWORD PTR [rbp-60]
   mov r13, 2
   mov r14, r12
   imul r14, r13
-.loc 1 439 0
   mov r12, rbx
   add r12, r14
-.loc 1 440 0
   movsxd rbx, DWORD PTR [rbp-64]
-.loc 1 439 0
   mov r13, r12
   add r13, rbx
   mov rax, r13
@@ -24493,32 +25127,32 @@ _caustic_assembler_encoder_cst_disp_is8:
   push r12
   push r13
   sub rsp, 56
-.loc 1 3621 0
+.loc 1 3737 0
   mov rbx, rdi
   mov rax, rbx
   mov QWORD PTR [rbp-56], rax
-.loc 1 441 0
+.loc 1 456 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, -128
   mov rax, rbx
   cmp rax, r12
-  jl .L1186
+  jl .L1214
+.loc 1 457 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 442 0
   mov r12, 127
-.loc 1 441 0
   mov rax, rbx
   cmp rax, r12
-  jg .L1186
+  jg .L1214
+.loc 1 456 0
   mov rbx, 1
-  jmp .L1187
-.L1186:
+  jmp .L1215
+.L1214:
   mov rbx, 0
-.L1187:
+.L1215:
   mov rax, rbx
   test rax, rax
-  jz .L1184
-.loc 1 442 0
+  jz .L1212
+.loc 1 457 0
   mov rbx, 1
   mov rax, rbx
   add rsp, 56
@@ -24527,11 +25161,11 @@ _caustic_assembler_encoder_cst_disp_is8:
   pop rbx
   pop rbp
   ret
-.loc 1 441 0
-  jmp .L1185
-.L1184:
-.L1185:
-.loc 1 443 0
+.loc 1 456 0
+  jmp .L1213
+.L1212:
+.L1213:
+.loc 1 459 0
   mov rbx, 0
   mov rax, rbx
   add rsp, 56
@@ -24555,34 +25189,34 @@ _caustic_assembler_encoder_cst_imm_is8:
   push r12
   push r13
   sub rsp, 56
-.loc 1 3654 0
+.loc 1 3770 0
   mov rbx, rdi
   mov rax, rbx
   mov QWORD PTR [rbp-56], rax
-.loc 1 444 0
+.loc 1 459 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 445 0
   mov r12, -128
-.loc 1 444 0
   mov rax, rbx
   cmp rax, r12
-  jl .L1190
-.loc 1 445 0
+  jl .L1218
+.loc 1 460 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 461 0
   mov r12, 127
+.loc 1 460 0
   mov rax, rbx
   cmp rax, r12
-  jg .L1190
-.loc 1 444 0
+  jg .L1218
+.loc 1 459 0
   mov rbx, 1
-  jmp .L1191
-.L1190:
+  jmp .L1219
+.L1218:
   mov rbx, 0
-.L1191:
+.L1219:
   mov rax, rbx
   test rax, rax
-  jz .L1188
-.loc 1 445 0
+  jz .L1216
+.loc 1 461 0
   mov rbx, 1
   mov rax, rbx
   add rsp, 56
@@ -24591,11 +25225,11 @@ _caustic_assembler_encoder_cst_imm_is8:
   pop rbx
   pop rbp
   ret
-.loc 1 444 0
-  jmp .L1189
-.L1188:
-.L1189:
-.loc 1 445 0
+.loc 1 459 0
+  jmp .L1217
+.L1216:
+.L1217:
+.loc 1 461 0
   mov rbx, 0
   mov rax, rbx
   add rsp, 56
@@ -24619,34 +25253,30 @@ _caustic_assembler_encoder_cst_imm_is32:
   push r12
   push r13
   sub rsp, 56
-.loc 1 3687 0
+.loc 1 3803 0
   mov rbx, rdi
   mov rax, rbx
   mov QWORD PTR [rbp-56], rax
-.loc 1 447 0
+.loc 1 464 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 449 0
   mov r12, -2147483648
-.loc 1 447 0
   mov rax, rbx
   cmp rax, r12
-  jl .L1194
-.loc 1 450 0
+  jl .L1222
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 2147483647
   mov rax, rbx
   cmp rax, r12
-  jg .L1194
-.loc 1 447 0
+  jg .L1222
   mov rbx, 1
-  jmp .L1195
-.L1194:
+  jmp .L1223
+.L1222:
   mov rbx, 0
-.L1195:
+.L1223:
   mov rax, rbx
   test rax, rax
-  jz .L1192
-.loc 1 455 0
+  jz .L1220
+.loc 1 465 0
   mov rbx, 1
   mov rax, rbx
   add rsp, 56
@@ -24655,12 +25285,13 @@ _caustic_assembler_encoder_cst_imm_is32:
   pop rbx
   pop rbp
   ret
-.loc 1 447 0
-  jmp .L1193
-.L1192:
-.L1193:
-.loc 1 455 0
+.loc 1 464 0
+  jmp .L1221
+.L1220:
+.L1221:
+.loc 1 466 0
   mov rbx, 0
+.loc 1 465 0
   mov rax, rbx
   add rsp, 56
   pop r13
@@ -24684,91 +25315,101 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   push r13
   push r14
   sub rsp, 80
-.loc 1 3720 0
+.loc 1 3836 0
   mov rbx, rdi
   mov rax, rbx
   mov QWORD PTR [rbp-56], rax
-.loc 1 3727 0
+.loc 1 3843 0
   mov rbx, rsi
   mov rax, rbx
   mov DWORD PTR [rbp-60], eax
-.loc 1 3731 0
+.loc 1 3847 0
   mov rbx, rdx
   mov rax, rbx
   mov DWORD PTR [rbp-64], eax
-.loc 1 3735 0
+.loc 1 3851 0
   mov rbx, rcx
   mov rax, rbx
   mov QWORD PTR [rbp-72], rax
-.loc 1 456 0
+.loc 1 469 0
   xor r10, r10
+.loc 1 470 0
   movsxd rbx, DWORD PTR [rbp-64]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
+.loc 1 469 0
   mov rax, rbx
   mov DWORD PTR [rbp-76], eax
-.loc 1 457 0
-  mov DWORD PTR [rbp-80], 0
-.loc 1 459 0
+.loc 1 473 0
+  mov rbx, 0
+.loc 1 471 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-80], eax
+.loc 1 474 0
   movsxd rbx, DWORD PTR [rbp-76]
   mov r12, 4
   mov rax, rbx
   cmp rax, r12
-  jne .L1196
+  jne .L1224
   lea rbx, [rbp-80]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1197
-.L1196:
-.L1197:
+  mov DWORD PTR [rcx], eax
+  jmp .L1225
+.L1224:
+.L1225:
   mov rbx, QWORD PTR [rbp-72]
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1200
+  jne .L1228
   movsxd rbx, DWORD PTR [rbp-76]
-.loc 1 460 0
+.loc 1 475 0
   mov r12, 5
-.loc 1 459 0
+.loc 1 474 0
   mov rax, rbx
   cmp rax, r12
-  je .L1200
+  je .L1228
   mov rbx, 1
-  jmp .L1201
-.L1200:
+  jmp .L1229
+.L1228:
   mov rbx, 0
-.L1201:
+.L1229:
   mov rax, rbx
   test rax, rax
-  jz .L1198
-.loc 1 461 0
+  jz .L1226
+.loc 1 476 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 477 0
   mov r12, 0
   movsxd r13, DWORD PTR [rbp-60]
+.loc 1 478 0
   movsxd r14, DWORD PTR [rbp-76]
+.loc 1 476 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 460 0
+.loc 1 475 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 464 0
+.loc 1 479 0
   movsxd rbx, DWORD PTR [rbp-80]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1202
-.loc 1 462 0
-.loc 1 464 0
+  jne .L1230
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 0
+.loc 1 480 0
   mov r13, 4
   movsxd r14, DWORD PTR [rbp-76]
+.loc 1 479 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -24778,26 +25419,25 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 462 0
-  jmp .L1203
-.L1202:
-.L1203:
-.loc 1 459 0
-  jmp .L1199
-.L1198:
-.loc 1 466 0
+  jmp .L1231
+.L1230:
+.L1231:
+.loc 1 474 0
+  jmp .L1227
+.L1226:
+.loc 1 482 0
   mov rbx, QWORD PTR [rbp-72]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_disp_is8
   mov rbx, rax
-.loc 1 467 0
+.loc 1 483 0
   mov r12, 1
-.loc 1 466 0
+.loc 1 482 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1204
-.loc 1 465 0
-.loc 1 469 0
+  jne .L1232
+.loc 1 481 0
+.loc 1 484 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 1
   movsxd r13, DWORD PTR [rbp-60]
@@ -24807,77 +25447,73 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 467 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 469 0
+.loc 1 485 0
   movsxd rbx, DWORD PTR [rbp-80]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1206
-.loc 1 470 0
+  jne .L1234
+.loc 1 484 0
+.loc 1 486 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 471 0
+.loc 1 487 0
   mov r12, 0
   mov r13, 4
-.loc 1 472 0
   movsxd r14, DWORD PTR [rbp-76]
-.loc 1 471 0
+.loc 1 486 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_sib
   mov r12, rax
-.loc 1 470 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 469 0
-  jmp .L1207
-.L1206:
-.L1207:
-.loc 1 474 0
+.loc 1 484 0
+  jmp .L1235
+.L1234:
+.L1235:
+.loc 1 487 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 488 0
   mov r12, QWORD PTR [rbp-72]
+.loc 1 487 0
   mov r13, r12
   movsxd r13, r13d
   mov rdi, rbx
   mov rsi, r13
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 465 0
-  jmp .L1205
-.L1204:
-.loc 1 475 0
+.loc 1 481 0
+  jmp .L1233
+.L1232:
+.loc 1 488 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 2
-.loc 1 476 0
+.loc 1 489 0
   movsxd r13, DWORD PTR [rbp-60]
   movsxd r14, DWORD PTR [rbp-76]
-.loc 1 475 0
+.loc 1 488 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 474 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 477 0
+.loc 1 489 0
   movsxd rbx, DWORD PTR [rbp-80]
-.loc 1 479 0
   mov r12, 1
-.loc 1 477 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1208
-.loc 1 479 0
+  jne .L1236
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 0
   mov r13, 4
@@ -24891,21 +25527,18 @@ _caustic_assembler_encoder_cst_emit_mem_modrm:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 477 0
-  jmp .L1209
-.L1208:
-.L1209:
-.loc 1 480 0
+  jmp .L1237
+.L1236:
+.L1237:
+.loc 1 490 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 481 0
   mov r12, QWORD PTR [rbp-72]
-.loc 1 480 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.L1205:
-.L1199:
+.L1233:
+.L1227:
   mov rbx, 0
   mov rax, rbx
   add rsp, 80
@@ -24921,16 +25554,16 @@ _caustic_assembler_encoder_cst_mem_modrm_size:
   push rbx
   push r12
   push r13
-  sub rsp, 76
-.loc 1 3949 0
+  sub rsp, 72
+.loc 1 4065 0
   mov rbx, rdi
   mov rax, rbx
   mov DWORD PTR [rbp-52], eax
-.loc 1 3953 0
+.loc 1 4069 0
   mov rbx, rsi
   mov rax, rbx
   mov QWORD PTR [rbp-60], rax
-.loc 1 484 0
+.loc 1 491 0
   xor r10, r10
   movsxd rbx, DWORD PTR [rbp-52]
   mov rdi, rbx
@@ -24938,100 +25571,102 @@ _caustic_assembler_encoder_cst_mem_modrm_size:
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-64], eax
-.loc 1 486 0
-  mov DWORD PTR [rbp-68], 0
-.loc 1 484 0
-.loc 1 486 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-68], eax
   movsxd rbx, DWORD PTR [rbp-64]
-.loc 1 487 0
+.loc 1 492 0
   mov r12, 4
-.loc 1 486 0
+.loc 1 491 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1210
-.loc 1 487 0
+  jne .L1238
+.loc 1 492 0
   lea rbx, [rbp-68]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 486 0
-  jmp .L1211
-.L1210:
-.L1211:
-.loc 1 487 0
+  mov DWORD PTR [rcx], eax
+.loc 1 491 0
+  jmp .L1239
+.L1238:
+.L1239:
+.loc 1 492 0
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1214
+  jne .L1242
   movsxd rbx, DWORD PTR [rbp-64]
   mov r12, 5
   mov rax, rbx
   cmp rax, r12
-  je .L1214
+  je .L1242
   mov rbx, 1
-  jmp .L1215
-.L1214:
+  jmp .L1243
+.L1242:
   mov rbx, 0
-.L1215:
+.L1243:
   mov rax, rbx
   test rax, rax
-  jz .L1212
-.loc 1 488 0
+  jz .L1240
   mov rbx, 1
   movsxd r12, DWORD PTR [rbp-68]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 76
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-.loc 1 487 0
-  jmp .L1213
-.L1212:
-.loc 1 488 0
+  jmp .L1241
+.L1240:
+.loc 1 493 0
   mov rbx, QWORD PTR [rbp-60]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_disp_is8
   mov rbx, rax
+.loc 1 494 0
   mov r12, 1
+.loc 1 493 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1216
-.loc 1 489 0
+  jne .L1244
+.loc 1 492 0
+.loc 1 495 0
   mov rbx, 2
   movsxd r12, DWORD PTR [rbp-68]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 76
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-.loc 1 488 0
-  jmp .L1217
-.L1216:
-.loc 1 489 0
+.loc 1 492 0
+  jmp .L1245
+.L1244:
+.loc 1 496 0
   mov rbx, 5
   movsxd r12, DWORD PTR [rbp-68]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 76
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-.L1217:
-.L1213:
+.L1245:
+.L1241:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 76
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -25044,116 +25679,125 @@ _caustic_assembler_encoder_cst_emit_mem_modrm_sib:
   push r12
   push r13
   push r14
-  sub rsp, 100
-.loc 1 4039 0
+  sub rsp, 96
+.loc 1 4155 0
   mov rbx, rdi
   mov rax, rbx
   mov QWORD PTR [rbp-56], rax
-.loc 1 4046 0
+.loc 1 4162 0
   mov rbx, rsi
   mov rax, rbx
   mov DWORD PTR [rbp-60], eax
-.loc 1 4050 0
+.loc 1 4166 0
   mov rbx, rdx
   mov rax, rbx
   mov DWORD PTR [rbp-64], eax
-.loc 1 4054 0
+.loc 1 4170 0
   mov rbx, rcx
   mov rax, rbx
   mov DWORD PTR [rbp-68], eax
-.loc 1 4058 0
+.loc 1 4174 0
   mov rbx, r8
   mov rax, rbx
   mov DWORD PTR [rbp-72], eax
-.loc 1 4062 0
+.loc 1 4178 0
   mov rbx, r9
   mov rax, rbx
   mov QWORD PTR [rbp-80], rax
-.loc 1 490 0
+.loc 1 499 0
   xor r10, r10
-.loc 1 491 0
+.loc 1 500 0
   movsxd rbx, DWORD PTR [rbp-64]
+.loc 1 499 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 490 0
   mov rax, rbx
   mov DWORD PTR [rbp-84], eax
-.loc 1 491 0
+.loc 1 500 0
   xor r10, r10
+.loc 1 502 0
   movsxd rbx, DWORD PTR [rbp-68]
+.loc 1 501 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
+.loc 1 500 0
   mov rax, rbx
   mov DWORD PTR [rbp-88], eax
-  mov DWORD PTR [rbp-92], 0
-.loc 1 492 0
+.loc 1 502 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-92], eax
   movsxd rbx, DWORD PTR [rbp-72]
   mov r12, 2
   mov rax, rbx
   cmp rax, r12
-  jne .L1218
+  jne .L1246
+.loc 1 503 0
   lea rbx, [rbp-92]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1219
-.L1218:
+  mov DWORD PTR [rcx], eax
+.loc 1 502 0
+  jmp .L1247
+.L1246:
+.loc 1 503 0
   movsxd rbx, DWORD PTR [rbp-72]
   mov r12, 4
   mov rax, rbx
   cmp rax, r12
-  jne .L1220
+  jne .L1248
   lea rbx, [rbp-92]
+  mov r12, 2
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 2
-  jmp .L1221
-.L1220:
-.loc 1 493 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1249
+.L1248:
+.loc 1 504 0
   movsxd rbx, DWORD PTR [rbp-72]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1222
-.loc 1 492 0
-.loc 1 494 0
+  jne .L1250
+.loc 1 505 0
   lea rbx, [rbp-92]
-.loc 1 495 0
+  mov r12, 3
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 3
-.loc 1 494 0
-.loc 1 492 0
-  jmp .L1223
-.L1222:
-.L1223:
-.L1221:
-.L1219:
-.loc 1 495 0
+  mov DWORD PTR [rcx], eax
+.loc 1 504 0
+  jmp .L1251
+.L1250:
+.L1251:
+.L1249:
+.L1247:
+.loc 1 506 0
   mov rbx, QWORD PTR [rbp-80]
-.loc 1 496 0
   mov r12, 0
-.loc 1 495 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1226
-.loc 1 496 0
+  jne .L1254
   movsxd rbx, DWORD PTR [rbp-84]
+.loc 1 507 0
   mov r12, 5
+.loc 1 506 0
   mov rax, rbx
   cmp rax, r12
-  je .L1226
-.loc 1 495 0
+  je .L1254
   mov rbx, 1
-  jmp .L1227
-.L1226:
+  jmp .L1255
+.L1254:
   mov rbx, 0
-.L1227:
+.L1255:
+.loc 1 505 0
   mov rax, rbx
   test rax, rax
-  jz .L1224
-.loc 1 498 0
+  jz .L1252
+.loc 1 510 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 499 0
   mov r12, 0
   movsxd r13, DWORD PTR [rbp-60]
   mov r14, 4
@@ -25162,61 +25806,65 @@ _caustic_assembler_encoder_cst_emit_mem_modrm_sib:
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 497 0
+.loc 1 509 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 499 0
+.loc 1 510 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 511 0
   movsxd r12, DWORD PTR [rbp-92]
   movsxd r13, DWORD PTR [rbp-88]
+.loc 1 512 0
   movsxd r14, DWORD PTR [rbp-84]
+.loc 1 511 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_sib
   mov r12, rax
+.loc 1 510 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 495 0
-  jmp .L1225
-.L1224:
-.loc 1 499 0
+.loc 1 505 0
+  jmp .L1253
+.L1252:
+.loc 1 513 0
   mov rbx, QWORD PTR [rbp-80]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_disp_is8
   mov rbx, rax
+.loc 1 514 0
   mov r12, 1
+.loc 1 513 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1228
-.loc 1 501 0
+  jne .L1256
+.loc 1 512 0
+.loc 1 514 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 1
-.loc 1 502 0
   movsxd r13, DWORD PTR [rbp-60]
   mov r14, 4
-.loc 1 501 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 500 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 502 0
+.loc 1 515 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-92]
+.loc 1 516 0
   movsxd r13, DWORD PTR [rbp-88]
-.loc 1 503 0
   movsxd r14, DWORD PTR [rbp-84]
-.loc 1 502 0
+.loc 1 515 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -25226,21 +25874,23 @@ _caustic_assembler_encoder_cst_emit_mem_modrm_sib:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 503 0
+.loc 1 517 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 518 0
   mov r12, QWORD PTR [rbp-80]
+.loc 1 517 0
   mov r13, r12
   movsxd r13, r13d
+.loc 1 516 0
   mov rdi, rbx
   mov rsi, r13
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 499 0
-  jmp .L1229
-.L1228:
-.loc 1 504 0
+.loc 1 512 0
+  jmp .L1257
+.L1256:
+.loc 1 522 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 505 0
   mov r12, 2
   movsxd r13, DWORD PTR [rbp-60]
   mov r14, 4
@@ -25249,41 +25899,36 @@ _caustic_assembler_encoder_cst_emit_mem_modrm_sib:
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 504 0
+.loc 1 520 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 507 0
+.loc 1 522 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 509 0
   movsxd r12, DWORD PTR [rbp-92]
-.loc 1 510 0
   movsxd r13, DWORD PTR [rbp-88]
   movsxd r14, DWORD PTR [rbp-84]
-.loc 1 508 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_sib
   mov r12, rax
-.loc 1 506 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 510 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, QWORD PTR [rbp-80]
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.L1229:
-.L1225:
+.L1257:
+.L1253:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 100
+  add rsp, 96
   pop r14
   pop r13
   pop r12
@@ -25297,44 +25942,44 @@ _caustic_assembler_encoder_cst_mem_modrm_sib_size:
   push r12
   push r13
   sub rsp, 72
-.loc 1 4289 0
+.loc 1 4405 0
   mov rbx, rdi
   mov rax, rbx
   mov DWORD PTR [rbp-52], eax
-.loc 1 4293 0
+.loc 1 4409 0
   mov rbx, rsi
   mov rax, rbx
   mov QWORD PTR [rbp-60], rax
-.loc 1 512 0
+.loc 1 525 0
   xor r10, r10
-.loc 1 514 0
+.loc 1 526 0
   movsxd rbx, DWORD PTR [rbp-52]
-.loc 1 513 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 512 0
+.loc 1 525 0
   mov rax, rbx
   mov DWORD PTR [rbp-64], eax
-.loc 1 514 0
+.loc 1 526 0
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1232
+  jne .L1260
   movsxd rbx, DWORD PTR [rbp-64]
   mov r12, 5
   mov rax, rbx
   cmp rax, r12
-  je .L1232
+  je .L1260
   mov rbx, 1
-  jmp .L1233
-.L1232:
+  jmp .L1261
+.L1260:
   mov rbx, 0
-.L1233:
+.L1261:
   mov rax, rbx
   test rax, rax
-  jz .L1230
+  jz .L1258
+.loc 1 527 0
   mov rbx, 2
   mov rax, rbx
   add rsp, 72
@@ -25343,18 +25988,21 @@ _caustic_assembler_encoder_cst_mem_modrm_sib_size:
   pop rbx
   pop rbp
   ret
-  jmp .L1231
-.L1230:
-.loc 1 515 0
+.loc 1 526 0
+  jmp .L1259
+.L1258:
+.loc 1 527 0
   mov rbx, QWORD PTR [rbp-60]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_disp_is8
   mov rbx, rax
+.loc 1 528 0
   mov r12, 1
+.loc 1 527 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1234
-.loc 1 516 0
+  jne .L1262
+.loc 1 528 0
   mov rbx, 3
   mov rax, rbx
   add rsp, 72
@@ -25363,12 +26011,11 @@ _caustic_assembler_encoder_cst_mem_modrm_sib_size:
   pop rbx
   pop rbp
   ret
-.loc 1 515 0
-  jmp .L1235
-.L1234:
-.loc 1 517 0
+.loc 1 527 0
+  jmp .L1263
+.L1262:
+.loc 1 529 0
   mov rbx, 6
-.loc 1 516 0
   mov rax, rbx
   add rsp, 72
   pop r13
@@ -25376,8 +26023,8 @@ _caustic_assembler_encoder_cst_mem_modrm_sib_size:
   pop rbx
   pop rbp
   ret
-.L1235:
-.L1231:
+.L1263:
+.L1259:
   mov rbx, 0
   mov rax, rbx
   add rsp, 72
@@ -25393,11 +26040,11 @@ _caustic_assembler_encoder_cst_has_sib:
   push r12
   push r13
   sub rsp, 56
-.loc 1 4351 0
+.loc 1 4467 0
   mov rbx, rdi
   mov rax, rbx
   mov QWORD PTR [rbp-56], rax
-.loc 1 522 0
+.loc 1 534 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -25406,7 +26053,7 @@ _caustic_assembler_encoder_cst_has_sib:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1238
+  jne .L1266
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 32
   mov r13, rbx
@@ -25418,17 +26065,16 @@ _caustic_assembler_encoder_cst_has_sib:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1238
+  je .L1266
   mov rbx, 1
-  jmp .L1239
-.L1238:
+  jmp .L1267
+.L1266:
   mov rbx, 0
-.L1239:
-.loc 1 520 0
+.L1267:
   mov rax, rbx
   test rax, rax
-  jz .L1236
-.loc 1 522 0
+  jz .L1264
+.loc 1 535 0
   mov rbx, 1
   mov rax, rbx
   add rsp, 56
@@ -25437,12 +26083,13 @@ _caustic_assembler_encoder_cst_has_sib:
   pop rbx
   pop rbp
   ret
-.loc 1 520 0
-  jmp .L1237
-.L1236:
-.L1237:
-.loc 1 522 0
+.loc 1 534 0
+  jmp .L1265
+.L1264:
+.L1265:
+.loc 1 536 0
   mov rbx, 0
+.loc 1 535 0
   mov rax, rbx
   add rsp, 56
   pop r13
@@ -25466,32 +26113,32 @@ _caustic_assembler_encoder_cst_encode:
   push r13
   push r14
   push r15
-  sub rsp, 508
-.loc 1 4391 0
+  sub rsp, 520
+.loc 1 4507 0
   mov rbx, rdi
   mov rax, rbx
   mov QWORD PTR [rbp-56], rax
-.loc 1 4398 0
+.loc 1 4514 0
   mov rbx, rsi
   mov rax, rbx
   mov DWORD PTR [rbp-60], eax
-.loc 1 4402 0
+.loc 1 4518 0
   mov rbx, rdx
   mov rax, rbx
   mov QWORD PTR [rbp-68], rax
-.loc 1 4409 0
+.loc 1 4525 0
   mov rbx, rcx
   mov rax, rbx
   mov QWORD PTR [rbp-76], rax
-.loc 1 4416 0
+.loc 1 4532 0
   mov rbx, r8
   mov rax, rbx
   mov QWORD PTR [rbp-84], rax
-.loc 1 4420 0
+.loc 1 4536 0
   mov rbx, r9
   mov rax, rbx
   mov QWORD PTR [rbp-92], rax
-.loc 1 526 0
+.loc 1 542 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -25500,27 +26147,22 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, QWORD PTR [rbx]
   mov rax, rbx
   mov QWORD PTR [rbp-100], rax
-.loc 1 527 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_RET]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1240
-.loc 1 528 0
+  jne .L1268
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 195
-.loc 1 527 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 529 0
   mov rbx, 1
-.loc 1 528 0
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25528,39 +26170,38 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 527 0
-  jmp .L1241
-.L1240:
-.L1241:
-.loc 1 529 0
+  jmp .L1269
+.L1268:
+.L1269:
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 530 0
+.loc 1 543 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SYSCALL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 529 0
+.loc 1 542 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1242
-.loc 1 532 0
+  jne .L1270
+.loc 1 544 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 533 0
   mov r12, 15
-.loc 1 530 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 534 0
+.loc 1 545 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 546 0
   mov r12, 5
+.loc 1 545 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
+.loc 1 546 0
   mov rbx, 2
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25568,32 +26209,31 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 529 0
-  jmp .L1243
-.L1242:
-.L1243:
-.loc 1 534 0
+.loc 1 542 0
+  jmp .L1271
+.L1270:
+.L1271:
+.loc 1 547 0
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 535 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CLD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 534 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1244
-.loc 1 536 0
+  jne .L1272
+.loc 1 546 0
+.loc 1 547 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 252
-.loc 1 535 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 537 0
+.loc 1 549 0
   mov rbx, 1
+.loc 1 548 0
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25601,31 +26241,28 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 534 0
-  jmp .L1245
-.L1244:
-.L1245:
-.loc 1 538 0
+.loc 1 546 0
+  jmp .L1273
+.L1272:
+.L1273:
+.loc 1 550 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NOP]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1246
-.loc 1 537 0
-.loc 1 539 0
+  jne .L1274
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 144
-.loc 1 538 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 539 0
+.loc 1 551 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25633,22 +26270,22 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 537 0
-  jmp .L1247
-.L1246:
-.L1247:
-.loc 1 539 0
+.loc 1 550 0
+  jmp .L1275
+.L1274:
+.L1275:
+.loc 1 552 0
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 540 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CQO]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 539 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1248
-.loc 1 542 0
+  jne .L1276
+.loc 1 551 0
+.loc 1 553 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 554 0
   mov r12, 1
   mov r13, 0
   mov r14, 0
@@ -25659,10 +26296,12 @@ _caustic_assembler_encoder_cst_encode:
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
+.loc 1 553 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
+.loc 1 555 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 153
   mov rdi, rbx
@@ -25671,7 +26310,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov rbx, 2
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25679,32 +26318,31 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 539 0
-  jmp .L1249
-.L1248:
-.L1249:
-.loc 1 542 0
+.loc 1 551 0
+  jmp .L1277
+.L1276:
+.L1277:
+.loc 1 557 0
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 543 0
+.loc 1 558 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CDQ]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 542 0
+.loc 1 557 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1250
-.loc 1 544 0
+  jne .L1278
+.loc 1 556 0
+.loc 1 558 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 153
-.loc 1 543 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 545 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25712,31 +26350,32 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 542 0
-  jmp .L1251
-.L1250:
-.L1251:
-.loc 1 546 0
+.loc 1 556 0
+  jmp .L1279
+.L1278:
+.L1279:
+.loc 1 559 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSB]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1252
-.loc 1 545 0
-.loc 1 547 0
+  jne .L1280
+.loc 1 558 0
+.loc 1 560 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 561 0
   mov r12, 164
-.loc 1 546 0
+.loc 1 560 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 547 0
+.loc 1 561 0
   mov rbx, 1
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25744,21 +26383,19 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 545 0
-  jmp .L1253
-.L1252:
-.L1253:
-.loc 1 547 0
+.loc 1 558 0
+  jmp .L1281
+.L1280:
+.L1281:
+.loc 1 562 0
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 548 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_REP]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 547 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1254
-.loc 1 550 0
+  jne .L1282
+.loc 1 563 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 243
   mov rdi, rbx
@@ -25767,7 +26404,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov rbx, 1
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25775,83 +26412,76 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 547 0
-  jmp .L1255
-.L1254:
-.L1255:
-.loc 1 550 0
+.loc 1 562 0
+  jmp .L1283
+.L1282:
+.L1283:
+.loc 1 564 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 566 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_PUSH]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 564 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1258
-.loc 1 551 0
+  jne .L1286
+.loc 1 566 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
-.loc 1 552 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
-.loc 1 551 0
   mov rax, r12
   cmp rax, r13
-  jne .L1258
-.loc 1 550 0
+  jne .L1286
+.loc 1 564 0
   mov rbx, 1
-  jmp .L1259
-.L1258:
+  jmp .L1287
+.L1286:
   mov rbx, 0
-.L1259:
+.L1287:
   mov rax, rbx
   test rax, rax
-  jz .L1256
-.loc 1 552 0
+  jz .L1284
+.loc 1 566 0
   xor r10, r10
-.loc 1 554 0
+.loc 1 567 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 553 0
+.loc 1 566 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 552 0
   mov rax, rbx
   mov DWORD PTR [rbp-104], eax
-.loc 1 554 0
+.loc 1 568 0
   mov rbx, QWORD PTR [rbp-68]
-.loc 1 555 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 554 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 555 0
+.loc 1 569 0
   mov r12, 1
-.loc 1 554 0
+.loc 1 568 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1260
-.loc 1 555 0
+  jne .L1288
+.loc 1 570 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 556 0
   mov r12, 0
-.loc 1 557 0
   mov r13, 0
-.loc 1 558 0
   mov r14, 0
   mov r15, 1
-.loc 1 555 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -25862,11 +26492,11 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 554 0
-  jmp .L1261
-.L1260:
-.L1261:
-.loc 1 558 0
+.loc 1 568 0
+  jmp .L1289
+.L1288:
+.L1289:
+.loc 1 571 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 80
   movsxd r13, DWORD PTR [rbp-104]
@@ -25876,23 +26506,22 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 559 0
+.loc 1 572 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
-.loc 1 560 0
+.loc 1 573 0
   mov r12, QWORD PTR [rbp-100]
-.loc 1 559 0
+.loc 1 572 0
   mov r13, rbx
   sub r13, r12
   mov rbx, r13
   movsxd rbx, ebx
-.loc 1 558 0
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -25900,40 +26529,45 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 550 0
-  jmp .L1257
-.L1256:
-.L1257:
-.loc 1 561 0
+.loc 1 564 0
+  jmp .L1285
+.L1284:
+.L1285:
+.loc 1 575 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 576 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_POP]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 575 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1264
-.loc 1 562 0
+  jne .L1292
+.loc 1 577 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
+.loc 1 578 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
+.loc 1 577 0
   mov rax, r12
   cmp rax, r13
-  jne .L1264
-.loc 1 561 0
+  jne .L1292
+.loc 1 575 0
   mov rbx, 1
-  jmp .L1265
-.L1264:
+  jmp .L1293
+.L1292:
   mov rbx, 0
-.L1265:
-.loc 1 560 0
+.L1293:
+.loc 1 573 0
   mov rax, rbx
   test rax, rax
-  jz .L1262
-.loc 1 563 0
+  jz .L1290
+.loc 1 579 0
   xor r10, r10
+.loc 1 583 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -25943,35 +26577,31 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
+.loc 1 579 0
   mov rax, rbx
   mov DWORD PTR [rbp-108], eax
-.loc 1 565 0
+.loc 1 583 0
   mov rbx, QWORD PTR [rbp-68]
-.loc 1 566 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 564 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 566 0
   mov r12, 1
-.loc 1 564 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1266
-.loc 1 563 0
-.loc 1 566 0
+  jne .L1294
+.loc 1 584 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 587 0
   mov r12, 0
   mov r13, 0
   mov r14, 0
-.loc 1 567 0
   mov r15, 1
-.loc 1 566 0
+.loc 1 584 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -25982,23 +26612,22 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 563 0
-  jmp .L1267
-.L1266:
-.L1267:
-.loc 1 568 0
+.loc 1 583 0
+  jmp .L1295
+.L1294:
+.L1295:
+.loc 1 592 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 88
-.loc 1 569 0
   movsxd r13, DWORD PTR [rbp-108]
-.loc 1 568 0
   mov r14, r12
   add r14, r13
+.loc 1 588 0
   mov rdi, rbx
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 570 0
+.loc 1 592 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -26008,11 +26637,10 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, QWORD PTR [rbp-100]
   mov r13, rbx
   sub r13, r12
-.loc 1 569 0
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -26020,19 +26648,18 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 560 0
-  jmp .L1263
-.L1262:
-.L1263:
-.loc 1 570 0
+.loc 1 573 0
+  jmp .L1291
+.L1290:
+.L1291:
+.loc 1 593 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CALL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1270
-.loc 1 571 0
+  jne .L1298
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -26041,50 +26668,46 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1270
-.loc 1 570 0
+  jne .L1298
   mov rbx, 1
-  jmp .L1271
-.L1270:
+  jmp .L1299
+.L1298:
   mov rbx, 0
-.L1271:
+.L1299:
   mov rax, rbx
   test rax, rax
-  jz .L1268
-.loc 1 572 0
+  jz .L1296
+.loc 1 594 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 232
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 574 0
+.loc 1 595 0
   mov rbx, QWORD PTR [rbp-84]
-.loc 1 575 0
   mov r12, QWORD PTR [rbp-92]
-.loc 1 577 0
   mov r13, 5
-.loc 1 575 0
   mov r14, r12
   add r14, r13
-.loc 1 574 0
   mov r12, rbx
   sub r12, r14
-.loc 1 573 0
+.loc 1 594 0
   mov rax, r12
   mov QWORD PTR [rbp-116], rax
-.loc 1 578 0
+.loc 1 596 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 599 0
   mov r12, QWORD PTR [rbp-116]
-.loc 1 577 0
+.loc 1 596 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.loc 1 583 0
+.loc 1 599 0
   mov rbx, 5
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -26092,43 +26715,46 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 570 0
-  jmp .L1269
-.L1268:
-.L1269:
-.loc 1 583 0
+.loc 1 593 0
+  jmp .L1297
+.L1296:
+.L1297:
+.loc 1 599 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JMP]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1274
+  jne .L1302
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
+.loc 1 600 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_LABEL]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
+.loc 1 599 0
   mov rax, r12
   cmp rax, r13
-  jne .L1274
+  jne .L1302
   mov rbx, 1
-  jmp .L1275
-.L1274:
+  jmp .L1303
+.L1302:
   mov rbx, 0
-.L1275:
+.L1303:
   mov rax, rbx
   test rax, rax
-  jz .L1272
-.loc 1 584 0
+  jz .L1300
+.loc 1 601 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 233
+.loc 1 600 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 587 0
+.loc 1 602 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, QWORD PTR [rbp-92]
   mov r13, 5
@@ -26136,21 +26762,22 @@ _caustic_assembler_encoder_cst_encode:
   add r14, r13
   mov r12, rbx
   sub r12, r14
-.loc 1 584 0
+.loc 1 601 0
   mov rax, r12
   mov QWORD PTR [rbp-124], rax
-.loc 1 592 0
+.loc 1 603 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 605 0
   mov r12, QWORD PTR [rbp-124]
-.loc 1 588 0
+.loc 1 603 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.loc 1 592 0
+.loc 1 607 0
   mov rbx, 5
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -26158,36 +26785,38 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 583 0
-  jmp .L1273
-.L1272:
-.L1273:
-.loc 1 592 0
+.loc 1 599 0
+  jmp .L1301
+.L1300:
+.L1301:
+.loc 1 607 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 608 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JZ]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 607 0
   mov rax, rbx
   cmp rax, r13
-  jl .L1280
-.loc 1 593 0
+  jl .L1308
+.loc 1 613 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JBE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jg .L1280
-.loc 1 592 0
+  jg .L1308
+.loc 1 607 0
   mov rbx, 1
-  jmp .L1281
-.L1280:
+  jmp .L1309
+.L1308:
   mov rbx, 0
-.L1281:
+.L1309:
   mov rax, rbx
   test rax, rax
-  jz .L1278
-.loc 1 593 0
+  jz .L1306
+.loc 1 613 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -26196,230 +26825,258 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1278
-.loc 1 592 0
+  jne .L1306
+.loc 1 607 0
   mov rbx, 1
-  jmp .L1279
-.L1278:
+  jmp .L1307
+.L1306:
   mov rbx, 0
-.L1279:
+.L1307:
   mov rax, rbx
   test rax, rax
-  jz .L1276
-.loc 1 594 0
+  jz .L1304
+.loc 1 614 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 15
-.loc 1 593 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 595 0
-  mov DWORD PTR [rbp-128], 0
-.loc 1 594 0
-.loc 1 595 0
+.loc 1 615 0
+  mov rbx, 0
+.loc 1 614 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-128], eax
+.loc 1 615 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 616 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JZ]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 615 0
   mov rax, rbx
   cmp rax, r13
-  je .L1284
+  je .L1312
+.loc 1 616 0
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 596 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 595 0
   mov rax, rbx
   cmp rax, r13
-  je .L1284
+  je .L1312
+.loc 1 615 0
   mov rbx, 0
-  jmp .L1285
-.L1284:
+  jmp .L1313
+.L1312:
   mov rbx, 1
-.L1285:
+.L1313:
   mov rax, rbx
   test rax, rax
-  jz .L1282
-.loc 1 599 0
+  jz .L1310
+.loc 1 618 0
   lea rbx, [rbp-128]
+  mov r12, 132
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 132
-.loc 1 595 0
-  jmp .L1283
-.L1282:
-.L1283:
-.loc 1 599 0
+  mov DWORD PTR [rcx], eax
+.loc 1 615 0
+  jmp .L1311
+.L1310:
+.L1311:
+.loc 1 619 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JNZ]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1288
+  je .L1316
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 600 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JNE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 599 0
   mov rax, rbx
   cmp rax, r13
-  je .L1288
+  je .L1316
   mov rbx, 0
-  jmp .L1289
-.L1288:
+  jmp .L1317
+.L1316:
   mov rbx, 1
-.L1289:
+.L1317:
+.loc 1 618 0
   mov rax, rbx
   test rax, rax
-  jz .L1286
-.loc 1 600 0
+  jz .L1314
+.loc 1 619 0
   lea rbx, [rbp-128]
+  mov r12, 133
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 133
-.loc 1 599 0
-  jmp .L1287
-.L1286:
-.L1287:
-.loc 1 601 0
+  mov DWORD PTR [rcx], eax
+.loc 1 618 0
+  jmp .L1315
+.L1314:
+.L1315:
+.loc 1 622 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1290
-.loc 1 600 0
-.loc 1 602 0
+  jne .L1318
   lea rbx, [rbp-128]
+  mov r12, 140
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 140
-.loc 1 600 0
-  jmp .L1291
-.L1290:
-.L1291:
-.loc 1 602 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1319
+.L1318:
+.L1319:
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 623 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JLE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 622 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1292
-.loc 1 603 0
+  jne .L1320
+.loc 1 623 0
   lea rbx, [rbp-128]
+  mov r12, 142
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 142
-.loc 1 602 0
-  jmp .L1293
-.L1292:
-.L1293:
-.loc 1 607 0
+  mov DWORD PTR [rcx], eax
+.loc 1 622 0
+  jmp .L1321
+.L1320:
+.L1321:
+.loc 1 623 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 624 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JG]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 623 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1294
-.loc 1 608 0
+  jne .L1322
+.loc 1 624 0
   lea rbx, [rbp-128]
+.loc 1 625 0
+  mov r12, 143
+.loc 1 624 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 143
-.loc 1 607 0
-  jmp .L1295
-.L1294:
-.L1295:
-.loc 1 613 0
+  mov DWORD PTR [rcx], eax
+.loc 1 623 0
+  jmp .L1323
+.L1322:
+.L1323:
+.loc 1 627 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JGE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1296
+  jne .L1324
   lea rbx, [rbp-128]
+.loc 1 628 0
+  mov r12, 141
+.loc 1 627 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 141
-  jmp .L1297
-.L1296:
-.L1297:
-.loc 1 614 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1325
+.L1324:
+.L1325:
+.loc 1 628 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JA]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1298
-.loc 1 613 0
-.loc 1 614 0
+  jne .L1326
+.loc 1 629 0
   lea rbx, [rbp-128]
+  mov r12, 135
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 135
-.loc 1 613 0
-  jmp .L1299
-.L1298:
-.L1299:
-.loc 1 615 0
+  mov DWORD PTR [rcx], eax
+.loc 1 628 0
+  jmp .L1327
+.L1326:
+.L1327:
+.loc 1 630 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JAE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1300
-.loc 1 616 0
+  jne .L1328
+.loc 1 629 0
+.loc 1 631 0
   lea rbx, [rbp-128]
+  mov r12, 131
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 131
-.loc 1 615 0
-  jmp .L1301
-.L1300:
-.L1301:
-.loc 1 616 0
+  mov DWORD PTR [rcx], eax
+.loc 1 629 0
+  jmp .L1329
+.L1328:
+.L1329:
+.loc 1 632 0
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 618 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JB]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 616 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1302
-.loc 1 618 0
+  jne .L1330
+.loc 1 631 0
+.loc 1 632 0
   lea rbx, [rbp-128]
+  mov r12, 130
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 130
-.loc 1 616 0
-  jmp .L1303
-.L1302:
-.L1303:
-.loc 1 619 0
+  mov DWORD PTR [rcx], eax
+.loc 1 631 0
+  jmp .L1331
+.L1330:
+.L1331:
+.loc 1 634 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JBE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1304
+  jne .L1332
+.loc 1 632 0
+.loc 1 635 0
   lea rbx, [rbp-128]
+  mov r12, 134
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 134
-  jmp .L1305
-.L1304:
-.L1305:
-.loc 1 622 0
+  mov DWORD PTR [rcx], eax
+.loc 1 632 0
+  jmp .L1333
+.L1332:
+.L1333:
+.loc 1 638 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-128]
-.loc 1 619 0
+.loc 1 635 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 622 0
+.loc 1 639 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, QWORD PTR [rbp-92]
   mov r13, 6
@@ -26427,9 +27084,10 @@ _caustic_assembler_encoder_cst_encode:
   add r14, r13
   mov r12, rbx
   sub r12, r14
+.loc 1 638 0
   mov rax, r12
   mov QWORD PTR [rbp-136], rax
-.loc 1 623 0
+.loc 1 639 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, QWORD PTR [rbp-136]
   mov rdi, rbx
@@ -26438,7 +27096,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov rbx, 6
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -26446,36 +27104,36 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 592 0
-  jmp .L1277
-.L1276:
-.L1277:
-.loc 1 624 0
+.loc 1 607 0
+  jmp .L1305
+.L1304:
+.L1305:
+.loc 1 640 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jl .L1310
-.loc 1 627 0
+  jl .L1338
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 641 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETAE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 640 0
   mov rax, rbx
   cmp rax, r13
-  jg .L1310
-.loc 1 624 0
+  jg .L1338
   mov rbx, 1
-  jmp .L1311
-.L1310:
+  jmp .L1339
+.L1338:
   mov rbx, 0
-.L1311:
+.L1339:
   mov rax, rbx
   test rax, rax
-  jz .L1308
-.loc 1 627 0
+  jz .L1336
+.loc 1 641 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -26484,194 +27142,230 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1308
-.loc 1 624 0
+  jne .L1336
+.loc 1 640 0
   mov rbx, 1
-  jmp .L1309
-.L1308:
+  jmp .L1337
+.L1336:
   mov rbx, 0
-.L1309:
-.loc 1 623 0
+.L1337:
   mov rax, rbx
   test rax, rax
-  jz .L1306
-.loc 1 628 0
-  mov DWORD PTR [rbp-140], 0
-.loc 1 629 0
+  jz .L1334
+.loc 1 643 0
+  mov rbx, 0
+.loc 1 642 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-140], eax
+.loc 1 644 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1312
-.loc 1 630 0
+  jne .L1340
+.loc 1 643 0
+.loc 1 644 0
   lea rbx, [rbp-140]
+.loc 1 645 0
+  mov r12, 148
+.loc 1 644 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 148
-.loc 1 629 0
-  jmp .L1313
-.L1312:
-.L1313:
-.loc 1 631 0
+  mov DWORD PTR [rcx], eax
+.loc 1 643 0
+  jmp .L1341
+.L1340:
+.L1341:
+.loc 1 645 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 646 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETNE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 645 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1314
-.loc 1 632 0
+  jne .L1342
+.loc 1 646 0
   lea rbx, [rbp-140]
+  mov r12, 149
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 149
-.loc 1 631 0
-  jmp .L1315
-.L1314:
-.L1315:
-.loc 1 632 0
+  mov DWORD PTR [rcx], eax
+.loc 1 645 0
+  jmp .L1343
+.L1342:
+.L1343:
+.loc 1 647 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 648 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 647 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1316
-.loc 1 634 0
+  jne .L1344
+.loc 1 649 0
   lea rbx, [rbp-140]
+  mov r12, 156
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 156
-.loc 1 632 0
-  jmp .L1317
-.L1316:
-.L1317:
-.loc 1 635 0
+  mov DWORD PTR [rcx], eax
+.loc 1 647 0
+  jmp .L1345
+.L1344:
+.L1345:
+.loc 1 649 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETLE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1318
-.loc 1 638 0
+  jne .L1346
+.loc 1 650 0
   lea rbx, [rbp-140]
+  mov r12, 158
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 158
-.loc 1 635 0
-  jmp .L1319
-.L1318:
-.L1319:
-.loc 1 638 0
+  mov DWORD PTR [rcx], eax
+.loc 1 649 0
+  jmp .L1347
+.L1346:
+.L1347:
+.loc 1 651 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 652 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETG]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 651 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1320
-.loc 1 639 0
+  jne .L1348
+.loc 1 652 0
   lea rbx, [rbp-140]
+  mov r12, 159
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 159
-.loc 1 638 0
-  jmp .L1321
-.L1320:
-.L1321:
-.loc 1 639 0
+  mov DWORD PTR [rcx], eax
+.loc 1 651 0
+  jmp .L1349
+.L1348:
+.L1349:
+.loc 1 653 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETGE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1322
+  jne .L1350
+.loc 1 654 0
   lea rbx, [rbp-140]
+  mov r12, 157
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 157
-  jmp .L1323
-.L1322:
-.L1323:
-.loc 1 640 0
+  mov DWORD PTR [rcx], eax
+.loc 1 653 0
+  jmp .L1351
+.L1350:
+.L1351:
+.loc 1 654 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 655 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETB]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 654 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1324
-.loc 1 641 0
+  jne .L1352
+.loc 1 658 0
   lea rbx, [rbp-140]
+  mov r12, 146
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 146
-.loc 1 640 0
-  jmp .L1325
-.L1324:
-.L1325:
-.loc 1 641 0
+  mov DWORD PTR [rcx], eax
+.loc 1 654 0
+  jmp .L1353
+.L1352:
+.L1353:
+.loc 1 658 0
   movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 659 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETBE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
+.loc 1 658 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1326
-.loc 1 642 0
+  jne .L1354
+.loc 1 659 0
   lea rbx, [rbp-140]
+  mov r12, 150
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 150
-.loc 1 641 0
-  jmp .L1327
-.L1326:
-.L1327:
-.loc 1 643 0
+  mov DWORD PTR [rcx], eax
+.loc 1 658 0
+  jmp .L1355
+.L1354:
+.L1355:
+.loc 1 659 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETA]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1328
-.loc 1 644 0
+  jne .L1356
   lea rbx, [rbp-140]
+.loc 1 660 0
+  mov r12, 151
+.loc 1 659 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 151
-.loc 1 643 0
-  jmp .L1329
-.L1328:
-.L1329:
-.loc 1 645 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1357
+.L1356:
+.L1357:
+.loc 1 660 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETAE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1330
-.loc 1 646 0
+  jne .L1358
+.loc 1 661 0
   lea rbx, [rbp-140]
+  mov r12, 147
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 147
-.loc 1 645 0
-  jmp .L1331
-.L1330:
-.L1331:
-.loc 1 646 0
+  mov DWORD PTR [rcx], eax
+.loc 1 660 0
+  jmp .L1359
+.L1358:
+.L1359:
+.loc 1 661 0
   xor r10, r10
-.loc 1 648 0
+.loc 1 662 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 647 0
+.loc 1 661 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 646 0
   mov rax, rbx
   mov DWORD PTR [rbp-144], eax
-.loc 1 649 0
+.loc 1 663 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -26681,81 +27375,90 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
+.loc 1 664 0
   mov r12, 1
+.loc 1 663 0
   mov rax, rbx
   cmp rax, r12
-  je .L1334
-.loc 1 650 0
+  je .L1362
+.loc 1 664 0
   mov rbx, QWORD PTR [rbp-68]
+.loc 1 665 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
+.loc 1 664 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_needs_rex_for_8bit
   mov rbx, rax
-.loc 1 651 0
+.loc 1 665 0
   mov r12, 1
-.loc 1 650 0
+.loc 1 664 0
   mov rax, rbx
   cmp rax, r12
-  je .L1334
-.loc 1 649 0
+  je .L1362
+.loc 1 663 0
   mov rbx, 0
-  jmp .L1335
-.L1334:
+  jmp .L1363
+.L1362:
   mov rbx, 1
-.L1335:
+.L1363:
   mov rax, rbx
   test rax, rax
-  jz .L1332
-.loc 1 652 0
+  jz .L1360
+.loc 1 666 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 0
-.loc 1 653 0
+.loc 1 667 0
   mov r13, 0
   mov r14, 0
+.loc 1 668 0
   mov r8, QWORD PTR [rbp-68]
   mov r9, 4
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
+.loc 1 667 0
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
-.loc 1 652 0
+.loc 1 666 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
-.loc 1 651 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 649 0
-  jmp .L1333
-.L1332:
-.L1333:
-.loc 1 654 0
+.loc 1 663 0
+  jmp .L1361
+.L1360:
+.L1361:
+.loc 1 669 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 671 0
   mov r12, 15
+.loc 1 669 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 658 0
+.loc 1 673 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 674 0
   movsxd r12, DWORD PTR [rbp-140]
+.loc 1 673 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 659 0
+.loc 1 682 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 3
   mov r13, 0
@@ -26765,198 +27468,6 @@ _caustic_assembler_encoder_cst_encode:
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 658 0
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 659 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 8
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  mov rbx, QWORD PTR [rbx]
-.loc 1 660 0
-  mov r12, QWORD PTR [rbp-100]
-.loc 1 659 0
-  mov r13, rbx
-  sub r13, r12
-  mov rbx, r13
-  movsxd rbx, ebx
-  mov rax, rbx
-  add rsp, 508
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 623 0
-  jmp .L1307
-.L1306:
-.L1307:
-.loc 1 660 0
-  movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 661 0
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_IDIV]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-.loc 1 660 0
-  mov rax, rbx
-  cmp rax, r13
-  je .L1344
-.loc 1 661 0
-  movsxd rbx, DWORD PTR [rbp-60]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_DIV]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1344
-.loc 1 660 0
-  mov rbx, 0
-  jmp .L1345
-.L1344:
-  mov rbx, 1
-.L1345:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1342
-.loc 1 661 0
-  movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 662 0
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NEG]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-.loc 1 661 0
-  mov rax, rbx
-  cmp rax, r13
-  je .L1342
-.loc 1 660 0
-  mov rbx, 0
-  jmp .L1343
-.L1342:
-  mov rbx, 1
-.L1343:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1340
-.loc 1 662 0
-  movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 663 0
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NOT]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-.loc 1 662 0
-  mov rax, rbx
-  cmp rax, r13
-  je .L1340
-.loc 1 660 0
-  mov rbx, 0
-  jmp .L1341
-.L1340:
-  mov rbx, 1
-.L1341:
-  mov rax, rbx
-  test rax, rax
-  jz .L1338
-.loc 1 663 0
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-.loc 1 664 0
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-.loc 1 663 0
-  mov rax, r12
-  cmp rax, r13
-  jne .L1338
-.loc 1 660 0
-  mov rbx, 1
-  jmp .L1339
-.L1338:
-  mov rbx, 0
-.L1339:
-  mov rax, rbx
-  test rax, rax
-  jz .L1336
-.loc 1 664 0
-  xor r10, r10
-.loc 1 665 0
-  mov rbx, QWORD PTR [rbp-68]
-.loc 1 666 0
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-.loc 1 665 0
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_size
-  mov rbx, rax
-.loc 1 664 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-148], eax
-.loc 1 666 0
-  xor r10, r10
-.loc 1 667 0
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_code
-  mov rbx, rax
-.loc 1 666 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-152], eax
-.loc 1 669 0
-  mov DWORD PTR [rbp-156], 0
-.loc 1 671 0
-  movsxd rbx, DWORD PTR [rbp-148]
-.loc 1 672 0
-  mov r12, 64
-.loc 1 671 0
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1346
-.loc 1 669 0
-.loc 1 673 0
-  lea rbx, [rbp-156]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 669 0
-  jmp .L1347
-.L1346:
-.L1347:
-.loc 1 678 0
-  mov rbx, QWORD PTR [rbp-56]
-.loc 1 682 0
-  movsxd r12, DWORD PTR [rbp-156]
-  mov r13, 0
-  mov r14, 0
-.loc 1 683 0
-  mov r8, QWORD PTR [rbp-68]
-  mov r9, 4
-  mov r10, r8
-  add r10, r9
-  mov r15, r10
-  movsxd r15, DWORD PTR [r15]
-.loc 1 682 0
-  mov rdi, r15
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov r15, rax
-  mov rdi, r12
-  mov rsi, r13
-  mov rdx, r14
-  mov rcx, r15
-  call _caustic_assembler_encoder_cst_make_rex
-  mov r12, rax
 .loc 1 677 0
   mov rdi, rbx
   mov rsi, r12
@@ -26964,30 +27475,52 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
 .loc 1 683 0
   mov rbx, QWORD PTR [rbp-56]
-  mov r12, 247
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
+  mov r12, 8
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  mov rbx, QWORD PTR [rbx]
+  mov r12, QWORD PTR [rbp-100]
+  mov r13, rbx
+  sub r13, r12
+  mov rbx, r13
+  movsxd rbx, ebx
+  mov rax, rbx
+  add rsp, 520
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 640 0
+  jmp .L1335
+.L1334:
+.L1335:
 .loc 1 684 0
-  mov DWORD PTR [rbp-160], 7
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 685 0
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_IDIV]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  je .L1372
+  movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_DIV]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 684 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1348
-.loc 1 685 0
-  lea rbx, [rbp-160]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 6
-.loc 1 684 0
-  jmp .L1349
-.L1348:
-.L1349:
+  je .L1372
+  mov rbx, 0
+  jmp .L1373
+.L1372:
+  mov rbx, 1
+.L1373:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1370
 .loc 1 685 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NEG]
@@ -26995,36 +27528,204 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1350
-.loc 1 688 0
-  lea rbx, [rbp-160]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 3
+  je .L1370
+.loc 1 684 0
+  mov rbx, 0
+  jmp .L1371
+.L1370:
+  mov rbx, 1
+.L1371:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1368
 .loc 1 685 0
-  jmp .L1351
-.L1350:
-.L1351:
-.loc 1 688 0
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 689 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NOT]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 688 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1352
-.loc 1 689 0
-  lea rbx, [rbp-160]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 2
+  je .L1368
+.loc 1 684 0
+  mov rbx, 0
+  jmp .L1369
+.L1368:
+  mov rbx, 1
+.L1369:
+  mov rax, rbx
+  test rax, rax
+  jz .L1366
+.loc 1 685 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
 .loc 1 688 0
-  jmp .L1353
-.L1352:
-.L1353:
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+.loc 1 685 0
+  mov rax, r12
+  cmp rax, r13
+  jne .L1366
+.loc 1 684 0
+  mov rbx, 1
+  jmp .L1367
+.L1366:
+  mov rbx, 0
+.L1367:
+  mov rax, rbx
+  test rax, rax
+  jz .L1364
+.loc 1 688 0
+  xor r10, r10
 .loc 1 689 0
-  mov rbx, QWORD PTR [rbp-56]
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_size
+  mov rbx, rax
+.loc 1 688 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-148], eax
+.loc 1 689 0
+  xor r10, r10
 .loc 1 690 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+.loc 1 689 0
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_code
+  mov rbx, rax
+  mov rax, rbx
+  mov DWORD PTR [rbp-152], eax
+.loc 1 691 0
+  mov rbx, 0
+.loc 1 690 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-156], eax
+.loc 1 691 0
+  movsxd rbx, DWORD PTR [rbp-148]
+  mov r12, 64
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1374
+  lea rbx, [rbp-156]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1375
+.L1374:
+.L1375:
+.loc 1 692 0
+  mov rbx, QWORD PTR [rbp-56]
+  movsxd r12, DWORD PTR [rbp-156]
+.loc 1 693 0
+  mov r13, 0
+  mov r14, 0
+.loc 1 694 0
+  mov r8, QWORD PTR [rbp-68]
+  mov r9, 4
+  mov r10, r8
+  add r10, r9
+  mov r15, r10
+  movsxd r15, DWORD PTR [r15]
+.loc 1 693 0
+  mov rdi, r15
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r15, rax
+.loc 1 692 0
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  mov rcx, r15
+  call _caustic_assembler_encoder_cst_make_rex
+  mov r12, rax
+.loc 1 691 0
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 694 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 247
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 697 0
+  mov rbx, 7
+.loc 1 695 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-160], eax
+.loc 1 697 0
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_DIV]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1376
+.loc 1 698 0
+  lea rbx, [rbp-160]
+  mov r12, 6
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 697 0
+  jmp .L1377
+.L1376:
+.L1377:
+.loc 1 698 0
+  movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 699 0
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NEG]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+.loc 1 698 0
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1378
+.loc 1 699 0
+  lea rbx, [rbp-160]
+  mov r12, 3
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 698 0
+  jmp .L1379
+.L1378:
+.L1379:
+.loc 1 699 0
+  movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 700 0
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NOT]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+.loc 1 699 0
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1380
+.loc 1 700 0
+  lea rbx, [rbp-160]
+  mov r12, 2
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 699 0
+  jmp .L1381
+.L1380:
+.L1381:
+.loc 1 701 0
+  mov rbx, QWORD PTR [rbp-56]
   mov r12, 3
   movsxd r13, DWORD PTR [rbp-160]
   movsxd r14, DWORD PTR [rbp-152]
@@ -27033,25 +27734,27 @@ _caustic_assembler_encoder_cst_encode:
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 689 0
+.loc 1 700 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 691 0
+.loc 1 701 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
+.loc 1 702 0
   mov r12, QWORD PTR [rbp-100]
+.loc 1 701 0
   mov r13, rbx
   sub r13, r12
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -27059,31 +27762,30 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 660 0
-  jmp .L1337
-.L1336:
-.L1337:
-.loc 1 691 0
+.loc 1 684 0
+  jmp .L1365
+.L1364:
+.L1365:
+.loc 1 705 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOV]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1354
-.loc 1 692 0
+  jne .L1382
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
-.loc 1 693 0
+.loc 1 706 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
-.loc 1 692 0
+.loc 1 705 0
   mov rax, r12
   cmp rax, r13
-  jne .L1358
-.loc 1 694 0
+  jne .L1386
+.loc 1 706 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -27092,35 +27794,34 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1358
-.loc 1 692 0
+  jne .L1386
+.loc 1 705 0
   mov rbx, 1
-  jmp .L1359
-.L1358:
+  jmp .L1387
+.L1386:
   mov rbx, 0
-.L1359:
+.L1387:
   mov rax, rbx
   test rax, rax
-  jz .L1356
-.loc 1 694 0
+  jz .L1384
+.loc 1 707 0
   xor r10, r10
-.loc 1 695 0
+.loc 1 708 0
   mov rbx, QWORD PTR [rbp-68]
-.loc 1 696 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 695 0
+.loc 1 707 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_size
   mov rbx, rax
-.loc 1 694 0
   mov rax, rbx
   mov DWORD PTR [rbp-164], eax
-.loc 1 697 0
+.loc 1 708 0
   xor r10, r10
+.loc 1 709 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -27130,10 +27831,12 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
+.loc 1 708 0
   mov rax, rbx
   mov DWORD PTR [rbp-168], eax
-.loc 1 698 0
+.loc 1 709 0
   xor r10, r10
+.loc 1 710 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
@@ -27143,50 +27846,60 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
+.loc 1 709 0
   mov rax, rbx
   mov DWORD PTR [rbp-172], eax
-.loc 1 699 0
+.loc 1 712 0
   movsxd rbx, DWORD PTR [rbp-164]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1360
-.loc 1 700 0
+  jne .L1388
+.loc 1 713 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
-.loc 1 699 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1361
-.L1360:
-.L1361:
-.loc 1 701 0
-  mov DWORD PTR [rbp-176], 0
-.loc 1 700 0
-.loc 1 701 0
-  mov DWORD PTR [rbp-180], 0
+.loc 1 712 0
+  jmp .L1389
+.L1388:
+.L1389:
+.loc 1 715 0
+  mov rbx, 0
+.loc 1 713 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-176], eax
+.loc 1 716 0
+  mov rbx, 0
+.loc 1 715 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-180], eax
+.loc 1 716 0
   movsxd rbx, DWORD PTR [rbp-164]
+.loc 1 717 0
   mov r12, 64
+.loc 1 716 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1362
-.loc 1 702 0
+  jne .L1390
+.loc 1 717 0
   lea rbx, [rbp-180]
-.loc 1 703 0
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 702 0
-.loc 1 705 0
+  mov DWORD PTR [rcx], eax
   lea rbx, [rbp-176]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 701 0
-  jmp .L1363
-.L1362:
-.L1363:
-.loc 1 705 0
+  mov DWORD PTR [rcx], eax
+.loc 1 716 0
+  jmp .L1391
+.L1390:
+.L1391:
+.loc 1 718 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
@@ -27199,49 +27912,48 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1366
-.loc 1 706 0
+  je .L1394
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 705 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 706 0
+.loc 1 719 0
   mov r12, 1
-.loc 1 705 0
+.loc 1 718 0
   mov rax, rbx
   cmp rax, r12
-  je .L1366
+  je .L1394
   mov rbx, 0
-  jmp .L1367
-.L1366:
+  jmp .L1395
+.L1394:
   mov rbx, 1
-.L1367:
+.L1395:
+.loc 1 717 0
   mov rax, rbx
   test rax, rax
-  jz .L1364
-.loc 1 706 0
+  jz .L1392
+.loc 1 719 0
   lea rbx, [rbp-176]
-.loc 1 707 0
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 706 0
-.loc 1 705 0
-  jmp .L1365
-.L1364:
-.L1365:
-.loc 1 707 0
+  mov DWORD PTR [rcx], eax
+.loc 1 717 0
+  jmp .L1393
+.L1392:
+.L1393:
+.loc 1 719 0
   movsxd rbx, DWORD PTR [rbp-164]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1370
-.loc 1 708 0
+  jne .L1398
+.loc 1 720 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -27254,8 +27966,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1372
-.loc 1 709 0
+  je .L1400
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
@@ -27265,47 +27976,47 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_needs_rex_for_8bit
   mov rbx, rax
+.loc 1 721 0
   mov r12, 1
+.loc 1 720 0
   mov rax, rbx
   cmp rax, r12
-  je .L1372
-.loc 1 708 0
+  je .L1400
   mov rbx, 0
-  jmp .L1373
-.L1372:
+  jmp .L1401
+.L1400:
   mov rbx, 1
-.L1373:
-.loc 1 707 0
+.L1401:
+.loc 1 719 0
   mov rax, rbx
   test rax, rax
-  jz .L1370
+  jz .L1398
   mov rbx, 1
-  jmp .L1371
-.L1370:
+  jmp .L1399
+.L1398:
   mov rbx, 0
-.L1371:
+.L1399:
   mov rax, rbx
   test rax, rax
-  jz .L1368
-.loc 1 710 0
+  jz .L1396
+.loc 1 721 0
   lea rbx, [rbp-176]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 707 0
-  jmp .L1369
-.L1368:
-.L1369:
-.loc 1 710 0
-  movsxd rbx, DWORD PTR [rbp-176]
-.loc 1 712 0
   mov r12, 1
-.loc 1 710 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 719 0
+  jmp .L1397
+.L1396:
+.L1397:
+.loc 1 721 0
+  movsxd rbx, DWORD PTR [rbp-176]
+  mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1374
-.loc 1 712 0
+  jne .L1402
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 713 0
+.loc 1 723 0
   movsxd r12, DWORD PTR [rbp-180]
   mov r13, QWORD PTR [rbp-76]
   mov r14, 4
@@ -27316,66 +28027,58 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r13
   call _caustic_assembler_encoder_cst_reg_ext
   mov r13, rax
+.loc 1 724 0
   mov r14, 0
-.loc 1 715 0
   mov r8, QWORD PTR [rbp-68]
   mov r9, 4
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
-.loc 1 713 0
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
+.loc 1 723 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
-.loc 1 712 0
+.loc 1 721 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 710 0
-  jmp .L1375
-.L1374:
-.L1375:
-.loc 1 716 0
+  jmp .L1403
+.L1402:
+.L1403:
+.loc 1 725 0
   movsxd rbx, DWORD PTR [rbp-164]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1376
-.loc 1 717 0
+  jne .L1404
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 136
-.loc 1 716 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1377
-.L1376:
-.loc 1 717 0
+  jmp .L1405
+.L1404:
+.loc 1 727 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 718 0
   mov r12, 137
-.loc 1 717 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1377:
-.loc 1 718 0
+.L1405:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 3
-.loc 1 719 0
   movsxd r13, DWORD PTR [rbp-172]
   movsxd r14, DWORD PTR [rbp-168]
-.loc 1 718 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -27385,22 +28088,20 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 719 0
+.loc 1 728 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
-.loc 1 720 0
   mov r12, QWORD PTR [rbp-100]
-.loc 1 719 0
   mov r13, rbx
   sub r13, r12
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -27408,22 +28109,24 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 692 0
-  jmp .L1357
-.L1356:
-.L1357:
-.loc 1 720 0
+.loc 1 705 0
+  jmp .L1385
+.L1384:
+.L1385:
+.loc 1 728 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
+.loc 1 729 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
+.loc 1 728 0
   mov rax, r12
   cmp rax, r13
-  jne .L1380
+  jne .L1408
+.loc 1 729 0
   mov rbx, QWORD PTR [rbp-76]
-.loc 1 721 0
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_IMM]
@@ -27431,18 +28134,19 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1380
-.loc 1 720 0
+  jne .L1408
+.loc 1 728 0
   mov rbx, 1
-  jmp .L1381
-.L1380:
+  jmp .L1409
+.L1408:
   mov rbx, 0
-.L1381:
+.L1409:
   mov rax, rbx
   test rax, rax
-  jz .L1378
-.loc 1 721 0
+  jz .L1406
+.loc 1 730 0
   xor r10, r10
+.loc 1 731 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -27452,10 +28156,11 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_size
   mov rbx, rax
+.loc 1 730 0
   mov rax, rbx
   mov DWORD PTR [rbp-184], eax
+.loc 1 731 0
   xor r10, r10
-.loc 1 723 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -27465,16 +28170,14 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 721 0
   mov rax, rbx
   mov DWORD PTR [rbp-188], eax
-.loc 1 724 0
   movsxd rbx, DWORD PTR [rbp-184]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1382
-.loc 1 725 0
+  jne .L1410
+.loc 1 732 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 8
   mov r13, rbx
@@ -27487,14 +28190,12 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1384
-.loc 1 724 0
-.loc 1 725 0
+  jne .L1412
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 1
   mov r13, 0
-.loc 1 727 0
   mov r14, 0
+.loc 1 733 0
   mov r8, QWORD PTR [rbp-68]
   mov r9, 4
   mov r10, r8
@@ -27504,7 +28205,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
-.loc 1 725 0
+.loc 1 732 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -27515,7 +28216,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 727 0
+.loc 1 733 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 199
   mov rdi, rbx
@@ -27523,11 +28224,11 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 728 0
+.loc 1 734 0
   mov r12, 3
   mov r13, 0
   movsxd r14, DWORD PTR [rbp-188]
-.loc 1 727 0
+.loc 1 733 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -27537,7 +28238,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 728 0
+.loc 1 734 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, QWORD PTR [rbp-76]
   mov r13, 8
@@ -27549,83 +28250,95 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.loc 1 724 0
-  jmp .L1385
-.L1384:
-.loc 1 729 0
+.loc 1 732 0
+  jmp .L1413
+.L1412:
+.loc 1 734 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 730 0
+.loc 1 737 0
   mov r12, 1
   mov r13, 0
   mov r14, 0
-.loc 1 731 0
   mov r8, QWORD PTR [rbp-68]
+.loc 1 738 0
   mov r9, 4
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
+.loc 1 737 0
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
-.loc 1 729 0
+.loc 1 736 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
+.loc 1 734 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 731 0
+.loc 1 738 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 739 0
   mov r12, 184
   movsxd r13, DWORD PTR [rbp-188]
   mov r14, r12
   add r14, r13
+.loc 1 738 0
   mov rdi, rbx
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
+.loc 1 740 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 732 0
+.loc 1 741 0
   mov r12, QWORD PTR [rbp-76]
   mov r13, 8
   mov r14, r12
   add r14, r13
   mov r12, r14
   mov r12, QWORD PTR [r12]
-.loc 1 731 0
+.loc 1 740 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit64_le
   mov rbx, rax
-.L1385:
-.loc 1 724 0
-  jmp .L1383
-.L1382:
-.loc 1 732 0
+.L1413:
+.loc 1 731 0
+  jmp .L1411
+.L1410:
+.loc 1 741 0
   movsxd rbx, DWORD PTR [rbp-184]
+.loc 1 743 0
   mov r12, 32
+.loc 1 741 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1386
+  jne .L1414
+.loc 1 745 0
   mov rbx, QWORD PTR [rbp-68]
+.loc 1 749 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
+.loc 1 743 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
+.loc 1 749 0
   mov r12, 1
+.loc 1 743 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1388
-.loc 1 733 0
+  jne .L1416
+.loc 1 749 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 0
   mov r13, 0
@@ -27641,23 +28354,22 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 732 0
-  jmp .L1389
-.L1388:
-.L1389:
-.loc 1 733 0
+.loc 1 743 0
+  jmp .L1417
+.L1416:
+.L1417:
+.loc 1 750 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 184
-.loc 1 734 0
   movsxd r13, DWORD PTR [rbp-188]
-.loc 1 733 0
   mov r14, r12
   add r14, r13
+.loc 1 749 0
   mov rdi, rbx
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 734 0
+.loc 1 750 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, QWORD PTR [rbp-76]
   mov r13, 8
@@ -27669,25 +28381,22 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.loc 1 732 0
-  jmp .L1387
-.L1386:
-.loc 1 734 0
+.loc 1 741 0
+  jmp .L1415
+.L1414:
+.loc 1 751 0
   movsxd rbx, DWORD PTR [rbp-184]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1390
-.loc 1 735 0
+  jne .L1418
+.loc 1 752 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 737 0
   mov r12, 102
-.loc 1 734 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 737 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -27697,67 +28406,67 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 738 0
+.loc 1 753 0
   mov r12, 1
-.loc 1 737 0
+.loc 1 752 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1392
-.loc 1 738 0
+  jne .L1420
+.loc 1 753 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 739 0
+.loc 1 754 0
   mov r12, 0
+.loc 1 755 0
   mov r13, 0
-.loc 1 740 0
   mov r14, 0
   mov r15, 1
-.loc 1 739 0
+.loc 1 754 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
-.loc 1 738 0
+.loc 1 753 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 737 0
-  jmp .L1393
-.L1392:
-.L1393:
-.loc 1 741 0
+.loc 1 752 0
+  jmp .L1421
+.L1420:
+.L1421:
+.loc 1 758 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 184
+.loc 1 759 0
   movsxd r13, DWORD PTR [rbp-188]
+.loc 1 758 0
   mov r14, r12
   add r14, r13
+.loc 1 757 0
   mov rdi, rbx
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 743 0
+.loc 1 761 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 749 0
   mov r12, QWORD PTR [rbp-76]
   mov r13, 8
   mov r14, r12
   add r14, r13
   mov r12, r14
   mov r12, QWORD PTR [r12]
-.loc 1 744 0
   mov r13, r12
   movsxd r13, r13d
-.loc 1 743 0
   mov rdi, rbx
   mov rsi, r13
   call _caustic_assembler_buf_cst_buf_emit16_le
   mov rbx, rax
-.loc 1 734 0
-  jmp .L1391
-.L1390:
-.loc 1 749 0
+.loc 1 751 0
+  jmp .L1419
+.L1418:
+.loc 1 761 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -27767,46 +28476,49 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
+.loc 1 762 0
   mov r12, 1
+.loc 1 761 0
   mov rax, rbx
   cmp rax, r12
-  je .L1396
+  je .L1424
+.loc 1 763 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
+.loc 1 762 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_needs_rex_for_8bit
   mov rbx, rax
-.loc 1 750 0
+.loc 1 764 0
   mov r12, 1
-.loc 1 749 0
+.loc 1 762 0
   mov rax, rbx
   cmp rax, r12
-  je .L1396
+  je .L1424
+.loc 1 761 0
   mov rbx, 0
-  jmp .L1397
-.L1396:
+  jmp .L1425
+.L1424:
   mov rbx, 1
-.L1397:
+.L1425:
   mov rax, rbx
   test rax, rax
-  jz .L1394
-.loc 1 750 0
+  jz .L1422
+.loc 1 767 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 0
   mov r13, 0
   mov r14, 0
   mov r8, QWORD PTR [rbp-68]
-.loc 1 751 0
   mov r9, 4
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
-.loc 1 750 0
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
@@ -27820,11 +28532,11 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 749 0
-  jmp .L1395
-.L1394:
-.L1395:
-.loc 1 752 0
+.loc 1 761 0
+  jmp .L1423
+.L1422:
+.L1423:
+.loc 1 768 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 176
   movsxd r13, DWORD PTR [rbp-188]
@@ -27835,40 +28547,35 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 753 0
   mov r12, QWORD PTR [rbp-76]
   mov r13, 8
   mov r14, r12
   add r14, r13
   mov r12, r14
   mov r12, QWORD PTR [r12]
-.loc 1 752 0
   mov r13, r12
   movsxd r13, r13d
   mov rdi, rbx
   mov rsi, r13
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1391:
-.L1387:
-.L1383:
-.loc 1 755 0
+.L1419:
+.L1415:
+.L1411:
+.loc 1 769 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
-.loc 1 756 0
   mov r12, QWORD PTR [rbp-100]
-.loc 1 755 0
   mov r13, rbx
   sub r13, r12
-.loc 1 754 0
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -27876,25 +28583,22 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 720 0
-  jmp .L1379
-.L1378:
-.L1379:
-.loc 1 758 0
+.loc 1 728 0
+  jmp .L1407
+.L1406:
+.L1407:
+.loc 1 770 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
-.loc 1 759 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
-.loc 1 758 0
   mov rax, r12
   cmp rax, r13
-  jne .L1400
-.loc 1 760 0
+  jne .L1428
+.loc 1 771 0
   mov rbx, QWORD PTR [rbp-76]
-.loc 1 761 0
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
@@ -27902,19 +28606,19 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1400
-.loc 1 758 0
+  jne .L1428
+.loc 1 770 0
   mov rbx, 1
-  jmp .L1401
-.L1400:
+  jmp .L1429
+.L1428:
   mov rbx, 0
-.L1401:
-.loc 1 757 0
+.L1429:
   mov rax, rbx
   test rax, rax
-  jz .L1398
-.loc 1 761 0
+  jz .L1426
+.loc 1 771 0
   xor r10, r10
+.loc 1 773 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
@@ -27924,38 +28628,36 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_size
   mov rbx, rax
+.loc 1 771 0
   mov rax, rbx
   mov DWORD PTR [rbp-192], eax
+.loc 1 774 0
   xor r10, r10
-.loc 1 762 0
+.loc 1 776 0
   mov rbx, QWORD PTR [rbp-76]
-.loc 1 763 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 762 0
+.loc 1 775 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 761 0
+.loc 1 774 0
   mov rax, rbx
   mov DWORD PTR [rbp-196], eax
-.loc 1 764 0
+.loc 1 778 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 28
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 767 0
   mov r12, 0
-.loc 1 764 0
   mov rax, rbx
   cmp rax, r12
-  jle .L1404
-.loc 1 767 0
+  jle .L1432
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 28
   mov r13, rbx
@@ -27965,18 +28667,17 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r12, DWORD PTR [rbp-192]
   mov rax, rbx
   cmp rax, r12
-  jge .L1404
-.loc 1 764 0
+  jge .L1432
   mov rbx, 1
-  jmp .L1405
-.L1404:
+  jmp .L1433
+.L1432:
   mov rbx, 0
-.L1405:
-.loc 1 763 0
+.L1433:
+.loc 1 777 0
   mov rax, rbx
   test rax, rax
-  jz .L1402
-.loc 1 767 0
+  jz .L1430
+.loc 1 778 0
   lea rbx, [rbp-192]
   mov r12, QWORD PTR [rbp-68]
   mov r13, 28
@@ -27987,503 +28688,79 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-.loc 1 763 0
-  jmp .L1403
-.L1402:
-.L1403:
-.loc 1 767 0
+.loc 1 777 0
+  jmp .L1431
+.L1430:
+.L1431:
+.loc 1 779 0
   movsxd rbx, DWORD PTR [rbp-192]
   mov r12, 16
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1406
-.loc 1 768 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 102
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 767 0
-  jmp .L1407
-.L1406:
-.L1407:
-.loc 1 768 0
-  mov DWORD PTR [rbp-200], 0
-.loc 1 769 0
-  mov DWORD PTR [rbp-204], 0
-.loc 1 768 0
-.loc 1 769 0
-  movsxd rbx, DWORD PTR [rbp-192]
-  mov r12, 64
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1408
-  lea rbx, [rbp-204]
-.loc 1 770 0
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 769 0
-.loc 1 770 0
-  lea rbx, [rbp-200]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 769 0
-  jmp .L1409
-.L1408:
-.L1409:
-.loc 1 771 0
-  mov rbx, QWORD PTR [rbp-76]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-.loc 1 770 0
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov rbx, rax
-.loc 1 771 0
-  mov r12, 1
-.loc 1 770 0
-  mov rax, rbx
-  cmp rax, r12
-  je .L1412
-.loc 1 771 0
-  mov rbx, QWORD PTR [rbp-68]
-.loc 1 772 0
-  mov r12, 16
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-.loc 1 771 0
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov rbx, rax
-.loc 1 772 0
-  mov r12, 1
-.loc 1 771 0
-  mov rax, rbx
-  cmp rax, r12
-  je .L1412
-.loc 1 770 0
-  mov rbx, 0
-  jmp .L1413
-.L1412:
-  mov rbx, 1
-.L1413:
-  mov rax, rbx
-  test rax, rax
-  jz .L1410
-.loc 1 773 0
-  lea rbx, [rbp-200]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 770 0
-  jmp .L1411
-.L1410:
-.L1411:
-.loc 1 775 0
-  mov rbx, QWORD PTR [rbp-68]
-.loc 1 774 0
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_has_sib
-  mov rbx, rax
-.loc 1 775 0
-  mov r12, 1
-.loc 1 774 0
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1416
-.loc 1 776 0
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, 32
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov rbx, rax
-.loc 1 778 0
-  mov r12, 1
-.loc 1 776 0
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1416
-.loc 1 774 0
-  mov rbx, 1
-  jmp .L1417
-.L1416:
-  mov rbx, 0
-.L1417:
-  mov rax, rbx
-  test rax, rax
-  jz .L1414
-.loc 1 778 0
-  lea rbx, [rbp-200]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 774 0
-  jmp .L1415
-.L1414:
-.L1415:
-.loc 1 778 0
-  movsxd rbx, DWORD PTR [rbp-192]
-  mov r12, 8
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1420
-  mov rbx, QWORD PTR [rbp-76]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_needs_rex_for_8bit
-  mov rbx, rax
-  mov r12, 1
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1420
-  mov rbx, 1
-  jmp .L1421
-.L1420:
-  mov rbx, 0
-.L1421:
-  mov rax, rbx
-  test rax, rax
-  jz .L1418
-.loc 1 779 0
-  lea rbx, [rbp-200]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 778 0
-  jmp .L1419
-.L1418:
-.L1419:
-.loc 1 779 0
-  movsxd rbx, DWORD PTR [rbp-200]
-  mov r12, 1
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1422
-.loc 1 780 0
-  mov DWORD PTR [rbp-208], 0
-.loc 1 779 0
-.loc 1 780 0
-  mov rbx, QWORD PTR [rbp-68]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_has_sib
-  mov rbx, rax
-  mov r12, 1
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1424
-  lea rbx, [rbp-208]
-  mov r10, rbx
-  mov r12, QWORD PTR [rbp-68]
-.loc 1 782 0
-  mov r13, 32
-  mov r14, r12
-  add r14, r13
-  mov r12, r14
-  movsxd r12, DWORD PTR [r12]
-.loc 1 780 0
-  mov rdi, r12
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov r12, rax
-  mov rax, r12
-  mov rcx, rbx
-  mov DWORD PTR [rcx], eax
-  jmp .L1425
-.L1424:
-.L1425:
-.loc 1 782 0
-  mov rbx, QWORD PTR [rbp-56]
-  movsxd r12, DWORD PTR [rbp-204]
-  mov r13, QWORD PTR [rbp-76]
-.loc 1 783 0
-  mov r14, 4
-  mov r8, r13
-  add r8, r14
-  mov r13, r8
-  movsxd r13, DWORD PTR [r13]
-.loc 1 782 0
-  mov rdi, r13
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov r13, rax
-.loc 1 783 0
-  movsxd r14, DWORD PTR [rbp-208]
-  mov r8, QWORD PTR [rbp-68]
-  mov r9, 16
-  mov r10, r8
-  add r10, r9
-  mov r15, r10
-  movsxd r15, DWORD PTR [r15]
-  mov rdi, r15
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov r15, rax
-.loc 1 782 0
-  mov rdi, r12
-  mov rsi, r13
-  mov rdx, r14
-  mov rcx, r15
-  call _caustic_assembler_encoder_cst_make_rex
-  mov r12, rax
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 779 0
-  jmp .L1423
-.L1422:
-.L1423:
-.loc 1 784 0
-  movsxd rbx, DWORD PTR [rbp-192]
-  mov r12, 8
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1426
-.loc 1 783 0
-.loc 1 785 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 136
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 783 0
-  jmp .L1427
-.L1426:
-.loc 1 785 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 137
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.L1427:
-.loc 1 786 0
-  mov rbx, QWORD PTR [rbp-68]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_has_sib
-  mov rbx, rax
-.loc 1 787 0
-  mov r12, 1
-.loc 1 786 0
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1428
-.loc 1 785 0
-.loc 1 787 0
-  mov rbx, QWORD PTR [rbp-56]
-  movsxd rax, DWORD PTR [rbp-196]
-  mov QWORD PTR [rbp-444], rax
-  mov r13, QWORD PTR [rbp-68]
-  mov r14, 16
-  mov r8, r13
-  add r8, r14
-  mov r13, r8
-  movsxd r13, DWORD PTR [r13]
-  mov r14, QWORD PTR [rbp-68]
-  mov r8, 32
-  mov r9, r14
-  add r9, r8
-  mov r14, r9
-  movsxd r14, DWORD PTR [r14]
-  mov r8, QWORD PTR [rbp-68]
-  mov r9, 36
-  mov r10, r8
-  add r10, r9
-  mov r15, r10
-  movsxd r15, DWORD PTR [r15]
-  mov r8, QWORD PTR [rbp-68]
-.loc 1 788 0
-  mov r9, 20
-  mov r10, r8
-  add r10, r9
-  mov r12, r10
-  mov r12, QWORD PTR [r12]
-.loc 1 787 0
-  mov rdi, rbx
-  mov rsi, QWORD PTR [rbp-444]
-  mov rdx, r13
-  mov rcx, r14
-  mov r8, r15
-  mov r9, r12
-  call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
-  mov rbx, rax
-.loc 1 785 0
-  jmp .L1429
-.L1428:
-.loc 1 789 0
-  mov rbx, QWORD PTR [rbp-56]
-  movsxd r12, DWORD PTR [rbp-196]
-  mov r13, QWORD PTR [rbp-68]
-  mov r14, 16
-  mov r8, r13
-  add r8, r14
-  mov r13, r8
-  movsxd r13, DWORD PTR [r13]
-  mov r14, QWORD PTR [rbp-68]
-  mov r8, 20
-  mov r9, r14
-  add r9, r8
-  mov r14, r9
-  mov r14, QWORD PTR [r14]
-  mov rdi, rbx
-  mov rsi, r12
-  mov rdx, r13
-  mov rcx, r14
-  call _caustic_assembler_encoder_cst_emit_mem_modrm
-  mov rbx, rax
-.L1429:
-.loc 1 792 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 8
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  mov rbx, QWORD PTR [rbx]
-  mov r12, QWORD PTR [rbp-100]
-  mov r13, rbx
-  sub r13, r12
-  mov rbx, r13
-  movsxd rbx, ebx
-  mov rax, rbx
-  add rsp, 508
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 757 0
-  jmp .L1399
-.L1398:
-.L1399:
-.loc 1 792 0
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1432
-.loc 1 793 0
-  mov rbx, QWORD PTR [rbp-76]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1432
-.loc 1 792 0
-  mov rbx, 1
-  jmp .L1433
-.L1432:
-  mov rbx, 0
-.L1433:
-  mov rax, rbx
-  test rax, rax
-  jz .L1430
-.loc 1 794 0
-  xor r10, r10
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_size
-  mov rbx, rax
-  mov rax, rbx
-  mov DWORD PTR [rbp-212], eax
-  xor r10, r10
-.loc 1 795 0
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_code
-  mov rbx, rax
-.loc 1 794 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-216], eax
-.loc 1 795 0
-  movsxd rbx, DWORD PTR [rbp-212]
-.loc 1 798 0
-  mov r12, 16
-.loc 1 795 0
   mov rax, rbx
   cmp rax, r12
   jne .L1434
-.loc 1 798 0
+.loc 1 778 0
+.loc 1 779 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 795 0
+.loc 1 778 0
   jmp .L1435
 .L1434:
 .L1435:
-.loc 1 800 0
-  mov DWORD PTR [rbp-220], 0
-.loc 1 799 0
-.loc 1 801 0
-  mov DWORD PTR [rbp-224], 0
-.loc 1 800 0
-.loc 1 801 0
-  movsxd rbx, DWORD PTR [rbp-212]
+.loc 1 780 0
+  mov rbx, 0
+.loc 1 779 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-200], eax
+.loc 1 780 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-204], eax
+  movsxd rbx, DWORD PTR [rbp-192]
+.loc 1 782 0
   mov r12, 64
+.loc 1 780 0
   mov rax, rbx
   cmp rax, r12
   jne .L1436
-  lea rbx, [rbp-224]
-.loc 1 802 0
+.loc 1 782 0
+  lea rbx, [rbp-204]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 801 0
-.loc 1 802 0
-  lea rbx, [rbp-220]
+  mov DWORD PTR [rcx], eax
+  lea rbx, [rbp-200]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 801 0
+  mov DWORD PTR [rcx], eax
+.loc 1 780 0
   jmp .L1437
 .L1436:
 .L1437:
-.loc 1 802 0
-  mov rbx, QWORD PTR [rbp-68]
+.loc 1 782 0
+  mov rbx, QWORD PTR [rbp-76]
+.loc 1 783 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
+.loc 1 782 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 805 0
+.loc 1 783 0
   mov r12, 1
-.loc 1 802 0
+.loc 1 782 0
   mov rax, rbx
   cmp rax, r12
   je .L1440
-.loc 1 805 0
-  mov rbx, QWORD PTR [rbp-76]
+.loc 1 783 0
+  mov rbx, QWORD PTR [rbp-68]
   mov r12, 16
   mov r13, rbx
   add r13, r12
@@ -28496,7 +28773,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   cmp rax, r12
   je .L1440
-.loc 1 802 0
+.loc 1 782 0
   mov rbx, 0
   jmp .L1441
 .L1440:
@@ -28505,16 +28782,20 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   test rax, rax
   jz .L1438
-.loc 1 805 0
-  lea rbx, [rbp-220]
+.loc 1 783 0
+  lea rbx, [rbp-200]
+.loc 1 784 0
+  mov r12, 1
+.loc 1 783 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 802 0
+  mov DWORD PTR [rcx], eax
+.loc 1 782 0
   jmp .L1439
 .L1438:
 .L1439:
-.loc 1 806 0
-  mov rbx, QWORD PTR [rbp-76]
+.loc 1 785 0
+  mov rbx, QWORD PTR [rbp-68]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
   mov rbx, rax
@@ -28522,7 +28803,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   cmp rax, r12
   jne .L1444
-  mov rbx, QWORD PTR [rbp-76]
+  mov rbx, QWORD PTR [rbp-68]
   mov r12, 32
   mov r13, rbx
   add r13, r12
@@ -28540,25 +28821,28 @@ _caustic_assembler_encoder_cst_encode:
 .L1444:
   mov rbx, 0
 .L1445:
-.loc 1 805 0
+.loc 1 784 0
   mov rax, rbx
   test rax, rax
   jz .L1442
-.loc 1 807 0
-  lea rbx, [rbp-220]
+.loc 1 785 0
+  lea rbx, [rbp-200]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 805 0
+  mov DWORD PTR [rcx], eax
+.loc 1 784 0
   jmp .L1443
 .L1442:
 .L1443:
-.loc 1 807 0
-  movsxd rbx, DWORD PTR [rbp-212]
+.loc 1 786 0
+  movsxd rbx, DWORD PTR [rbp-192]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
   jne .L1448
-  mov rbx, QWORD PTR [rbp-68]
+.loc 1 787 0
+  mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
   add r13, r12
@@ -28571,62 +28855,69 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   cmp rax, r12
   jne .L1448
+.loc 1 786 0
   mov rbx, 1
   jmp .L1449
 .L1448:
   mov rbx, 0
 .L1449:
+.loc 1 785 0
   mov rax, rbx
   test rax, rax
   jz .L1446
-  lea rbx, [rbp-220]
+.loc 1 787 0
+  lea rbx, [rbp-200]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
+.loc 1 785 0
   jmp .L1447
 .L1446:
 .L1447:
-.loc 1 808 0
-  movsxd rbx, DWORD PTR [rbp-220]
+.loc 1 787 0
+  movsxd rbx, DWORD PTR [rbp-200]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
   jne .L1450
-  mov DWORD PTR [rbp-228], 0
-.loc 1 809 0
-  mov rbx, QWORD PTR [rbp-76]
+.loc 1 789 0
+  mov rbx, 0
+.loc 1 787 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-208], eax
+.loc 1 789 0
+  mov rbx, QWORD PTR [rbp-68]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
   mov rbx, rax
-.loc 1 810 0
   mov r12, 1
-.loc 1 809 0
   mov rax, rbx
   cmp rax, r12
   jne .L1452
-.loc 1 808 0
-.loc 1 810 0
-  lea rbx, [rbp-228]
-  mov r10, rbx
-  mov r12, QWORD PTR [rbp-76]
+  lea rbx, [rbp-208]
+  xor r10, r10
+.loc 1 792 0
+  mov r12, QWORD PTR [rbp-68]
   mov r13, 32
   mov r14, r12
   add r14, r13
   mov r12, r14
   movsxd r12, DWORD PTR [r12]
+.loc 1 789 0
   mov rdi, r12
   call _caustic_assembler_encoder_cst_reg_ext
   mov r12, rax
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-.loc 1 808 0
   jmp .L1453
 .L1452:
 .L1453:
-.loc 1 811 0
+.loc 1 792 0
   mov rbx, QWORD PTR [rbp-56]
-  movsxd r12, DWORD PTR [rbp-224]
-  mov r13, QWORD PTR [rbp-68]
+  movsxd r12, DWORD PTR [rbp-204]
+  mov r13, QWORD PTR [rbp-76]
   mov r14, 4
   mov r8, r13
   add r8, r14
@@ -28635,8 +28926,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r13
   call _caustic_assembler_encoder_cst_reg_ext
   mov r13, rax
-  movsxd r14, DWORD PTR [rbp-228]
-  mov r8, QWORD PTR [rbp-76]
+.loc 1 793 0
+  movsxd r14, DWORD PTR [rbp-208]
+  mov r8, QWORD PTR [rbp-68]
   mov r9, 16
   mov r10, r8
   add r10, r9
@@ -28645,6 +28937,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
+.loc 1 792 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -28655,33 +28948,36 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 808 0
+.loc 1 787 0
   jmp .L1451
 .L1450:
 .L1451:
-.loc 1 812 0
-  movsxd rbx, DWORD PTR [rbp-212]
+.loc 1 794 0
+  movsxd rbx, DWORD PTR [rbp-192]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
   jne .L1454
   mov rbx, QWORD PTR [rbp-56]
-  mov r12, 138
+.loc 1 795 0
+  mov r12, 136
+.loc 1 794 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
   jmp .L1455
 .L1454:
-.loc 1 814 0
+.loc 1 795 0
   mov rbx, QWORD PTR [rbp-56]
-  mov r12, 139
+  mov r12, 137
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .L1455:
-  mov rbx, QWORD PTR [rbp-76]
+.loc 1 798 0
+  mov rbx, QWORD PTR [rbp-68]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
   mov rbx, rax
@@ -28689,36 +28985,37 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   cmp rax, r12
   jne .L1456
+.loc 1 799 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 815 0
-  movsxd rax, DWORD PTR [rbp-216]
+  movsxd rax, DWORD PTR [rbp-196]
   mov QWORD PTR [rbp-452], rax
-.loc 1 818 0
-  mov r13, QWORD PTR [rbp-76]
+  mov r13, QWORD PTR [rbp-68]
   mov r14, 16
   mov r8, r13
   add r8, r14
   mov r13, r8
   movsxd r13, DWORD PTR [r13]
-  mov r14, QWORD PTR [rbp-76]
+.loc 1 800 0
+  mov r14, QWORD PTR [rbp-68]
   mov r8, 32
   mov r9, r14
   add r9, r8
   mov r14, r9
   movsxd r14, DWORD PTR [r14]
-  mov r8, QWORD PTR [rbp-76]
+  mov r8, QWORD PTR [rbp-68]
   mov r9, 36
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
-  mov r8, QWORD PTR [rbp-76]
+.loc 1 801 0
+  mov r8, QWORD PTR [rbp-68]
   mov r9, 20
   mov r10, r8
   add r10, r9
   mov r12, r10
   mov r12, QWORD PTR [r12]
-.loc 1 814 0
+.loc 1 799 0
   mov rdi, rbx
   mov rsi, QWORD PTR [rbp-452]
   mov rdx, r13
@@ -28727,25 +29024,26 @@ _caustic_assembler_encoder_cst_encode:
   mov r9, r12
   call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
   mov rbx, rax
+.loc 1 798 0
   jmp .L1457
 .L1456:
-.loc 1 818 0
+.loc 1 801 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 819 0
-  movsxd r12, DWORD PTR [rbp-216]
-  mov r13, QWORD PTR [rbp-76]
+.loc 1 802 0
+  movsxd r12, DWORD PTR [rbp-196]
+  mov r13, QWORD PTR [rbp-68]
   mov r14, 16
   mov r8, r13
   add r8, r14
   mov r13, r8
   movsxd r13, DWORD PTR [r13]
-  mov r14, QWORD PTR [rbp-76]
+  mov r14, QWORD PTR [rbp-68]
   mov r8, 20
   mov r9, r14
   add r9, r8
   mov r14, r9
   mov r14, QWORD PTR [r14]
-.loc 1 818 0
+.loc 1 801 0
   mov rdi, rbx
   mov rsi, r12
   mov rdx, r13
@@ -28753,7 +29051,7 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
 .L1457:
-.loc 1 820 0
+.loc 1 805 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -28763,10 +29061,11 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, QWORD PTR [rbp-100]
   mov r13, rbx
   sub r13, r12
+.loc 1 802 0
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -28774,13 +29073,12 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 792 0
-  jmp .L1431
-.L1430:
-.L1431:
-.loc 1 820 0
+.loc 1 770 0
+  jmp .L1427
+.L1426:
+.L1427:
+.loc 1 805 0
   mov rbx, QWORD PTR [rbp-68]
-.loc 1 821 0
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
@@ -28789,29 +29087,42 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r12
   cmp rax, r13
   jne .L1460
+.loc 1 806 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
-.loc 1 823 0
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_RIP_LABEL]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
-.loc 1 821 0
   mov rax, r12
   cmp rax, r13
   jne .L1460
+.loc 1 805 0
   mov rbx, 1
   jmp .L1461
 .L1460:
   mov rbx, 0
 .L1461:
-.loc 1 820 0
   mov rax, rbx
   test rax, rax
   jz .L1458
-.loc 1 823 0
+.loc 1 806 0
   xor r10, r10
-.loc 1 824 0
+.loc 1 807 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+.loc 1 806 0
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_size
+  mov rbx, rax
+  mov rax, rbx
+  mov DWORD PTR [rbp-212], eax
+.loc 1 807 0
+  xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -28821,227 +29132,69 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 823 0
   mov rax, rbx
-  mov DWORD PTR [rbp-232], eax
-.loc 1 824 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 1
-.loc 1 826 0
-  mov r13, QWORD PTR [rbp-68]
-  mov r14, 4
-  mov r8, r13
-  add r8, r14
-  mov r13, r8
-  movsxd r13, DWORD PTR [r13]
-.loc 1 824 0
-  mov rdi, r13
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov r13, rax
-.loc 1 826 0
-  mov r14, 0
-  mov r15, 0
-.loc 1 824 0
-  mov rdi, r12
-  mov rsi, r13
-  mov rdx, r14
-  mov rcx, r15
-  call _caustic_assembler_encoder_cst_make_rex
-  mov r12, rax
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 827 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 139
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-  mov rbx, QWORD PTR [rbp-56]
-.loc 1 829 0
-  mov r12, 0
-  movsxd r13, DWORD PTR [rbp-232]
-  mov r14, 5
-.loc 1 828 0
-  mov rdi, r12
-  mov rsi, r13
-  mov rdx, r14
-  call _caustic_assembler_encoder_cst_make_modrm
-  mov r12, rax
-.loc 1 827 0
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 830 0
-  mov rbx, QWORD PTR [rbp-84]
-  mov r12, QWORD PTR [rbp-92]
-  mov r13, QWORD PTR [rbp-56]
-  mov r14, 8
-  mov r8, r13
-  add r8, r14
-  mov r13, r8
-  mov r13, QWORD PTR [r13]
-.loc 1 832 0
-  mov r14, QWORD PTR [rbp-100]
-.loc 1 830 0
-  mov r8, r13
-  sub r8, r14
-  mov r13, r8
-  mov r14, r12
-  add r14, r13
-.loc 1 832 0
-  mov r12, 4
-.loc 1 830 0
-  mov r13, r14
-  add r13, r12
-  mov r12, rbx
-  sub r12, r13
-.loc 1 829 0
-  mov rax, r12
-  mov QWORD PTR [rbp-240], rax
-.loc 1 833 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, QWORD PTR [rbp-240]
-.loc 1 832 0
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit32_le
-  mov rbx, rax
-.loc 1 834 0
-  mov rbx, QWORD PTR [rbp-56]
-.loc 1 835 0
-  mov r12, 8
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  mov rbx, QWORD PTR [rbx]
-  mov r12, QWORD PTR [rbp-100]
-  mov r13, rbx
-  sub r13, r12
-.loc 1 833 0
-  mov rbx, r13
-  movsxd rbx, ebx
-  mov rax, rbx
-  add rsp, 508
-  pop r15
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-.loc 1 820 0
-  jmp .L1459
-.L1458:
-.L1459:
-.loc 1 835 0
-  mov rbx, QWORD PTR [rbp-68]
-.loc 1 836 0
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1464
-  mov rbx, QWORD PTR [rbp-76]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-.loc 1 838 0
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_IMM]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-.loc 1 836 0
-  mov rax, r12
-  cmp rax, r13
-  jne .L1464
-  mov rbx, 1
-  jmp .L1465
-.L1464:
-  mov rbx, 0
-.L1465:
-.loc 1 835 0
-  mov rax, rbx
-  test rax, rax
-  jz .L1462
-.loc 1 839 0
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, 28
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-.loc 1 838 0
-  mov rax, rbx
-  mov DWORD PTR [rbp-244], eax
-.loc 1 839 0
-  movsxd rbx, DWORD PTR [rbp-244]
-.loc 1 840 0
-  mov r12, 0
-.loc 1 839 0
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1466
-.loc 1 840 0
-  lea rbx, [rbp-244]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 64
-.loc 1 839 0
-  jmp .L1467
-.L1466:
-.L1467:
-.loc 1 841 0
-  movsxd rbx, DWORD PTR [rbp-244]
-.loc 1 842 0
+  mov DWORD PTR [rbp-216], eax
+  movsxd rbx, DWORD PTR [rbp-212]
   mov r12, 16
-.loc 1 841 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1468
-.loc 1 840 0
-.loc 1 842 0
+  jne .L1462
+.loc 1 808 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 840 0
-  jmp .L1469
-.L1468:
-.L1469:
-.loc 1 844 0
-  mov DWORD PTR [rbp-248], 0
-.loc 1 843 0
-.loc 1 845 0
-  mov DWORD PTR [rbp-252], 0
-.loc 1 844 0
-.loc 1 847 0
-  movsxd rbx, DWORD PTR [rbp-244]
-.loc 1 849 0
+.loc 1 807 0
+  jmp .L1463
+.L1462:
+.L1463:
+.loc 1 808 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-220], eax
+.loc 1 810 0
+  mov rbx, 0
+.loc 1 809 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-224], eax
+.loc 1 810 0
+  movsxd rbx, DWORD PTR [rbp-212]
   mov r12, 64
-.loc 1 847 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1470
-.loc 1 845 0
-.loc 1 851 0
-  lea rbx, [rbp-252]
+  jne .L1464
+.loc 1 811 0
+  lea rbx, [rbp-224]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  lea rbx, [rbp-248]
+  mov DWORD PTR [rcx], eax
+  lea rbx, [rbp-220]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 845 0
-  jmp .L1471
-.L1470:
-.L1471:
-.loc 1 851 0
+  mov DWORD PTR [rcx], eax
+.loc 1 810 0
+  jmp .L1465
+.L1464:
+.L1465:
+.loc 1 811 0
   mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L1468
+  mov rbx, QWORD PTR [rbp-76]
   mov r12, 16
   mov r13, rbx
   add r13, r12
@@ -29050,39 +29203,90 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
+.loc 1 812 0
   mov r12, 1
+.loc 1 811 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1472
-.loc 1 852 0
-  lea rbx, [rbp-248]
+  je .L1468
+  mov rbx, 0
+  jmp .L1469
+.L1468:
+  mov rbx, 1
+.L1469:
+  mov rax, rbx
+  test rax, rax
+  jz .L1466
+.loc 1 812 0
+  lea rbx, [rbp-220]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 851 0
-  jmp .L1473
-.L1472:
-.L1473:
-.loc 1 852 0
-  mov rbx, QWORD PTR [rbp-68]
+  mov DWORD PTR [rcx], eax
+.loc 1 811 0
+  jmp .L1467
+.L1466:
+.L1467:
+.loc 1 812 0
+  mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
   mov rbx, rax
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1476
-  mov rbx, QWORD PTR [rbp-68]
+  jne .L1472
+  mov rbx, QWORD PTR [rbp-76]
+.loc 1 813 0
   mov r12, 32
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
+.loc 1 812 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 853 0
+.loc 1 814 0
   mov r12, 1
-.loc 1 852 0
+.loc 1 812 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1472
+  mov rbx, 1
+  jmp .L1473
+.L1472:
+  mov rbx, 0
+.L1473:
+  mov rax, rbx
+  test rax, rax
+  jz .L1470
+.loc 1 814 0
+  lea rbx, [rbp-220]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 812 0
+  jmp .L1471
+.L1470:
+.L1471:
+.loc 1 814 0
+  movsxd rbx, DWORD PTR [rbp-212]
+  mov r12, 8
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1476
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_needs_rex_for_8bit
+  mov rbx, rax
+  mov r12, 1
   mov rax, rbx
   cmp rax, r12
   jne .L1476
@@ -29094,25 +29298,27 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   test rax, rax
   jz .L1474
-.loc 1 853 0
-  lea rbx, [rbp-248]
+.loc 1 818 0
+  lea rbx, [rbp-220]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 852 0
+  mov DWORD PTR [rcx], eax
+.loc 1 814 0
   jmp .L1475
 .L1474:
 .L1475:
-.loc 1 854 0
-  movsxd rbx, DWORD PTR [rbp-248]
+.loc 1 818 0
+  movsxd rbx, DWORD PTR [rbp-220]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
   jne .L1478
-.loc 1 856 0
-  mov DWORD PTR [rbp-256], 0
-.loc 1 854 0
-.loc 1 857 0
-  mov rbx, QWORD PTR [rbp-68]
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-228], eax
+.loc 1 819 0
+  mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
   mov rbx, rax
@@ -29120,41 +29326,590 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, rbx
   cmp rax, r12
   jne .L1480
-.loc 1 856 0
-.loc 1 857 0
-  lea rbx, [rbp-256]
-  mov r10, rbx
-  mov r12, QWORD PTR [rbp-68]
-.loc 1 859 0
+.loc 1 818 0
+.loc 1 820 0
+  lea rbx, [rbp-228]
+  xor r10, r10
+  mov r12, QWORD PTR [rbp-76]
   mov r13, 32
   mov r14, r12
   add r14, r13
   mov r12, r14
   movsxd r12, DWORD PTR [r12]
-.loc 1 857 0
   mov rdi, r12
   call _caustic_assembler_encoder_cst_reg_ext
   mov r12, rax
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-.loc 1 856 0
+.loc 1 818 0
   jmp .L1481
 .L1480:
 .L1481:
-.loc 1 860 0
+.loc 1 820 0
   mov rbx, QWORD PTR [rbp-56]
+  movsxd r12, DWORD PTR [rbp-224]
+.loc 1 821 0
+  mov r13, QWORD PTR [rbp-68]
+  mov r14, 4
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  movsxd r13, DWORD PTR [r13]
+  mov rdi, r13
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r13, rax
+  movsxd r14, DWORD PTR [rbp-228]
+.loc 1 823 0
+  mov r8, QWORD PTR [rbp-76]
+  mov r9, 16
+  mov r10, r8
+  add r10, r9
+  mov r15, r10
+  movsxd r15, DWORD PTR [r15]
+.loc 1 822 0
+  mov rdi, r15
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r15, rax
+.loc 1 820 0
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  mov rcx, r15
+  call _caustic_assembler_encoder_cst_make_rex
+  mov r12, rax
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 818 0
+  jmp .L1479
+.L1478:
+.L1479:
+.loc 1 824 0
+  movsxd rbx, DWORD PTR [rbp-212]
+  mov r12, 8
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1482
+.loc 1 823 0
+.loc 1 824 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 138
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 823 0
+  jmp .L1483
+.L1482:
+.loc 1 826 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 139
+.loc 1 824 0
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.L1483:
+.loc 1 827 0
+  mov rbx, QWORD PTR [rbp-76]
+.loc 1 826 0
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_has_sib
+  mov rbx, rax
+.loc 1 827 0
+  mov r12, 1
+.loc 1 826 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1484
+.loc 1 827 0
+  mov rbx, QWORD PTR [rbp-56]
+  movsxd rax, DWORD PTR [rbp-216]
+  mov QWORD PTR [rbp-460], rax
+  mov r13, QWORD PTR [rbp-76]
+  mov r14, 16
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  movsxd r13, DWORD PTR [r13]
+.loc 1 829 0
+  mov r14, QWORD PTR [rbp-76]
+  mov r8, 32
+  mov r9, r14
+  add r9, r8
+  mov r14, r9
+  movsxd r14, DWORD PTR [r14]
+  mov r8, QWORD PTR [rbp-76]
+  mov r9, 36
+  mov r10, r8
+  add r10, r9
+  mov r15, r10
+  movsxd r15, DWORD PTR [r15]
+  mov r8, QWORD PTR [rbp-76]
+  mov r9, 20
+  mov r10, r8
+  add r10, r9
+  mov r12, r10
+  mov r12, QWORD PTR [r12]
+.loc 1 827 0
+  mov rdi, rbx
+  mov rsi, QWORD PTR [rbp-460]
+  mov rdx, r13
+  mov rcx, r14
+  mov r8, r15
+  mov r9, r12
+  call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
+  mov rbx, rax
+.loc 1 826 0
+  jmp .L1485
+.L1484:
+.loc 1 830 0
+  mov rbx, QWORD PTR [rbp-56]
+  movsxd r12, DWORD PTR [rbp-216]
+  mov r13, QWORD PTR [rbp-76]
+  mov r14, 16
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  movsxd r13, DWORD PTR [r13]
+.loc 1 831 0
+  mov r14, QWORD PTR [rbp-76]
+.loc 1 832 0
+  mov r8, 20
+  mov r9, r14
+  add r9, r8
+  mov r14, r9
+  mov r14, QWORD PTR [r14]
+.loc 1 830 0
+  mov rdi, rbx
+  mov rsi, r12
+  mov rdx, r13
+  mov rcx, r14
+  call _caustic_assembler_encoder_cst_emit_mem_modrm
+  mov rbx, rax
+.L1485:
+.loc 1 833 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 8
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  mov rbx, QWORD PTR [rbx]
+  mov r12, QWORD PTR [rbp-100]
+  mov r13, rbx
+  sub r13, r12
+.loc 1 832 0
+  mov rbx, r13
+  movsxd rbx, ebx
+  mov rax, rbx
+  add rsp, 520
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 805 0
+  jmp .L1459
+.L1458:
+.L1459:
+.loc 1 833 0
+  mov rbx, QWORD PTR [rbp-68]
+.loc 1 834 0
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+.loc 1 835 0
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+.loc 1 834 0
+  mov rax, r12
+  cmp rax, r13
+  jne .L1488
+.loc 1 835 0
+  mov rbx, QWORD PTR [rbp-76]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+.loc 1 836 0
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_RIP_LABEL]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+.loc 1 835 0
+  mov rax, r12
+  cmp rax, r13
+  jne .L1488
+.loc 1 834 0
+  mov rbx, 1
+  jmp .L1489
+.L1488:
+  mov rbx, 0
+.L1489:
+.loc 1 833 0
+  mov rax, rbx
+  test rax, rax
+  jz .L1486
+.loc 1 836 0
+  xor r10, r10
+.loc 1 838 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+.loc 1 837 0
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_code
+  mov rbx, rax
+.loc 1 836 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-232], eax
+.loc 1 839 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 1
+  mov r13, QWORD PTR [rbp-68]
+.loc 1 840 0
+  mov r14, 4
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  movsxd r13, DWORD PTR [r13]
+.loc 1 839 0
+  mov rdi, r13
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r13, rax
+.loc 1 840 0
+  mov r14, 0
+  mov r15, 0
+.loc 1 839 0
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  mov rcx, r15
+  call _caustic_assembler_encoder_cst_make_rex
+  mov r12, rax
+.loc 1 838 0
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 842 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 139
+.loc 1 841 0
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 843 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 0
+  movsxd r13, DWORD PTR [rbp-232]
+  mov r14, 5
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  call _caustic_assembler_encoder_cst_make_modrm
+  mov r12, rax
+.loc 1 842 0
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 845 0
+  mov rbx, QWORD PTR [rbp-84]
+  mov r12, QWORD PTR [rbp-92]
+.loc 1 849 0
+  mov r13, QWORD PTR [rbp-56]
+.loc 1 851 0
+  mov r14, 8
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  mov r13, QWORD PTR [r13]
+  mov r14, QWORD PTR [rbp-100]
+  mov r8, r13
+  sub r8, r14
+.loc 1 845 0
+  mov r13, r8
+  mov r14, r12
+  add r14, r13
+.loc 1 851 0
+  mov r12, 4
+.loc 1 845 0
+  mov r13, r14
+  add r13, r12
+  mov r12, rbx
+  sub r12, r13
+.loc 1 844 0
+  mov rax, r12
+  mov QWORD PTR [rbp-240], rax
+.loc 1 851 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, QWORD PTR [rbp-240]
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit32_le
+  mov rbx, rax
+.loc 1 852 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 8
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  mov rbx, QWORD PTR [rbx]
+  mov r12, QWORD PTR [rbp-100]
+  mov r13, rbx
+  sub r13, r12
+.loc 1 851 0
+  mov rbx, r13
+  movsxd rbx, ebx
+  mov rax, rbx
+  add rsp, 520
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+.loc 1 833 0
+  jmp .L1487
+.L1486:
+.L1487:
+.loc 1 852 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1492
+.loc 1 853 0
+  mov rbx, QWORD PTR [rbp-76]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_IMM]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1492
+.loc 1 852 0
+  mov rbx, 1
+  jmp .L1493
+.L1492:
+  mov rbx, 0
+.L1493:
+  mov rax, rbx
+  test rax, rax
+  jz .L1490
+.loc 1 854 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 28
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+.loc 1 853 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-244], eax
+.loc 1 856 0
+  movsxd rbx, DWORD PTR [rbp-244]
+  mov r12, 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1494
+  lea rbx, [rbp-244]
+.loc 1 857 0
+  mov r12, 64
+.loc 1 856 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1495
+.L1494:
+.L1495:
+.loc 1 857 0
+  movsxd rbx, DWORD PTR [rbp-244]
+  mov r12, 16
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1496
+.loc 1 859 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 102
+.loc 1 857 0
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  jmp .L1497
+.L1496:
+.L1497:
+.loc 1 860 0
+  mov rbx, 0
+.loc 1 859 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-248], eax
+.loc 1 862 0
+  mov rbx, 0
+.loc 1 860 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-252], eax
+.loc 1 862 0
+  movsxd rbx, DWORD PTR [rbp-244]
+.loc 1 863 0
+  mov r12, 64
+.loc 1 862 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1498
+.loc 1 863 0
+  lea rbx, [rbp-252]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  lea rbx, [rbp-248]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 862 0
+  jmp .L1499
+.L1498:
+.L1499:
+.loc 1 864 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 16
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1500
+.loc 1 863 0
+.loc 1 864 0
+  lea rbx, [rbp-248]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 863 0
+  jmp .L1501
+.L1500:
+.L1501:
+.loc 1 865 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_has_sib
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1504
+  mov rbx, QWORD PTR [rbp-68]
+.loc 1 866 0
+  mov r12, 32
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+.loc 1 865 0
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+.loc 1 866 0
+  mov r12, 1
+.loc 1 865 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1504
+  mov rbx, 1
+  jmp .L1505
+.L1504:
+  mov rbx, 0
+.L1505:
+  mov rax, rbx
+  test rax, rax
+  jz .L1502
+.loc 1 866 0
+  lea rbx, [rbp-248]
+.loc 1 867 0
+  mov r12, 1
+.loc 1 866 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 865 0
+  jmp .L1503
+.L1502:
+.L1503:
+.loc 1 868 0
+  movsxd rbx, DWORD PTR [rbp-248]
+.loc 1 869 0
+  mov r12, 1
+.loc 1 868 0
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1506
+.loc 1 874 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-256], eax
+.loc 1 875 0
+  mov rbx, QWORD PTR [rbp-68]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_has_sib
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1508
+.loc 1 877 0
+  lea rbx, [rbp-256]
+  xor r10, r10
+  mov r12, QWORD PTR [rbp-68]
+  mov r13, 32
+  mov r14, r12
+  add r14, r13
+  mov r12, r14
+  movsxd r12, DWORD PTR [r12]
+  mov rdi, r12
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r12, rax
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 875 0
+  jmp .L1509
+.L1508:
+.L1509:
+.loc 1 878 0
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 879 0
   movsxd r12, DWORD PTR [rbp-252]
   mov r13, 0
   movsxd r14, DWORD PTR [rbp-256]
-.loc 1 862 0
+.loc 1 880 0
   mov r8, QWORD PTR [rbp-68]
   mov r9, 16
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
-.loc 1 860 0
+.loc 1 879 0
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
@@ -29164,41 +29919,39 @@ _caustic_assembler_encoder_cst_encode:
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
-.loc 1 859 0
+.loc 1 878 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 854 0
-  jmp .L1479
-.L1478:
-.L1479:
-.loc 1 863 0
+.loc 1 868 0
+  jmp .L1507
+.L1506:
+.L1507:
+.loc 1 880 0
   movsxd rbx, DWORD PTR [rbp-244]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1482
-.loc 1 862 0
-.loc 1 863 0
+  jne .L1510
+.loc 1 883 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 198
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 862 0
-  jmp .L1483
-.L1482:
-.loc 1 864 0
+.loc 1 880 0
+  jmp .L1511
+.L1510:
+.loc 1 884 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 199
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1483:
-.loc 1 865 0
+.L1511:
   mov rbx, QWORD PTR [rbp-68]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -29206,11 +29959,11 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1484
+  jne .L1512
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 866 0
-  mov QWORD PTR [rbp-460], 0
+  mov QWORD PTR [rbp-468], 0
   mov r13, QWORD PTR [rbp-68]
+.loc 1 885 0
   mov r14, 16
   mov r8, r13
   add r8, r14
@@ -29222,7 +29975,7 @@ _caustic_assembler_encoder_cst_encode:
   add r9, r8
   mov r14, r9
   movsxd r14, DWORD PTR [r14]
-.loc 1 868 0
+.loc 1 886 0
   mov r8, QWORD PTR [rbp-68]
   mov r9, 36
   mov r10, r8
@@ -29235,22 +29988,22 @@ _caustic_assembler_encoder_cst_encode:
   add r10, r9
   mov r12, r10
   mov r12, QWORD PTR [r12]
-.loc 1 865 0
+.loc 1 884 0
   mov rdi, rbx
-  mov rsi, QWORD PTR [rbp-460]
+  mov rsi, QWORD PTR [rbp-468]
   mov rdx, r13
   mov rcx, r14
   mov r8, r15
   mov r9, r12
   call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
   mov rbx, rax
-  jmp .L1485
-.L1484:
-.loc 1 874 0
+  jmp .L1513
+.L1512:
+.loc 1 886 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 0
+.loc 1 887 0
   mov r13, QWORD PTR [rbp-68]
-.loc 1 875 0
   mov r14, 16
   mov r8, r13
   add r8, r14
@@ -29262,68 +30015,61 @@ _caustic_assembler_encoder_cst_encode:
   add r9, r8
   mov r14, r9
   mov r14, QWORD PTR [r14]
-.loc 1 874 0
+.loc 1 886 0
   mov rdi, rbx
   mov rsi, r12
   mov rdx, r13
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-.L1485:
-.loc 1 877 0
+.L1513:
+.loc 1 887 0
   movsxd rbx, DWORD PTR [rbp-244]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1486
-.loc 1 875 0
-.loc 1 878 0
+  jne .L1514
+.loc 1 888 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 879 0
   mov r12, QWORD PTR [rbp-76]
   mov r13, 8
   mov r14, r12
   add r14, r13
   mov r12, r14
   mov r12, QWORD PTR [r12]
-.loc 1 878 0
   mov r13, r12
   movsxd r13, r13d
+.loc 1 887 0
   mov rdi, rbx
   mov rsi, r13
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 875 0
-  jmp .L1487
-.L1486:
-.loc 1 880 0
+  jmp .L1515
+.L1514:
+.loc 1 888 0
   movsxd rbx, DWORD PTR [rbp-244]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1488
-.loc 1 879 0
-.loc 1 880 0
+  jne .L1516
+.loc 1 889 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 881 0
   mov r12, QWORD PTR [rbp-76]
-.loc 1 883 0
   mov r13, 8
   mov r14, r12
   add r14, r13
   mov r12, r14
   mov r12, QWORD PTR [r12]
-.loc 1 880 0
   mov r13, r12
   movsxd r13, r13d
   mov rdi, rbx
   mov rsi, r13
   call _caustic_assembler_buf_cst_buf_emit16_le
   mov rbx, rax
-.loc 1 879 0
-  jmp .L1489
-.L1488:
-.loc 1 884 0
+.loc 1 888 0
+  jmp .L1517
+.L1516:
+.loc 1 890 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, QWORD PTR [rbp-76]
   mov r13, 8
@@ -29335,21 +30081,23 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.L1489:
-.L1487:
+.L1517:
+.L1515:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
+.loc 1 891 0
   mov r12, QWORD PTR [rbp-100]
+.loc 1 890 0
   mov r13, rbx
   sub r13, r12
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -29357,25 +30105,23 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 835 0
-  jmp .L1463
-.L1462:
-.L1463:
-.loc 1 691 0
-  jmp .L1355
-.L1354:
-.L1355:
-.loc 1 884 0
+.loc 1 852 0
+  jmp .L1491
+.L1490:
+.L1491:
+.loc 1 705 0
+  jmp .L1383
+.L1382:
+.L1383:
+.loc 1 891 0
   movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 885 0
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_LEA]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
-.loc 1 884 0
   mov rax, rbx
   cmp rax, r13
-  jne .L1490
-.loc 1 886 0
+  jne .L1518
+.loc 1 896 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -29384,7 +30130,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1494
+  jne .L1522
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -29393,17 +30139,18 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1494
+  jne .L1522
   mov rbx, 1
-  jmp .L1495
-.L1494:
+  jmp .L1523
+.L1522:
   mov rbx, 0
-.L1495:
+.L1523:
+.loc 1 891 0
   mov rax, rbx
   test rax, rax
-  jz .L1492
+  jz .L1520
+.loc 1 897 0
   xor r10, r10
-.loc 1 887 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -29413,13 +30160,13 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 886 0
   mov rax, rbx
   mov DWORD PTR [rbp-260], eax
-.loc 1 888 0
-  mov DWORD PTR [rbp-264], 0
-.loc 1 887 0
-.loc 1 888 0
+.loc 1 898 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-264], eax
+.loc 1 899 0
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -29427,9 +30174,10 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1496
+  jne .L1524
   lea rbx, [rbp-264]
-  mov r10, rbx
+  xor r10, r10
+.loc 1 900 0
   mov r12, QWORD PTR [rbp-76]
   mov r13, 32
   mov r14, r12
@@ -29439,15 +30187,18 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r12
   call _caustic_assembler_encoder_cst_reg_ext
   mov r12, rax
+.loc 1 899 0
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1497
-.L1496:
-.L1497:
-.loc 1 889 0
+  jmp .L1525
+.L1524:
+.L1525:
+.loc 1 902 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 903 0
   mov r12, 1
+.loc 1 906 0
   mov r13, QWORD PTR [rbp-68]
   mov r14, 4
   mov r8, r13
@@ -29458,35 +30209,37 @@ _caustic_assembler_encoder_cst_encode:
   call _caustic_assembler_encoder_cst_reg_ext
   mov r13, rax
   movsxd r14, DWORD PTR [rbp-264]
-.loc 1 890 0
+.loc 1 907 0
   mov r8, QWORD PTR [rbp-76]
   mov r9, 16
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
+.loc 1 906 0
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
-.loc 1 889 0
+.loc 1 903 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
+.loc 1 902 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 890 0
+.loc 1 907 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 141
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 891 0
+.loc 1 908 0
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -29494,19 +30247,17 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1498
-.loc 1 890 0
-.loc 1 891 0
+  jne .L1526
   mov rbx, QWORD PTR [rbp-56]
   movsxd rax, DWORD PTR [rbp-260]
-  mov QWORD PTR [rbp-468], rax
+  mov QWORD PTR [rbp-476], rax
   mov r13, QWORD PTR [rbp-76]
   mov r14, 16
   mov r8, r13
   add r8, r14
   mov r13, r8
   movsxd r13, DWORD PTR [r13]
-.loc 1 896 0
+.loc 1 910 0
   mov r14, QWORD PTR [rbp-76]
   mov r8, 32
   mov r9, r14
@@ -29520,24 +30271,24 @@ _caustic_assembler_encoder_cst_encode:
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
   mov r8, QWORD PTR [rbp-76]
+.loc 1 911 0
   mov r9, 20
   mov r10, r8
   add r10, r9
   mov r12, r10
   mov r12, QWORD PTR [r12]
-.loc 1 891 0
+.loc 1 908 0
   mov rdi, rbx
-  mov rsi, QWORD PTR [rbp-468]
+  mov rsi, QWORD PTR [rbp-476]
   mov rdx, r13
   mov rcx, r14
   mov r8, r15
   mov r9, r12
   call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
   mov rbx, rax
-.loc 1 890 0
-  jmp .L1499
-.L1498:
-.loc 1 897 0
+  jmp .L1527
+.L1526:
+.loc 1 911 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-260]
   mov r13, QWORD PTR [rbp-76]
@@ -29546,37 +30297,37 @@ _caustic_assembler_encoder_cst_encode:
   add r8, r14
   mov r13, r8
   movsxd r13, DWORD PTR [r13]
-.loc 1 898 0
+.loc 1 912 0
   mov r14, QWORD PTR [rbp-76]
   mov r8, 20
   mov r9, r14
   add r9, r8
   mov r14, r9
   mov r14, QWORD PTR [r14]
-.loc 1 897 0
+.loc 1 911 0
   mov rdi, rbx
   mov rsi, r12
   mov rdx, r13
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-.L1499:
-.loc 1 898 0
+.L1527:
+.loc 1 912 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 899 0
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
+.loc 1 913 0
   mov r12, QWORD PTR [rbp-100]
+.loc 1 912 0
   mov r13, rbx
   sub r13, r12
-.loc 1 898 0
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -29584,46 +30335,42 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 886 0
-  jmp .L1493
-.L1492:
-.L1493:
-.loc 1 899 0
+.loc 1 891 0
+  jmp .L1521
+.L1520:
+.L1521:
+.loc 1 913 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
-.loc 1 900 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
-.loc 1 899 0
   mov rax, r12
   cmp rax, r13
-  jne .L1502
-.loc 1 901 0
+  jne .L1530
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
-.loc 1 902 0
+.loc 1 915 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_RIP_LABEL]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
-.loc 1 901 0
+.loc 1 913 0
   mov rax, r12
   cmp rax, r13
-  jne .L1502
-.loc 1 899 0
+  jne .L1530
   mov rbx, 1
-  jmp .L1503
-.L1502:
+  jmp .L1531
+.L1530:
   mov rbx, 0
-.L1503:
+.L1531:
   mov rax, rbx
   test rax, rax
-  jz .L1500
-.loc 1 902 0
+  jz .L1528
+.loc 1 915 0
   xor r10, r10
-.loc 1 906 0
+.loc 1 916 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -29633,11 +30380,12 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 902 0
+.loc 1 915 0
   mov rax, rbx
   mov DWORD PTR [rbp-268], eax
-.loc 1 907 0
+.loc 1 916 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 917 0
   mov r12, 1
   mov r13, QWORD PTR [rbp-68]
   mov r14, 4
@@ -29648,92 +30396,93 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r13
   call _caustic_assembler_encoder_cst_reg_ext
   mov r13, rax
+.loc 1 918 0
   mov r14, 0
-.loc 1 908 0
   mov r15, 0
-.loc 1 907 0
+.loc 1 917 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
-.loc 1 906 0
+.loc 1 916 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 908 0
+.loc 1 918 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 141
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
+.loc 1 920 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 910 0
   mov r12, 0
   movsxd r13, DWORD PTR [rbp-268]
+.loc 1 921 0
   mov r14, 5
+.loc 1 920 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 908 0
+.loc 1 918 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 911 0
+.loc 1 921 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, QWORD PTR [rbp-92]
+.loc 1 922 0
   mov r13, QWORD PTR [rbp-56]
   mov r14, 8
   mov r8, r13
   add r8, r14
   mov r13, r8
   mov r13, QWORD PTR [r13]
-.loc 1 912 0
   mov r14, QWORD PTR [rbp-100]
-.loc 1 911 0
   mov r8, r13
   sub r8, r14
   mov r13, r8
+.loc 1 921 0
   mov r14, r12
   add r14, r13
-.loc 1 912 0
+.loc 1 922 0
   mov r12, 4
-.loc 1 911 0
+.loc 1 921 0
   mov r13, r14
   add r13, r12
   mov r12, rbx
   sub r12, r13
   mov rax, r12
   mov QWORD PTR [rbp-276], rax
-.loc 1 912 0
+.loc 1 923 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 913 0
   mov r12, QWORD PTR [rbp-276]
-.loc 1 912 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.loc 1 913 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
+.loc 1 924 0
   mov r12, QWORD PTR [rbp-100]
+.loc 1 923 0
   mov r13, rbx
   sub r13, r12
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -29741,192 +30490,77 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 899 0
-  jmp .L1501
-.L1500:
-.L1501:
-.loc 1 884 0
-  jmp .L1491
-.L1490:
-.L1491:
-.loc 1 915 0
-  movsxd rbx, DWORD PTR [rbp-60]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1514
-  movsxd rbx, DWORD PTR [rbp-60]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1514
-  mov rbx, 0
-  jmp .L1515
-.L1514:
-  mov rbx, 1
-.L1515:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1512
-.loc 1 916 0
-  movsxd rbx, DWORD PTR [rbp-60]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1512
-.loc 1 915 0
-  mov rbx, 0
-  jmp .L1513
-.L1512:
-  mov rbx, 1
-.L1513:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1510
-.loc 1 916 0
-  movsxd rbx, DWORD PTR [rbp-60]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_OR]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1510
-.loc 1 915 0
-  mov rbx, 0
-  jmp .L1511
-.L1510:
-  mov rbx, 1
-.L1511:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1508
-.loc 1 917 0
-  movsxd rbx, DWORD PTR [rbp-60]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_XOR]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1508
-.loc 1 915 0
-  mov rbx, 0
-  jmp .L1509
-.L1508:
-  mov rbx, 1
-.L1509:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1506
-.loc 1 917 0
-  movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 918 0
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CMP]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-.loc 1 917 0
-  mov rax, rbx
-  cmp rax, r13
-  je .L1506
-.loc 1 915 0
-  mov rbx, 0
-  jmp .L1507
-.L1506:
-  mov rbx, 1
-.L1507:
 .loc 1 913 0
-  mov rax, rbx
-  test rax, rax
-  jz .L1504
-.loc 1 918 0
-  mov DWORD PTR [rbp-280], 0
-.loc 1 920 0
-  mov DWORD PTR [rbp-284], 0
-.loc 1 918 0
-.loc 1 920 0
-  movsxd rbx, DWORD PTR [rbp-60]
-.loc 1 921 0
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-.loc 1 920 0
-  mov rax, rbx
-  cmp rax, r13
-  jne .L1516
-.loc 1 921 0
-  lea rbx, [rbp-280]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  lea rbx, [rbp-284]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 0
-.loc 1 920 0
-  jmp .L1517
-.L1516:
-.L1517:
-.loc 1 922 0
-  movsxd rbx, DWORD PTR [rbp-60]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  jne .L1518
-.loc 1 921 0
-.loc 1 922 0
-  lea rbx, [rbp-280]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 41
-  lea rbx, [rbp-284]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 5
-.loc 1 921 0
+  jmp .L1529
+.L1528:
+.L1529:
+.loc 1 891 0
   jmp .L1519
 .L1518:
 .L1519:
-.loc 1 923 0
+.loc 1 924 0
   movsxd rbx, DWORD PTR [rbp-60]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
+.loc 1 925 0
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+.loc 1 924 0
+  mov rax, rbx
+  cmp rax, r13
+  je .L1542
+.loc 1 925 0
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1520
-  lea rbx, [rbp-280]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 33
-  lea rbx, [rbp-284]
+  je .L1542
 .loc 1 924 0
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 4
-.loc 1 923 0
-  jmp .L1521
-.L1520:
-.L1521:
+  mov rbx, 0
+  jmp .L1543
+.L1542:
+  mov rbx, 1
+.L1543:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1540
+.loc 1 925 0
+  movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 926 0
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+.loc 1 925 0
+  mov rax, rbx
+  cmp rax, r13
+  je .L1540
 .loc 1 924 0
+  mov rbx, 0
+  jmp .L1541
+.L1540:
+  mov rbx, 1
+.L1541:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1538
+.loc 1 926 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_OR]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1522
-.loc 1 925 0
-  lea rbx, [rbp-280]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 9
-  lea rbx, [rbp-284]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
+  je .L1538
 .loc 1 924 0
-  jmp .L1523
-.L1522:
-.L1523:
+  mov rbx, 0
+  jmp .L1539
+.L1538:
+  mov rbx, 1
+.L1539:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1536
 .loc 1 926 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_XOR]
@@ -29934,19 +30568,16 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1524
-.loc 1 925 0
-.loc 1 926 0
-  lea rbx, [rbp-280]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 49
-  lea rbx, [rbp-284]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 6
-.loc 1 925 0
-  jmp .L1525
-.L1524:
-.L1525:
+  je .L1536
+.loc 1 924 0
+  mov rbx, 0
+  jmp .L1537
+.L1536:
+  mov rbx, 1
+.L1537:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1534
 .loc 1 926 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CMP]
@@ -29954,29 +30585,184 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1526
+  je .L1534
+.loc 1 924 0
+  mov rbx, 0
+  jmp .L1535
+.L1534:
+  mov rbx, 1
+.L1535:
+  mov rax, rbx
+  test rax, rax
+  jz .L1532
 .loc 1 927 0
-  lea rbx, [rbp-280]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 57
-  lea rbx, [rbp-284]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 7
+  mov rbx, 0
 .loc 1 926 0
-  jmp .L1527
-.L1526:
-.L1527:
+  mov rax, rbx
+  mov DWORD PTR [rbp-280], eax
 .loc 1 927 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-284], eax
+.loc 1 929 0
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1544
+.loc 1 927 0
+.loc 1 929 0
+  lea rbx, [rbp-280]
+.loc 1 930 0
+  mov r12, 1
+.loc 1 929 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 930 0
+  lea rbx, [rbp-284]
+  mov r12, 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 927 0
+  jmp .L1545
+.L1544:
+.L1545:
+.loc 1 930 0
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1546
+  lea rbx, [rbp-280]
+.loc 1 931 0
+  mov r12, 41
+.loc 1 930 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 931 0
+  lea rbx, [rbp-284]
+  mov r12, 5
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 930 0
+  jmp .L1547
+.L1546:
+.L1547:
+.loc 1 932 0
+  movsxd rbx, DWORD PTR [rbp-60]
+.loc 1 933 0
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+.loc 1 932 0
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1548
+.loc 1 934 0
+  lea rbx, [rbp-280]
+  mov r12, 33
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  lea rbx, [rbp-284]
+.loc 1 935 0
+  mov r12, 4
+.loc 1 934 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 932 0
+  jmp .L1549
+.L1548:
+.L1549:
+.loc 1 937 0
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_OR]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1550
+  lea rbx, [rbp-280]
+  mov r12, 9
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  lea rbx, [rbp-284]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1551
+.L1550:
+.L1551:
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_XOR]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1552
+.loc 1 938 0
+  lea rbx, [rbp-280]
+  mov r12, 49
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 939 0
+  lea rbx, [rbp-284]
+  mov r12, 6
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 937 0
+  jmp .L1553
+.L1552:
+.L1553:
+.loc 1 939 0
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CMP]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1554
+  lea rbx, [rbp-280]
+  mov r12, 57
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  lea rbx, [rbp-284]
+.loc 1 940 0
+  mov r12, 7
+.loc 1 939 0
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1555
+.L1554:
+.L1555:
+.loc 1 945 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
+.loc 1 946 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
+.loc 1 945 0
   mov rax, r12
   cmp rax, r13
-  jne .L1530
-.loc 1 929 0
+  jne .L1558
+.loc 1 946 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -29985,18 +30771,19 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1530
-.loc 1 927 0
+  jne .L1558
+.loc 1 945 0
   mov rbx, 1
-  jmp .L1531
-.L1530:
+  jmp .L1559
+.L1558:
   mov rbx, 0
-.L1531:
+.L1559:
   mov rax, rbx
   test rax, rax
-  jz .L1528
-.loc 1 930 0
+  jz .L1556
+.loc 1 946 0
   xor r10, r10
+.loc 1 947 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -30006,10 +30793,12 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_size
   mov rbx, rax
+.loc 1 946 0
   mov rax, rbx
   mov DWORD PTR [rbp-288], eax
+.loc 1 947 0
   xor r10, r10
-.loc 1 931 0
+.loc 1 948 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -30019,128 +30808,131 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 930 0
+.loc 1 947 0
   mov rax, rbx
   mov DWORD PTR [rbp-292], eax
-.loc 1 932 0
+.loc 1 948 0
   xor r10, r10
-.loc 1 934 0
+.loc 1 949 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 933 0
+.loc 1 948 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 932 0
   mov rax, rbx
   mov DWORD PTR [rbp-296], eax
-.loc 1 935 0
+.loc 1 949 0
   movsxd rbx, DWORD PTR [rbp-288]
-.loc 1 937 0
   mov r12, 16
-.loc 1 935 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1532
-.loc 1 937 0
+  jne .L1560
+.loc 1 950 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
+.loc 1 949 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 935 0
-  jmp .L1533
-.L1532:
-.L1533:
-.loc 1 937 0
-  mov DWORD PTR [rbp-300], 0
-.loc 1 939 0
-  mov DWORD PTR [rbp-304], 0
-.loc 1 937 0
-.loc 1 939 0
+  jmp .L1561
+.L1560:
+.L1561:
+.loc 1 951 0
+  mov rbx, 0
+.loc 1 950 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-300], eax
+.loc 1 951 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-304], eax
+.loc 1 952 0
   movsxd rbx, DWORD PTR [rbp-288]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1534
+  jne .L1562
+.loc 1 951 0
+.loc 1 952 0
   lea rbx, [rbp-304]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
   lea rbx, [rbp-300]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1535
-.L1534:
-.L1535:
-.loc 1 941 0
+  mov DWORD PTR [rcx], eax
+.loc 1 951 0
+  jmp .L1563
+.L1562:
+.L1563:
+.loc 1 953 0
   mov rbx, QWORD PTR [rbp-68]
-.loc 1 945 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 940 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 945 0
   mov r12, 1
-.loc 1 940 0
   mov rax, rbx
   cmp rax, r12
-  je .L1538
-.loc 1 946 0
+  je .L1566
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 945 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 946 0
+.loc 1 954 0
   mov r12, 1
-.loc 1 945 0
+.loc 1 953 0
   mov rax, rbx
   cmp rax, r12
-  je .L1538
-.loc 1 940 0
+  je .L1566
   mov rbx, 0
-  jmp .L1539
-.L1538:
+  jmp .L1567
+.L1566:
   mov rbx, 1
-.L1539:
-.loc 1 939 0
+.L1567:
+.loc 1 952 0
   mov rax, rbx
   test rax, rax
-  jz .L1536
-.loc 1 946 0
+  jz .L1564
+.loc 1 955 0
   lea rbx, [rbp-300]
+.loc 1 957 0
+  mov r12, 1
+.loc 1 955 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 939 0
-  jmp .L1537
-.L1536:
-.L1537:
-.loc 1 947 0
+  mov DWORD PTR [rcx], eax
+.loc 1 952 0
+  jmp .L1565
+.L1564:
+.L1565:
+.loc 1 957 0
   movsxd rbx, DWORD PTR [rbp-300]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1540
-.loc 1 946 0
-.loc 1 947 0
+  jne .L1568
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 958 0
   movsxd r12, DWORD PTR [rbp-304]
-.loc 1 948 0
   mov r13, QWORD PTR [rbp-76]
   mov r14, 4
   mov r8, r13
@@ -30160,56 +30952,52 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
-.loc 1 947 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
+.loc 1 957 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 946 0
-  jmp .L1541
-.L1540:
-.L1541:
-.loc 1 949 0
+  jmp .L1569
+.L1568:
+.L1569:
+.loc 1 959 0
   movsxd rbx, DWORD PTR [rbp-288]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1542
-.loc 1 950 0
+  jne .L1570
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-280]
+.loc 1 960 0
   mov r13, 1
+.loc 1 959 0
   mov r14, r12
   sub r14, r13
-.loc 1 949 0
   mov rdi, rbx
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1543
-.L1542:
-.loc 1 951 0
+  jmp .L1571
+.L1570:
+.loc 1 960 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-280]
-.loc 1 950 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1543:
-.loc 1 951 0
+.L1571:
+.loc 1 961 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 3
-.loc 1 952 0
   movsxd r13, DWORD PTR [rbp-296]
   movsxd r14, DWORD PTR [rbp-292]
-.loc 1 951 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -30219,22 +31007,21 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 952 0
+.loc 1 962 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
-.loc 1 953 0
   mov r12, QWORD PTR [rbp-100]
-.loc 1 952 0
   mov r13, rbx
   sub r13, r12
+.loc 1 961 0
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -30242,109 +31029,117 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 927 0
-  jmp .L1529
-.L1528:
-.L1529:
-.loc 1 953 0
+.loc 1 945 0
+  jmp .L1557
+.L1556:
+.L1557:
+.loc 1 962 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
+.loc 1 963 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
+.loc 1 962 0
   mov rax, r12
   cmp rax, r13
-  jne .L1546
-.loc 1 954 0
+  jne .L1574
+.loc 1 963 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
-.loc 1 955 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_IMM]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
-.loc 1 954 0
   mov rax, r12
   cmp rax, r13
-  jne .L1546
-.loc 1 953 0
+  jne .L1574
+.loc 1 962 0
   mov rbx, 1
-  jmp .L1547
-.L1546:
+  jmp .L1575
+.L1574:
   mov rbx, 0
-.L1547:
+.L1575:
   mov rax, rbx
   test rax, rax
-  jz .L1544
-.loc 1 957 0
+  jz .L1572
+.loc 1 963 0
   xor r10, r10
+.loc 1 966 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
+.loc 1 963 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_size
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-308], eax
+.loc 1 966 0
   xor r10, r10
-.loc 1 958 0
   mov rbx, QWORD PTR [rbp-68]
+.loc 1 967 0
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
+.loc 1 966 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 957 0
   mov rax, rbx
   mov DWORD PTR [rbp-312], eax
-.loc 1 958 0
-  mov DWORD PTR [rbp-316], 0
-.loc 1 959 0
+.loc 1 968 0
+  mov rbx, 0
+.loc 1 967 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-316], eax
+.loc 1 968 0
   movsxd rbx, DWORD PTR [rbp-308]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1548
+  jne .L1576
+.loc 1 969 0
   lea rbx, [rbp-316]
+.loc 1 970 0
+  mov r12, 1
+.loc 1 969 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1549
-.L1548:
-.L1549:
+  mov DWORD PTR [rcx], eax
+.loc 1 968 0
+  jmp .L1577
+.L1576:
+.L1577:
+.loc 1 972 0
   movsxd rbx, DWORD PTR [rbp-308]
-.loc 1 960 0
   mov r12, 16
-.loc 1 959 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1550
-.loc 1 960 0
+  jne .L1578
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 973 0
   mov r12, 102
+.loc 1 972 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 959 0
-  jmp .L1551
-.L1550:
-.L1551:
-.loc 1 960 0
+  jmp .L1579
+.L1578:
+.L1579:
+.loc 1 973 0
   movsxd rbx, DWORD PTR [rbp-316]
-.loc 1 961 0
   mov r12, 1
-.loc 1 960 0
   mov rax, rbx
   cmp rax, r12
-  je .L1554
-.loc 1 961 0
+  je .L1582
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -30357,47 +31152,48 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1554
-.loc 1 960 0
+  je .L1582
   mov rbx, 0
-  jmp .L1555
-.L1554:
+  jmp .L1583
+.L1582:
   mov rbx, 1
-.L1555:
+.L1583:
   mov rax, rbx
   test rax, rax
-  jz .L1552
-.loc 1 961 0
+  jz .L1580
+.loc 1 976 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 962 0
   movsxd r12, DWORD PTR [rbp-316]
+.loc 1 977 0
   mov r13, 0
   mov r14, 0
   mov r8, QWORD PTR [rbp-68]
+.loc 1 978 0
   mov r9, 4
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
+.loc 1 977 0
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
+.loc 1 976 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
-.loc 1 961 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 960 0
-  jmp .L1553
-.L1552:
-.L1553:
-.loc 1 963 0
+.loc 1 973 0
+  jmp .L1581
+.L1580:
+.L1581:
+.loc 1 978 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 8
   mov r13, rbx
@@ -30410,157 +31206,50 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1558
+  jne .L1586
+.loc 1 979 0
   movsxd rbx, DWORD PTR [rbp-308]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  je .L1558
+  je .L1586
+.loc 1 978 0
   mov rbx, 1
-  jmp .L1559
-.L1558:
+  jmp .L1587
+.L1586:
   mov rbx, 0
-.L1559:
+.L1587:
   mov rax, rbx
   test rax, rax
-  jz .L1556
-.loc 1 966 0
+  jz .L1584
+.loc 1 979 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 131
-.loc 1 963 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 966 0
-  mov rbx, QWORD PTR [rbp-56]
-.loc 1 967 0
-  mov r12, 3
-  movsxd r13, DWORD PTR [rbp-284]
-  movsxd r14, DWORD PTR [rbp-312]
-.loc 1 966 0
-  mov rdi, r12
-  mov rsi, r13
-  mov rdx, r14
-  call _caustic_assembler_encoder_cst_make_modrm
-  mov r12, rax
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 968 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, QWORD PTR [rbp-76]
-  mov r13, 8
-  mov r14, r12
-  add r14, r13
-  mov r12, r14
-  mov r12, QWORD PTR [r12]
-  mov r13, r12
-  movsxd r13, r13d
-  mov rdi, rbx
-  mov rsi, r13
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 963 0
-  jmp .L1557
-.L1556:
-.loc 1 972 0
-  movsxd rbx, DWORD PTR [rbp-308]
-  mov r12, 8
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1560
-  mov rbx, QWORD PTR [rbp-56]
-.loc 1 973 0
-  mov r12, 128
-.loc 1 972 0
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 973 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 3
-  movsxd r13, DWORD PTR [rbp-284]
-  movsxd r14, DWORD PTR [rbp-312]
-  mov rdi, r12
-  mov rsi, r13
-  mov rdx, r14
-  call _caustic_assembler_encoder_cst_make_modrm
-  mov r12, rax
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 976 0
-  mov rbx, QWORD PTR [rbp-56]
-.loc 1 977 0
-  mov r12, QWORD PTR [rbp-76]
-  mov r13, 8
-  mov r14, r12
-  add r14, r13
-  mov r12, r14
-  mov r12, QWORD PTR [r12]
-.loc 1 976 0
-  mov r13, r12
-  movsxd r13, r13d
-  mov rdi, rbx
-  mov rsi, r13
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 972 0
-  jmp .L1561
-.L1560:
-.loc 1 978 0
-  mov rbx, QWORD PTR [rbp-56]
-  mov r12, 129
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-  mov rbx, QWORD PTR [rbp-56]
-.loc 1 979 0
-  mov r12, 3
-  movsxd r13, DWORD PTR [rbp-284]
-  movsxd r14, DWORD PTR [rbp-312]
-.loc 1 978 0
-  mov rdi, r12
-  mov rsi, r13
-  mov rdx, r14
-  call _caustic_assembler_encoder_cst_make_modrm
-  mov r12, rax
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_buf_cst_buf_emit8
-  mov rbx, rax
-.loc 1 979 0
-  movsxd rbx, DWORD PTR [rbp-308]
-  mov r12, 16
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1562
 .loc 1 980 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 982 0
-  mov r12, QWORD PTR [rbp-76]
-  mov r13, 8
-  mov r14, r12
-  add r14, r13
-  mov r12, r14
-  mov r12, QWORD PTR [r12]
 .loc 1 981 0
-  mov r13, r12
-  movsxd r13, r13d
+  mov r12, 3
+  movsxd r13, DWORD PTR [rbp-284]
+.loc 1 982 0
+  movsxd r14, DWORD PTR [rbp-312]
+.loc 1 980 0
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  call _caustic_assembler_encoder_cst_make_modrm
+  mov r12, rax
 .loc 1 979 0
   mov rdi, rbx
-  mov rsi, r13
-  call _caustic_assembler_buf_cst_buf_emit16_le
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1563
-.L1562:
-.loc 1 988 0
+.loc 1 984 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 988 0
   mov r12, QWORD PTR [rbp-76]
   mov r13, 8
   mov r14, r12
@@ -30568,27 +31257,146 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r14
   mov r12, QWORD PTR [r12]
 .loc 1 985 0
+  mov r13, r12
+  movsxd r13, r13d
+.loc 1 984 0
+  mov rdi, rbx
+  mov rsi, r13
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 978 0
+  jmp .L1585
+.L1584:
+.loc 1 989 0
+  movsxd rbx, DWORD PTR [rbp-308]
+  mov r12, 8
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1588
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 990 0
+  mov r12, 128
+.loc 1 989 0
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 990 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 3
+.loc 1 991 0
+  movsxd r13, DWORD PTR [rbp-284]
+  movsxd r14, DWORD PTR [rbp-312]
+.loc 1 990 0
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  call _caustic_assembler_encoder_cst_make_modrm
+  mov r12, rax
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 993 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, QWORD PTR [rbp-76]
+  mov r13, 8
+  mov r14, r12
+  add r14, r13
+  mov r12, r14
+  mov r12, QWORD PTR [r12]
+  mov r13, r12
+  movsxd r13, r13d
+  mov rdi, rbx
+  mov rsi, r13
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 989 0
+  jmp .L1589
+.L1588:
+.loc 1 994 0
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 995 0
+  mov r12, 129
+.loc 1 994 0
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 995 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 3
+.loc 1 996 0
+  movsxd r13, DWORD PTR [rbp-284]
+.loc 1 997 0
+  movsxd r14, DWORD PTR [rbp-312]
+.loc 1 995 0
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  call _caustic_assembler_encoder_cst_make_modrm
+  mov r12, rax
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+.loc 1 1000 0
+  movsxd rbx, DWORD PTR [rbp-308]
+  mov r12, 16
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1590
+.loc 1 999 0
+.loc 1 1001 0
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, QWORD PTR [rbp-76]
+  mov r13, 8
+  mov r14, r12
+  add r14, r13
+  mov r12, r14
+  mov r12, QWORD PTR [r12]
+  mov r13, r12
+  movsxd r13, r13d
+  mov rdi, rbx
+  mov rsi, r13
+  call _caustic_assembler_buf_cst_buf_emit16_le
+  mov rbx, rax
+.loc 1 999 0
+  jmp .L1591
+.L1590:
+.loc 1 1004 0
+  mov rbx, QWORD PTR [rbp-56]
+.loc 1 1005 0
+  mov r12, QWORD PTR [rbp-76]
+  mov r13, 8
+  mov r14, r12
+  add r14, r13
+  mov r12, r14
+  mov r12, QWORD PTR [r12]
+.loc 1 1004 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
-.L1563:
-.L1561:
-.L1557:
-.loc 1 989 0
+.L1591:
+.L1589:
+.L1585:
+.loc 1 1005 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
+.loc 1 1006 0
   mov r12, QWORD PTR [rbp-100]
+.loc 1 1005 0
   mov r13, rbx
   sub r13, r12
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -30596,11 +31404,11 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 953 0
-  jmp .L1545
-.L1544:
-.L1545:
-.loc 1 990 0
+.loc 1 962 0
+  jmp .L1573
+.L1572:
+.L1573:
+.loc 1 1006 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -30609,27 +31417,27 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1566
+  jne .L1594
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
-.loc 1 991 0
+.loc 1 1007 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
-.loc 1 990 0
+.loc 1 1006 0
   mov rax, r12
   cmp rax, r13
-  jne .L1566
+  jne .L1594
   mov rbx, 1
-  jmp .L1567
-.L1566:
+  jmp .L1595
+.L1594:
   mov rbx, 0
-.L1567:
+.L1595:
   mov rax, rbx
   test rax, rax
-  jz .L1564
-.loc 1 993 0
+  jz .L1592
+.loc 1 1007 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
@@ -30642,8 +31450,8 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-320], eax
-.loc 1 994 0
   xor r10, r10
+.loc 1 1008 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -30653,50 +31461,55 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
+.loc 1 1007 0
   mov rax, rbx
   mov DWORD PTR [rbp-324], eax
-.loc 1 995 0
-  mov DWORD PTR [rbp-328], 0
-.loc 1 996 0
+.loc 1 1011 0
+  mov rbx, 0
+.loc 1 1008 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-328], eax
+.loc 1 1011 0
   movsxd rbx, DWORD PTR [rbp-320]
-.loc 1 997 0
+.loc 1 1012 0
   mov r12, 64
-.loc 1 996 0
+.loc 1 1011 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1568
-.loc 1 995 0
-.loc 1 999 0
+  jne .L1596
+.loc 1 1012 0
   lea rbx, [rbp-328]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 995 0
-  jmp .L1569
-.L1568:
-.L1569:
-.loc 1 1000 0
+  mov DWORD PTR [rcx], eax
+.loc 1 1011 0
+  jmp .L1597
+.L1596:
+.L1597:
+.loc 1 1012 0
   movsxd rbx, DWORD PTR [rbp-320]
-.loc 1 1001 0
   mov r12, 16
-.loc 1 1000 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1570
-.loc 1 1001 0
+  jne .L1598
+.loc 1 1013 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
+.loc 1 1012 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1000 0
-  jmp .L1571
-.L1570:
-.L1571:
-.loc 1 1004 0
-  mov DWORD PTR [rbp-332], 0
-.loc 1 1001 0
-.loc 1 1005 0
+  jmp .L1599
+.L1598:
+.L1599:
+.loc 1 1014 0
+  mov rbx, 0
+.loc 1 1013 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-332], eax
+.loc 1 1014 0
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -30704,28 +31517,27 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1572
-.loc 1 1004 0
-.loc 1 1005 0
+  jne .L1600
   lea rbx, [rbp-332]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-76]
+.loc 1 1015 0
   mov r13, 32
   mov r14, r12
   add r14, r13
   mov r12, r14
   movsxd r12, DWORD PTR [r12]
+.loc 1 1014 0
   mov rdi, r12
   call _caustic_assembler_encoder_cst_reg_ext
   mov r12, rax
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-.loc 1 1004 0
-  jmp .L1573
-.L1572:
-.L1573:
-.loc 1 1006 0
+  jmp .L1601
+.L1600:
+.L1601:
+.loc 1 1015 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-328]
   mov r13, QWORD PTR [rbp-68]
@@ -30737,7 +31549,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r13
   call _caustic_assembler_encoder_cst_reg_ext
   mov r13, rax
-.loc 1 1007 0
+.loc 1 1018 0
   movsxd r14, DWORD PTR [rbp-332]
   mov r8, QWORD PTR [rbp-76]
   mov r9, 16
@@ -30748,7 +31560,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
-.loc 1 1006 0
+.loc 1 1015 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
@@ -30759,7 +31571,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1007 0
+.loc 1 1019 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-280]
   mov r13, 2
@@ -30769,7 +31581,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r14
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1008 0
+.loc 1 1020 0
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -30777,11 +31589,12 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1574
-.loc 1 1011 0
+  jne .L1602
+.loc 1 1019 0
+.loc 1 1021 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd rax, DWORD PTR [rbp-324]
-  mov QWORD PTR [rbp-476], rax
+  mov QWORD PTR [rbp-484], rax
   mov r13, QWORD PTR [rbp-76]
   mov r14, 16
   mov r8, r13
@@ -30794,7 +31607,6 @@ _caustic_assembler_encoder_cst_encode:
   add r9, r8
   mov r14, r9
   movsxd r14, DWORD PTR [r14]
-.loc 1 1012 0
   mov r8, QWORD PTR [rbp-76]
   mov r9, 36
   mov r10, r8
@@ -30807,20 +31619,20 @@ _caustic_assembler_encoder_cst_encode:
   add r10, r9
   mov r12, r10
   mov r12, QWORD PTR [r12]
-.loc 1 1008 0
+.loc 1 1020 0
   mov rdi, rbx
-  mov rsi, QWORD PTR [rbp-476]
+  mov rsi, QWORD PTR [rbp-484]
   mov rdx, r13
   mov rcx, r14
   mov r8, r15
   mov r9, r12
   call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
   mov rbx, rax
-  jmp .L1575
-.L1574:
-.loc 1 1012 0
+.loc 1 1019 0
+  jmp .L1603
+.L1602:
+.loc 1 1022 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 1013 0
   movsxd r12, DWORD PTR [rbp-324]
   mov r13, QWORD PTR [rbp-76]
   mov r14, 16
@@ -30834,15 +31646,14 @@ _caustic_assembler_encoder_cst_encode:
   add r9, r8
   mov r14, r9
   mov r14, QWORD PTR [r14]
-.loc 1 1012 0
   mov rdi, rbx
   mov rsi, r12
   mov rdx, r13
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-.L1575:
-.loc 1 1014 0
+.L1603:
+.loc 1 1025 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -30854,9 +31665,8 @@ _caustic_assembler_encoder_cst_encode:
   sub r13, r12
   mov rbx, r13
   movsxd rbx, ebx
-.loc 1 1013 0
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -30864,42 +31674,42 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 990 0
-  jmp .L1565
-.L1564:
-.L1565:
-.loc 1 913 0
-  jmp .L1505
-.L1504:
-.L1505:
-.loc 1 1014 0
+.loc 1 1006 0
+  jmp .L1593
+.L1592:
+.L1593:
+.loc 1 924 0
+  jmp .L1533
+.L1532:
+.L1533:
+.loc 1 1026 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_TEST]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1580
-.loc 1 1015 0
+  jne .L1608
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
+.loc 1 1027 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
+.loc 1 1026 0
   mov rax, r12
   cmp rax, r13
-  jne .L1580
-.loc 1 1014 0
+  jne .L1608
   mov rbx, 1
-  jmp .L1581
-.L1580:
+  jmp .L1609
+.L1608:
   mov rbx, 0
-.L1581:
+.L1609:
   mov rax, rbx
   test rax, rax
-  jz .L1578
-.loc 1 1015 0
+  jz .L1606
+.loc 1 1027 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -30908,19 +31718,19 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1578
-.loc 1 1014 0
+  jne .L1606
+.loc 1 1026 0
   mov rbx, 1
-  jmp .L1579
-.L1578:
+  jmp .L1607
+.L1606:
   mov rbx, 0
-.L1579:
+.L1607:
   mov rax, rbx
   test rax, rax
-  jz .L1576
-.loc 1 1015 0
+  jz .L1604
+.loc 1 1027 0
   xor r10, r10
-.loc 1 1018 0
+.loc 1 1028 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -30930,11 +31740,12 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_size
   mov rbx, rax
-.loc 1 1015 0
+.loc 1 1027 0
   mov rax, rbx
   mov DWORD PTR [rbp-336], eax
-.loc 1 1019 0
+.loc 1 1028 0
   xor r10, r10
+.loc 1 1029 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -30944,10 +31755,11 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
+.loc 1 1028 0
   mov rax, rbx
   mov DWORD PTR [rbp-340], eax
+.loc 1 1030 0
   xor r10, r10
-.loc 1 1020 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
@@ -30957,54 +31769,65 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_code
   mov rbx, rax
-.loc 1 1019 0
   mov rax, rbx
   mov DWORD PTR [rbp-344], eax
-.loc 1 1021 0
-  mov DWORD PTR [rbp-348], 0
+.loc 1 1031 0
+  mov rbx, 0
+.loc 1 1030 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-348], eax
+.loc 1 1031 0
   movsxd rbx, DWORD PTR [rbp-336]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1582
-.loc 1 1022 0
+  jne .L1610
   lea rbx, [rbp-348]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 1021 0
-  jmp .L1583
-.L1582:
-.L1583:
-.loc 1 1022 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1611
+.L1610:
+.L1611:
   movsxd rbx, DWORD PTR [rbp-336]
+.loc 1 1032 0
   mov r12, 16
+.loc 1 1031 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1584
+  jne .L1612
+.loc 1 1032 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1585
-.L1584:
-.L1585:
-.loc 1 1025 0
-  mov DWORD PTR [rbp-352], 0
-.loc 1 1026 0
+.loc 1 1031 0
+  jmp .L1613
+.L1612:
+.L1613:
+.loc 1 1033 0
+  mov rbx, 0
+.loc 1 1032 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-352], eax
+.loc 1 1033 0
   movsxd rbx, DWORD PTR [rbp-348]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1586
+  jne .L1614
   lea rbx, [rbp-352]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1587
-.L1586:
-.L1587:
-.loc 1 1027 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1615
+.L1614:
+.L1615:
+.loc 1 1036 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -31017,49 +31840,53 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1590
+  je .L1618
+.loc 1 1037 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
+.loc 1 1036 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_ext
   mov rbx, rax
-.loc 1 1028 0
+.loc 1 1037 0
   mov r12, 1
-.loc 1 1027 0
+.loc 1 1036 0
   mov rax, rbx
   cmp rax, r12
-  je .L1590
+  je .L1618
   mov rbx, 0
-  jmp .L1591
-.L1590:
+  jmp .L1619
+.L1618:
   mov rbx, 1
-.L1591:
-.loc 1 1026 0
+.L1619:
   mov rax, rbx
   test rax, rax
-  jz .L1588
-.loc 1 1028 0
+  jz .L1616
+.loc 1 1037 0
   lea rbx, [rbp-352]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 1026 0
-  jmp .L1589
-.L1588:
-.L1589:
-.loc 1 1028 0
-  movsxd rbx, DWORD PTR [rbp-352]
   mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.loc 1 1036 0
+  jmp .L1617
+.L1616:
+.L1617:
+.loc 1 1037 0
+  movsxd rbx, DWORD PTR [rbp-352]
+.loc 1 1038 0
+  mov r12, 1
+.loc 1 1037 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1592
-.loc 1 1029 0
+  jne .L1620
+.loc 1 1039 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-348]
-.loc 1 1030 0
   mov r13, QWORD PTR [rbp-76]
   mov r14, 4
   mov r8, r13
@@ -31069,84 +31896,93 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r13
   call _caustic_assembler_encoder_cst_reg_ext
   mov r13, rax
+.loc 1 1040 0
   mov r14, 0
+.loc 1 1042 0
   mov r8, QWORD PTR [rbp-68]
   mov r9, 4
   mov r10, r8
   add r10, r9
   mov r15, r10
   movsxd r15, DWORD PTR [r15]
+.loc 1 1041 0
   mov rdi, r15
   call _caustic_assembler_encoder_cst_reg_ext
   mov r15, rax
-.loc 1 1029 0
+.loc 1 1039 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   mov rcx, r15
   call _caustic_assembler_encoder_cst_make_rex
   mov r12, rax
+.loc 1 1038 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1028 0
-  jmp .L1593
-.L1592:
-.L1593:
-.loc 1 1031 0
+.loc 1 1037 0
+  jmp .L1621
+.L1620:
+.L1621:
+.loc 1 1043 0
   movsxd rbx, DWORD PTR [rbp-336]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1594
+  jne .L1622
+.loc 1 1042 0
+.loc 1 1043 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 132
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1595
-.L1594:
-.loc 1 1032 0
+.loc 1 1042 0
+  jmp .L1623
+.L1622:
+.loc 1 1043 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 1044 0
   mov r12, 133
+.loc 1 1043 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1595:
+.L1623:
+.loc 1 1045 0
   mov rbx, QWORD PTR [rbp-56]
-.loc 1 1033 0
   mov r12, 3
   movsxd r13, DWORD PTR [rbp-344]
   movsxd r14, DWORD PTR [rbp-340]
-.loc 1 1032 0
   mov rdi, r12
   mov rsi, r13
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
+.loc 1 1044 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1033 0
+.loc 1 1045 0
   mov rbx, QWORD PTR [rbp-56]
+.loc 1 1047 0
   mov r12, 8
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
-.loc 1 1036 0
   mov r12, QWORD PTR [rbp-100]
-.loc 1 1033 0
   mov r13, rbx
   sub r13, r12
+.loc 1 1045 0
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -31154,19 +31990,19 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 1014 0
-  jmp .L1577
-.L1576:
-.L1577:
-.loc 1 1036 0
+.loc 1 1026 0
+  jmp .L1605
+.L1604:
+.L1605:
+.loc 1 1047 0
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_IMUL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1600
-.loc 1 1037 0
+  jne .L1628
+.loc 1 1048 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -31175,69 +32011,65 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1600
-.loc 1 1036 0
+  jne .L1628
+.loc 1 1047 0
   mov rbx, 1
-  jmp .L1601
-.L1600:
+  jmp .L1629
+.L1628:
   mov rbx, 0
-.L1601:
+.L1629:
   mov rax, rbx
   test rax, rax
-  jz .L1598
-.loc 1 1037 0
+  jz .L1626
+.loc 1 1048 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
+.loc 1 1049 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
   mov r13, rbx
   movsxd r13, DWORD PTR [r13]
+.loc 1 1048 0
   mov rax, r12
   cmp rax, r13
-  jne .L1598
-.loc 1 1036 0
+  jne .L1626
+.loc 1 1047 0
   mov rbx, 1
-  jmp .L1599
-.L1598:
+  jmp .L1627
+.L1626:
   mov rbx, 0
-.L1599:
+.L1627:
   mov rax, rbx
   test rax, rax
-  jz .L1596
-.loc 1 1038 0
+  jz .L1624
   xor r10, r10
-.loc 1 1039 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rbx, r13
   movsxd rbx, DWORD PTR [rbx]
-.loc 1 1038 0
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_reg_size
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-356], eax
-.loc 1 1040 0
-  mov DWORD PTR [rbp-360], 0
-.loc 1 1039 0
-.loc 1 1042 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-360], eax
   movsxd rbx, DWORD PTR [rbp-356]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1602
-.loc 1 1041 0
-.loc 1 1042 0
+  jne .L1630
   lea rbx, [rbp-360]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.loc 1 1041 0
-  jmp .L1603
-.L1602:
-.L1603:
-.loc 1 1043 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1631
+.L1630:
+.L1631:
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-360]
   mov r13, QWORD PTR [rbp-68]
@@ -31269,22 +32101,18 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1045 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 15
-.loc 1 1044 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1045 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 175
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1047 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 3
   mov r13, QWORD PTR [rbp-68]
@@ -31296,14 +32124,12 @@ _caustic_assembler_encoder_cst_encode:
   mov rdi, r13
   call _caustic_assembler_encoder_cst_reg_code
   mov r13, rax
-.loc 1 1048 0
   mov r14, QWORD PTR [rbp-76]
   mov r8, 4
   mov r9, r14
   add r9, r8
   mov r14, r9
   movsxd r14, DWORD PTR [r14]
-.loc 1 1047 0
   mov rdi, r14
   call _caustic_assembler_encoder_cst_reg_code
   mov r14, rax
@@ -31312,12 +32138,10 @@ _caustic_assembler_encoder_cst_encode:
   mov rdx, r14
   call _caustic_assembler_encoder_cst_make_modrm
   mov r12, rax
-.loc 1 1045 0
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.loc 1 1049 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -31327,11 +32151,10 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, QWORD PTR [rbp-100]
   mov r13, rbx
   sub r13, r12
-.loc 1 1048 0
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -31339,47 +32162,46 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-.loc 1 1036 0
-  jmp .L1597
-.L1596:
-.L1597:
+  jmp .L1625
+.L1624:
+.L1625:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SHL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1610
+  je .L1638
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SHR]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1610
+  je .L1638
   mov rbx, 0
-  jmp .L1611
-.L1610:
+  jmp .L1639
+.L1638:
   mov rbx, 1
-.L1611:
+.L1639:
   mov rax, rbx
   test rax, rax
-  jnz .L1608
+  jnz .L1636
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SAR]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1608
+  je .L1636
   mov rbx, 0
-  jmp .L1609
-.L1608:
+  jmp .L1637
+.L1636:
   mov rbx, 1
-.L1609:
+.L1637:
   mov rax, rbx
   test rax, rax
-  jz .L1606
+  jz .L1634
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -31388,15 +32210,15 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1606
+  jne .L1634
   mov rbx, 1
-  jmp .L1607
-.L1606:
+  jmp .L1635
+.L1634:
   mov rbx, 0
-.L1607:
+.L1635:
   mov rax, rbx
   test rax, rax
-  jz .L1604
+  jz .L1632
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
@@ -31421,45 +32243,55 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-368], eax
-  mov DWORD PTR [rbp-372], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-372], eax
   movsxd rbx, DWORD PTR [rbp-364]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1612
+  jne .L1640
   lea rbx, [rbp-372]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1613
-.L1612:
-.L1613:
-  mov DWORD PTR [rbp-376], 4
+  mov DWORD PTR [rcx], eax
+  jmp .L1641
+.L1640:
+.L1641:
+  mov rbx, 4
+  mov rax, rbx
+  mov DWORD PTR [rbp-376], eax
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SHR]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1614
+  jne .L1642
   lea rbx, [rbp-376]
+  mov r12, 5
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 5
-  jmp .L1615
-.L1614:
-.L1615:
+  mov DWORD PTR [rcx], eax
+  jmp .L1643
+.L1642:
+.L1643:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SAR]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1616
+  jne .L1644
   lea rbx, [rbp-376]
+  mov r12, 7
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 7
-  jmp .L1617
-.L1616:
-.L1617:
+  mov DWORD PTR [rcx], eax
+  jmp .L1645
+.L1644:
+.L1645:
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-372]
   mov r13, 0
@@ -31491,7 +32323,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1618
+  jne .L1646
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 211
   mov rdi, rbx
@@ -31511,8 +32343,8 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1619
-.L1618:
+  jmp .L1647
+.L1646:
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -31521,7 +32353,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1620
+  jne .L1648
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 8
   mov r13, rbx
@@ -31531,7 +32363,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1622
+  jne .L1650
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 209
   mov rdi, rbx
@@ -31551,8 +32383,8 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1623
-.L1622:
+  jmp .L1651
+.L1650:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 193
   mov rdi, rbx
@@ -31585,11 +32417,11 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r13
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1623:
-  jmp .L1621
-.L1620:
-.L1621:
-.L1619:
+.L1651:
+  jmp .L1649
+.L1648:
+.L1649:
+.L1647:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -31602,7 +32434,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -31610,16 +32442,16 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1605
-.L1604:
-.L1605:
+  jmp .L1633
+.L1632:
+.L1633:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSXD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1624
+  jne .L1652
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
@@ -31663,7 +32495,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1626
+  jne .L1654
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -31675,7 +32507,9 @@ _caustic_assembler_encoder_cst_encode:
   sub r13, r12
   mov rax, r13
   mov QWORD PTR [rbp-388], rax
-  mov DWORD PTR [rbp-392], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-392], eax
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -31683,9 +32517,9 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1628
+  jne .L1656
   lea rbx, [rbp-392]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-76]
   mov r13, 32
   mov r14, r12
@@ -31698,9 +32532,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1629
-.L1628:
-.L1629:
+  jmp .L1657
+.L1656:
+.L1657:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, rbx
   mov r12, QWORD PTR [r12]
@@ -31751,10 +32585,10 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1630
+  jne .L1658
   mov rbx, QWORD PTR [rbp-56]
   movsxd rax, DWORD PTR [rbp-380]
-  mov QWORD PTR [rbp-484], rax
+  mov QWORD PTR [rbp-492], rax
   mov r13, QWORD PTR [rbp-76]
   mov r14, 16
   mov r8, r13
@@ -31780,15 +32614,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r10
   mov r12, QWORD PTR [r12]
   mov rdi, rbx
-  mov rsi, QWORD PTR [rbp-484]
+  mov rsi, QWORD PTR [rbp-492]
   mov rdx, r13
   mov rcx, r14
   mov r8, r15
   mov r9, r12
   call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
   mov rbx, rax
-  jmp .L1631
-.L1630:
+  jmp .L1659
+.L1658:
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-380]
   mov r13, QWORD PTR [rbp-76]
@@ -31809,9 +32643,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-.L1631:
-  jmp .L1627
-.L1626:
+.L1659:
+  jmp .L1655
+.L1654:
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -31820,7 +32654,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1632
+  jne .L1660
   mov rbx, QWORD PTR [rbp-56]
   mov r12, rbx
   mov r12, QWORD PTR [r12]
@@ -31893,10 +32727,10 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1633
-.L1632:
-.L1633:
-.L1627:
+  jmp .L1661
+.L1660:
+.L1661:
+.L1655:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -31909,7 +32743,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -31917,16 +32751,16 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1625
-.L1624:
-.L1625:
+  jmp .L1653
+.L1652:
+.L1653:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSX]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1634
+  jne .L1662
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
@@ -31947,9 +32781,13 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1636
-  mov DWORD PTR [rbp-400], 1
-  mov DWORD PTR [rbp-404], 0
+  jne .L1664
+  mov rbx, 1
+  mov rax, rbx
+  mov DWORD PTR [rbp-400], eax
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-404], eax
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -31957,9 +32795,9 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1638
+  jne .L1666
   lea rbx, [rbp-404]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-76]
   mov r13, 32
   mov r14, r12
@@ -31972,9 +32810,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1639
-.L1638:
-.L1639:
+  jmp .L1667
+.L1666:
+.L1667:
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-400]
   mov r13, QWORD PTR [rbp-68]
@@ -32021,22 +32859,22 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1640
+  jne .L1668
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 190
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1641
-.L1640:
+  jmp .L1669
+.L1668:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 191
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1641:
+.L1669:
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -32044,10 +32882,10 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1642
+  jne .L1670
   mov rbx, QWORD PTR [rbp-56]
   movsxd rax, DWORD PTR [rbp-396]
-  mov QWORD PTR [rbp-492], rax
+  mov QWORD PTR [rbp-500], rax
   mov r13, QWORD PTR [rbp-76]
   mov r14, 16
   mov r8, r13
@@ -32073,15 +32911,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r10
   mov r12, QWORD PTR [r12]
   mov rdi, rbx
-  mov rsi, QWORD PTR [rbp-492]
+  mov rsi, QWORD PTR [rbp-500]
   mov rdx, r13
   mov rcx, r14
   mov r8, r15
   mov r9, r12
   call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
   mov rbx, rax
-  jmp .L1643
-.L1642:
+  jmp .L1671
+.L1670:
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-396]
   mov r13, QWORD PTR [rbp-76]
@@ -32102,9 +32940,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-.L1643:
-  jmp .L1637
-.L1636:
+.L1671:
+  jmp .L1665
+.L1664:
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -32113,7 +32951,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1644
+  jne .L1672
   xor r10, r10
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
@@ -32167,22 +33005,22 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1646
+  jne .L1674
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 190
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1647
-.L1646:
+  jmp .L1675
+.L1674:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 191
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1647:
+.L1675:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 3
   movsxd r13, DWORD PTR [rbp-396]
@@ -32204,10 +33042,10 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1645
-.L1644:
-.L1645:
-.L1637:
+  jmp .L1673
+.L1672:
+.L1673:
+.L1665:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -32220,7 +33058,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -32228,16 +33066,16 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1635
-.L1634:
-.L1635:
+  jmp .L1663
+.L1662:
+.L1663:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVZX]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1648
+  jne .L1676
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
@@ -32258,8 +33096,10 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1650
-  mov DWORD PTR [rbp-416], 0
+  jne .L1678
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-416], eax
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -32272,14 +33112,18 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1652
+  jne .L1680
   lea rbx, [rbp-416]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1653
-.L1652:
-.L1653:
-  mov DWORD PTR [rbp-420], 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1681
+.L1680:
+.L1681:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-420], eax
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -32287,9 +33131,9 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1654
+  jne .L1682
   lea rbx, [rbp-420]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-76]
   mov r13, 32
   mov r14, r12
@@ -32302,9 +33146,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1655
-.L1654:
-.L1655:
+  jmp .L1683
+.L1682:
+.L1683:
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-416]
   mov r13, QWORD PTR [rbp-68]
@@ -32351,22 +33195,22 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1656
+  jne .L1684
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 182
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1657
-.L1656:
+  jmp .L1685
+.L1684:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 183
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1657:
+.L1685:
   mov rbx, QWORD PTR [rbp-76]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -32374,10 +33218,10 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1658
+  jne .L1686
   mov rbx, QWORD PTR [rbp-56]
   movsxd rax, DWORD PTR [rbp-412]
-  mov QWORD PTR [rbp-500], rax
+  mov QWORD PTR [rbp-508], rax
   mov r13, QWORD PTR [rbp-76]
   mov r14, 16
   mov r8, r13
@@ -32403,15 +33247,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, r10
   mov r12, QWORD PTR [r12]
   mov rdi, rbx
-  mov rsi, QWORD PTR [rbp-500]
+  mov rsi, QWORD PTR [rbp-508]
   mov rdx, r13
   mov rcx, r14
   mov r8, r15
   mov r9, r12
   call _caustic_assembler_encoder_cst_emit_mem_modrm_sib
   mov rbx, rax
-  jmp .L1659
-.L1658:
+  jmp .L1687
+.L1686:
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-412]
   mov r13, QWORD PTR [rbp-76]
@@ -32432,9 +33276,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rcx, r14
   call _caustic_assembler_encoder_cst_emit_mem_modrm
   mov rbx, rax
-.L1659:
-  jmp .L1651
-.L1650:
+.L1687:
+  jmp .L1679
+.L1678:
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -32443,7 +33287,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1660
+  jne .L1688
   xor r10, r10
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
@@ -32456,7 +33300,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-424], eax
-  mov DWORD PTR [rbp-428], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-428], eax
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -32469,13 +33315,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1662
+  jne .L1690
   lea rbx, [rbp-428]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1663
-.L1662:
-.L1663:
+  mov DWORD PTR [rcx], eax
+  jmp .L1691
+.L1690:
+.L1691:
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-428]
   mov r13, QWORD PTR [rbp-68]
@@ -32517,22 +33365,22 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1664
+  jne .L1692
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 182
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1665
-.L1664:
+  jmp .L1693
+.L1692:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 183
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-.L1665:
+.L1693:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 3
   movsxd r13, DWORD PTR [rbp-412]
@@ -32554,10 +33402,10 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1661
-.L1660:
-.L1661:
-.L1651:
+  jmp .L1689
+.L1688:
+.L1689:
+.L1679:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -32570,7 +33418,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -32578,16 +33426,16 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1649
-.L1648:
-.L1649:
+  jmp .L1677
+.L1676:
+.L1677:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVQ]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1666
+  jne .L1694
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -32596,7 +33444,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1672
+  jne .L1700
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -32609,15 +33457,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 128
   mov rax, rbx
   cmp rax, r12
-  jne .L1672
+  jne .L1700
   mov rbx, 1
-  jmp .L1673
-.L1672:
+  jmp .L1701
+.L1700:
   mov rbx, 0
-.L1673:
+.L1701:
   mov rax, rbx
   test rax, rax
-  jz .L1670
+  jz .L1698
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -32626,15 +33474,15 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1670
+  jne .L1698
   mov rbx, 1
-  jmp .L1671
-.L1670:
+  jmp .L1699
+.L1698:
   mov rbx, 0
-.L1671:
+.L1699:
   mov rax, rbx
   test rax, rax
-  jz .L1668
+  jz .L1696
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
   mov rdi, rbx
@@ -32725,7 +33573,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -32733,9 +33581,9 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1669
-.L1668:
-.L1669:
+  jmp .L1697
+.L1696:
+.L1697:
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -32744,7 +33592,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1678
+  jne .L1706
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -32753,15 +33601,15 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1678
+  jne .L1706
   mov rbx, 1
-  jmp .L1679
-.L1678:
+  jmp .L1707
+.L1706:
   mov rbx, 0
-.L1679:
+.L1707:
   mov rax, rbx
   test rax, rax
-  jz .L1676
+  jz .L1704
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
@@ -32774,15 +33622,15 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 128
   mov rax, rbx
   cmp rax, r12
-  jne .L1676
+  jne .L1704
   mov rbx, 1
-  jmp .L1677
-.L1676:
+  jmp .L1705
+.L1704:
   mov rbx, 0
-.L1677:
+.L1705:
   mov rax, rbx
   test rax, rax
-  jz .L1674
+  jz .L1702
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
   mov rdi, rbx
@@ -32873,7 +33721,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -32881,64 +33729,64 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1675
-.L1674:
-.L1675:
-  jmp .L1667
-.L1666:
-.L1667:
+  jmp .L1703
+.L1702:
+.L1703:
+  jmp .L1695
+.L1694:
+.L1695:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADDSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1686
+  je .L1714
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUBSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1686
+  je .L1714
   mov rbx, 0
-  jmp .L1687
-.L1686:
+  jmp .L1715
+.L1714:
   mov rbx, 1
-.L1687:
+.L1715:
   mov rax, rbx
   test rax, rax
-  jnz .L1684
+  jnz .L1712
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MULSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1684
+  je .L1712
   mov rbx, 0
-  jmp .L1685
-.L1684:
+  jmp .L1713
+.L1712:
   mov rbx, 1
-.L1685:
+.L1713:
   mov rax, rbx
   test rax, rax
-  jnz .L1682
+  jnz .L1710
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_DIVSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1682
+  je .L1710
   mov rbx, 0
-  jmp .L1683
-.L1682:
+  jmp .L1711
+.L1710:
   mov rbx, 1
-.L1683:
+.L1711:
   mov rax, rbx
   test rax, rax
-  jz .L1680
+  jz .L1708
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -32947,7 +33795,7 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1690
+  jne .L1718
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -32956,22 +33804,24 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1690
+  jne .L1718
   mov rbx, 1
-  jmp .L1691
-.L1690:
+  jmp .L1719
+.L1718:
   mov rbx, 0
-.L1691:
+.L1719:
   mov rax, rbx
   test rax, rax
-  jz .L1688
+  jz .L1716
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 242
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  mov DWORD PTR [rbp-432], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-432], eax
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -32984,7 +33834,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1694
+  je .L1722
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
@@ -32997,26 +33847,28 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1694
+  je .L1722
   mov rbx, 0
-  jmp .L1695
-.L1694:
+  jmp .L1723
+.L1722:
   mov rbx, 1
-.L1695:
+.L1723:
   mov rax, rbx
   test rax, rax
-  jz .L1692
+  jz .L1720
   lea rbx, [rbp-432]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1693
-.L1692:
-.L1693:
+  mov DWORD PTR [rcx], eax
+  jmp .L1721
+.L1720:
+.L1721:
   movsxd rbx, DWORD PTR [rbp-432]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1696
+  jne .L1724
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 0
   mov r13, QWORD PTR [rbp-68]
@@ -33048,9 +33900,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1697
-.L1696:
-.L1697:
+  jmp .L1725
+.L1724:
+.L1725:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 15
   mov rdi, rbx
@@ -33063,64 +33915,64 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1698
+  jne .L1726
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 88
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1699
-.L1698:
-.L1699:
+  jmp .L1727
+.L1726:
+.L1727:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUBSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1700
+  jne .L1728
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 92
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1701
-.L1700:
-.L1701:
+  jmp .L1729
+.L1728:
+.L1729:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MULSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1702
+  jne .L1730
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 89
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1703
-.L1702:
-.L1703:
+  jmp .L1731
+.L1730:
+.L1731:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_DIVSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1704
+  jne .L1732
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 94
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1705
-.L1704:
-.L1705:
+  jmp .L1733
+.L1732:
+.L1733:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 3
   mov r13, QWORD PTR [rbp-68]
@@ -33162,7 +34014,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -33170,19 +34022,19 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1689
-.L1688:
-.L1689:
-  jmp .L1681
-.L1680:
-.L1681:
+  jmp .L1717
+.L1716:
+.L1717:
+  jmp .L1709
+.L1708:
+.L1709:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_XORPD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1710
+  jne .L1738
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33191,15 +34043,15 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1710
+  jne .L1738
   mov rbx, 1
-  jmp .L1711
-.L1710:
+  jmp .L1739
+.L1738:
   mov rbx, 0
-.L1711:
+.L1739:
   mov rax, rbx
   test rax, rax
-  jz .L1708
+  jz .L1736
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33208,22 +34060,24 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1708
+  jne .L1736
   mov rbx, 1
-  jmp .L1709
-.L1708:
+  jmp .L1737
+.L1736:
   mov rbx, 0
-.L1709:
+.L1737:
   mov rax, rbx
   test rax, rax
-  jz .L1706
+  jz .L1734
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 102
   mov rdi, rbx
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  mov DWORD PTR [rbp-436], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-436], eax
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -33236,7 +34090,7 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1714
+  je .L1742
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 4
   mov r13, rbx
@@ -33249,26 +34103,28 @@ _caustic_assembler_encoder_cst_encode:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1714
+  je .L1742
   mov rbx, 0
-  jmp .L1715
-.L1714:
+  jmp .L1743
+.L1742:
   mov rbx, 1
-.L1715:
+.L1743:
   mov rax, rbx
   test rax, rax
-  jz .L1712
+  jz .L1740
   lea rbx, [rbp-436]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1713
-.L1712:
-.L1713:
+  mov DWORD PTR [rcx], eax
+  jmp .L1741
+.L1740:
+.L1741:
   movsxd rbx, DWORD PTR [rbp-436]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1716
+  jne .L1744
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 0
   mov r13, QWORD PTR [rbp-68]
@@ -33300,9 +34156,9 @@ _caustic_assembler_encoder_cst_encode:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
-  jmp .L1717
-.L1716:
-.L1717:
+  jmp .L1745
+.L1744:
+.L1745:
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 15
   mov rdi, rbx
@@ -33356,7 +34212,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -33364,16 +34220,16 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1707
-.L1706:
-.L1707:
+  jmp .L1735
+.L1734:
+.L1735:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1722
+  jne .L1750
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33382,15 +34238,15 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1722
+  jne .L1750
   mov rbx, 1
-  jmp .L1723
-.L1722:
+  jmp .L1751
+.L1750:
   mov rbx, 0
-.L1723:
+.L1751:
   mov rax, rbx
   test rax, rax
-  jz .L1720
+  jz .L1748
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33399,15 +34255,15 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1720
+  jne .L1748
   mov rbx, 1
-  jmp .L1721
-.L1720:
+  jmp .L1749
+.L1748:
   mov rbx, 0
-.L1721:
+.L1749:
   mov rax, rbx
   test rax, rax
-  jz .L1718
+  jz .L1746
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 242
   mov rdi, rbx
@@ -33498,7 +34354,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -33506,16 +34362,16 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1719
-.L1718:
-.L1719:
+  jmp .L1747
+.L1746:
+.L1747:
   movsxd rbx, DWORD PTR [rbp-60]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSI2SD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1728
+  jne .L1756
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33524,15 +34380,15 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1728
+  jne .L1756
   mov rbx, 1
-  jmp .L1729
-.L1728:
+  jmp .L1757
+.L1756:
   mov rbx, 0
-.L1729:
+.L1757:
   mov rax, rbx
   test rax, rax
-  jz .L1726
+  jz .L1754
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33541,15 +34397,15 @@ _caustic_assembler_encoder_cst_encode:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1726
+  jne .L1754
   mov rbx, 1
-  jmp .L1727
-.L1726:
+  jmp .L1755
+.L1754:
   mov rbx, 0
-.L1727:
+.L1755:
   mov rax, rbx
   test rax, rax
-  jz .L1724
+  jz .L1752
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 242
   mov rdi, rbx
@@ -33640,7 +34496,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, r13
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -33648,9 +34504,399 @@ _caustic_assembler_encoder_cst_encode:
   pop rbx
   pop rbp
   ret
-  jmp .L1725
-.L1724:
-.L1725:
+  jmp .L1753
+.L1752:
+.L1753:
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSD2SS]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1762
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1762
+  mov rbx, 1
+  jmp .L1763
+.L1762:
+  mov rbx, 0
+.L1763:
+  mov rax, rbx
+  test rax, rax
+  jz .L1760
+  mov rbx, QWORD PTR [rbp-76]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1760
+  mov rbx, 1
+  jmp .L1761
+.L1760:
+  mov rbx, 0
+.L1761:
+  mov rax, rbx
+  test rax, rax
+  jz .L1758
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 242
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-440], eax
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L1766
+  mov rbx, QWORD PTR [rbp-76]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L1766
+  mov rbx, 0
+  jmp .L1767
+.L1766:
+  mov rbx, 1
+.L1767:
+  mov rax, rbx
+  test rax, rax
+  jz .L1764
+  lea rbx, [rbp-440]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1765
+.L1764:
+.L1765:
+  movsxd rbx, DWORD PTR [rbp-440]
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1768
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 0
+  mov r13, QWORD PTR [rbp-68]
+  mov r14, 4
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  movsxd r13, DWORD PTR [r13]
+  mov rdi, r13
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r13, rax
+  mov r14, 0
+  mov r8, QWORD PTR [rbp-76]
+  mov r9, 4
+  mov r10, r8
+  add r10, r9
+  mov r15, r10
+  movsxd r15, DWORD PTR [r15]
+  mov rdi, r15
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r15, rax
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  mov rcx, r15
+  call _caustic_assembler_encoder_cst_make_rex
+  mov r12, rax
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  jmp .L1769
+.L1768:
+.L1769:
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 15
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 90
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 3
+  mov r13, QWORD PTR [rbp-68]
+  mov r14, 4
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  movsxd r13, DWORD PTR [r13]
+  mov rdi, r13
+  call _caustic_assembler_encoder_cst_reg_code
+  mov r13, rax
+  mov r14, QWORD PTR [rbp-76]
+  mov r8, 4
+  mov r9, r14
+  add r9, r8
+  mov r14, r9
+  movsxd r14, DWORD PTR [r14]
+  mov rdi, r14
+  call _caustic_assembler_encoder_cst_reg_code
+  mov r14, rax
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  call _caustic_assembler_encoder_cst_make_modrm
+  mov r12, rax
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 8
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  mov rbx, QWORD PTR [rbx]
+  mov r12, QWORD PTR [rbp-100]
+  mov r13, rbx
+  sub r13, r12
+  mov rbx, r13
+  movsxd rbx, ebx
+  mov rax, rbx
+  add rsp, 520
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L1759
+.L1758:
+.L1759:
+  movsxd rbx, DWORD PTR [rbp-60]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSS2SD]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1774
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1774
+  mov rbx, 1
+  jmp .L1775
+.L1774:
+  mov rbx, 0
+.L1775:
+  mov rax, rbx
+  test rax, rax
+  jz .L1772
+  mov rbx, QWORD PTR [rbp-76]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1772
+  mov rbx, 1
+  jmp .L1773
+.L1772:
+  mov rbx, 0
+.L1773:
+  mov rax, rbx
+  test rax, rax
+  jz .L1770
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 243
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-444], eax
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L1778
+  mov rbx, QWORD PTR [rbp-76]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L1778
+  mov rbx, 0
+  jmp .L1779
+.L1778:
+  mov rbx, 1
+.L1779:
+  mov rax, rbx
+  test rax, rax
+  jz .L1776
+  lea rbx, [rbp-444]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1777
+.L1776:
+.L1777:
+  movsxd rbx, DWORD PTR [rbp-444]
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1780
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 0
+  mov r13, QWORD PTR [rbp-68]
+  mov r14, 4
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  movsxd r13, DWORD PTR [r13]
+  mov rdi, r13
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r13, rax
+  mov r14, 0
+  mov r8, QWORD PTR [rbp-76]
+  mov r9, 4
+  mov r10, r8
+  add r10, r9
+  mov r15, r10
+  movsxd r15, DWORD PTR [r15]
+  mov rdi, r15
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov r15, rax
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  mov rcx, r15
+  call _caustic_assembler_encoder_cst_make_rex
+  mov r12, rax
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  jmp .L1781
+.L1780:
+.L1781:
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 15
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 90
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 3
+  mov r13, QWORD PTR [rbp-68]
+  mov r14, 4
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  movsxd r13, DWORD PTR [r13]
+  mov rdi, r13
+  call _caustic_assembler_encoder_cst_reg_code
+  mov r13, rax
+  mov r14, QWORD PTR [rbp-76]
+  mov r8, 4
+  mov r9, r14
+  add r9, r8
+  mov r14, r9
+  movsxd r14, DWORD PTR [r14]
+  mov rdi, r14
+  call _caustic_assembler_encoder_cst_reg_code
+  mov r14, rax
+  mov rdi, r12
+  mov rsi, r13
+  mov rdx, r14
+  call _caustic_assembler_encoder_cst_make_modrm
+  mov r12, rax
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_buf_cst_buf_emit8
+  mov rbx, rax
+  mov rbx, QWORD PTR [rbp-56]
+  mov r12, 8
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  mov rbx, QWORD PTR [rbx]
+  mov r12, QWORD PTR [rbp-100]
+  mov r13, rbx
+  sub r13, r12
+  mov rbx, r13
+  movsxd rbx, ebx
+  mov rax, rbx
+  add rsp, 520
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L1771
+.L1770:
+.L1771:
   lea rbx, [rip+_std_linux_cst_STDERR]
   mov r12, rbx
   mov r12, QWORD PTR [r12]
@@ -33663,7 +34909,7 @@ _caustic_assembler_encoder_cst_encode:
   mov rbx, rax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -33673,7 +34919,7 @@ _caustic_assembler_encoder_cst_encode:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 508
+  add rsp, 520
   pop r15
   pop r14
   pop r13
@@ -33688,16 +34934,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   push r12
   push r13
   push r14
-  sub rsp, 220
-.loc 1 11258 0
+  sub rsp, 224
+.loc 1 11700 0
   mov rbx, rdi
   mov rax, rbx
   mov DWORD PTR [rbp-52], eax
-.loc 1 11262 0
+.loc 1 11704 0
   mov rbx, rsi
   mov rax, rbx
   mov QWORD PTR [rbp-60], rax
-.loc 1 11269 0
+.loc 1 11711 0
   mov rbx, rdx
   mov rax, rbx
   mov QWORD PTR [rbp-68], rax
@@ -33707,159 +34953,159 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1730
+  jne .L1782
   mov rbx, 1
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1731
-.L1730:
-.L1731:
+  jmp .L1783
+.L1782:
+.L1783:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SYSCALL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1732
+  jne .L1784
   mov rbx, 2
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1733
-.L1732:
-.L1733:
+  jmp .L1785
+.L1784:
+.L1785:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CLD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1734
+  jne .L1786
   mov rbx, 1
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1735
-.L1734:
-.L1735:
+  jmp .L1787
+.L1786:
+.L1787:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NOP]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1736
+  jne .L1788
   mov rbx, 1
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1737
-.L1736:
-.L1737:
+  jmp .L1789
+.L1788:
+.L1789:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CQO]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1738
+  jne .L1790
   mov rbx, 2
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1739
-.L1738:
-.L1739:
+  jmp .L1791
+.L1790:
+.L1791:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CDQ]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1740
+  jne .L1792
   mov rbx, 1
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1741
-.L1740:
-.L1741:
+  jmp .L1793
+.L1792:
+.L1793:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSB]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1742
+  jne .L1794
   mov rbx, 1
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1743
-.L1742:
-.L1743:
+  jmp .L1795
+.L1794:
+.L1795:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_REP]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1744
+  jne .L1796
   mov rbx, 1
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1745
-.L1744:
-.L1745:
+  jmp .L1797
+.L1796:
+.L1797:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_PUSH]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1748
+  jne .L1800
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33868,15 +35114,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1748
+  jne .L1800
   mov rbx, 1
-  jmp .L1749
-.L1748:
+  jmp .L1801
+.L1800:
   mov rbx, 0
-.L1749:
+.L1801:
   mov rax, rbx
   test rax, rax
-  jz .L1746
+  jz .L1798
   mov rbx, 1
   mov r12, QWORD PTR [rbp-60]
   mov r13, 4
@@ -33890,23 +35136,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1747
-.L1746:
-.L1747:
+  jmp .L1799
+.L1798:
+.L1799:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_POP]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1752
+  jne .L1804
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33915,15 +35161,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1752
+  jne .L1804
   mov rbx, 1
-  jmp .L1753
-.L1752:
+  jmp .L1805
+.L1804:
   mov rbx, 0
-.L1753:
+.L1805:
   mov rax, rbx
   test rax, rax
-  jz .L1750
+  jz .L1802
   mov rbx, 1
   mov r12, QWORD PTR [rbp-60]
   mov r13, 4
@@ -33937,23 +35183,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1751
-.L1750:
-.L1751:
+  jmp .L1803
+.L1802:
+.L1803:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CALL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1756
+  jne .L1808
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33962,34 +35208,34 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1756
+  jne .L1808
   mov rbx, 1
-  jmp .L1757
-.L1756:
+  jmp .L1809
+.L1808:
   mov rbx, 0
-.L1757:
+.L1809:
   mov rax, rbx
   test rax, rax
-  jz .L1754
+  jz .L1806
   mov rbx, 5
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1755
-.L1754:
-.L1755:
+  jmp .L1807
+.L1806:
+.L1807:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JMP]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1760
+  jne .L1812
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -33998,49 +35244,49 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1760
+  jne .L1812
   mov rbx, 1
-  jmp .L1761
-.L1760:
+  jmp .L1813
+.L1812:
   mov rbx, 0
-.L1761:
+.L1813:
   mov rax, rbx
   test rax, rax
-  jz .L1758
+  jz .L1810
   mov rbx, 5
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1759
-.L1758:
-.L1759:
+  jmp .L1811
+.L1810:
+.L1811:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JZ]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jl .L1766
+  jl .L1818
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_JBE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jg .L1766
+  jg .L1818
   mov rbx, 1
-  jmp .L1767
-.L1766:
+  jmp .L1819
+.L1818:
   mov rbx, 0
-.L1767:
+.L1819:
   mov rax, rbx
   test rax, rax
-  jz .L1764
+  jz .L1816
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34049,49 +35295,49 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1764
+  jne .L1816
   mov rbx, 1
-  jmp .L1765
-.L1764:
+  jmp .L1817
+.L1816:
   mov rbx, 0
-.L1765:
+.L1817:
   mov rax, rbx
   test rax, rax
-  jz .L1762
+  jz .L1814
   mov rbx, 6
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1763
-.L1762:
-.L1763:
+  jmp .L1815
+.L1814:
+.L1815:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jl .L1772
+  jl .L1824
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SETAE]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jg .L1772
+  jg .L1824
   mov rbx, 1
-  jmp .L1773
-.L1772:
+  jmp .L1825
+.L1824:
   mov rbx, 0
-.L1773:
+.L1825:
   mov rax, rbx
   test rax, rax
-  jz .L1770
+  jz .L1822
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34100,16 +35346,18 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1770
+  jne .L1822
   mov rbx, 1
-  jmp .L1771
-.L1770:
+  jmp .L1823
+.L1822:
   mov rbx, 0
-.L1771:
+.L1823:
   mov rax, rbx
   test rax, rax
-  jz .L1768
-  mov DWORD PTR [rbp-72], 0
+  jz .L1820
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-72], eax
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -34122,7 +35370,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1776
+  je .L1828
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -34135,88 +35383,90 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1776
+  je .L1828
   mov rbx, 0
-  jmp .L1777
-.L1776:
+  jmp .L1829
+.L1828:
   mov rbx, 1
-.L1777:
+.L1829:
   mov rax, rbx
   test rax, rax
-  jz .L1774
+  jz .L1826
   lea rbx, [rbp-72]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1775
-.L1774:
-.L1775:
+  mov DWORD PTR [rcx], eax
+  jmp .L1827
+.L1826:
+.L1827:
   mov rbx, 3
   movsxd r12, DWORD PTR [rbp-72]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1769
-.L1768:
-.L1769:
+  jmp .L1821
+.L1820:
+.L1821:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_IDIV]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1786
+  je .L1838
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_DIV]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1786
+  je .L1838
   mov rbx, 0
-  jmp .L1787
-.L1786:
+  jmp .L1839
+.L1838:
   mov rbx, 1
-.L1787:
+.L1839:
   mov rax, rbx
   test rax, rax
-  jnz .L1784
+  jnz .L1836
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NEG]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1784
+  je .L1836
   mov rbx, 0
-  jmp .L1785
-.L1784:
+  jmp .L1837
+.L1836:
   mov rbx, 1
-.L1785:
+.L1837:
   mov rax, rbx
   test rax, rax
-  jnz .L1782
+  jnz .L1834
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_NOT]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1782
+  je .L1834
   mov rbx, 0
-  jmp .L1783
-.L1782:
+  jmp .L1835
+.L1834:
   mov rbx, 1
-.L1783:
+.L1835:
   mov rax, rbx
   test rax, rax
-  jz .L1780
+  jz .L1832
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34225,34 +35475,34 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1780
+  jne .L1832
   mov rbx, 1
-  jmp .L1781
-.L1780:
+  jmp .L1833
+.L1832:
   mov rbx, 0
-.L1781:
+.L1833:
   mov rax, rbx
   test rax, rax
-  jz .L1778
+  jz .L1830
   mov rbx, 3
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1779
-.L1778:
-.L1779:
+  jmp .L1831
+.L1830:
+.L1831:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOV]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1788
+  jne .L1840
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34261,7 +35511,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1792
+  jne .L1844
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34270,15 +35520,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1792
+  jne .L1844
   mov rbx, 1
-  jmp .L1793
-.L1792:
+  jmp .L1845
+.L1844:
   mov rbx, 0
-.L1793:
+.L1845:
   mov rax, rbx
   test rax, rax
-  jz .L1790
+  jz .L1842
   xor r10, r10
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
@@ -34291,12 +35541,14 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-76], eax
-  mov DWORD PTR [rbp-80], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-80], eax
   movsxd rbx, DWORD PTR [rbp-76]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1794
+  jne .L1846
   lea rbx, [rbp-80]
   movsxd r12, DWORD PTR [rbp-80]
   mov r13, 1
@@ -34305,21 +35557,25 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1795
-.L1794:
-.L1795:
-  mov DWORD PTR [rbp-84], 0
+  jmp .L1847
+.L1846:
+.L1847:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-84], eax
   movsxd rbx, DWORD PTR [rbp-76]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1796
+  jne .L1848
   lea rbx, [rbp-84]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1797
-.L1796:
-.L1797:
+  mov DWORD PTR [rcx], eax
+  jmp .L1849
+.L1848:
+.L1849:
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -34332,7 +35588,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1800
+  je .L1852
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -34345,26 +35601,28 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1800
+  je .L1852
   mov rbx, 0
-  jmp .L1801
-.L1800:
+  jmp .L1853
+.L1852:
   mov rbx, 1
-.L1801:
+.L1853:
   mov rax, rbx
   test rax, rax
-  jz .L1798
+  jz .L1850
   lea rbx, [rbp-84]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1799
-.L1798:
-.L1799:
+  mov DWORD PTR [rcx], eax
+  jmp .L1851
+.L1850:
+.L1851:
   movsxd rbx, DWORD PTR [rbp-76]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1804
+  jne .L1856
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -34377,7 +35635,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1806
+  je .L1858
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -34390,29 +35648,31 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1806
+  je .L1858
   mov rbx, 0
-  jmp .L1807
-.L1806:
+  jmp .L1859
+.L1858:
   mov rbx, 1
-.L1807:
+.L1859:
   mov rax, rbx
   test rax, rax
-  jz .L1804
+  jz .L1856
   mov rbx, 1
-  jmp .L1805
-.L1804:
+  jmp .L1857
+.L1856:
   mov rbx, 0
-.L1805:
+.L1857:
   mov rax, rbx
   test rax, rax
-  jz .L1802
+  jz .L1854
   lea rbx, [rbp-84]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1803
-.L1802:
-.L1803:
+  mov DWORD PTR [rcx], eax
+  jmp .L1855
+.L1854:
+.L1855:
   movsxd rbx, DWORD PTR [rbp-80]
   movsxd r12, DWORD PTR [rbp-84]
   mov r13, rbx
@@ -34421,16 +35681,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, r13
   add r12, rbx
   mov rax, r12
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1791
-.L1790:
-.L1791:
+  jmp .L1843
+.L1842:
+.L1843:
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34439,7 +35699,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1810
+  jne .L1862
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34448,15 +35708,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1810
+  jne .L1862
   mov rbx, 1
-  jmp .L1811
-.L1810:
+  jmp .L1863
+.L1862:
   mov rbx, 0
-.L1811:
+.L1863:
   mov rax, rbx
   test rax, rax
-  jz .L1808
+  jz .L1860
   xor r10, r10
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
@@ -34473,7 +35733,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1812
+  jne .L1864
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 8
   mov r13, rbx
@@ -34486,36 +35746,36 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1814
+  jne .L1866
   mov rbx, 7
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1815
-.L1814:
-.L1815:
+  jmp .L1867
+.L1866:
+.L1867:
   mov rbx, 10
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1813
-.L1812:
-.L1813:
+  jmp .L1865
+.L1864:
+.L1865:
   movsxd rbx, DWORD PTR [rbp-88]
   mov r12, 32
   mov rax, rbx
   cmp rax, r12
-  jne .L1816
+  jne .L1868
   mov rbx, 5
   mov r12, QWORD PTR [rbp-60]
   mov r13, 4
@@ -34529,21 +35789,21 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1817
-.L1816:
-.L1817:
+  jmp .L1869
+.L1868:
+.L1869:
   movsxd rbx, DWORD PTR [rbp-88]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1818
+  jne .L1870
   mov rbx, 4
   mov r12, QWORD PTR [rbp-60]
   mov r13, 4
@@ -34557,17 +35817,19 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1819
-.L1818:
-.L1819:
-  mov DWORD PTR [rbp-92], 0
+  jmp .L1871
+.L1870:
+.L1871:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-92], eax
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -34580,7 +35842,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1822
+  je .L1874
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -34593,36 +35855,38 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1822
+  je .L1874
   mov rbx, 0
-  jmp .L1823
-.L1822:
+  jmp .L1875
+.L1874:
   mov rbx, 1
-.L1823:
+.L1875:
   mov rax, rbx
   test rax, rax
-  jz .L1820
+  jz .L1872
   lea rbx, [rbp-92]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1821
-.L1820:
-.L1821:
+  mov DWORD PTR [rcx], eax
+  jmp .L1873
+.L1872:
+.L1873:
   mov rbx, 2
   movsxd r12, DWORD PTR [rbp-92]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1809
-.L1808:
-.L1809:
+  jmp .L1861
+.L1860:
+.L1861:
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34631,7 +35895,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1826
+  jne .L1878
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34640,15 +35904,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1826
+  jne .L1878
   mov rbx, 1
-  jmp .L1827
-.L1826:
+  jmp .L1879
+.L1878:
   mov rbx, 0
-.L1827:
+.L1879:
   mov rax, rbx
   test rax, rax
-  jz .L1824
+  jz .L1876
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
@@ -34670,7 +35934,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jle .L1830
+  jle .L1882
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 28
   mov r13, rbx
@@ -34680,15 +35944,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r12, DWORD PTR [rbp-96]
   mov rax, rbx
   cmp rax, r12
-  jge .L1830
+  jge .L1882
   mov rbx, 1
-  jmp .L1831
-.L1830:
+  jmp .L1883
+.L1882:
   mov rbx, 0
-.L1831:
+.L1883:
   mov rax, rbx
   test rax, rax
-  jz .L1828
+  jz .L1880
   lea rbx, [rbp-96]
   mov r12, QWORD PTR [rbp-60]
   mov r13, 28
@@ -34699,15 +35963,17 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1829
-.L1828:
-.L1829:
-  mov DWORD PTR [rbp-100], 0
+  jmp .L1881
+.L1880:
+.L1881:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-100], eax
   movsxd rbx, DWORD PTR [rbp-96]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1832
+  jne .L1884
   lea rbx, [rbp-100]
   movsxd r12, DWORD PTR [rbp-100]
   mov r13, 1
@@ -34716,21 +35982,25 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1833
-.L1832:
-.L1833:
-  mov DWORD PTR [rbp-104], 0
+  jmp .L1885
+.L1884:
+.L1885:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-104], eax
   movsxd rbx, DWORD PTR [rbp-96]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1834
+  jne .L1886
   lea rbx, [rbp-104]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1835
-.L1834:
-.L1835:
+  mov DWORD PTR [rcx], eax
+  jmp .L1887
+.L1886:
+.L1887:
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -34743,7 +36013,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1838
+  je .L1890
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 16
   mov r13, rbx
@@ -34756,21 +36026,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1838
+  je .L1890
   mov rbx, 0
-  jmp .L1839
-.L1838:
+  jmp .L1891
+.L1890:
   mov rbx, 1
-.L1839:
+.L1891:
   mov rax, rbx
   test rax, rax
-  jz .L1836
+  jz .L1888
   lea rbx, [rbp-104]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1837
-.L1836:
-.L1837:
+  mov DWORD PTR [rcx], eax
+  jmp .L1889
+.L1888:
+.L1889:
   mov rbx, QWORD PTR [rbp-60]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -34778,7 +36050,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1842
+  jne .L1894
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 32
   mov r13, rbx
@@ -34791,26 +36063,28 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1842
+  jne .L1894
   mov rbx, 1
-  jmp .L1843
-.L1842:
+  jmp .L1895
+.L1894:
   mov rbx, 0
-.L1843:
+.L1895:
   mov rax, rbx
   test rax, rax
-  jz .L1840
+  jz .L1892
   lea rbx, [rbp-104]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1841
-.L1840:
-.L1841:
+  mov DWORD PTR [rcx], eax
+  jmp .L1893
+.L1892:
+.L1893:
   movsxd rbx, DWORD PTR [rbp-96]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1846
+  jne .L1898
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -34823,21 +36097,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1846
+  jne .L1898
   mov rbx, 1
-  jmp .L1847
-.L1846:
+  jmp .L1899
+.L1898:
   mov rbx, 0
-.L1847:
+.L1899:
   mov rax, rbx
   test rax, rax
-  jz .L1844
+  jz .L1896
   lea rbx, [rbp-104]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1845
-.L1844:
-.L1845:
+  mov DWORD PTR [rcx], eax
+  jmp .L1897
+.L1896:
+.L1897:
   xor r10, r10
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 16
@@ -34864,9 +36140,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1848
+  jne .L1900
   lea rbx, [rbp-108]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-60]
   mov r13, 16
   mov r14, r12
@@ -34886,9 +36162,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1849
-.L1848:
-.L1849:
+  jmp .L1901
+.L1900:
+.L1901:
   movsxd rbx, DWORD PTR [rbp-100]
   movsxd r12, DWORD PTR [rbp-104]
   mov r13, rbx
@@ -34900,16 +36176,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r12
   add r13, rbx
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1825
-.L1824:
-.L1825:
+  jmp .L1877
+.L1876:
+.L1877:
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34918,7 +36194,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1852
+  jne .L1904
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -34927,15 +36203,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1852
+  jne .L1904
   mov rbx, 1
-  jmp .L1853
-.L1852:
+  jmp .L1905
+.L1904:
   mov rbx, 0
-.L1853:
+.L1905:
   mov rax, rbx
   test rax, rax
-  jz .L1850
+  jz .L1902
   xor r10, r10
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
@@ -34948,12 +36224,14 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-112], eax
-  mov DWORD PTR [rbp-116], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-116], eax
   movsxd rbx, DWORD PTR [rbp-112]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1854
+  jne .L1906
   lea rbx, [rbp-116]
   movsxd r12, DWORD PTR [rbp-116]
   mov r13, 1
@@ -34962,21 +36240,25 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1855
-.L1854:
-.L1855:
-  mov DWORD PTR [rbp-120], 0
+  jmp .L1907
+.L1906:
+.L1907:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-120], eax
   movsxd rbx, DWORD PTR [rbp-112]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1856
+  jne .L1908
   lea rbx, [rbp-120]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1857
-.L1856:
-.L1857:
+  mov DWORD PTR [rcx], eax
+  jmp .L1909
+.L1908:
+.L1909:
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -34989,7 +36271,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1860
+  je .L1912
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 16
   mov r13, rbx
@@ -35002,21 +36284,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1860
+  je .L1912
   mov rbx, 0
-  jmp .L1861
-.L1860:
+  jmp .L1913
+.L1912:
   mov rbx, 1
-.L1861:
+.L1913:
   mov rax, rbx
   test rax, rax
-  jz .L1858
+  jz .L1910
   lea rbx, [rbp-120]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1859
-.L1858:
-.L1859:
+  mov DWORD PTR [rcx], eax
+  jmp .L1911
+.L1910:
+.L1911:
   mov rbx, QWORD PTR [rbp-68]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -35024,7 +36308,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1864
+  jne .L1916
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 32
   mov r13, rbx
@@ -35037,26 +36321,28 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1864
+  jne .L1916
   mov rbx, 1
-  jmp .L1865
-.L1864:
+  jmp .L1917
+.L1916:
   mov rbx, 0
-.L1865:
+.L1917:
   mov rax, rbx
   test rax, rax
-  jz .L1862
+  jz .L1914
   lea rbx, [rbp-120]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1863
-.L1862:
-.L1863:
+  mov DWORD PTR [rcx], eax
+  jmp .L1915
+.L1914:
+.L1915:
   movsxd rbx, DWORD PTR [rbp-112]
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1868
+  jne .L1920
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -35069,21 +36355,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1868
+  jne .L1920
   mov rbx, 1
-  jmp .L1869
-.L1868:
+  jmp .L1921
+.L1920:
   mov rbx, 0
-.L1869:
+.L1921:
   mov rax, rbx
   test rax, rax
-  jz .L1866
+  jz .L1918
   lea rbx, [rbp-120]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1867
-.L1866:
-.L1867:
+  mov DWORD PTR [rcx], eax
+  jmp .L1919
+.L1918:
+.L1919:
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 16
@@ -35110,9 +36398,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1870
+  jne .L1922
   lea rbx, [rbp-124]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-68]
   mov r13, 16
   mov r14, r12
@@ -35132,9 +36420,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1871
-.L1870:
-.L1871:
+  jmp .L1923
+.L1922:
+.L1923:
   movsxd rbx, DWORD PTR [rbp-116]
   movsxd r12, DWORD PTR [rbp-120]
   mov r13, rbx
@@ -35146,16 +36434,16 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r12
   add r13, rbx
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1851
-.L1850:
-.L1851:
+  jmp .L1903
+.L1902:
+.L1903:
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -35164,7 +36452,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1874
+  jne .L1926
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -35173,27 +36461,27 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1874
+  jne .L1926
   mov rbx, 1
-  jmp .L1875
-.L1874:
+  jmp .L1927
+.L1926:
   mov rbx, 0
-.L1875:
+.L1927:
   mov rax, rbx
   test rax, rax
-  jz .L1872
+  jz .L1924
   mov rbx, 7
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1873
-.L1872:
-.L1873:
+  jmp .L1925
+.L1924:
+.L1925:
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -35202,7 +36490,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1878
+  jne .L1930
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -35211,15 +36499,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1878
+  jne .L1930
   mov rbx, 1
-  jmp .L1879
-.L1878:
+  jmp .L1931
+.L1930:
   mov rbx, 0
-.L1879:
+.L1931:
   mov rax, rbx
   test rax, rax
-  jz .L1876
+  jz .L1928
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 28
   mov r13, rbx
@@ -35232,19 +36520,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jne .L1880
+  jne .L1932
   lea rbx, [rbp-128]
+  mov r12, 64
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 64
-  jmp .L1881
-.L1880:
-.L1881:
-  mov DWORD PTR [rbp-132], 0
+  mov DWORD PTR [rcx], eax
+  jmp .L1933
+.L1932:
+.L1933:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-132], eax
   movsxd rbx, DWORD PTR [rbp-128]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1882
+  jne .L1934
   lea rbx, [rbp-132]
   movsxd r12, DWORD PTR [rbp-132]
   mov r13, 1
@@ -35253,21 +36545,25 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1883
-.L1882:
-.L1883:
-  mov DWORD PTR [rbp-136], 0
+  jmp .L1935
+.L1934:
+.L1935:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-136], eax
   movsxd rbx, DWORD PTR [rbp-128]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1884
+  jne .L1936
   lea rbx, [rbp-136]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1885
-.L1884:
-.L1885:
+  mov DWORD PTR [rcx], eax
+  jmp .L1937
+.L1936:
+.L1937:
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 16
   mov r13, rbx
@@ -35280,13 +36576,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1886
+  jne .L1938
   lea rbx, [rbp-136]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1887
-.L1886:
-.L1887:
+  mov DWORD PTR [rcx], eax
+  jmp .L1939
+.L1938:
+.L1939:
   mov rbx, QWORD PTR [rbp-60]
   mov rdi, rbx
   call _caustic_assembler_encoder_cst_has_sib
@@ -35294,7 +36592,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1890
+  jne .L1942
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 32
   mov r13, rbx
@@ -35307,21 +36605,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1890
+  jne .L1942
   mov rbx, 1
-  jmp .L1891
-.L1890:
+  jmp .L1943
+.L1942:
   mov rbx, 0
-.L1891:
+.L1943:
   mov rax, rbx
   test rax, rax
-  jz .L1888
+  jz .L1940
   lea rbx, [rbp-136]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1889
-.L1888:
-.L1889:
+  mov DWORD PTR [rcx], eax
+  jmp .L1941
+.L1940:
+.L1941:
   xor r10, r10
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 16
@@ -35348,9 +36648,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1892
+  jne .L1944
   lea rbx, [rbp-140]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-60]
   mov r13, 16
   mov r14, r12
@@ -35370,9 +36670,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1893
-.L1892:
-.L1893:
+  jmp .L1945
+.L1944:
+.L1945:
   lea rbx, [rbp-132]
   movsxd r12, DWORD PTR [rbp-132]
   movsxd r13, DWORD PTR [rbp-136]
@@ -35391,553 +36691,33 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 8
   mov rax, rbx
   cmp rax, r12
-  jne .L1894
+  jne .L1946
   movsxd rbx, DWORD PTR [rbp-132]
   mov r12, 1
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1895
-.L1894:
-.L1895:
+  jmp .L1947
+.L1946:
+.L1947:
   movsxd rbx, DWORD PTR [rbp-128]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1896
+  jne .L1948
   movsxd rbx, DWORD PTR [rbp-132]
   mov r12, 2
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1897
-.L1896:
-.L1897:
-  movsxd rbx, DWORD PTR [rbp-132]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rax, r13
-  add rsp, 220
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1877
-.L1876:
-.L1877:
-  jmp .L1789
-.L1788:
-.L1789:
-  movsxd rbx, DWORD PTR [rbp-52]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_LEA]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  jne .L1898
-  mov rbx, QWORD PTR [rbp-60]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1902
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1902
-  mov rbx, 1
-  jmp .L1903
-.L1902:
-  mov rbx, 0
-.L1903:
-  mov rax, rbx
-  test rax, rax
-  jz .L1900
-  xor r10, r10
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, 16
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov r12, QWORD PTR [rbp-68]
-  mov r13, 20
-  mov r14, r12
-  add r14, r13
-  mov r12, r14
-  mov r12, QWORD PTR [r12]
-  mov rdi, rbx
-  mov rsi, r12
-  call _caustic_assembler_encoder_cst_mem_modrm_size
-  mov rbx, rax
-  mov rax, rbx
-  mov DWORD PTR [rbp-144], eax
-  mov rbx, QWORD PTR [rbp-68]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_has_sib
-  mov rbx, rax
-  mov r12, 1
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1904
-  lea rbx, [rbp-144]
-  mov r10, rbx
-  mov r12, QWORD PTR [rbp-68]
-  mov r13, 16
-  mov r14, r12
-  add r14, r13
-  mov r12, r14
-  movsxd r12, DWORD PTR [r12]
-  mov r13, QWORD PTR [rbp-68]
-  mov r14, 20
-  mov r8, r13
-  add r8, r14
-  mov r13, r8
-  mov r13, QWORD PTR [r13]
-  mov rdi, r12
-  mov rsi, r13
-  call _caustic_assembler_encoder_cst_mem_modrm_sib_size
-  mov r12, rax
-  mov rax, r12
-  mov rcx, rbx
-  mov DWORD PTR [rcx], eax
-  jmp .L1905
-.L1904:
-.L1905:
-  mov rbx, 2
-  movsxd r12, DWORD PTR [rbp-144]
-  mov r13, rbx
-  add r13, r12
-  mov rax, r13
-  add rsp, 220
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1901
-.L1900:
-.L1901:
-  mov rbx, QWORD PTR [rbp-60]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1908
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_RIP_LABEL]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1908
-  mov rbx, 1
-  jmp .L1909
-.L1908:
-  mov rbx, 0
-.L1909:
-  mov rax, rbx
-  test rax, rax
-  jz .L1906
-  mov rbx, 7
-  mov rax, rbx
-  add rsp, 220
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1907
-.L1906:
-.L1907:
-  jmp .L1899
-.L1898:
-.L1899:
-  movsxd rbx, DWORD PTR [rbp-52]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1920
-  movsxd rbx, DWORD PTR [rbp-52]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1920
-  mov rbx, 0
-  jmp .L1921
-.L1920:
-  mov rbx, 1
-.L1921:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1918
-  movsxd rbx, DWORD PTR [rbp-52]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1918
-  mov rbx, 0
-  jmp .L1919
-.L1918:
-  mov rbx, 1
-.L1919:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1916
-  movsxd rbx, DWORD PTR [rbp-52]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_OR]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1916
-  mov rbx, 0
-  jmp .L1917
-.L1916:
-  mov rbx, 1
-.L1917:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1914
-  movsxd rbx, DWORD PTR [rbp-52]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_XOR]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1914
-  mov rbx, 0
-  jmp .L1915
-.L1914:
-  mov rbx, 1
-.L1915:
-  mov rax, rbx
-  test rax, rax
-  jnz .L1912
-  movsxd rbx, DWORD PTR [rbp-52]
-  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CMP]
-  mov r13, r12
-  movsxd r13, DWORD PTR [r13]
-  mov rax, rbx
-  cmp rax, r13
-  je .L1912
-  mov rbx, 0
-  jmp .L1913
-.L1912:
-  mov rbx, 1
-.L1913:
-  mov rax, rbx
-  test rax, rax
-  jz .L1910
-  mov rbx, QWORD PTR [rbp-60]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1924
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1924
-  mov rbx, 1
-  jmp .L1925
-.L1924:
-  mov rbx, 0
-.L1925:
-  mov rax, rbx
-  test rax, rax
-  jz .L1922
-  xor r10, r10
-  mov rbx, QWORD PTR [rbp-60]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_size
-  mov rbx, rax
-  mov rax, rbx
-  mov DWORD PTR [rbp-148], eax
-  mov DWORD PTR [rbp-152], 0
-  movsxd rbx, DWORD PTR [rbp-148]
-  mov r12, 16
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1926
-  lea rbx, [rbp-152]
-  movsxd r12, DWORD PTR [rbp-152]
-  mov r13, 1
-  mov r14, r12
-  add r14, r13
-  mov rax, r14
-  mov rcx, rbx
-  mov DWORD PTR [rcx], eax
-  jmp .L1927
-.L1926:
-.L1927:
-  mov DWORD PTR [rbp-156], 0
-  movsxd rbx, DWORD PTR [rbp-148]
-  mov r12, 64
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1928
-  lea rbx, [rbp-156]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1929
-.L1928:
-.L1929:
-  mov rbx, QWORD PTR [rbp-60]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov rbx, rax
-  mov r12, 1
-  mov rax, rbx
-  cmp rax, r12
-  je .L1932
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov rbx, rax
-  mov r12, 1
-  mov rax, rbx
-  cmp rax, r12
-  je .L1932
-  mov rbx, 0
-  jmp .L1933
-.L1932:
-  mov rbx, 1
-.L1933:
-  mov rax, rbx
-  test rax, rax
-  jz .L1930
-  lea rbx, [rbp-156]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1931
-.L1930:
-.L1931:
-  movsxd rbx, DWORD PTR [rbp-152]
-  movsxd r12, DWORD PTR [rbp-156]
-  mov r13, rbx
-  add r13, r12
-  mov rbx, 2
-  mov r12, r13
-  add r12, rbx
-  mov rax, r12
-  add rsp, 220
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1923
-.L1922:
-.L1923:
-  mov rbx, QWORD PTR [rbp-60]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1936
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, rbx
-  movsxd r12, DWORD PTR [r12]
-  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_IMM]
-  mov r13, rbx
-  movsxd r13, DWORD PTR [r13]
-  mov rax, r12
-  cmp rax, r13
-  jne .L1936
-  mov rbx, 1
-  jmp .L1937
-.L1936:
-  mov rbx, 0
-.L1937:
-  mov rax, rbx
-  test rax, rax
-  jz .L1934
-  xor r10, r10
-  mov rbx, QWORD PTR [rbp-60]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_size
-  mov rbx, rax
-  mov rax, rbx
-  mov DWORD PTR [rbp-160], eax
-  mov DWORD PTR [rbp-164], 0
-  movsxd rbx, DWORD PTR [rbp-160]
-  mov r12, 16
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1938
-  lea rbx, [rbp-164]
-  movsxd r12, DWORD PTR [rbp-164]
-  mov r13, 1
-  mov r14, r12
-  add r14, r13
-  mov rax, r14
-  mov rcx, rbx
-  mov DWORD PTR [rcx], eax
-  jmp .L1939
-.L1938:
-.L1939:
-  mov DWORD PTR [rbp-168], 0
-  movsxd rbx, DWORD PTR [rbp-160]
-  mov r12, 64
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1940
-  lea rbx, [rbp-168]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1941
-.L1940:
-.L1941:
-  mov rbx, QWORD PTR [rbp-60]
-  mov r12, 4
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  movsxd rbx, DWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_reg_ext
-  mov rbx, rax
-  mov r12, 1
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1942
-  lea rbx, [rbp-168]
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1943
-.L1942:
-.L1943:
-  lea rbx, [rbp-164]
-  movsxd r12, DWORD PTR [rbp-164]
-  movsxd r13, DWORD PTR [rbp-168]
-  mov r14, r12
-  add r14, r13
-  mov rax, r14
-  mov rcx, rbx
-  mov DWORD PTR [rcx], eax
-  mov rbx, QWORD PTR [rbp-68]
-  mov r12, 8
-  mov r13, rbx
-  add r13, r12
-  mov rbx, r13
-  mov rbx, QWORD PTR [rbx]
-  mov rdi, rbx
-  call _caustic_assembler_encoder_cst_imm_is8
-  mov rbx, rax
-  mov r12, 1
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1946
-  movsxd rbx, DWORD PTR [rbp-160]
-  mov r12, 8
-  mov rax, rbx
-  cmp rax, r12
-  je .L1946
-  mov rbx, 1
-  jmp .L1947
-.L1946:
-  mov rbx, 0
-.L1947:
-  mov rax, rbx
-  test rax, rax
-  jz .L1944
-  movsxd rbx, DWORD PTR [rbp-164]
-  mov r12, 3
-  mov r13, rbx
-  add r13, r12
-  mov rax, r13
-  add rsp, 220
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1945
-.L1944:
-.L1945:
-  movsxd rbx, DWORD PTR [rbp-160]
-  mov r12, 8
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1948
-  movsxd rbx, DWORD PTR [rbp-164]
-  mov r12, 3
-  mov r13, rbx
-  add r13, r12
-  mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
@@ -35947,41 +36727,31 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   jmp .L1949
 .L1948:
 .L1949:
-  movsxd rbx, DWORD PTR [rbp-160]
-  mov r12, 16
-  mov rax, rbx
-  cmp rax, r12
-  jne .L1950
-  movsxd rbx, DWORD PTR [rbp-164]
+  movsxd rbx, DWORD PTR [rbp-132]
   mov r12, 4
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1951
-.L1950:
-.L1951:
-  movsxd rbx, DWORD PTR [rbp-164]
-  mov r12, 6
-  mov r13, rbx
-  add r13, r12
-  mov rax, r13
-  add rsp, 220
-  pop r14
-  pop r13
-  pop r12
-  pop rbx
-  pop rbp
-  ret
-  jmp .L1935
-.L1934:
-.L1935:
+  jmp .L1929
+.L1928:
+.L1929:
+  jmp .L1841
+.L1840:
+.L1841:
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_LEA]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L1950
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36009,6 +36779,552 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   test rax, rax
   jz .L1952
   xor r10, r10
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 16
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov r12, QWORD PTR [rbp-68]
+  mov r13, 20
+  mov r14, r12
+  add r14, r13
+  mov r12, r14
+  mov r12, QWORD PTR [r12]
+  mov rdi, rbx
+  mov rsi, r12
+  call _caustic_assembler_encoder_cst_mem_modrm_size
+  mov rbx, rax
+  mov rax, rbx
+  mov DWORD PTR [rbp-144], eax
+  mov rbx, QWORD PTR [rbp-68]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_has_sib
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1956
+  lea rbx, [rbp-144]
+  xor r10, r10
+  mov r12, QWORD PTR [rbp-68]
+  mov r13, 16
+  mov r14, r12
+  add r14, r13
+  mov r12, r14
+  movsxd r12, DWORD PTR [r12]
+  mov r13, QWORD PTR [rbp-68]
+  mov r14, 20
+  mov r8, r13
+  add r8, r14
+  mov r13, r8
+  mov r13, QWORD PTR [r13]
+  mov rdi, r12
+  mov rsi, r13
+  call _caustic_assembler_encoder_cst_mem_modrm_sib_size
+  mov r12, rax
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1957
+.L1956:
+.L1957:
+  mov rbx, 2
+  movsxd r12, DWORD PTR [rbp-144]
+  mov r13, rbx
+  add r13, r12
+  mov rax, r13
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L1953
+.L1952:
+.L1953:
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1960
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_RIP_LABEL]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1960
+  mov rbx, 1
+  jmp .L1961
+.L1960:
+  mov rbx, 0
+.L1961:
+  mov rax, rbx
+  test rax, rax
+  jz .L1958
+  mov rbx, 7
+  mov rax, rbx
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L1959
+.L1958:
+.L1959:
+  jmp .L1951
+.L1950:
+.L1951:
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADD]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  je .L1972
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUB]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  je .L1972
+  mov rbx, 0
+  jmp .L1973
+.L1972:
+  mov rbx, 1
+.L1973:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1970
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_AND]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  je .L1970
+  mov rbx, 0
+  jmp .L1971
+.L1970:
+  mov rbx, 1
+.L1971:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1968
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_OR]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  je .L1968
+  mov rbx, 0
+  jmp .L1969
+.L1968:
+  mov rbx, 1
+.L1969:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1966
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_XOR]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  je .L1966
+  mov rbx, 0
+  jmp .L1967
+.L1966:
+  mov rbx, 1
+.L1967:
+  mov rax, rbx
+  test rax, rax
+  jnz .L1964
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CMP]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  je .L1964
+  mov rbx, 0
+  jmp .L1965
+.L1964:
+  mov rbx, 1
+.L1965:
+  mov rax, rbx
+  test rax, rax
+  jz .L1962
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1976
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1976
+  mov rbx, 1
+  jmp .L1977
+.L1976:
+  mov rbx, 0
+.L1977:
+  mov rax, rbx
+  test rax, rax
+  jz .L1974
+  xor r10, r10
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_size
+  mov rbx, rax
+  mov rax, rbx
+  mov DWORD PTR [rbp-148], eax
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-152], eax
+  movsxd rbx, DWORD PTR [rbp-148]
+  mov r12, 16
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1978
+  lea rbx, [rbp-152]
+  movsxd r12, DWORD PTR [rbp-152]
+  mov r13, 1
+  mov r14, r12
+  add r14, r13
+  mov rax, r14
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1979
+.L1978:
+.L1979:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-156], eax
+  movsxd rbx, DWORD PTR [rbp-148]
+  mov r12, 64
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1980
+  lea rbx, [rbp-156]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1981
+.L1980:
+.L1981:
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L1984
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L1984
+  mov rbx, 0
+  jmp .L1985
+.L1984:
+  mov rbx, 1
+.L1985:
+  mov rax, rbx
+  test rax, rax
+  jz .L1982
+  lea rbx, [rbp-156]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1983
+.L1982:
+.L1983:
+  movsxd rbx, DWORD PTR [rbp-152]
+  movsxd r12, DWORD PTR [rbp-156]
+  mov r13, rbx
+  add r13, r12
+  mov rbx, 2
+  mov r12, r13
+  add r12, rbx
+  mov rax, r12
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L1975
+.L1974:
+.L1975:
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1988
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_IMM]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L1988
+  mov rbx, 1
+  jmp .L1989
+.L1988:
+  mov rbx, 0
+.L1989:
+  mov rax, rbx
+  test rax, rax
+  jz .L1986
+  xor r10, r10
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_size
+  mov rbx, rax
+  mov rax, rbx
+  mov DWORD PTR [rbp-160], eax
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-164], eax
+  movsxd rbx, DWORD PTR [rbp-160]
+  mov r12, 16
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1990
+  lea rbx, [rbp-164]
+  movsxd r12, DWORD PTR [rbp-164]
+  mov r13, 1
+  mov r14, r12
+  add r14, r13
+  mov rax, r14
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1991
+.L1990:
+.L1991:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-168], eax
+  movsxd rbx, DWORD PTR [rbp-160]
+  mov r12, 64
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1992
+  lea rbx, [rbp-168]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1993
+.L1992:
+.L1993:
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1994
+  lea rbx, [rbp-168]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L1995
+.L1994:
+.L1995:
+  lea rbx, [rbp-164]
+  movsxd r12, DWORD PTR [rbp-164]
+  movsxd r13, DWORD PTR [rbp-168]
+  mov r14, r12
+  add r14, r13
+  mov rax, r14
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 8
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  mov rbx, QWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_imm_is8
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  jne .L1998
+  movsxd rbx, DWORD PTR [rbp-160]
+  mov r12, 8
+  mov rax, rbx
+  cmp rax, r12
+  je .L1998
+  mov rbx, 1
+  jmp .L1999
+.L1998:
+  mov rbx, 0
+.L1999:
+  mov rax, rbx
+  test rax, rax
+  jz .L1996
+  movsxd rbx, DWORD PTR [rbp-164]
+  mov r12, 3
+  mov r13, rbx
+  add r13, r12
+  mov rax, r13
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L1997
+.L1996:
+.L1997:
+  movsxd rbx, DWORD PTR [rbp-160]
+  mov r12, 8
+  mov rax, rbx
+  cmp rax, r12
+  jne .L2000
+  movsxd rbx, DWORD PTR [rbp-164]
+  mov r12, 3
+  mov r13, rbx
+  add r13, r12
+  mov rax, r13
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L2001
+.L2000:
+.L2001:
+  movsxd rbx, DWORD PTR [rbp-160]
+  mov r12, 16
+  mov rax, rbx
+  cmp rax, r12
+  jne .L2002
+  movsxd rbx, DWORD PTR [rbp-164]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rax, r13
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L2003
+.L2002:
+.L2003:
+  movsxd rbx, DWORD PTR [rbp-164]
+  mov r12, 6
+  mov r13, rbx
+  add r13, r12
+  mov rax, r13
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L1987
+.L1986:
+.L1987:
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L2006
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_MEM]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L2006
+  mov rbx, 1
+  jmp .L2007
+.L2006:
+  mov rbx, 0
+.L2007:
+  mov rax, rbx
+  test rax, rax
+  jz .L2004
+  xor r10, r10
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -36020,12 +37336,14 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-172], eax
-  mov DWORD PTR [rbp-176], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-176], eax
   movsxd rbx, DWORD PTR [rbp-172]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1956
+  jne .L2008
   lea rbx, [rbp-176]
   movsxd r12, DWORD PTR [rbp-176]
   mov r13, 1
@@ -36034,9 +37352,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1957
-.L1956:
-.L1957:
+  jmp .L2009
+.L2008:
+.L2009:
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 16
@@ -36063,9 +37381,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1958
+  jne .L2010
   lea rbx, [rbp-180]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-68]
   mov r13, 16
   mov r14, r12
@@ -36085,9 +37403,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1959
-.L1958:
-.L1959:
+  jmp .L2011
+.L2010:
+.L2011:
   movsxd rbx, DWORD PTR [rbp-176]
   mov r12, 1
   mov r13, rbx
@@ -36099,26 +37417,26 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r13, r12
   add r13, rbx
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1953
-.L1952:
-.L1953:
-  jmp .L1911
-.L1910:
-.L1911:
+  jmp .L2005
+.L2004:
+.L2005:
+  jmp .L1963
+.L1962:
+.L1963:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_TEST]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1964
+  jne .L2016
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36127,15 +37445,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1964
+  jne .L2016
   mov rbx, 1
-  jmp .L1965
-.L1964:
+  jmp .L2017
+.L2016:
   mov rbx, 0
-.L1965:
+.L2017:
   mov rax, rbx
   test rax, rax
-  jz .L1962
+  jz .L2014
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36144,15 +37462,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1962
+  jne .L2014
   mov rbx, 1
-  jmp .L1963
-.L1962:
+  jmp .L2015
+.L2014:
   mov rbx, 0
-.L1963:
+.L2015:
   mov rax, rbx
   test rax, rax
-  jz .L1960
+  jz .L2012
   xor r10, r10
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
@@ -36165,12 +37483,14 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rbx, rax
   mov rax, rbx
   mov DWORD PTR [rbp-184], eax
-  mov DWORD PTR [rbp-188], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-188], eax
   movsxd rbx, DWORD PTR [rbp-184]
   mov r12, 16
   mov rax, rbx
   cmp rax, r12
-  jne .L1966
+  jne .L2018
   lea rbx, [rbp-188]
   movsxd r12, DWORD PTR [rbp-188]
   mov r13, 1
@@ -36179,21 +37499,25 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1967
-.L1966:
-.L1967:
-  mov DWORD PTR [rbp-192], 0
+  jmp .L2019
+.L2018:
+.L2019:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-192], eax
   movsxd rbx, DWORD PTR [rbp-184]
   mov r12, 64
   mov rax, rbx
   cmp rax, r12
-  jne .L1968
+  jne .L2020
   lea rbx, [rbp-192]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1969
-.L1968:
-.L1969:
+  mov DWORD PTR [rcx], eax
+  jmp .L2021
+.L2020:
+.L2021:
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -36206,7 +37530,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1972
+  je .L2024
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -36219,21 +37543,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L1972
+  je .L2024
   mov rbx, 0
-  jmp .L1973
-.L1972:
+  jmp .L2025
+.L2024:
   mov rbx, 1
-.L1973:
+.L2025:
   mov rax, rbx
   test rax, rax
-  jz .L1970
+  jz .L2022
   lea rbx, [rbp-192]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L1971
-.L1970:
-.L1971:
+  mov DWORD PTR [rcx], eax
+  jmp .L2023
+.L2022:
+.L2023:
   movsxd rbx, DWORD PTR [rbp-188]
   movsxd r12, DWORD PTR [rbp-192]
   mov r13, rbx
@@ -36242,23 +37568,23 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, r13
   add r12, rbx
   mov rax, r12
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1961
-.L1960:
-.L1961:
+  jmp .L2013
+.L2012:
+.L2013:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_IMUL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1978
+  jne .L2030
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36267,15 +37593,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1978
+  jne .L2030
   mov rbx, 1
-  jmp .L1979
-.L1978:
+  jmp .L2031
+.L2030:
   mov rbx, 0
-.L1979:
+.L2031:
   mov rax, rbx
   test rax, rax
-  jz .L1976
+  jz .L2028
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36284,64 +37610,64 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1976
+  jne .L2028
   mov rbx, 1
-  jmp .L1977
-.L1976:
+  jmp .L2029
+.L2028:
   mov rbx, 0
-.L1977:
+.L2029:
   mov rax, rbx
   test rax, rax
-  jz .L1974
+  jz .L2026
   mov rbx, 4
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1975
-.L1974:
-.L1975:
+  jmp .L2027
+.L2026:
+.L2027:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SHL]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1986
+  je .L2038
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SHR]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1986
+  je .L2038
   mov rbx, 0
-  jmp .L1987
-.L1986:
+  jmp .L2039
+.L2038:
   mov rbx, 1
-.L1987:
+.L2039:
   mov rax, rbx
   test rax, rax
-  jnz .L1984
+  jnz .L2036
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SAR]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L1984
+  je .L2036
   mov rbx, 0
-  jmp .L1985
-.L1984:
+  jmp .L2037
+.L2036:
   mov rbx, 1
-.L1985:
+.L2037:
   mov rax, rbx
   test rax, rax
-  jz .L1982
+  jz .L2034
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36350,15 +37676,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1982
+  jne .L2034
   mov rbx, 1
-  jmp .L1983
-.L1982:
+  jmp .L2035
+.L2034:
   mov rbx, 0
-.L1983:
+.L2035:
   mov rax, rbx
   test rax, rax
-  jz .L1980
+  jz .L2032
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36367,19 +37693,19 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1988
+  jne .L2040
   mov rbx, 3
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1989
-.L1988:
-.L1989:
+  jmp .L2041
+.L2040:
+.L2041:
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36388,7 +37714,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1990
+  jne .L2042
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 8
   mov r13, rbx
@@ -36398,41 +37724,41 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1992
+  jne .L2044
   mov rbx, 3
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1993
-.L1992:
-.L1993:
+  jmp .L2045
+.L2044:
+.L2045:
   mov rbx, 4
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1991
-.L1990:
-.L1991:
-  jmp .L1981
-.L1980:
-.L1981:
+  jmp .L2043
+.L2042:
+.L2043:
+  jmp .L2033
+.L2032:
+.L2033:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSXD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L1994
+  jne .L2046
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36441,7 +37767,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L1996
+  jne .L2048
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 16
@@ -36468,9 +37794,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L1998
+  jne .L2050
   lea rbx, [rbp-196]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-68]
   mov r13, 16
   mov r14, r12
@@ -36490,24 +37816,24 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L1999
-.L1998:
-.L1999:
+  jmp .L2051
+.L2050:
+.L2051:
   mov rbx, 2
   movsxd r12, DWORD PTR [rbp-196]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L1997
-.L1996:
-.L1997:
+  jmp .L2049
+.L2048:
+.L2049:
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36516,29 +37842,29 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2000
+  jne .L2052
   mov rbx, 3
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2001
-.L2000:
-.L2001:
-  jmp .L1995
-.L1994:
-.L1995:
+  jmp .L2053
+.L2052:
+.L2053:
+  jmp .L2047
+.L2046:
+.L2047:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVSX]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2002
+  jne .L2054
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36547,7 +37873,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2004
+  jne .L2056
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 16
@@ -36574,9 +37900,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2006
+  jne .L2058
   lea rbx, [rbp-200]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-68]
   mov r13, 16
   mov r14, r12
@@ -36596,24 +37922,24 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2007
-.L2006:
-.L2007:
+  jmp .L2059
+.L2058:
+.L2059:
   mov rbx, 3
   movsxd r12, DWORD PTR [rbp-200]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2005
-.L2004:
-.L2005:
+  jmp .L2057
+.L2056:
+.L2057:
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36622,29 +37948,29 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2008
+  jne .L2060
   mov rbx, 4
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2009
-.L2008:
-.L2009:
-  jmp .L2003
-.L2002:
-.L2003:
+  jmp .L2061
+.L2060:
+.L2061:
+  jmp .L2055
+.L2054:
+.L2055:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVZX]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2010
+  jne .L2062
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36653,7 +37979,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2012
+  jne .L2064
   xor r10, r10
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 16
@@ -36680,9 +38006,9 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2014
+  jne .L2066
   lea rbx, [rbp-204]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-68]
   mov r13, 16
   mov r14, r12
@@ -36702,24 +38028,24 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2015
-.L2014:
-.L2015:
+  jmp .L2067
+.L2066:
+.L2067:
   mov rbx, 3
   movsxd r12, DWORD PTR [rbp-204]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2013
-.L2012:
-.L2013:
+  jmp .L2065
+.L2064:
+.L2065:
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36728,93 +38054,93 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2016
+  jne .L2068
   mov rbx, 4
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2017
-.L2016:
-.L2017:
-  jmp .L2011
-.L2010:
-.L2011:
+  jmp .L2069
+.L2068:
+.L2069:
+  jmp .L2063
+.L2062:
+.L2063:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MOVQ]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2018
+  jne .L2070
   mov rbx, 5
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2019
-.L2018:
-.L2019:
+  jmp .L2071
+.L2070:
+.L2071:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_ADDSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2026
+  je .L2078
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_SUBSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2026
+  je .L2078
   mov rbx, 0
-  jmp .L2027
-.L2026:
+  jmp .L2079
+.L2078:
   mov rbx, 1
-.L2027:
+.L2079:
   mov rax, rbx
   test rax, rax
-  jnz .L2024
+  jnz .L2076
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_MULSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2024
+  je .L2076
   mov rbx, 0
-  jmp .L2025
-.L2024:
+  jmp .L2077
+.L2076:
   mov rbx, 1
-.L2025:
+.L2077:
   mov rax, rbx
   test rax, rax
-  jnz .L2022
+  jnz .L2074
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_DIVSD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2022
+  je .L2074
   mov rbx, 0
-  jmp .L2023
-.L2022:
+  jmp .L2075
+.L2074:
   mov rbx, 1
-.L2023:
+.L2075:
   mov rax, rbx
   test rax, rax
-  jz .L2020
+  jz .L2072
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36823,7 +38149,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2030
+  jne .L2082
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36832,16 +38158,18 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2030
+  jne .L2082
   mov rbx, 1
-  jmp .L2031
-.L2030:
+  jmp .L2083
+.L2082:
   mov rbx, 0
-.L2031:
+.L2083:
   mov rax, rbx
   test rax, rax
-  jz .L2028
-  mov DWORD PTR [rbp-208], 0
+  jz .L2080
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-208], eax
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -36854,7 +38182,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2034
+  je .L2086
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -36867,46 +38195,48 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2034
+  je .L2086
   mov rbx, 0
-  jmp .L2035
-.L2034:
+  jmp .L2087
+.L2086:
   mov rbx, 1
-.L2035:
+.L2087:
   mov rax, rbx
   test rax, rax
-  jz .L2032
+  jz .L2084
   lea rbx, [rbp-208]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L2033
-.L2032:
-.L2033:
+  mov DWORD PTR [rcx], eax
+  jmp .L2085
+.L2084:
+.L2085:
   mov rbx, 4
   movsxd r12, DWORD PTR [rbp-208]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2029
-.L2028:
-.L2029:
-  jmp .L2021
-.L2020:
-.L2021:
+  jmp .L2081
+.L2080:
+.L2081:
+  jmp .L2073
+.L2072:
+.L2073:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_XORPD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2040
+  jne .L2092
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36915,15 +38245,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2040
+  jne .L2092
   mov rbx, 1
-  jmp .L2041
-.L2040:
+  jmp .L2093
+.L2092:
   mov rbx, 0
-.L2041:
+.L2093:
   mov rax, rbx
   test rax, rax
-  jz .L2038
+  jz .L2090
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -36932,16 +38262,18 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2038
+  jne .L2090
   mov rbx, 1
-  jmp .L2039
-.L2038:
+  jmp .L2091
+.L2090:
   mov rbx, 0
-.L2039:
+.L2091:
   mov rax, rbx
   test rax, rax
-  jz .L2036
-  mov DWORD PTR [rbp-212], 0
+  jz .L2088
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-212], eax
   mov rbx, QWORD PTR [rbp-60]
   mov r12, 4
   mov r13, rbx
@@ -36954,7 +38286,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2044
+  je .L2096
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
   mov r13, rbx
@@ -36967,43 +38299,45 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2044
+  je .L2096
   mov rbx, 0
-  jmp .L2045
-.L2044:
+  jmp .L2097
+.L2096:
   mov rbx, 1
-.L2045:
+.L2097:
   mov rax, rbx
   test rax, rax
-  jz .L2042
+  jz .L2094
   lea rbx, [rbp-212]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-  jmp .L2043
-.L2042:
-.L2043:
+  mov DWORD PTR [rcx], eax
+  jmp .L2095
+.L2094:
+.L2095:
   mov rbx, 4
   movsxd r12, DWORD PTR [rbp-212]
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2037
-.L2036:
-.L2037:
+  jmp .L2089
+.L2088:
+.L2089:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTTSD2SI]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2050
+  jne .L2102
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -37012,15 +38346,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2050
+  jne .L2102
   mov rbx, 1
-  jmp .L2051
-.L2050:
+  jmp .L2103
+.L2102:
   mov rbx, 0
-.L2051:
+.L2103:
   mov rax, rbx
   test rax, rax
-  jz .L2048
+  jz .L2100
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -37029,34 +38363,34 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2048
+  jne .L2100
   mov rbx, 1
-  jmp .L2049
-.L2048:
+  jmp .L2101
+.L2100:
   mov rbx, 0
-.L2049:
+.L2101:
   mov rax, rbx
   test rax, rax
-  jz .L2046
+  jz .L2098
   mov rbx, 5
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2047
-.L2046:
-.L2047:
+  jmp .L2099
+.L2098:
+.L2099:
   movsxd rbx, DWORD PTR [rbp-52]
   lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSI2SD]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2056
+  jne .L2108
   mov rbx, QWORD PTR [rbp-60]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -37065,15 +38399,15 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2056
+  jne .L2108
   mov rbx, 1
-  jmp .L2057
-.L2056:
+  jmp .L2109
+.L2108:
   mov rbx, 0
-.L2057:
+.L2109:
   mov rax, rbx
   test rax, rax
-  jz .L2054
+  jz .L2106
   mov rbx, QWORD PTR [rbp-68]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -37082,30 +38416,232 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2054
+  jne .L2106
   mov rbx, 1
-  jmp .L2055
-.L2054:
+  jmp .L2107
+.L2106:
   mov rbx, 0
-.L2055:
+.L2107:
   mov rax, rbx
   test rax, rax
-  jz .L2052
+  jz .L2104
   mov rbx, 5
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2053
-.L2052:
-.L2053:
+  jmp .L2105
+.L2104:
+.L2105:
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSD2SS]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L2114
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L2114
+  mov rbx, 1
+  jmp .L2115
+.L2114:
+  mov rbx, 0
+.L2115:
+  mov rax, rbx
+  test rax, rax
+  jz .L2112
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L2112
+  mov rbx, 1
+  jmp .L2113
+.L2112:
+  mov rbx, 0
+.L2113:
+  mov rax, rbx
+  test rax, rax
+  jz .L2110
   mov rbx, 0
   mov rax, rbx
-  add rsp, 220
+  mov DWORD PTR [rbp-216], eax
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L2118
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L2118
+  mov rbx, 0
+  jmp .L2119
+.L2118:
+  mov rbx, 1
+.L2119:
+  mov rax, rbx
+  test rax, rax
+  jz .L2116
+  lea rbx, [rbp-216]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L2117
+.L2116:
+.L2117:
+  mov rbx, 4
+  movsxd r12, DWORD PTR [rbp-216]
+  mov r13, rbx
+  add r13, r12
+  mov rax, r13
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L2111
+.L2110:
+.L2111:
+  movsxd rbx, DWORD PTR [rbp-52]
+  lea r12, [rip+_caustic_assembler_asm_defs_cst_INST_CVTSS2SD]
+  mov r13, r12
+  movsxd r13, DWORD PTR [r13]
+  mov rax, rbx
+  cmp rax, r13
+  jne .L2124
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L2124
+  mov rbx, 1
+  jmp .L2125
+.L2124:
+  mov rbx, 0
+.L2125:
+  mov rax, rbx
+  test rax, rax
+  jz .L2122
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, rbx
+  movsxd r12, DWORD PTR [r12]
+  lea rbx, [rip+_caustic_assembler_asm_defs_cst_OP_REG]
+  mov r13, rbx
+  movsxd r13, DWORD PTR [r13]
+  mov rax, r12
+  cmp rax, r13
+  jne .L2122
+  mov rbx, 1
+  jmp .L2123
+.L2122:
+  mov rbx, 0
+.L2123:
+  mov rax, rbx
+  test rax, rax
+  jz .L2120
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-220], eax
+  mov rbx, QWORD PTR [rbp-60]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L2128
+  mov rbx, QWORD PTR [rbp-68]
+  mov r12, 4
+  mov r13, rbx
+  add r13, r12
+  mov rbx, r13
+  movsxd rbx, DWORD PTR [rbx]
+  mov rdi, rbx
+  call _caustic_assembler_encoder_cst_reg_ext
+  mov rbx, rax
+  mov r12, 1
+  mov rax, rbx
+  cmp rax, r12
+  je .L2128
+  mov rbx, 0
+  jmp .L2129
+.L2128:
+  mov rbx, 1
+.L2129:
+  mov rax, rbx
+  test rax, rax
+  jz .L2126
+  lea rbx, [rbp-220]
+  mov r12, 1
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+  jmp .L2127
+.L2126:
+.L2127:
+  mov rbx, 4
+  movsxd r12, DWORD PTR [rbp-220]
+  mov r13, rbx
+  add r13, r12
+  mov rax, r13
+  add rsp, 224
+  pop r14
+  pop r13
+  pop r12
+  pop rbx
+  pop rbp
+  ret
+  jmp .L2121
+.L2120:
+.L2121:
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 224
   pop r14
   pop r13
   pop r12
@@ -37114,7 +38650,7 @@ _caustic_assembler_encoder_cst_fast_inst_size:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 220
+  add rsp, 224
   pop r14
   pop r13
   pop r12
@@ -37129,7 +38665,7 @@ _caustic_assembler_elf_cst_sym_hash:
   push r13
   push r14
   push r15
-  sub rsp, 140
+  sub rsp, 136
 .loc 1 287 0
   mov rbx, rdi
   mov rax, rbx
@@ -37143,18 +38679,22 @@ _caustic_assembler_elf_cst_sym_hash:
   mov rax, rbx
   mov DWORD PTR [rbp-64], eax
 .loc 1 43 0
-  mov QWORD PTR [rbp-72], 5381
+  mov rbx, 5381
+  mov rax, rbx
+  mov QWORD PTR [rbp-72], rax
 .loc 1 47 0
-  mov DWORD PTR [rbp-76], 0
+  mov rbx, 0
 .loc 1 44 0
-.L2058:
+  mov rax, rbx
+  mov DWORD PTR [rbp-76], eax
+.L2130:
 .loc 1 47 0
   movsxd rax, DWORD PTR [rbp-76]
   mov QWORD PTR [rbp-92], rax
   movsxd r12, DWORD PTR [rbp-60]
   mov rax, QWORD PTR [rbp-92]
   cmp rax, r12
-  jge .L2059
+  jge .L2131
 .loc 1 48 0
   lea rax, [rbp-72]
   mov QWORD PTR [rbp-84], rax
@@ -37188,14 +38728,14 @@ _caustic_assembler_elf_cst_sym_hash:
   mov rcx, QWORD PTR [rbp-116]
   mov DWORD PTR [rcx], eax
 .loc 1 47 0
-  jmp .L2058
-.L2059:
+  jmp .L2130
+.L2131:
 .loc 1 52 0
   mov rbx, QWORD PTR [rbp-72]
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jge .L2060
+  jge .L2132
 .loc 1 51 0
 .loc 1 52 0
   lea rbx, [rbp-72]
@@ -37207,9 +38747,9 @@ _caustic_assembler_elf_cst_sym_hash:
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
 .loc 1 51 0
-  jmp .L2061
-.L2060:
-.L2061:
+  jmp .L2133
+.L2132:
+.L2133:
 .loc 1 52 0
   mov rbx, QWORD PTR [rbp-72]
 .loc 1 53 0
@@ -37227,7 +38767,7 @@ _caustic_assembler_elf_cst_sym_hash:
   mov rbx, r12
   movsxd rbx, ebx
   mov rax, rbx
-  add rsp, 140
+  add rsp, 136
   pop r15
   pop r14
   pop r13
@@ -37237,7 +38777,7 @@ _caustic_assembler_elf_cst_sym_hash:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 140
+  add rsp, 136
   pop r15
   pop r14
   pop r13
@@ -37253,16 +38793,20 @@ _caustic_assembler_elf_cst_sym_init:
   push r13
   push r14
   push r15
-  sub rsp, 164
+  sub rsp, 168
 .loc 1 53 0
   mov QWORD PTR [rbp-108], rdi
 .loc 1 54 0
-  mov DWORD PTR [rbp-52], 1024
+  mov r12, 1024
+  mov rax, r12
+  mov DWORD PTR [rbp-52], eax
 .loc 1 55 0
-  mov DWORD PTR [rbp-56], 16384
+  mov r12, 16384
+  mov rax, r12
+  mov DWORD PTR [rbp-56], eax
 .loc 1 56 0
   lea r12, [rbp-96]
-  mov r10, r12
+  xor r10, r10
   movsxd r13, DWORD PTR [rbp-52]
   mov r14, r13
 .loc 1 57 0
@@ -37282,9 +38826,11 @@ _caustic_assembler_elf_cst_sym_init:
   mov r14, r12
   add r14, r13
 .loc 1 58 0
-  mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov r12, 0
 .loc 1 57 0
+  mov rax, r12
+  mov rcx, r14
+  mov DWORD PTR [rcx], eax
 .loc 1 58 0
   lea r12, [rbp-96]
   mov r13, 12
@@ -37355,15 +38901,17 @@ _caustic_assembler_elf_cst_sym_init:
   mov rcx, r14
   mov QWORD PTR [rcx], rax
 .loc 1 65 0
-  mov DWORD PTR [rbp-100], 0
+  mov r12, 0
 .loc 1 64 0
-.L2062:
+  mov rax, r12
+  mov DWORD PTR [rbp-100], eax
+.L2134:
 .loc 1 65 0
   movsxd r12, DWORD PTR [rbp-100]
   movsxd r13, DWORD PTR [rbp-56]
   mov rax, r12
   cmp rax, r13
-  jge .L2063
+  jge .L2135
   lea r8, [rbp-96]
   mov r9, 16
   mov r10, r8
@@ -37379,8 +38927,10 @@ _caustic_assembler_elf_cst_sym_init:
   mov rax, rsi
   add rax, QWORD PTR [rbp-116]
   mov QWORD PTR [rbp-124], rax
+  mov QWORD PTR [rbp-132], -1
+  mov rax, QWORD PTR [rbp-132]
   mov rcx, QWORD PTR [rbp-124]
-  mov DWORD PTR [rcx], -1
+  mov DWORD PTR [rcx], eax
   lea rax, [rbp-100]
   mov QWORD PTR [rbp-140], rax
   movsxd rax, DWORD PTR [rbp-100]
@@ -37391,8 +38941,8 @@ _caustic_assembler_elf_cst_sym_init:
   mov rax, rbx
   mov rcx, QWORD PTR [rbp-140]
   mov DWORD PTR [rcx], eax
-  jmp .L2062
-.L2063:
+  jmp .L2134
+.L2135:
 .loc 1 68 0
   lea rbx, [rbp-96]
   mov rdi, QWORD PTR [rbp-108]
@@ -37401,7 +38951,7 @@ _caustic_assembler_elf_cst_sym_init:
   cld
   rep movsb
   mov rax, QWORD PTR [rbp-108]
-  add rsp, 164
+  add rsp, 168
   pop r15
   pop r14
   pop r13
@@ -37411,7 +38961,7 @@ _caustic_assembler_elf_cst_sym_init:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 164
+  add rsp, 168
   pop r15
   pop r14
   pop r13
@@ -37426,7 +38976,7 @@ _caustic_assembler_elf_cst_sym_get:
   push r12
   push r13
   push r14
-  sub rsp, 68
+  sub rsp, 64
 .loc 1 547 0
   mov rbx, rdi
   mov rax, rbx
@@ -37452,7 +39002,7 @@ _caustic_assembler_elf_cst_sym_get:
   add r12, r14
   mov rbx, r12
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -37461,7 +39011,7 @@ _caustic_assembler_elf_cst_sym_get:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -37516,7 +39066,7 @@ _caustic_assembler_elf_cst_sym_add:
   movsxd r12, DWORD PTR [r12]
   mov rax, rbx
   cmp rax, r12
-  jl .L2064
+  jl .L2136
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
   mov r13, rbx
@@ -37668,9 +39218,9 @@ _caustic_assembler_elf_cst_sym_add:
   mov rcx, r13
   mov DWORD PTR [rcx], eax
 .loc 1 73 0
-  jmp .L2065
-.L2064:
-.L2065:
+  jmp .L2137
+.L2136:
+.L2137:
 .loc 1 92 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
@@ -37747,8 +39297,10 @@ _caustic_assembler_elf_cst_sym_add:
   mov r12, 28
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 107 0
   xor r10, r10
 .loc 1 109 0
@@ -37866,7 +39418,7 @@ _caustic_assembler_elf_cst_sym_find:
   push r13
   push r14
   push r15
-  sub rsp, 276
+  sub rsp, 280
 .loc 1 917 0
   mov rbx, rdi
   mov rax, rbx
@@ -37920,14 +39472,14 @@ _caustic_assembler_elf_cst_sym_find:
 .loc 1 130 0
   mov rax, rbx
   mov DWORD PTR [rbp-76], eax
-.L2066:
+.L2138:
 .loc 1 134 0
   movsxd rax, DWORD PTR [rbp-76]
   mov QWORD PTR [rbp-92], rax
   mov r12, 0
   mov rax, QWORD PTR [rbp-92]
   cmp rax, r12
-  jl .L2067
+  jl .L2139
 .loc 1 135 0
   xor r10, r10
 .loc 1 137 0
@@ -37975,13 +39527,13 @@ _caustic_assembler_elf_cst_sym_find:
 .loc 1 141 0
   mov rax, QWORD PTR [rbp-172]
   cmp rax, QWORD PTR [rbp-180]
-  jne .L2068
+  jne .L2140
 .loc 1 139 0
 .loc 1 147 0
   movsxd rax, DWORD PTR [rbp-76]
   mov QWORD PTR [rbp-196], rax
   mov rax, QWORD PTR [rbp-196]
-  add rsp, 276
+  add rsp, 280
   pop r15
   pop r14
   pop r13
@@ -37990,9 +39542,9 @@ _caustic_assembler_elf_cst_sym_find:
   pop rbp
   ret
 .loc 1 139 0
-  jmp .L2069
-.L2068:
-.L2069:
+  jmp .L2141
+.L2140:
+.L2141:
 .loc 1 147 0
   lea rax, [rbp-76]
   mov QWORD PTR [rbp-204], rax
@@ -38023,12 +39575,12 @@ _caustic_assembler_elf_cst_sym_find:
   mov rcx, QWORD PTR [rbp-204]
   mov DWORD PTR [rcx], eax
 .loc 1 134 0
-  jmp .L2066
-.L2067:
+  jmp .L2138
+.L2139:
 .loc 1 148 0
   mov rbx, 99999
   mov rax, rbx
-  add rsp, 276
+  add rsp, 280
   pop r15
   pop r14
   pop r13
@@ -38038,7 +39590,7 @@ _caustic_assembler_elf_cst_sym_find:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 276
+  add rsp, 280
   pop r15
   pop r14
   pop r13
@@ -38100,7 +39652,7 @@ _caustic_assembler_elf_cst_sym_find_or_add:
   mov r12, 99999
   mov rax, rbx
   cmp rax, r12
-  je .L2070
+  je .L2142
 .loc 1 153 0
 .loc 1 157 0
   xor r10, r10
@@ -38122,21 +39674,21 @@ _caustic_assembler_elf_cst_sym_find_or_add:
   mov r12, 99
   mov rax, rbx
   cmp rax, r12
-  jne .L2074
+  jne .L2146
   movsxd rbx, DWORD PTR [rbp-72]
   mov r12, 99
   mov rax, rbx
   cmp rax, r12
-  je .L2074
+  je .L2146
   mov rbx, 1
-  jmp .L2075
-.L2074:
+  jmp .L2147
+.L2146:
   mov rbx, 0
-.L2075:
+.L2147:
 .loc 1 157 0
   mov rax, rbx
   test rax, rax
-  jz .L2072
+  jz .L2144
 .loc 1 158 0
   mov rbx, QWORD PTR [rbp-96]
   mov r12, 12
@@ -38155,9 +39707,9 @@ _caustic_assembler_elf_cst_sym_find_or_add:
   mov rcx, r13
   mov QWORD PTR [rcx], rax
 .loc 1 157 0
-  jmp .L2073
-.L2072:
-.L2073:
+  jmp .L2145
+.L2144:
+.L2145:
 .loc 1 158 0
   movsxd rbx, DWORD PTR [rbp-84]
 .loc 1 161 0
@@ -38165,18 +39717,20 @@ _caustic_assembler_elf_cst_sym_find_or_add:
 .loc 1 158 0
   mov rax, rbx
   cmp rax, r12
-  jne .L2076
+  jne .L2148
 .loc 1 161 0
   mov rbx, QWORD PTR [rbp-96]
   mov r12, 24
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
 .loc 1 158 0
-  jmp .L2077
-.L2076:
-.L2077:
+  jmp .L2149
+.L2148:
+.L2149:
 .loc 1 161 0
   movsxd rbx, DWORD PTR [rbp-88]
   mov rax, rbx
@@ -38189,9 +39743,9 @@ _caustic_assembler_elf_cst_sym_find_or_add:
   pop rbp
   ret
 .loc 1 153 0
-  jmp .L2071
-.L2070:
-.L2071:
+  jmp .L2143
+.L2142:
+.L2143:
 .loc 1 162 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, QWORD PTR [rbp-64]
@@ -38247,15 +39801,17 @@ _caustic_assembler_elf_cst_reloc_init:
   push r13
   push r14
   push r15
-  sub rsp, 76
+  sub rsp, 72
 .loc 1 165 0
   mov rbx, rdi
 .loc 1 166 0
-  mov DWORD PTR [rbp-52], 256
+  mov r12, 256
 .loc 1 165 0
+  mov rax, r12
+  mov DWORD PTR [rbp-52], eax
 .loc 1 167 0
   lea r12, [rbp-68]
-  mov r10, r12
+  xor r10, r10
 .loc 1 170 0
   movsxd r13, DWORD PTR [rbp-52]
 .loc 1 168 0
@@ -38277,8 +39833,10 @@ _caustic_assembler_elf_cst_reloc_init:
   mov r13, 8
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 171 0
   lea r12, [rbp-68]
   mov r13, 12
@@ -38296,7 +39854,7 @@ _caustic_assembler_elf_cst_reloc_init:
   cld
   rep movsb
   mov rax, rbx
-  add rsp, 76
+  add rsp, 72
   pop r15
   pop r14
   pop r13
@@ -38306,7 +39864,7 @@ _caustic_assembler_elf_cst_reloc_init:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 76
+  add rsp, 72
   pop r15
   pop r14
   pop r13
@@ -38321,7 +39879,7 @@ _caustic_assembler_elf_cst_reloc_get:
   push r12
   push r13
   push r14
-  sub rsp, 68
+  sub rsp, 64
 .loc 1 1260 0
   mov rbx, rdi
   mov rax, rbx
@@ -38351,7 +39909,7 @@ _caustic_assembler_elf_cst_reloc_get:
 .loc 1 174 0
   mov rbx, r12
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -38360,7 +39918,7 @@ _caustic_assembler_elf_cst_reloc_get:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -38375,7 +39933,7 @@ _caustic_assembler_elf_cst_reloc_add:
   push r13
   push r14
   push r15
-  sub rsp, 116
+  sub rsp, 120
 .loc 1 1305 0
   mov rbx, rdi
   mov rax, rbx
@@ -38413,7 +39971,7 @@ _caustic_assembler_elf_cst_reloc_add:
 .loc 1 182 0
   mov rax, rbx
   cmp rax, r12
-  jl .L2078
+  jl .L2150
 .loc 1 184 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
@@ -38493,9 +40051,9 @@ _caustic_assembler_elf_cst_reloc_add:
   mov rcx, r13
   mov DWORD PTR [rcx], eax
 .loc 1 182 0
-  jmp .L2079
-.L2078:
-.L2079:
+  jmp .L2151
+.L2150:
+.L2151:
 .loc 1 194 0
   xor r10, r10
 .loc 1 195 0
@@ -38566,7 +40124,7 @@ _caustic_assembler_elf_cst_reloc_add:
   mov DWORD PTR [rcx], eax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 116
+  add rsp, 120
   pop r15
   pop r14
   pop r13
@@ -38582,7 +40140,7 @@ _caustic_assembler_elf_cst_write_elf:
   push r13
   push r14
   push r15
-  sub rsp, 3292
+  sub rsp, 3288
 .loc 1 1477 0
   mov rbx, rdi
   mov rax, rbx
@@ -38628,35 +40186,55 @@ _caustic_assembler_elf_cst_write_elf:
   cld
   rep movsb
 .loc 1 213 0
-  mov DWORD PTR [rbp-132], 0
+  mov rbx, 0
 .loc 1 212 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-132], eax
 .loc 1 214 0
-  mov DWORD PTR [rbp-136], 1
+  mov rbx, 1
 .loc 1 213 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-136], eax
 .loc 1 216 0
-  mov DWORD PTR [rbp-140], 2
+  mov rbx, 2
 .loc 1 215 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-140], eax
 .loc 1 217 0
-  mov DWORD PTR [rbp-144], 3
+  mov rbx, 3
 .loc 1 216 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-144], eax
 .loc 1 218 0
-  mov DWORD PTR [rbp-148], 4
+  mov rbx, 4
 .loc 1 217 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-148], eax
 .loc 1 219 0
-  mov DWORD PTR [rbp-152], 5
+  mov rbx, 5
 .loc 1 218 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-152], eax
 .loc 1 221 0
-  mov DWORD PTR [rbp-156], 6
+  mov rbx, 6
 .loc 1 220 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-156], eax
 .loc 1 222 0
-  mov DWORD PTR [rbp-160], 7
+  mov rbx, 7
 .loc 1 221 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-160], eax
 .loc 1 223 0
-  mov DWORD PTR [rbp-164], 8
+  mov rbx, 8
 .loc 1 222 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-164], eax
 .loc 1 225 0
-  mov DWORD PTR [rbp-168], 9
+  mov rbx, 9
 .loc 1 223 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-168], eax
 .loc 1 225 0
   xor r10, r10
 .loc 1 226 0
@@ -38892,15 +40470,19 @@ _caustic_assembler_elf_cst_write_elf:
   cld
   rep movsb
 .loc 1 251 0
-  mov DWORD PTR [rbp-276], 24
-  mov DWORD PTR [rbp-280], 0
-.L2080:
+  mov rbx, 24
+  mov rax, rbx
+  mov DWORD PTR [rbp-276], eax
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-280], eax
+.L2152:
   movsxd rax, DWORD PTR [rbp-280]
   mov QWORD PTR [rbp-596], rax
   movsxd r12, DWORD PTR [rbp-276]
   mov rax, QWORD PTR [rbp-596]
   cmp rax, r12
-  jge .L2081
+  jge .L2153
   lea r14, [rbp-272]
   mov r15, 0
   mov rdi, r14
@@ -38919,18 +40501,22 @@ _caustic_assembler_elf_cst_write_elf:
   mov rax, rbx
   mov rcx, QWORD PTR [rbp-612]
   mov DWORD PTR [rcx], eax
-  jmp .L2080
-.L2081:
+  jmp .L2152
+.L2153:
 .loc 1 254 0
-  mov DWORD PTR [rbp-284], 1
-  mov DWORD PTR [rbp-288], 0
-.L2082:
+  mov rbx, 1
+  mov rax, rbx
+  mov DWORD PTR [rbp-284], eax
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-288], eax
+.L2154:
   movsxd rax, DWORD PTR [rbp-288]
   mov QWORD PTR [rbp-636], rax
   mov r12, 4
   mov rax, QWORD PTR [rbp-636]
   cmp rax, r12
-  jge .L2083
+  jge .L2155
 .loc 1 255 0
   lea r14, [rbp-272]
   mov r15, 0
@@ -39007,15 +40593,19 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-796]
   mov DWORD PTR [rcx], eax
 .loc 1 254 0
-  jmp .L2082
-.L2083:
+  jmp .L2154
+.L2155:
 .loc 1 266 0
-  mov DWORD PTR [rbp-292], 5
+  mov rbx, 5
 .loc 1 265 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-292], eax
 .loc 1 268 0
-  mov DWORD PTR [rbp-296], 0
+  mov rbx, 0
 .loc 1 267 0
-.L2084:
+  mov rax, rbx
+  mov DWORD PTR [rbp-296], eax
+.L2156:
 .loc 1 269 0
   movsxd rax, DWORD PTR [rbp-296]
   mov QWORD PTR [rbp-820], rax
@@ -39029,7 +40619,7 @@ _caustic_assembler_elf_cst_write_elf:
 .loc 1 269 0
   mov rax, QWORD PTR [rbp-820]
   cmp rax, r15
-  jge .L2085
+  jge .L2157
 .loc 1 268 0
 .loc 1 272 0
   xor r10, r10
@@ -39057,7 +40647,7 @@ _caustic_assembler_elf_cst_write_elf:
 .loc 1 272 0
   mov rax, QWORD PTR [rbp-884]
   cmp rax, QWORD PTR [rbp-892]
-  jne .L2086
+  jne .L2158
 .loc 1 273 0
   lea rax, [rbp-292]
   mov QWORD PTR [rbp-908], rax
@@ -39071,9 +40661,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-908]
   mov DWORD PTR [rcx], eax
 .loc 1 272 0
-  jmp .L2087
-.L2086:
-.L2087:
+  jmp .L2159
+.L2158:
+.L2159:
 .loc 1 273 0
   lea rax, [rbp-296]
   mov QWORD PTR [rbp-940], rax
@@ -39086,8 +40676,8 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-940]
   mov DWORD PTR [rcx], eax
 .loc 1 268 0
-  jmp .L2084
-.L2085:
+  jmp .L2156
+.L2157:
 .loc 1 274 0
   mov rbx, QWORD PTR [rbp-96]
   mov r12, 8
@@ -39110,13 +40700,17 @@ _caustic_assembler_elf_cst_write_elf:
   mov rax, r12
   mov QWORD PTR [rbp-312], rax
 .loc 1 277 0
-  mov DWORD PTR [rbp-316], 5
+  mov rbx, 5
 .loc 1 274 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-316], eax
 .loc 1 277 0
   lea rbx, [rbp-296]
+  mov r12, 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 0
-.L2088:
+  mov DWORD PTR [rcx], eax
+.L2160:
   movsxd rax, DWORD PTR [rbp-296]
   mov QWORD PTR [rbp-964], rax
   mov r12, QWORD PTR [rbp-96]
@@ -39127,7 +40721,7 @@ _caustic_assembler_elf_cst_write_elf:
   movsxd r15, DWORD PTR [r15]
   mov rax, QWORD PTR [rbp-964]
   cmp rax, r15
-  jge .L2089
+  jge .L2161
   xor r10, r10
 .loc 1 278 0
   mov rax, QWORD PTR [rbp-96]
@@ -39154,7 +40748,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov QWORD PTR [rbp-1036], 0
   mov rax, QWORD PTR [rbp-1028]
   cmp rax, QWORD PTR [rbp-1036]
-  jne .L2090
+  jne .L2162
   lea rax, [rbp-248]
   mov QWORD PTR [rbp-1052], rax
   mov QWORD PTR [rbp-1060], 8
@@ -39277,14 +40871,16 @@ _caustic_assembler_elf_cst_write_elf:
   mov QWORD PTR [rbp-1388], 99
   mov rax, QWORD PTR [rbp-1380]
   cmp rax, QWORD PTR [rbp-1388]
-  jne .L2092
+  jne .L2164
   lea rax, [rbp-332]
   mov QWORD PTR [rbp-1404], rax
+  mov QWORD PTR [rbp-1412], 0
+  mov rax, QWORD PTR [rbp-1412]
   mov rcx, QWORD PTR [rbp-1404]
-  mov DWORD PTR [rcx], 0
-  jmp .L2093
-.L2092:
-.L2093:
+  mov DWORD PTR [rcx], eax
+  jmp .L2165
+.L2164:
+.L2165:
 .loc 1 288 0
   lea rax, [rbp-272]
   mov QWORD PTR [rbp-1420], rax
@@ -39365,9 +40961,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-1596]
   mov DWORD PTR [rcx], eax
 .loc 1 278 0
-  jmp .L2091
-.L2090:
-.L2091:
+  jmp .L2163
+.L2162:
+.L2163:
 .loc 1 294 0
   lea rax, [rbp-296]
   mov QWORD PTR [rbp-1628], rax
@@ -39382,15 +40978,17 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-1628]
   mov DWORD PTR [rcx], eax
 .loc 1 277 0
-  jmp .L2088
-.L2089:
+  jmp .L2160
+.L2161:
 .loc 1 295 0
   lea rbx, [rbp-296]
 .loc 1 296 0
-  mov rcx, rbx
-  mov DWORD PTR [rcx], 0
+  mov r12, 0
 .loc 1 295 0
-.L2094:
+  mov rax, r12
+  mov rcx, rbx
+  mov DWORD PTR [rcx], eax
+.L2166:
 .loc 1 296 0
   movsxd rax, DWORD PTR [rbp-296]
   mov QWORD PTR [rbp-1652], rax
@@ -39402,7 +41000,7 @@ _caustic_assembler_elf_cst_write_elf:
   movsxd r15, DWORD PTR [r15]
   mov rax, QWORD PTR [rbp-1652]
   cmp rax, r15
-  jge .L2095
+  jge .L2167
   xor r10, r10
 .loc 1 297 0
   mov rax, QWORD PTR [rbp-96]
@@ -39429,7 +41027,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov QWORD PTR [rbp-1724], 1
   mov rax, QWORD PTR [rbp-1716]
   cmp rax, QWORD PTR [rbp-1724]
-  jne .L2096
+  jne .L2168
 .loc 1 299 0
   lea rax, [rbp-248]
   mov QWORD PTR [rbp-1740], rax
@@ -39530,7 +41128,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov QWORD PTR [rbp-2004], 1
   mov rax, QWORD PTR [rbp-1996]
   cmp rax, QWORD PTR [rbp-2004]
-  je .L2102
+  je .L2174
   mov rax, QWORD PTR [rbp-348]
   mov QWORD PTR [rbp-2020], rax
   mov QWORD PTR [rbp-2028], 12
@@ -39545,15 +41143,15 @@ _caustic_assembler_elf_cst_write_elf:
 .loc 1 307 0
   mov rax, QWORD PTR [rbp-2044]
   cmp rax, QWORD PTR [rbp-2052]
-  je .L2102
+  je .L2174
   mov QWORD PTR [rbp-1964], 0
-  jmp .L2103
-.L2102:
+  jmp .L2175
+.L2174:
   mov QWORD PTR [rbp-1964], 1
-.L2103:
+.L2175:
   mov rax, QWORD PTR [rbp-1964]
   test rax, rax
-  jnz .L2100
+  jnz .L2172
 .loc 1 308 0
   mov rax, QWORD PTR [rbp-348]
   mov QWORD PTR [rbp-2068], rax
@@ -39567,16 +41165,16 @@ _caustic_assembler_elf_cst_write_elf:
   mov QWORD PTR [rbp-2100], 3
   mov rax, QWORD PTR [rbp-2092]
   cmp rax, QWORD PTR [rbp-2100]
-  je .L2100
+  je .L2172
 .loc 1 307 0
   mov QWORD PTR [rbp-1956], 0
-  jmp .L2101
-.L2100:
+  jmp .L2173
+.L2172:
   mov QWORD PTR [rbp-1956], 1
-.L2101:
+.L2173:
   mov rax, QWORD PTR [rbp-1956]
   test rax, rax
-  jz .L2098
+  jz .L2170
 .loc 1 308 0
   lea rax, [rbp-356]
   mov QWORD PTR [rbp-2116], rax
@@ -39589,9 +41187,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-2116]
   mov DWORD PTR [rcx], eax
 .loc 1 307 0
-  jmp .L2099
-.L2098:
-.L2099:
+  jmp .L2171
+.L2170:
+.L2171:
 .loc 1 309 0
   movsxd rax, DWORD PTR [rbp-356]
   mov QWORD PTR [rbp-2140], rax
@@ -39663,16 +41261,18 @@ _caustic_assembler_elf_cst_write_elf:
 .loc 1 313 0
   mov rax, QWORD PTR [rbp-2308]
   cmp rax, QWORD PTR [rbp-2316]
-  jne .L2104
+  jne .L2176
 .loc 1 314 0
   lea rax, [rbp-364]
   mov QWORD PTR [rbp-2332], rax
+  mov QWORD PTR [rbp-2340], 0
+  mov rax, QWORD PTR [rbp-2340]
   mov rcx, QWORD PTR [rbp-2332]
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 313 0
-  jmp .L2105
-.L2104:
-.L2105:
+  jmp .L2177
+.L2176:
+.L2177:
 .loc 1 315 0
   lea rax, [rbp-272]
   mov QWORD PTR [rbp-2348], rax
@@ -39759,9 +41359,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-2524]
   mov DWORD PTR [rcx], eax
 .loc 1 297 0
-  jmp .L2097
-.L2096:
-.L2097:
+  jmp .L2169
+.L2168:
+.L2169:
 .loc 1 323 0
   lea rax, [rbp-296]
   mov QWORD PTR [rbp-2556], rax
@@ -39774,8 +41374,8 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-2556]
   mov DWORD PTR [rcx], eax
 .loc 1 296 0
-  jmp .L2094
-.L2095:
+  jmp .L2166
+.L2167:
 .loc 1 323 0
   xor r10, r10
 .loc 1 325 0
@@ -39793,8 +41393,10 @@ _caustic_assembler_elf_cst_write_elf:
   cld
   rep movsb
 .loc 1 325 0
-  mov DWORD PTR [rbp-400], 0
-.L2106:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-400], eax
+.L2178:
 .loc 1 326 0
   movsxd rax, DWORD PTR [rbp-400]
   mov QWORD PTR [rbp-2580], rax
@@ -39807,7 +41409,7 @@ _caustic_assembler_elf_cst_write_elf:
   movsxd r15, DWORD PTR [r15]
   mov rax, QWORD PTR [rbp-2580]
   cmp rax, r15
-  jge .L2107
+  jge .L2179
 .loc 1 327 0
   xor r10, r10
 .loc 1 328 0
@@ -39861,7 +41463,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov QWORD PTR [rbp-2724], 0
   mov rax, QWORD PTR [rbp-2716]
   cmp rax, QWORD PTR [rbp-2724]
-  jl .L2110
+  jl .L2182
   mov rax, QWORD PTR [rbp-408]
   mov QWORD PTR [rbp-2740], rax
   mov QWORD PTR [rbp-2748], 8
@@ -39888,16 +41490,16 @@ _caustic_assembler_elf_cst_write_elf:
 .loc 1 331 0
   mov rax, QWORD PTR [rbp-2764]
   cmp rax, QWORD PTR [rbp-2804]
-  jge .L2110
+  jge .L2182
   mov rbx, 1
-  jmp .L2111
-.L2110:
+  jmp .L2183
+.L2182:
   mov rbx, 0
-.L2111:
+.L2183:
 .loc 1 330 0
   mov rax, rbx
   test rax, rax
-  jz .L2108
+  jz .L2180
 .loc 1 336 0
   mov rax, QWORD PTR [rbp-312]
   mov QWORD PTR [rbp-2820], rax
@@ -39943,9 +41545,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-2900]
   mov QWORD PTR [rcx], rax
 .loc 1 330 0
-  jmp .L2109
-.L2108:
-.L2109:
+  jmp .L2181
+.L2180:
+.L2181:
 .loc 1 340 0
   mov rax, QWORD PTR [rbp-416]
   mov QWORD PTR [rbp-2932], rax
@@ -40009,13 +41611,17 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-3068]
   mov DWORD PTR [rcx], eax
 .loc 1 326 0
-  jmp .L2106
-.L2107:
+  jmp .L2178
+.L2179:
 .loc 1 345 0
-  mov QWORD PTR [rbp-440], 64
+  mov rbx, 64
 .loc 1 344 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-440], rax
 .loc 1 346 0
-  mov QWORD PTR [rbp-448], 64
+  mov rbx, 64
+  mov rax, rbx
+  mov QWORD PTR [rbp-448], rax
   mov rbx, QWORD PTR [rbp-440]
   mov rax, rbx
   mov QWORD PTR [rbp-456], rax
@@ -40056,7 +41662,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov rbx, 0
   mov rax, r13
   cmp rax, rbx
-  je .L2112
+  je .L2184
 .loc 1 350 0
   lea rbx, [rbp-456]
   mov r12, QWORD PTR [rbp-456]
@@ -40079,9 +41685,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
 .loc 1 349 0
-  jmp .L2113
-.L2112:
-.L2113:
+  jmp .L2185
+.L2184:
+.L2185:
 .loc 1 352 0
   mov rbx, QWORD PTR [rbp-456]
 .loc 1 350 0
@@ -40121,20 +41727,20 @@ _caustic_assembler_elf_cst_write_elf:
   mov rbx, 0
   mov rax, r13
   cmp rax, rbx
-  je .L2116
+  je .L2188
   mov rbx, QWORD PTR [rbp-488]
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jle .L2116
+  jle .L2188
   mov rbx, 1
-  jmp .L2117
-.L2116:
+  jmp .L2189
+.L2188:
   mov rbx, 0
-.L2117:
+.L2189:
   mov rax, rbx
   test rax, rax
-  jz .L2114
+  jz .L2186
   lea rbx, [rbp-456]
   mov r12, QWORD PTR [rbp-456]
   mov r13, 16
@@ -40155,9 +41761,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rax, r12
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
-  jmp .L2115
-.L2114:
-.L2115:
+  jmp .L2187
+.L2186:
+.L2187:
 .loc 1 358 0
   mov rbx, QWORD PTR [rbp-456]
 .loc 1 357 0
@@ -40198,22 +41804,22 @@ _caustic_assembler_elf_cst_write_elf:
 .loc 1 360 0
   mov rax, r13
   cmp rax, rbx
-  je .L2120
+  je .L2192
 .loc 1 361 0
   mov rbx, QWORD PTR [rbp-504]
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jle .L2120
+  jle .L2192
 .loc 1 360 0
   mov rbx, 1
-  jmp .L2121
-.L2120:
+  jmp .L2193
+.L2192:
   mov rbx, 0
-.L2121:
+.L2193:
   mov rax, rbx
   test rax, rax
-  jz .L2118
+  jz .L2190
 .loc 1 362 0
   lea rbx, [rbp-456]
   mov r12, QWORD PTR [rbp-456]
@@ -40236,9 +41842,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
 .loc 1 360 0
-  jmp .L2119
-.L2118:
-.L2119:
+  jmp .L2191
+.L2190:
+.L2191:
 .loc 1 365 0
   mov rbx, QWORD PTR [rbp-456]
 .loc 1 364 0
@@ -40284,7 +41890,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov rbx, 0
   mov rax, r13
   cmp rax, rbx
-  je .L2122
+  je .L2194
 .loc 1 369 0
 .loc 1 370 0
   lea rbx, [rbp-456]
@@ -40312,9 +41918,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
 .loc 1 369 0
-  jmp .L2123
-.L2122:
-.L2123:
+  jmp .L2195
+.L2194:
+.L2195:
 .loc 1 371 0
   mov rbx, QWORD PTR [rbp-456]
   mov rax, rbx
@@ -40358,7 +41964,7 @@ _caustic_assembler_elf_cst_write_elf:
 .loc 1 373 0
   mov rax, r13
   cmp rax, rbx
-  je .L2126
+  je .L2198
 .loc 1 374 0
   lea rbx, [rbp-396]
   mov r12, 8
@@ -40369,16 +41975,16 @@ _caustic_assembler_elf_cst_write_elf:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jle .L2126
+  jle .L2198
 .loc 1 373 0
   mov rbx, 1
-  jmp .L2127
-.L2126:
+  jmp .L2199
+.L2198:
   mov rbx, 0
-.L2127:
+.L2199:
   mov rax, rbx
   test rax, rax
-  jz .L2124
+  jz .L2196
 .loc 1 374 0
   lea rbx, [rbp-456]
 .loc 1 375 0
@@ -40407,9 +42013,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
 .loc 1 373 0
-  jmp .L2125
-.L2124:
-.L2125:
+  jmp .L2197
+.L2196:
+.L2197:
 .loc 1 379 0
   mov rbx, QWORD PTR [rbp-456]
 .loc 1 378 0
@@ -40470,7 +42076,7 @@ _caustic_assembler_elf_cst_write_elf:
 .loc 1 381 0
   mov rax, r13
   cmp rax, rbx
-  je .L2128
+  je .L2200
 .loc 1 384 0
   lea rbx, [rbp-456]
 .loc 1 385 0
@@ -40495,9 +42101,9 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
 .loc 1 381 0
-  jmp .L2129
-.L2128:
-.L2129:
+  jmp .L2201
+.L2200:
+.L2201:
 .loc 1 386 0
   mov rbx, QWORD PTR [rbp-456]
   mov rax, rbx
@@ -40688,7 +42294,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jle .L2130
+  jle .L2202
 .loc 1 414 0
   lea rbx, [rbp-128]
   mov r12, QWORD PTR [rbp-72]
@@ -40711,15 +42317,15 @@ _caustic_assembler_elf_cst_write_elf:
   call _caustic_assembler_buf_cst_buf_align
   mov rbx, rax
 .loc 1 413 0
-  jmp .L2131
-.L2130:
-.L2131:
+  jmp .L2203
+.L2202:
+.L2203:
 .loc 1 416 0
   mov rbx, QWORD PTR [rbp-504]
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jle .L2132
+  jle .L2204
 .loc 1 418 0
   lea rbx, [rbp-128]
 .loc 1 419 0
@@ -40743,9 +42349,9 @@ _caustic_assembler_elf_cst_write_elf:
   call _caustic_assembler_buf_cst_buf_align
   mov rbx, rax
 .loc 1 416 0
-  jmp .L2133
-.L2132:
-.L2133:
+  jmp .L2205
+.L2204:
+.L2205:
 .loc 1 427 0
   lea rbx, [rbp-128]
   lea r12, [rbp-272]
@@ -40782,7 +42388,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jle .L2134
+  jle .L2206
   lea rbx, [rbp-128]
 .loc 1 431 0
   mov r12, 8
@@ -40803,9 +42409,9 @@ _caustic_assembler_elf_cst_write_elf:
   call _caustic_assembler_buf_cst_buf_append
   mov rbx, rax
 .loc 1 430 0
-  jmp .L2135
-.L2134:
-.L2135:
+  jmp .L2207
+.L2206:
+.L2207:
 .loc 1 432 0
   lea rbx, [rbp-128]
   lea r12, [rbp-192]
@@ -40826,15 +42432,17 @@ _caustic_assembler_elf_cst_write_elf:
   mov rsi, r12
   call _caustic_assembler_buf_cst_buf_align
   mov rbx, rax
-  mov DWORD PTR [rbp-588], 0
-.L2136:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-588], eax
+.L2208:
 .loc 1 440 0
   movsxd rax, DWORD PTR [rbp-588]
   mov QWORD PTR [rbp-3092], rax
   mov r12, 64
   mov rax, QWORD PTR [rbp-3092]
   cmp rax, r12
-  jge .L2137
+  jge .L2209
 .loc 1 439 0
 .loc 1 440 0
   lea r14, [rbp-128]
@@ -40856,8 +42464,8 @@ _caustic_assembler_elf_cst_write_elf:
   mov rcx, QWORD PTR [rbp-3108]
   mov DWORD PTR [rcx], eax
 .loc 1 439 0
-  jmp .L2136
-.L2137:
+  jmp .L2208
+.L2209:
 .loc 1 441 0
   lea rbx, [rbp-128]
 .loc 1 442 0
@@ -41562,7 +43170,7 @@ _caustic_assembler_elf_cst_write_elf:
   mov rbx, rax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 3292
+  add rsp, 3288
   pop r15
   pop r14
   pop r13
@@ -41584,8 +43192,10 @@ strlen:
   mov rax, rbx
   mov QWORD PTR [rbp-56], rax
 .loc 1 42 0
-  mov QWORD PTR [rbp-64], 0
-.L2138:
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-64], rax
+.L2210:
 .loc 1 43 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, QWORD PTR [rbp-64]
@@ -41596,7 +43206,7 @@ strlen:
   mov r8, 0
   mov rax, r14
   cmp rax, r8
-  je .L2139
+  je .L2211
   lea r10, [rbp-64]
   mov rsi, QWORD PTR [rbp-64]
   mov rdi, 1
@@ -41605,8 +43215,8 @@ strlen:
   mov rax, r15
   mov rcx, r10
   mov QWORD PTR [rcx], rax
-  jmp .L2138
-.L2139:
+  jmp .L2210
+.L2211:
 .loc 1 44 0
   mov rbx, QWORD PTR [rbp-64]
   mov rax, rbx
@@ -41669,7 +43279,7 @@ print_int:
   push r13
   push r14
   push r15
-  sub rsp, 196
+  sub rsp, 200
 .loc 1 348 0
   mov rbx, rdi
   mov rax, rbx
@@ -41679,7 +43289,7 @@ print_int:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jne .L2140
+  jne .L2212
   lea rbx, [rip+_std_linux_cst_STDOUT]
   mov r12, rbx
   mov r12, QWORD PTR [r12]
@@ -41690,7 +43300,7 @@ print_int:
   mov rdx, r13
   call _std_linux_cst_write
   mov rbx, rax
-  add rsp, 196
+  add rsp, 200
   pop r15
   pop r14
   pop r13
@@ -41698,24 +43308,28 @@ print_int:
   pop rbx
   pop rbp
   ret
-  jmp .L2141
-.L2140:
-.L2141:
+  jmp .L2213
+.L2212:
+.L2213:
 .loc 1 54 0
   mov rbx, QWORD PTR [rbp-56]
   mov rax, rbx
   mov QWORD PTR [rbp-88], rax
 .loc 1 55 0
-  mov QWORD PTR [rbp-96], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-96], rax
 .loc 1 56 0
   mov rbx, QWORD PTR [rbp-88]
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jge .L2142
+  jge .L2214
   lea rbx, [rbp-96]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov QWORD PTR [rcx], 1
+  mov QWORD PTR [rcx], rax
   lea rbx, [rbp-88]
   mov r12, 0
   mov r13, QWORD PTR [rbp-88]
@@ -41724,19 +43338,21 @@ print_int:
   mov rax, r14
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
-  jmp .L2143
-.L2142:
-.L2143:
+  jmp .L2215
+.L2214:
+.L2215:
 .loc 1 57 0
-  mov DWORD PTR [rbp-100], 23
-.L2144:
+  mov rbx, 23
+  mov rax, rbx
+  mov DWORD PTR [rbp-100], eax
+.L2216:
 .loc 1 58 0
   mov rax, QWORD PTR [rbp-88]
   mov QWORD PTR [rbp-124], rax
   mov r12, 0
   mov rax, QWORD PTR [rbp-124]
   cmp rax, r12
-  jle .L2145
+  jle .L2217
 .loc 1 59 0
   lea r14, [rbp-80]
   movsxd r8, DWORD PTR [rbp-100]
@@ -41790,20 +43406,22 @@ print_int:
   mov rcx, QWORD PTR [rbp-172]
   mov DWORD PTR [rcx], eax
 .loc 1 58 0
-  jmp .L2144
-.L2145:
+  jmp .L2216
+.L2217:
 .loc 1 63 0
   mov rbx, QWORD PTR [rbp-96]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2146
+  jne .L2218
   lea rbx, [rbp-80]
   movsxd r12, DWORD PTR [rbp-100]
   mov r13, rbx
   add r13, r12
+  mov rbx, 45
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 45
+  mov BYTE PTR [rcx], al
   lea rbx, [rbp-100]
   movsxd r12, DWORD PTR [rbp-100]
   mov r13, 1
@@ -41812,9 +43430,9 @@ print_int:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2147
-.L2146:
-.L2147:
+  jmp .L2219
+.L2218:
+.L2219:
 .loc 1 64 0
   movsxd rbx, DWORD PTR [rbp-100]
   mov r12, rbx
@@ -41844,7 +43462,7 @@ print_int:
   mov rbx, rax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 196
+  add rsp, 200
   pop r15
   pop r14
   pop r13
@@ -41883,7 +43501,7 @@ read_file:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jge .L2148
+  jge .L2220
   mov rbx, 0
   mov r12, rbx
   mov rax, r12
@@ -41894,9 +43512,9 @@ read_file:
   pop rbx
   pop rbp
   ret
-  jmp .L2149
-.L2148:
-.L2149:
+  jmp .L2221
+.L2220:
+.L2221:
 .loc 1 71 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-64]
@@ -41927,7 +43545,7 @@ read_file:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jg .L2150
+  jg .L2222
   mov rbx, QWORD PTR [rbp-64]
   mov rdi, rbx
   call _std_linux_cst_close
@@ -41942,9 +43560,9 @@ read_file:
   pop rbx
   pop rbp
   ret
-  jmp .L2151
-.L2150:
-.L2151:
+  jmp .L2223
+.L2222:
+.L2223:
 .loc 1 74 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-72]
@@ -42031,7 +43649,7 @@ read_file_size:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jge .L2152
+  jge .L2224
   mov rbx, 0
   mov rax, rbx
   add rsp, 80
@@ -42041,9 +43659,9 @@ read_file_size:
   pop rbx
   pop rbp
   ret
-  jmp .L2153
-.L2152:
-.L2153:
+  jmp .L2225
+.L2224:
+.L2225:
 .loc 1 84 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-64]
@@ -42127,8 +43745,10 @@ make_output_name:
   mov r12, QWORD PTR [rbp-64]
   mov r13, rbx
   add r13, r12
+  mov rbx, 46
+  mov rax, rbx
   mov rcx, r13
-  mov BYTE PTR [rcx], 46
+  mov BYTE PTR [rcx], al
 .loc 1 94 0
   mov rbx, QWORD PTR [rbp-72]
   mov r12, QWORD PTR [rbp-64]
@@ -42137,8 +43757,10 @@ make_output_name:
   add r14, r13
   mov r12, rbx
   add r12, r14
+  mov rbx, 111
+  mov rax, rbx
   mov rcx, r12
-  mov BYTE PTR [rcx], 111
+  mov BYTE PTR [rcx], al
 .loc 1 95 0
   mov rbx, QWORD PTR [rbp-72]
   mov r12, QWORD PTR [rbp-64]
@@ -42147,8 +43769,10 @@ make_output_name:
   add r14, r13
   mov r12, rbx
   add r12, r14
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r12
-  mov BYTE PTR [rcx], 0
+  mov BYTE PTR [rcx], al
 .loc 1 96 0
   mov rbx, QWORD PTR [rbp-72]
   mov rax, rbx
@@ -42192,16 +43816,18 @@ pl_init:
   mov r13, 4096
   mov rax, r12
   cmp rax, r13
-  jge .L2154
+  jge .L2226
   lea r12, [rbp-56]
+  mov r13, 4096
+  mov rax, r13
   mov rcx, r12
-  mov DWORD PTR [rcx], 4096
-  jmp .L2155
-.L2154:
-.L2155:
+  mov DWORD PTR [rcx], eax
+  jmp .L2227
+.L2226:
+.L2227:
 .loc 1 151 0
   lea r12, [rbp-72]
-  mov r10, r12
+  xor r10, r10
   movsxd r13, DWORD PTR [rbp-56]
   mov r14, r13
   mov r13, 180
@@ -42218,8 +43844,10 @@ pl_init:
   mov r13, 8
   mov r14, r12
   add r14, r13
+  mov r12, 0
+  mov rax, r12
   mov rcx, r14
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 153 0
   lea r12, [rbp-72]
   mov r13, 12
@@ -42262,7 +43890,7 @@ pl_get:
   push r12
   push r13
   push r14
-  sub rsp, 68
+  sub rsp, 64
 .loc 1 1083 0
   mov rbx, rdi
   mov rax, rbx
@@ -42285,7 +43913,7 @@ pl_get:
   add r12, r14
   mov rbx, r12
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -42294,7 +43922,7 @@ pl_get:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 68
+  add rsp, 64
   pop r14
   pop r13
   pop r12
@@ -42309,7 +43937,7 @@ pl_add:
   push r13
   push r14
   push r15
-  sub rsp, 84
+  sub rsp, 88
 .loc 1 1128 0
   mov rbx, rdi
   mov rax, rbx
@@ -42329,7 +43957,7 @@ pl_add:
   movsxd r12, DWORD PTR [r12]
   mov rax, rbx
   cmp rax, r12
-  jl .L2156
+  jl .L2228
 .loc 1 163 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
@@ -42397,9 +44025,9 @@ pl_add:
   mov rcx, r13
   mov DWORD PTR [rcx], eax
 .loc 1 162 0
-  jmp .L2157
-.L2156:
-.L2157:
+  jmp .L2229
+.L2228:
+.L2229:
 .loc 1 170 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -42472,8 +44100,10 @@ pl_add:
   mov r12, 20
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
 .loc 1 177 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 28
@@ -42490,15 +44120,19 @@ pl_add:
   mov r12, 32
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
 .loc 1 179 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 40
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 180 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 44
@@ -42515,8 +44149,10 @@ pl_add:
   mov r12, 48
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 182 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 52
@@ -42532,8 +44168,10 @@ pl_add:
   mov r12, 60
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 184 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 64
@@ -42561,8 +44199,10 @@ pl_add:
   mov r12, 72
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
 .loc 1 187 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 80
@@ -42579,15 +44219,19 @@ pl_add:
   mov r12, 84
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
 .loc 1 189 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 92
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 190 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 96
@@ -42604,8 +44248,10 @@ pl_add:
   mov r12, 100
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 192 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 104
@@ -42621,8 +44267,10 @@ pl_add:
   mov r12, 112
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 194 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 116
@@ -42638,15 +44286,19 @@ pl_add:
   mov r12, 124
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 196 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 128
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 197 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 132
@@ -42662,15 +44314,19 @@ pl_add:
   mov r12, 140
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 199 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 144
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
 .loc 1 200 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 152
@@ -42686,29 +44342,37 @@ pl_add:
   mov r12, 160
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 202 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 164
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov QWORD PTR [rcx], 0
+  mov QWORD PTR [rcx], rax
 .loc 1 203 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 172
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 204 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, 176
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 205 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
@@ -42729,7 +44393,7 @@ pl_add:
 .loc 1 206 0
   mov rbx, QWORD PTR [rbp-76]
   mov rax, rbx
-  add rsp, 84
+  add rsp, 88
   pop r15
   pop r14
   pop r13
@@ -42739,7 +44403,7 @@ pl_add:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 84
+  add rsp, 88
   pop r15
   pop r14
   pop r13
@@ -42770,7 +44434,7 @@ make_op:
   mov r13, 1
   mov rax, r12
   cmp rax, r13
-  jne .L2158
+  jne .L2230
 .loc 1 214 0
   lea r12, [rbp-112]
   mov r13, QWORD PTR [rbp-56]
@@ -42909,8 +44573,8 @@ make_op:
   mov rcx, r14
   mov DWORD PTR [rcx], eax
 .loc 1 213 0
-  jmp .L2159
-.L2158:
+  jmp .L2231
+.L2230:
 .loc 1 225 0
   lea r12, [rbp-112]
   mov r13, QWORD PTR [rbp-56]
@@ -43048,7 +44712,7 @@ make_op:
   mov rax, r12
   mov rcx, r14
   mov DWORD PTR [rcx], eax
-.L2159:
+.L2231:
 .loc 1 236 0
   lea r12, [rbp-112]
   mov rdi, rbx
@@ -43097,7 +44761,7 @@ set_op_reg:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2160
+  jne .L2232
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
   mov r13, rbx
@@ -43116,8 +44780,8 @@ set_op_reg:
   mov rax, rbx
   mov rcx, r13
   mov DWORD PTR [rcx], eax
-  jmp .L2161
-.L2160:
+  jmp .L2233
+.L2232:
 .loc 1 241 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 64
@@ -43137,7 +44801,7 @@ set_op_reg:
   mov rax, rbx
   mov rcx, r13
   mov DWORD PTR [rcx], eax
-.L2161:
+.L2233:
   mov rbx, 0
   mov rax, rbx
   add rsp, 72
@@ -43152,7 +44816,7 @@ set_op_imm:
   push rbx
   push r12
   push r13
-  sub rsp, 76
+  sub rsp, 72
 .loc 1 1775 0
   mov rbx, rdi
   mov rax, rbx
@@ -43170,7 +44834,7 @@ set_op_imm:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2162
+  jne .L2234
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
   mov r13, rbx
@@ -43189,8 +44853,8 @@ set_op_imm:
   mov rax, rbx
   mov rcx, r13
   mov QWORD PTR [rcx], rax
-  jmp .L2163
-.L2162:
+  jmp .L2235
+.L2234:
 .loc 1 246 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 64
@@ -43210,10 +44874,10 @@ set_op_imm:
   mov rax, rbx
   mov rcx, r13
   mov QWORD PTR [rcx], rax
-.L2163:
+.L2235:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 76
+  add rsp, 72
   pop r13
   pop r12
   pop rbx
@@ -43225,7 +44889,7 @@ set_op_mem:
   push rbx
   push r12
   push r13
-  sub rsp, 84
+  sub rsp, 88
 .loc 1 1834 0
   mov rbx, rdi
   mov rax, rbx
@@ -43251,7 +44915,7 @@ set_op_mem:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2164
+  jne .L2236
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
   mov r13, rbx
@@ -43300,10 +44964,12 @@ set_op_mem:
   mov r12, 48
   mov r13, rbx
   add r13, r12
+  mov rbx, 0
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 0
-  jmp .L2165
-.L2164:
+  mov DWORD PTR [rcx], eax
+  jmp .L2237
+.L2236:
 .loc 1 251 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 64
@@ -43353,12 +45019,14 @@ set_op_mem:
   mov r12, 100
   mov r13, rbx
   add r13, r12
-  mov rcx, r13
-  mov DWORD PTR [rcx], 0
-.L2165:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 84
+  mov rcx, r13
+  mov DWORD PTR [rcx], eax
+.L2237:
+  mov rbx, 0
+  mov rax, rbx
+  add rsp, 88
   pop r13
   pop r12
   pop rbx
@@ -43370,7 +45038,7 @@ set_op_mem_sib:
   push rbx
   push r12
   push r13
-  sub rsp, 92
+  sub rsp, 88
 .loc 1 1953 0
   mov rbx, rdi
   mov rax, rbx
@@ -43404,7 +45072,7 @@ set_op_mem_sib:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2166
+  jne .L2238
 .loc 1 256 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
@@ -43462,8 +45130,8 @@ set_op_mem_sib:
   mov rcx, r13
   mov DWORD PTR [rcx], eax
 .loc 1 255 0
-  jmp .L2167
-.L2166:
+  jmp .L2239
+.L2238:
 .loc 1 263 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 64
@@ -43520,10 +45188,10 @@ set_op_mem_sib:
   mov rax, rbx
   mov rcx, r13
   mov DWORD PTR [rcx], eax
-.L2167:
+.L2239:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 92
+  add rsp, 88
   pop r13
   pop r12
   pop rbx
@@ -43557,7 +45225,7 @@ set_op_label:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2168
+  jne .L2240
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
   mov r13, rbx
@@ -43584,8 +45252,8 @@ set_op_label:
   mov rax, rbx
   mov rcx, r13
   mov DWORD PTR [rcx], eax
-  jmp .L2169
-.L2168:
+  jmp .L2241
+.L2240:
 .loc 1 274 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 64
@@ -43613,7 +45281,7 @@ set_op_label:
   mov rax, rbx
   mov rcx, r13
   mov DWORD PTR [rcx], eax
-.L2169:
+.L2241:
   mov rbx, 0
   mov rax, rbx
   add rsp, 72
@@ -43628,7 +45296,7 @@ set_op_rip:
   push rbx
   push r12
   push r13
-  sub rsp, 84
+  sub rsp, 88
 .loc 1 2152 0
   mov rbx, rdi
   mov rax, rbx
@@ -43654,7 +45322,7 @@ set_op_rip:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2170
+  jne .L2242
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
   mov r13, rbx
@@ -43689,8 +45357,8 @@ set_op_rip:
   mov rax, rbx
   mov rcx, r13
   mov DWORD PTR [rcx], eax
-  jmp .L2171
-.L2170:
+  jmp .L2243
+.L2242:
 .loc 1 279 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 64
@@ -43726,10 +45394,10 @@ set_op_rip:
   mov rax, rbx
   mov rcx, r13
   mov DWORD PTR [rcx], eax
-.L2171:
+.L2243:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 84
+  add rsp, 88
   pop r13
   pop r12
   pop rbx
@@ -43743,7 +45411,7 @@ parse_mem_operand:
   push r13
   push r14
   push r15
-  sub rsp, 244
+  sub rsp, 248
 .loc 1 2244 0
   mov rbx, rdi
   mov rax, rbx
@@ -43808,7 +45476,7 @@ parse_mem_operand:
   mov r12, 99
   mov rax, rbx
   cmp rax, r12
-  jne .L2172
+  jne .L2244
 .loc 1 291 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -43828,7 +45496,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2174
+  jne .L2246
 .loc 1 293 0
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
@@ -43876,7 +45544,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2176
+  jne .L2248
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
   mov r13, 1
@@ -43885,9 +45553,9 @@ parse_mem_operand:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2177
-.L2176:
-.L2177:
+  jmp .L2249
+.L2248:
+.L2249:
 .loc 1 298 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-88]
@@ -43918,7 +45586,7 @@ parse_mem_operand:
   call set_op_rip
   mov rbx, rax
 .loc 1 300 0
-  add rsp, 244
+  add rsp, 248
   pop r15
   pop r14
   pop r13
@@ -43927,15 +45595,17 @@ parse_mem_operand:
   pop rbp
   ret
 .loc 1 292 0
-  jmp .L2175
-.L2174:
-.L2175:
+  jmp .L2247
+.L2246:
+.L2247:
 .loc 1 290 0
-  jmp .L2173
-.L2172:
-.L2173:
+  jmp .L2245
+.L2244:
+.L2245:
 .loc 1 303 0
-  mov QWORD PTR [rbp-132], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-132], rax
 .loc 1 304 0
   lea rbx, [rip+_caustic_assembler_asm_defs_cst_REG_NONE]
   mov r12, rbx
@@ -43943,7 +45613,9 @@ parse_mem_operand:
   mov rax, r12
   mov DWORD PTR [rbp-136], eax
 .loc 1 305 0
-  mov DWORD PTR [rbp-140], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-140], eax
 .loc 1 306 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -43963,7 +45635,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2178
+  jne .L2250
 .loc 1 308 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -43986,7 +45658,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2180
+  jne .L2252
 .loc 1 310 0
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
@@ -44035,7 +45707,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2182
+  jne .L2254
 .loc 1 315 0
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
@@ -44078,13 +45750,15 @@ parse_mem_operand:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 314 0
-  jmp .L2183
-.L2182:
+  jmp .L2255
+.L2254:
 .loc 1 320 0
   lea rbx, [rbp-140]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
-.L2183:
+  mov DWORD PTR [rcx], eax
+.L2255:
 .loc 1 322 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -44104,7 +45778,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2184
+  jne .L2256
 .loc 1 324 0
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
@@ -44145,8 +45819,8 @@ parse_mem_operand:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 323 0
-  jmp .L2185
-.L2184:
+  jmp .L2257
+.L2256:
 .loc 1 328 0
   mov rbx, QWORD PTR [rbp-180]
   mov r12, rbx
@@ -44156,7 +45830,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2186
+  jne .L2258
 .loc 1 329 0
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
@@ -44200,13 +45874,13 @@ parse_mem_operand:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 328 0
-  jmp .L2187
-.L2186:
-.L2187:
-.L2185:
+  jmp .L2259
+.L2258:
+.L2259:
+.L2257:
 .loc 1 309 0
-  jmp .L2181
-.L2180:
+  jmp .L2253
+.L2252:
 .loc 1 335 0
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
@@ -44246,10 +45920,10 @@ parse_mem_operand:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-.L2181:
+.L2253:
 .loc 1 307 0
-  jmp .L2179
-.L2178:
+  jmp .L2251
+.L2250:
 .loc 1 340 0
   mov rbx, QWORD PTR [rbp-148]
   mov r12, rbx
@@ -44259,7 +45933,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2188
+  jne .L2260
 .loc 1 341 0
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
@@ -44303,10 +45977,10 @@ parse_mem_operand:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 340 0
-  jmp .L2189
-.L2188:
-.L2189:
-.L2179:
+  jmp .L2261
+.L2260:
+.L2261:
+.L2251:
 .loc 1 346 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -44326,7 +46000,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2190
+  jne .L2262
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
   mov r13, 1
@@ -44335,9 +46009,9 @@ parse_mem_operand:
   mov rax, r14
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2191
-.L2190:
-.L2191:
+  jmp .L2263
+.L2262:
+.L2263:
 .loc 1 348 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-88]
@@ -44351,7 +46025,7 @@ parse_mem_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2192
+  je .L2264
 .loc 1 350 0
   mov rbx, QWORD PTR [rbp-76]
   movsxd r12, DWORD PTR [rbp-80]
@@ -44375,8 +46049,8 @@ parse_mem_operand:
   mov rbx, rax
   add rsp, 16
 .loc 1 349 0
-  jmp .L2193
-.L2192:
+  jmp .L2265
+.L2264:
 .loc 1 352 0
   mov rbx, QWORD PTR [rbp-76]
   movsxd r12, DWORD PTR [rbp-80]
@@ -44390,10 +46064,10 @@ parse_mem_operand:
   mov r8, r15
   call set_op_mem
   mov rbx, rax
-.L2193:
+.L2265:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 244
+  add rsp, 248
   pop r15
   pop r14
   pop r13
@@ -44449,7 +46123,7 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2194
+  jne .L2266
 .loc 1 361 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-60]
@@ -44483,9 +46157,9 @@ parse_operand:
   pop rbp
   ret
 .loc 1 360 0
-  jmp .L2195
-.L2194:
-.L2195:
+  jmp .L2267
+.L2266:
+.L2267:
 .loc 1 365 0
   mov rbx, QWORD PTR [rbp-88]
   mov r12, rbx
@@ -44495,7 +46169,7 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2196
+  jne .L2268
 .loc 1 366 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-60]
@@ -44529,9 +46203,9 @@ parse_operand:
   pop rbp
   ret
 .loc 1 365 0
-  jmp .L2197
-.L2196:
-.L2197:
+  jmp .L2269
+.L2268:
+.L2269:
 .loc 1 370 0
   mov rbx, QWORD PTR [rbp-88]
   mov r12, rbx
@@ -44541,7 +46215,7 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2198
+  jne .L2270
 .loc 1 371 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -44564,7 +46238,7 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2200
+  jne .L2272
 .loc 1 373 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-60]
@@ -44601,13 +46275,13 @@ parse_operand:
   pop rbp
   ret
 .loc 1 372 0
-  jmp .L2201
-.L2200:
-.L2201:
+  jmp .L2273
+.L2272:
+.L2273:
 .loc 1 370 0
-  jmp .L2199
-.L2198:
-.L2199:
+  jmp .L2271
+.L2270:
+.L2271:
 .loc 1 378 0
   mov rbx, QWORD PTR [rbp-88]
   mov r12, rbx
@@ -44617,7 +46291,7 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2202
+  jne .L2274
 .loc 1 379 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -44640,7 +46314,7 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2204
+  jne .L2276
 .loc 1 381 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-112], rax
@@ -44675,13 +46349,13 @@ parse_operand:
   pop rbp
   ret
 .loc 1 380 0
-  jmp .L2205
-.L2204:
-.L2205:
+  jmp .L2277
+.L2276:
+.L2277:
 .loc 1 378 0
-  jmp .L2203
-.L2202:
-.L2203:
+  jmp .L2275
+.L2274:
+.L2275:
 .loc 1 385 0
   mov rbx, QWORD PTR [rbp-88]
   mov r12, rbx
@@ -44691,7 +46365,7 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2206
+  jne .L2278
 .loc 1 386 0
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-60]
@@ -44718,9 +46392,9 @@ parse_operand:
   pop rbp
   ret
 .loc 1 385 0
-  jmp .L2207
-.L2206:
-.L2207:
+  jmp .L2279
+.L2278:
+.L2279:
 .loc 1 389 0
   mov rbx, QWORD PTR [rbp-88]
   mov r12, rbx
@@ -44730,7 +46404,7 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  je .L2210
+  je .L2282
   mov rbx, QWORD PTR [rbp-88]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -44739,15 +46413,15 @@ parse_operand:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  je .L2210
+  je .L2282
   mov rbx, 0
-  jmp .L2211
-.L2210:
+  jmp .L2283
+.L2282:
   mov rbx, 1
-.L2211:
+.L2283:
   mov rax, rbx
   test rax, rax
-  jz .L2208
+  jz .L2280
 .loc 1 390 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-60]
@@ -44788,9 +46462,9 @@ parse_operand:
   pop rbp
   ret
 .loc 1 389 0
-  jmp .L2209
-.L2208:
-.L2209:
+  jmp .L2281
+.L2280:
+.L2281:
 .loc 1 394 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-60]
@@ -44838,9 +46512,13 @@ decode_string:
   mov rax, rbx
   mov QWORD PTR [rbp-76], rax
 .loc 1 401 0
-  mov DWORD PTR [rbp-80], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-80], eax
 .loc 1 402 0
-  mov DWORD PTR [rbp-84], 1
+  mov rbx, 1
+  mov rax, rbx
+  mov DWORD PTR [rbp-84], eax
 .loc 1 403 0
   movsxd rbx, DWORD PTR [rbp-60]
   mov r12, 1
@@ -44848,14 +46526,14 @@ decode_string:
   sub r13, r12
   mov rax, r13
   mov DWORD PTR [rbp-88], eax
-.L2212:
+.L2284:
 .loc 1 405 0
   movsxd rax, DWORD PTR [rbp-84]
   mov QWORD PTR [rbp-104], rax
   movsxd r12, DWORD PTR [rbp-88]
   mov rax, QWORD PTR [rbp-104]
   cmp rax, r12
-  jge .L2213
+  jge .L2285
 .loc 1 406 0
   mov r14, QWORD PTR [rbp-56]
   movsxd r8, DWORD PTR [rbp-84]
@@ -44866,7 +46544,7 @@ decode_string:
   mov rsi, 92
   mov rax, r10
   cmp rax, rsi
-  jne .L2214
+  jne .L2286
 .loc 1 407 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-96], rax
@@ -44885,11 +46563,11 @@ decode_string:
   mov QWORD PTR [rbp-136], rax
   mov rax, QWORD PTR [rbp-128]
   cmp rax, QWORD PTR [rbp-136]
-  jl .L2216
-  jmp .L2213
-  jmp .L2217
-.L2216:
-.L2217:
+  jl .L2288
+  jmp .L2285
+  jmp .L2289
+.L2288:
+.L2289:
 .loc 1 409 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-152], rax
@@ -44904,7 +46582,7 @@ decode_string:
   mov QWORD PTR [rbp-184], 110
   mov rax, QWORD PTR [rbp-176]
   cmp rax, QWORD PTR [rbp-184]
-  jne .L2218
+  jne .L2290
   mov rax, QWORD PTR [rbp-76]
   mov QWORD PTR [rbp-200], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -44912,10 +46590,12 @@ decode_string:
   mov rax, QWORD PTR [rbp-200]
   add rax, QWORD PTR [rbp-208]
   mov QWORD PTR [rbp-216], rax
+  mov QWORD PTR [rbp-224], 10
+  mov rax, QWORD PTR [rbp-224]
   mov rcx, QWORD PTR [rbp-216]
-  mov BYTE PTR [rcx], 10
-  jmp .L2219
-.L2218:
+  mov BYTE PTR [rcx], al
+  jmp .L2291
+.L2290:
 .loc 1 410 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-232], rax
@@ -44930,7 +46610,7 @@ decode_string:
   mov QWORD PTR [rbp-264], 116
   mov rax, QWORD PTR [rbp-256]
   cmp rax, QWORD PTR [rbp-264]
-  jne .L2220
+  jne .L2292
   mov rax, QWORD PTR [rbp-76]
   mov QWORD PTR [rbp-280], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -44938,10 +46618,12 @@ decode_string:
   mov rax, QWORD PTR [rbp-280]
   add rax, QWORD PTR [rbp-288]
   mov QWORD PTR [rbp-296], rax
+  mov QWORD PTR [rbp-304], 9
+  mov rax, QWORD PTR [rbp-304]
   mov rcx, QWORD PTR [rbp-296]
-  mov BYTE PTR [rcx], 9
-  jmp .L2221
-.L2220:
+  mov BYTE PTR [rcx], al
+  jmp .L2293
+.L2292:
 .loc 1 411 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-312], rax
@@ -44956,7 +46638,7 @@ decode_string:
   mov QWORD PTR [rbp-344], 48
   mov rax, QWORD PTR [rbp-336]
   cmp rax, QWORD PTR [rbp-344]
-  jne .L2222
+  jne .L2294
   mov rax, QWORD PTR [rbp-76]
   mov QWORD PTR [rbp-360], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -44964,10 +46646,12 @@ decode_string:
   mov rax, QWORD PTR [rbp-360]
   add rax, QWORD PTR [rbp-368]
   mov QWORD PTR [rbp-376], rax
+  mov QWORD PTR [rbp-384], 0
+  mov rax, QWORD PTR [rbp-384]
   mov rcx, QWORD PTR [rbp-376]
-  mov BYTE PTR [rcx], 0
-  jmp .L2223
-.L2222:
+  mov BYTE PTR [rcx], al
+  jmp .L2295
+.L2294:
 .loc 1 412 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-392], rax
@@ -44982,7 +46666,7 @@ decode_string:
   mov QWORD PTR [rbp-424], 92
   mov rax, QWORD PTR [rbp-416]
   cmp rax, QWORD PTR [rbp-424]
-  jne .L2224
+  jne .L2296
   mov rax, QWORD PTR [rbp-76]
   mov QWORD PTR [rbp-440], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -44990,10 +46674,12 @@ decode_string:
   mov rax, QWORD PTR [rbp-440]
   add rax, QWORD PTR [rbp-448]
   mov QWORD PTR [rbp-456], rax
+  mov QWORD PTR [rbp-464], 92
+  mov rax, QWORD PTR [rbp-464]
   mov rcx, QWORD PTR [rbp-456]
-  mov BYTE PTR [rcx], 92
-  jmp .L2225
-.L2224:
+  mov BYTE PTR [rcx], al
+  jmp .L2297
+.L2296:
 .loc 1 413 0
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-472], rax
@@ -45008,7 +46694,7 @@ decode_string:
   mov QWORD PTR [rbp-504], 34
   mov rax, QWORD PTR [rbp-496]
   cmp rax, QWORD PTR [rbp-504]
-  jne .L2226
+  jne .L2298
   mov rax, QWORD PTR [rbp-76]
   mov QWORD PTR [rbp-520], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -45016,10 +46702,12 @@ decode_string:
   mov rax, QWORD PTR [rbp-520]
   add rax, QWORD PTR [rbp-528]
   mov QWORD PTR [rbp-536], rax
+  mov QWORD PTR [rbp-544], 34
+  mov rax, QWORD PTR [rbp-544]
   mov rcx, QWORD PTR [rbp-536]
-  mov BYTE PTR [rcx], 34
-  jmp .L2227
-.L2226:
+  mov BYTE PTR [rcx], al
+  jmp .L2299
+.L2298:
 .loc 1 414 0
   mov rax, QWORD PTR [rbp-76]
   mov QWORD PTR [rbp-552], rax
@@ -45041,14 +46729,14 @@ decode_string:
   mov rax, QWORD PTR [rbp-600]
   mov rcx, QWORD PTR [rbp-568]
   mov BYTE PTR [rcx], al
-.L2227:
-.L2225:
-.L2223:
-.L2221:
-.L2219:
+.L2299:
+.L2297:
+.L2295:
+.L2293:
+.L2291:
 .loc 1 406 0
-  jmp .L2215
-.L2214:
+  jmp .L2287
+.L2286:
 .loc 1 416 0
   mov rax, QWORD PTR [rbp-76]
   mov QWORD PTR [rbp-608], rax
@@ -45070,7 +46758,7 @@ decode_string:
   mov rax, QWORD PTR [rbp-656]
   mov rcx, QWORD PTR [rbp-624]
   mov BYTE PTR [rcx], al
-.L2215:
+.L2287:
 .loc 1 418 0
   lea rax, [rbp-80]
   mov QWORD PTR [rbp-664], rax
@@ -45095,8 +46783,8 @@ decode_string:
   mov rcx, QWORD PTR [rbp-696]
   mov DWORD PTR [rcx], eax
 .loc 1 405 0
-  jmp .L2212
-.L2213:
+  jmp .L2284
+.L2285:
 .loc 1 421 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-80]
@@ -45145,7 +46833,7 @@ skip_to_eol:
   movsxd rbx, DWORD PTR [rbp-60]
   mov rax, rbx
   mov DWORD PTR [rbp-64], eax
-.L2228:
+.L2300:
 .loc 1 429 0
   movsxd rax, DWORD PTR [rbp-64]
   mov QWORD PTR [rbp-80], rax
@@ -45158,7 +46846,7 @@ skip_to_eol:
   movsxd r15, DWORD PTR [r15]
   mov rax, QWORD PTR [rbp-80]
   cmp rax, r15
-  jge .L2229
+  jge .L2301
 .loc 1 430 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-56]
@@ -45184,7 +46872,7 @@ skip_to_eol:
   mov QWORD PTR [rbp-144], rax
   mov rax, QWORD PTR [rbp-136]
   cmp rax, QWORD PTR [rbp-144]
-  je .L2232
+  je .L2304
   mov rax, QWORD PTR [rbp-72]
   mov QWORD PTR [rbp-168], rax
   mov rax, QWORD PTR [rbp-168]
@@ -45197,19 +46885,19 @@ skip_to_eol:
   mov QWORD PTR [rbp-184], rax
   mov rax, QWORD PTR [rbp-176]
   cmp rax, QWORD PTR [rbp-184]
-  je .L2232
+  je .L2304
   mov rbx, 0
-  jmp .L2233
-.L2232:
+  jmp .L2305
+.L2304:
   mov rbx, 1
-.L2233:
+.L2305:
   mov rax, rbx
   test rax, rax
-  jz .L2230
-  jmp .L2229
-  jmp .L2231
-.L2230:
-.L2231:
+  jz .L2302
+  jmp .L2301
+  jmp .L2303
+.L2302:
+.L2303:
 .loc 1 432 0
   lea rax, [rbp-64]
   mov QWORD PTR [rbp-208], rax
@@ -45222,8 +46910,8 @@ skip_to_eol:
   mov rcx, QWORD PTR [rbp-208]
   mov DWORD PTR [rcx], eax
 .loc 1 429 0
-  jmp .L2228
-.L2229:
+  jmp .L2300
+.L2301:
 .loc 1 434 0
   movsxd rbx, DWORD PTR [rbp-64]
   mov rax, rbx
@@ -45252,7 +46940,7 @@ parse_dir_num:
   push r12
   push r13
   push r14
-  sub rsp, 92
+  sub rsp, 96
 .loc 1 3591 0
   mov rbx, rdi
   mov rax, rbx
@@ -45284,7 +46972,7 @@ parse_dir_num:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2234
+  jne .L2306
 .loc 1 442 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-60]
@@ -45302,7 +46990,7 @@ parse_dir_num:
   mov rbx, r13
   mov rbx, QWORD PTR [rbx]
   mov rax, rbx
-  add rsp, 92
+  add rsp, 96
   pop r14
   pop r13
   pop r12
@@ -45310,8 +46998,8 @@ parse_dir_num:
   pop rbp
   ret
 .loc 1 441 0
-  jmp .L2235
-.L2234:
+  jmp .L2307
+.L2306:
 .loc 1 444 0
   mov rbx, QWORD PTR [rbp-76]
   mov r12, rbx
@@ -45321,7 +47009,7 @@ parse_dir_num:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2236
+  jne .L2308
 .loc 1 445 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -45355,7 +47043,7 @@ parse_dir_num:
   mov r13, rbx
   sub r13, r12
   mov rax, r13
-  add rsp, 92
+  add rsp, 96
   pop r14
   pop r13
   pop r12
@@ -45363,10 +47051,10 @@ parse_dir_num:
   pop rbp
   ret
 .loc 1 444 0
-  jmp .L2237
-.L2236:
-.L2237:
-.L2235:
+  jmp .L2309
+.L2308:
+.L2309:
+.L2307:
 .loc 1 449 0
   mov rbx, QWORD PTR [rbp-68]
   movsxd r12, DWORD PTR [rbp-60]
@@ -45376,7 +47064,7 @@ parse_dir_num:
 .loc 1 450 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 92
+  add rsp, 96
   pop r14
   pop r13
   pop r12
@@ -45385,7 +47073,7 @@ parse_dir_num:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 92
+  add rsp, 96
   pop r14
   pop r13
   pop r12
@@ -45453,7 +47141,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2238
+  jne .L2310
 .loc 1 460 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -45467,7 +47155,7 @@ parse_directive:
   mov DWORD PTR [rcx], eax
 .loc 1 461 0
   lea rbx, [rbp-88]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-56]
   movsxd r13, DWORD PTR [rbp-88]
   mov r14, 1
@@ -45492,9 +47180,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 459 0
-  jmp .L2239
-.L2238:
-.L2239:
+  jmp .L2311
+.L2310:
+.L2311:
 .loc 1 464 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -45517,7 +47205,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2240
+  jne .L2312
 .loc 1 465 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -45552,9 +47240,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 464 0
-  jmp .L2241
-.L2240:
-.L2241:
+  jmp .L2313
+.L2312:
+.L2313:
 .loc 1 469 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -45577,7 +47265,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2242
+  jne .L2314
 .loc 1 470 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -45612,9 +47300,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 469 0
-  jmp .L2243
-.L2242:
-.L2243:
+  jmp .L2315
+.L2314:
+.L2315:
 .loc 1 474 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -45637,7 +47325,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2244
+  jne .L2316
 .loc 1 475 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -45672,9 +47360,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 474 0
-  jmp .L2245
-.L2244:
-.L2245:
+  jmp .L2317
+.L2316:
+.L2317:
 .loc 1 479 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -45697,7 +47385,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2246
+  jne .L2318
 .loc 1 480 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -45732,9 +47420,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 479 0
-  jmp .L2247
-.L2246:
-.L2247:
+  jmp .L2319
+.L2318:
+.L2319:
 .loc 1 484 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -45757,7 +47445,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2248
+  jne .L2320
 .loc 1 485 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -45797,7 +47485,7 @@ parse_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  je .L2252
+  je .L2324
   mov rbx, QWORD PTR [rbp-96]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -45806,15 +47494,15 @@ parse_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  je .L2252
+  je .L2324
   mov rbx, 1
-  jmp .L2253
-.L2252:
+  jmp .L2325
+.L2324:
   mov rbx, 0
-.L2253:
+.L2325:
   mov rax, rbx
   test rax, rax
-  jz .L2250
+  jz .L2322
 .loc 1 489 0
   mov rbx, QWORD PTR [rbp-96]
   mov r12, 4
@@ -45837,7 +47525,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2254
+  jne .L2326
   mov rbx, QWORD PTR [rbp-76]
   lea r12, [rip+SECTION_RODATA]
   mov r13, r12
@@ -45845,8 +47533,8 @@ parse_directive:
   mov rax, r13
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2255
-.L2254:
+  jmp .L2327
+.L2326:
 .loc 1 490 0
   mov rbx, QWORD PTR [rbp-96]
   mov r12, 4
@@ -45869,7 +47557,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2256
+  jne .L2328
   mov rbx, QWORD PTR [rbp-76]
   lea r12, [rip+SECTION_DATA]
   mov r13, r12
@@ -45877,8 +47565,8 @@ parse_directive:
   mov rax, r13
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2257
-.L2256:
+  jmp .L2329
+.L2328:
 .loc 1 491 0
   mov rbx, QWORD PTR [rbp-96]
   mov r12, 4
@@ -45901,7 +47589,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2258
+  jne .L2330
   mov rbx, QWORD PTR [rbp-76]
   lea r12, [rip+SECTION_BSS]
   mov r13, r12
@@ -45909,8 +47597,8 @@ parse_directive:
   mov rax, r13
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2259
-.L2258:
+  jmp .L2331
+.L2330:
 .loc 1 492 0
   mov rbx, QWORD PTR [rbp-96]
   mov r12, 4
@@ -45933,7 +47621,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2260
+  jne .L2332
   mov rbx, QWORD PTR [rbp-76]
   lea r12, [rip+SECTION_TEXT]
   mov r13, r12
@@ -45941,12 +47629,12 @@ parse_directive:
   mov rax, r13
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-  jmp .L2261
-.L2260:
-.L2261:
-.L2259:
-.L2257:
-.L2255:
+  jmp .L2333
+.L2332:
+.L2333:
+.L2331:
+.L2329:
+.L2327:
 .loc 1 493 0
   lea rbx, [rbp-88]
   movsxd r12, DWORD PTR [rbp-88]
@@ -45957,9 +47645,9 @@ parse_directive:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 488 0
-  jmp .L2251
-.L2250:
-.L2251:
+  jmp .L2323
+.L2322:
+.L2323:
 .loc 1 495 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 4
@@ -45973,7 +47661,7 @@ parse_directive:
   mov DWORD PTR [rcx], eax
 .loc 1 496 0
   lea rbx, [rbp-88]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-56]
   movsxd r13, DWORD PTR [rbp-88]
   mov rdi, r12
@@ -45995,9 +47683,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 484 0
-  jmp .L2249
-.L2248:
-.L2249:
+  jmp .L2321
+.L2320:
+.L2321:
 .loc 1 499 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -46020,7 +47708,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2264
+  je .L2336
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
   mov r13, rbx
@@ -46042,15 +47730,15 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2264
+  je .L2336
   mov rbx, 0
-  jmp .L2265
-.L2264:
+  jmp .L2337
+.L2336:
   mov rbx, 1
-.L2265:
+.L2337:
   mov rax, rbx
   test rax, rax
-  jz .L2262
+  jz .L2334
 .loc 1 500 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -46090,7 +47778,7 @@ parse_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  je .L2268
+  je .L2340
   mov rbx, QWORD PTR [rbp-104]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -46099,15 +47787,15 @@ parse_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  je .L2268
+  je .L2340
   mov rbx, 1
-  jmp .L2269
-.L2268:
+  jmp .L2341
+.L2340:
   mov rbx, 0
-.L2269:
+.L2341:
   mov rax, rbx
   test rax, rax
-  jz .L2266
+  jz .L2338
 .loc 1 504 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 132
@@ -46146,9 +47834,9 @@ parse_directive:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 503 0
-  jmp .L2267
-.L2266:
-.L2267:
+  jmp .L2339
+.L2338:
+.L2339:
 .loc 1 508 0
   movsxd rbx, DWORD PTR [rbp-88]
   mov rax, rbx
@@ -46161,9 +47849,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 499 0
-  jmp .L2263
-.L2262:
-.L2263:
+  jmp .L2335
+.L2334:
+.L2335:
 .loc 1 510 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -46186,7 +47874,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2270
+  jne .L2342
 .loc 1 511 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -46237,7 +47925,7 @@ parse_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2272
+  jne .L2344
 .loc 1 516 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 132
@@ -46276,9 +47964,9 @@ parse_directive:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 515 0
-  jmp .L2273
-.L2272:
-.L2273:
+  jmp .L2345
+.L2344:
+.L2345:
 .loc 1 520 0
   movsxd rbx, DWORD PTR [rbp-88]
   mov rax, rbx
@@ -46291,9 +47979,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 510 0
-  jmp .L2271
-.L2270:
-.L2271:
+  jmp .L2343
+.L2342:
+.L2343:
 .loc 1 522 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -46316,7 +48004,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2276
+  je .L2348
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
   mov r13, rbx
@@ -46338,15 +48026,15 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2276
+  je .L2348
   mov rbx, 0
-  jmp .L2277
-.L2276:
+  jmp .L2349
+.L2348:
   mov rbx, 1
-.L2277:
+.L2349:
   mov rax, rbx
   test rax, rax
-  jz .L2274
+  jz .L2346
 .loc 1 523 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -46397,7 +48085,7 @@ parse_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2278
+  jne .L2350
 .loc 1 528 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 132
@@ -46436,9 +48124,9 @@ parse_directive:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 527 0
-  jmp .L2279
-.L2278:
-.L2279:
+  jmp .L2351
+.L2350:
+.L2351:
 .loc 1 532 0
   movsxd rbx, DWORD PTR [rbp-88]
   mov rax, rbx
@@ -46451,9 +48139,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 522 0
-  jmp .L2275
-.L2274:
-.L2275:
+  jmp .L2347
+.L2346:
+.L2347:
 .loc 1 534 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -46476,7 +48164,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2280
+  jne .L2352
 .loc 1 535 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -46517,7 +48205,7 @@ parse_directive:
   mov r12, 144
   mov r13, rbx
   add r13, r12
-  mov r10, r13
+  xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-88]
   lea r14, [rbp-124]
@@ -46541,9 +48229,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 534 0
-  jmp .L2281
-.L2280:
-.L2281:
+  jmp .L2353
+.L2352:
+.L2353:
 .loc 1 542 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -46566,7 +48254,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2284
+  je .L2356
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
   mov r13, rbx
@@ -46588,15 +48276,15 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  je .L2284
+  je .L2356
   mov rbx, 0
-  jmp .L2285
-.L2284:
+  jmp .L2357
+.L2356:
   mov rbx, 1
-.L2285:
+.L2357:
   mov rax, rbx
   test rax, rax
-  jz .L2282
+  jz .L2354
 .loc 1 543 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -46637,7 +48325,7 @@ parse_directive:
   mov r12, 144
   mov r13, rbx
   add r13, r12
-  mov r10, r13
+  xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-88]
   lea r14, [rbp-128]
@@ -46661,9 +48349,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 542 0
-  jmp .L2283
-.L2282:
-.L2283:
+  jmp .L2355
+.L2354:
+.L2355:
 .loc 1 550 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -46686,7 +48374,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2286
+  jne .L2358
 .loc 1 551 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -46727,7 +48415,7 @@ parse_directive:
   mov r12, 144
   mov r13, rbx
   add r13, r12
-  mov r10, r13
+  xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-88]
   lea r14, [rbp-132]
@@ -46751,9 +48439,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 550 0
-  jmp .L2287
-.L2286:
-.L2287:
+  jmp .L2359
+.L2358:
+.L2359:
 .loc 1 558 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -46776,7 +48464,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2288
+  jne .L2360
 .loc 1 559 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -46817,7 +48505,7 @@ parse_directive:
   mov r12, 144
   mov r13, rbx
   add r13, r12
-  mov r10, r13
+  xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
   movsxd r12, DWORD PTR [rbp-88]
   lea r14, [rbp-136]
@@ -46841,9 +48529,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 558 0
-  jmp .L2289
-.L2288:
-.L2289:
+  jmp .L2361
+.L2360:
+.L2361:
 .loc 1 566 0
   mov rbx, QWORD PTR [rbp-84]
   mov r12, 4
@@ -46866,7 +48554,7 @@ parse_directive:
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2290
+  jne .L2362
 .loc 1 567 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -46917,7 +48605,7 @@ parse_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2292
+  jne .L2364
 .loc 1 572 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 144
@@ -46942,9 +48630,9 @@ parse_directive:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 571 0
-  jmp .L2293
-.L2292:
-.L2293:
+  jmp .L2365
+.L2364:
+.L2365:
 .loc 1 575 0
   movsxd rbx, DWORD PTR [rbp-88]
   mov rax, rbx
@@ -46957,9 +48645,9 @@ parse_directive:
   pop rbp
   ret
 .loc 1 566 0
-  jmp .L2291
-.L2290:
-.L2291:
+  jmp .L2363
+.L2362:
+.L2363:
 .loc 1 577 0
   mov rbx, QWORD PTR [rbp-68]
   mov r12, 128
@@ -47003,7 +48691,7 @@ parse_instruction:
   push r13
   push r14
   push r15
-  sub rsp, 100
+  sub rsp, 104
 .loc 1 4862 0
   mov rbx, rdi
   mov rax, rbx
@@ -47032,11 +48720,11 @@ parse_instruction:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2294
+  jne .L2366
 .loc 1 588 0
   movsxd rbx, DWORD PTR [rbp-72]
   mov rax, rbx
-  add rsp, 100
+  add rsp, 104
   pop r15
   pop r14
   pop r13
@@ -47045,9 +48733,9 @@ parse_instruction:
   pop rbp
   ret
 .loc 1 587 0
-  jmp .L2295
-.L2294:
-.L2295:
+  jmp .L2367
+.L2366:
+.L2367:
 .loc 1 592 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -47067,7 +48755,7 @@ parse_instruction:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  je .L2298
+  je .L2370
   mov rbx, QWORD PTR [rbp-80]
   mov r12, rbx
   movsxd r12, DWORD PTR [r12]
@@ -47076,15 +48764,15 @@ parse_instruction:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  je .L2298
+  je .L2370
   mov rbx, 1
-  jmp .L2299
-.L2298:
+  jmp .L2371
+.L2370:
   mov rbx, 0
-.L2299:
+.L2371:
   mov rax, rbx
   test rax, rax
-  jz .L2296
+  jz .L2368
 .loc 1 594 0
   movsxd rbx, DWORD PTR [rbp-72]
   mov rax, rbx
@@ -47127,7 +48815,7 @@ parse_instruction:
   movsxd r13, DWORD PTR [r13]
   mov rax, r12
   cmp rax, r13
-  jne .L2300
+  jne .L2372
 .loc 1 601 0
   lea rbx, [rbp-72]
   movsxd r12, DWORD PTR [rbp-72]
@@ -47157,16 +48845,16 @@ parse_instruction:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 600 0
-  jmp .L2301
-.L2300:
-.L2301:
+  jmp .L2373
+.L2372:
+.L2373:
 .loc 1 593 0
-  jmp .L2297
-.L2296:
-.L2297:
+  jmp .L2369
+.L2368:
+.L2369:
 .loc 1 607 0
   lea rbx, [rbp-72]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-56]
   movsxd r13, DWORD PTR [rbp-72]
   mov rdi, r12
@@ -47179,7 +48867,7 @@ parse_instruction:
 .loc 1 608 0
   movsxd rbx, DWORD PTR [rbp-72]
   mov rax, rbx
-  add rsp, 100
+  add rsp, 104
   pop r15
   pop r14
   pop r13
@@ -47189,7 +48877,7 @@ parse_instruction:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 100
+  add rsp, 104
   pop r15
   pop r14
   pop r13
@@ -47205,7 +48893,7 @@ parse_all:
   push r13
   push r14
   push r15
-  sub rsp, 1748
+  sub rsp, 1752
 .loc 1 613 0
   mov QWORD PTR [rbp-148], rdi
 .loc 1 5042 0
@@ -47231,14 +48919,16 @@ parse_all:
   cld
   rep movsb
 .loc 1 615 0
-  mov DWORD PTR [rbp-80], 0
+  mov r12, 0
+  mov rax, r12
+  mov DWORD PTR [rbp-80], eax
 .loc 1 616 0
   lea r12, [rip+SECTION_TEXT]
   mov r13, r12
   movsxd r13, DWORD PTR [r13]
   mov rax, r13
   mov DWORD PTR [rbp-84], eax
-.L2302:
+.L2374:
 .loc 1 618 0
   movsxd r12, DWORD PTR [rbp-80]
   mov r13, QWORD PTR [rbp-56]
@@ -47250,7 +48940,7 @@ parse_all:
   mov QWORD PTR [rbp-156], rax
   mov rax, r12
   cmp rax, QWORD PTR [rbp-156]
-  jge .L2303
+  jge .L2375
 .loc 1 619 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-56]
@@ -47276,7 +48966,7 @@ parse_all:
   mov QWORD PTR [rbp-220], rax
   mov rax, QWORD PTR [rbp-212]
   cmp rax, QWORD PTR [rbp-220]
-  je .L2306
+  je .L2378
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-244], rax
   mov rax, QWORD PTR [rbp-244]
@@ -47289,15 +48979,15 @@ parse_all:
   mov QWORD PTR [rbp-260], rax
   mov rax, QWORD PTR [rbp-252]
   cmp rax, QWORD PTR [rbp-260]
-  je .L2306
+  je .L2378
   mov QWORD PTR [rbp-196], 0
-  jmp .L2307
-.L2306:
+  jmp .L2379
+.L2378:
   mov QWORD PTR [rbp-196], 1
-.L2307:
+.L2379:
   mov rax, QWORD PTR [rbp-196]
   test rax, rax
-  jz .L2304
+  jz .L2376
 .loc 1 623 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-284], rax
@@ -47311,11 +49001,11 @@ parse_all:
   mov QWORD PTR [rbp-300], rax
   mov rax, QWORD PTR [rbp-292]
   cmp rax, QWORD PTR [rbp-300]
-  jne .L2308
-  jmp .L2303
-  jmp .L2309
-.L2308:
-.L2309:
+  jne .L2380
+  jmp .L2375
+  jmp .L2381
+.L2380:
+.L2381:
 .loc 1 624 0
   lea rax, [rbp-80]
   mov QWORD PTR [rbp-324], rax
@@ -47329,8 +49019,8 @@ parse_all:
   mov rcx, QWORD PTR [rbp-324]
   mov DWORD PTR [rcx], eax
 .loc 1 622 0
-  jmp .L2305
-.L2304:
+  jmp .L2377
+.L2376:
 .loc 1 627 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-356], rax
@@ -47344,7 +49034,7 @@ parse_all:
   mov QWORD PTR [rbp-372], rax
   mov rax, QWORD PTR [rbp-364]
   cmp rax, QWORD PTR [rbp-372]
-  jne .L2310
+  jne .L2382
 .loc 1 628 0
   xor r10, r10
   lea rax, [rbp-76]
@@ -47399,7 +49089,7 @@ parse_all:
 .loc 1 632 0
   lea rax, [rbp-80]
   mov QWORD PTR [rbp-524], rax
-  mov r10, QWORD PTR [rbp-524]
+  xor r10, r10
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-532], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -47432,7 +49122,7 @@ parse_all:
 .loc 1 635 0
   lea rax, [rbp-80]
   mov QWORD PTR [rbp-604], rax
-  mov r10, QWORD PTR [rbp-604]
+  xor r10, r10
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-612], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -47445,8 +49135,8 @@ parse_all:
   mov rcx, QWORD PTR [rbp-604]
   mov DWORD PTR [rcx], eax
 .loc 1 627 0
-  jmp .L2311
-.L2310:
+  jmp .L2383
+.L2382:
 .loc 1 638 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-636], rax
@@ -47460,7 +49150,7 @@ parse_all:
   mov QWORD PTR [rbp-652], rax
   mov rax, QWORD PTR [rbp-644]
   cmp rax, QWORD PTR [rbp-652]
-  jne .L2312
+  jne .L2384
 .loc 1 639 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-56]
@@ -47490,7 +49180,7 @@ parse_all:
   mov QWORD PTR [rbp-732], rax
   mov rax, QWORD PTR [rbp-724]
   cmp rax, QWORD PTR [rbp-732]
-  jne .L2314
+  jne .L2386
 .loc 1 641 0
   xor r10, r10
   lea rax, [rbp-76]
@@ -47593,8 +49283,8 @@ parse_all:
   mov rcx, QWORD PTR [rbp-996]
   mov DWORD PTR [rcx], eax
 .loc 1 640 0
-  jmp .L2315
-.L2314:
+  jmp .L2387
+.L2386:
 .loc 1 649 0
   xor r10, r10
   lea rax, [rbp-76]
@@ -47668,7 +49358,7 @@ parse_all:
 .loc 1 654 0
   lea rax, [rbp-80]
   mov QWORD PTR [rbp-1212], rax
-  mov r10, QWORD PTR [rbp-1212]
+  xor r10, r10
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-1220], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -47687,10 +49377,10 @@ parse_all:
   mov rax, QWORD PTR [rbp-1260]
   mov rcx, QWORD PTR [rbp-1212]
   mov DWORD PTR [rcx], eax
-.L2315:
+.L2387:
 .loc 1 638 0
-  jmp .L2313
-.L2312:
+  jmp .L2385
+.L2384:
 .loc 1 658 0
   mov rax, QWORD PTR [rbp-92]
   mov QWORD PTR [rbp-1268], rax
@@ -47704,7 +49394,7 @@ parse_all:
   mov QWORD PTR [rbp-1284], rax
   mov rax, QWORD PTR [rbp-1276]
   cmp rax, QWORD PTR [rbp-1284]
-  jne .L2316
+  jne .L2388
 .loc 1 659 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-56]
@@ -47734,7 +49424,7 @@ parse_all:
   mov QWORD PTR [rbp-1364], rax
   mov rax, QWORD PTR [rbp-1356]
   cmp rax, QWORD PTR [rbp-1364]
-  jne .L2318
+  jne .L2390
 .loc 1 661 0
   xor r10, r10
   lea rax, [rbp-76]
@@ -47837,12 +49527,12 @@ parse_all:
   mov rcx, QWORD PTR [rbp-1628]
   mov DWORD PTR [rcx], eax
 .loc 1 660 0
-  jmp .L2319
-.L2318:
+  jmp .L2391
+.L2390:
 .loc 1 669 0
   lea rax, [rbp-80]
   mov QWORD PTR [rbp-1660], rax
-  mov r10, QWORD PTR [rbp-1660]
+  xor r10, r10
   mov rax, QWORD PTR [rbp-56]
   mov QWORD PTR [rbp-1668], rax
   movsxd rax, DWORD PTR [rbp-80]
@@ -47858,10 +49548,10 @@ parse_all:
   mov rax, QWORD PTR [rbp-1700]
   mov rcx, QWORD PTR [rbp-1660]
   mov DWORD PTR [rcx], eax
-.L2319:
+.L2391:
 .loc 1 658 0
-  jmp .L2317
-.L2316:
+  jmp .L2389
+.L2388:
 .loc 1 673 0
   lea rax, [rbp-80]
   mov QWORD PTR [rbp-1708], rax
@@ -47873,13 +49563,13 @@ parse_all:
   mov rax, rbx
   mov rcx, QWORD PTR [rbp-1708]
   mov DWORD PTR [rcx], eax
-.L2317:
-.L2313:
-.L2311:
-.L2305:
+.L2389:
+.L2385:
+.L2383:
+.L2377:
 .loc 1 618 0
-  jmp .L2302
-.L2303:
+  jmp .L2374
+.L2375:
 .loc 1 677 0
   lea rbx, [rbp-76]
   mov rdi, QWORD PTR [rbp-148]
@@ -47888,7 +49578,7 @@ parse_all:
   cld
   rep movsb
   mov rax, QWORD PTR [rbp-148]
-  add rsp, 1748
+  add rsp, 1752
   pop r15
   pop r14
   pop r13
@@ -47898,7 +49588,7 @@ parse_all:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 1748
+  add rsp, 1752
   pop r15
   pop r14
   pop r13
@@ -47985,7 +49675,7 @@ calc_dir_size:
   push r12
   push r13
   push r14
-  sub rsp, 76
+  sub rsp, 80
 .loc 1 5575 0
   mov rbx, rdi
   mov rax, rbx
@@ -48002,7 +49692,7 @@ calc_dir_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2322
+  je .L2394
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
   mov r13, rbx
@@ -48014,17 +49704,19 @@ calc_dir_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2322
+  je .L2394
   mov rbx, 0
-  jmp .L2323
-.L2322:
+  jmp .L2395
+.L2394:
   mov rbx, 1
-.L2323:
+.L2395:
   mov rax, rbx
   test rax, rax
-  jz .L2320
+  jz .L2392
 .loc 1 690 0
-  mov DWORD PTR [rbp-60], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-60], eax
 .loc 1 691 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-56]
@@ -48077,26 +49769,26 @@ calc_dir_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2324
+  jne .L2396
   movsxd rbx, DWORD PTR [rbp-60]
   mov r12, 1
   mov r13, rbx
   add r13, r12
   mov rax, r13
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2325
-.L2324:
-.L2325:
+  jmp .L2397
+.L2396:
+.L2397:
 .loc 1 695 0
   movsxd rbx, DWORD PTR [rbp-60]
   mov rax, rbx
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
@@ -48104,9 +49796,9 @@ calc_dir_size:
   pop rbp
   ret
 .loc 1 689 0
-  jmp .L2321
-.L2320:
-.L2321:
+  jmp .L2393
+.L2392:
+.L2393:
 .loc 1 697 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -48119,19 +49811,19 @@ calc_dir_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2326
+  jne .L2398
   mov rbx, 1
   mov rax, rbx
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2327
-.L2326:
-.L2327:
+  jmp .L2399
+.L2398:
+.L2399:
 .loc 1 698 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -48144,19 +49836,19 @@ calc_dir_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2328
+  jne .L2400
   mov rbx, 2
   mov rax, rbx
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2329
-.L2328:
-.L2329:
+  jmp .L2401
+.L2400:
+.L2401:
 .loc 1 699 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -48169,19 +49861,19 @@ calc_dir_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2330
+  jne .L2402
   mov rbx, 4
   mov rax, rbx
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2331
-.L2330:
-.L2331:
+  jmp .L2403
+.L2402:
+.L2403:
 .loc 1 700 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -48194,19 +49886,19 @@ calc_dir_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2332
+  jne .L2404
   mov rbx, 8
   mov rax, rbx
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2333
-.L2332:
-.L2333:
+  jmp .L2405
+.L2404:
+.L2405:
 .loc 1 701 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -48219,7 +49911,7 @@ calc_dir_size:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2334
+  jne .L2406
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 144
   mov r13, rbx
@@ -48229,20 +49921,20 @@ calc_dir_size:
   mov r12, rbx
   movsxd r12, r12d
   mov rax, r12
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
   pop rbx
   pop rbp
   ret
-  jmp .L2335
-.L2334:
-.L2335:
+  jmp .L2407
+.L2406:
+.L2407:
 .loc 1 702 0
   mov rbx, 0
   mov rax, rbx
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
@@ -48251,7 +49943,7 @@ calc_dir_size:
   ret
   mov rbx, 0
   mov rax, rbx
-  add rsp, 76
+  add rsp, 80
   pop r14
   pop r13
   pop r12
@@ -48266,7 +49958,7 @@ pass1:
   push r13
   push r14
   push r15
-  sub rsp, 2028
+  sub rsp, 2024
 .loc 1 5739 0
   mov rbx, rdi
   mov rax, rbx
@@ -48276,16 +49968,26 @@ pass1:
   mov rax, rbx
   mov QWORD PTR [rbp-64], rax
 .loc 1 706 0
-  mov QWORD PTR [rbp-72], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-72], rax
 .loc 1 707 0
-  mov QWORD PTR [rbp-80], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-80], rax
 .loc 1 708 0
-  mov QWORD PTR [rbp-88], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-88], rax
 .loc 1 709 0
-  mov QWORD PTR [rbp-96], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-96], rax
 .loc 1 710 0
-  mov DWORD PTR [rbp-100], 0
-.L2336:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-100], eax
+.L2408:
 .loc 1 712 0
   movsxd rax, DWORD PTR [rbp-100]
   mov QWORD PTR [rbp-132], rax
@@ -48300,7 +50002,7 @@ pass1:
   mov QWORD PTR [rbp-868], rax
   mov rax, QWORD PTR [rbp-132]
   cmp rax, QWORD PTR [rbp-868]
-  jge .L2337
+  jge .L2409
 .loc 1 713 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-56]
@@ -48326,9 +50028,11 @@ pass1:
   mov QWORD PTR [rbp-188], rax
   mov rax, QWORD PTR [rbp-180]
   cmp rax, QWORD PTR [rbp-188]
-  jne .L2338
+  jne .L2410
 .loc 1 716 0
-  mov QWORD PTR [rbp-116], 0
+  mov QWORD PTR [rbp-212], 0
+  mov rax, QWORD PTR [rbp-212]
+  mov QWORD PTR [rbp-116], rax
 .loc 1 717 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-220], rax
@@ -48346,7 +50050,7 @@ pass1:
   mov QWORD PTR [rbp-252], rax
   mov rax, QWORD PTR [rbp-244]
   cmp rax, QWORD PTR [rbp-252]
-  jne .L2340
+  jne .L2412
   lea rax, [rbp-116]
   mov QWORD PTR [rbp-276], rax
   mov rax, QWORD PTR [rbp-72]
@@ -48354,8 +50058,8 @@ pass1:
   mov rax, QWORD PTR [rbp-284]
   mov rcx, QWORD PTR [rbp-276]
   mov QWORD PTR [rcx], rax
-  jmp .L2341
-.L2340:
+  jmp .L2413
+.L2412:
 .loc 1 718 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-292], rax
@@ -48373,7 +50077,7 @@ pass1:
   mov QWORD PTR [rbp-324], rax
   mov rax, QWORD PTR [rbp-316]
   cmp rax, QWORD PTR [rbp-324]
-  jne .L2342
+  jne .L2414
   lea rax, [rbp-116]
   mov QWORD PTR [rbp-348], rax
   mov rax, QWORD PTR [rbp-80]
@@ -48381,8 +50085,8 @@ pass1:
   mov rax, QWORD PTR [rbp-356]
   mov rcx, QWORD PTR [rbp-348]
   mov QWORD PTR [rcx], rax
-  jmp .L2343
-.L2342:
+  jmp .L2415
+.L2414:
 .loc 1 719 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-364], rax
@@ -48400,7 +50104,7 @@ pass1:
   mov QWORD PTR [rbp-396], rax
   mov rax, QWORD PTR [rbp-388]
   cmp rax, QWORD PTR [rbp-396]
-  jne .L2344
+  jne .L2416
   lea rax, [rbp-116]
   mov QWORD PTR [rbp-420], rax
   mov rax, QWORD PTR [rbp-88]
@@ -48408,8 +50112,8 @@ pass1:
   mov rax, QWORD PTR [rbp-428]
   mov rcx, QWORD PTR [rbp-420]
   mov QWORD PTR [rcx], rax
-  jmp .L2345
-.L2344:
+  jmp .L2417
+.L2416:
 .loc 1 720 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-436], rax
@@ -48427,7 +50131,7 @@ pass1:
   mov QWORD PTR [rbp-468], rax
   mov rax, QWORD PTR [rbp-460]
   cmp rax, QWORD PTR [rbp-468]
-  jne .L2346
+  jne .L2418
   lea rax, [rbp-116]
   mov QWORD PTR [rbp-492], rax
   mov rax, QWORD PTR [rbp-96]
@@ -48435,12 +50139,12 @@ pass1:
   mov rax, QWORD PTR [rbp-500]
   mov rcx, QWORD PTR [rbp-492]
   mov QWORD PTR [rcx], rax
-  jmp .L2347
-.L2346:
-.L2347:
-.L2345:
-.L2343:
-.L2341:
+  jmp .L2419
+.L2418:
+.L2419:
+.L2417:
+.L2415:
+.L2413:
 .loc 1 721 0
   mov rax, QWORD PTR [rbp-64]
   mov QWORD PTR [rbp-508], rax
@@ -48483,8 +50187,8 @@ pass1:
   call _caustic_assembler_elf_cst_sym_find_or_add
   mov QWORD PTR [rbp-628], rax
 .loc 1 715 0
-  jmp .L2339
-.L2338:
+  jmp .L2411
+.L2410:
 .loc 1 723 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-636], rax
@@ -48498,7 +50202,7 @@ pass1:
   mov QWORD PTR [rbp-652], rax
   mov rax, QWORD PTR [rbp-644]
   cmp rax, QWORD PTR [rbp-652]
-  jne .L2348
+  jne .L2420
 .loc 1 724 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-676], rax
@@ -48516,7 +50220,7 @@ pass1:
   mov QWORD PTR [rbp-708], rax
   mov rax, QWORD PTR [rbp-700]
   cmp rax, QWORD PTR [rbp-708]
-  jne .L2350
+  jne .L2422
 .loc 1 725 0
   mov rax, QWORD PTR [rbp-64]
   mov QWORD PTR [rbp-732], rax
@@ -48554,8 +50258,8 @@ pass1:
   call _caustic_assembler_elf_cst_sym_find_or_add
   mov QWORD PTR [rbp-836], rax
 .loc 1 724 0
-  jmp .L2351
-.L2350:
+  jmp .L2423
+.L2422:
 .loc 1 727 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-892], rax
@@ -48573,7 +50277,7 @@ pass1:
   mov QWORD PTR [rbp-924], rax
   mov rax, QWORD PTR [rbp-916]
   cmp rax, QWORD PTR [rbp-924]
-  je .L2364
+  je .L2436
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-948], rax
   mov QWORD PTR [rbp-956], 128
@@ -48590,15 +50294,15 @@ pass1:
   mov QWORD PTR [rbp-980], rax
   mov rax, QWORD PTR [rbp-972]
   cmp rax, QWORD PTR [rbp-980]
-  je .L2364
+  je .L2436
   mov QWORD PTR [rbp-884], 0
-  jmp .L2365
-.L2364:
+  jmp .L2437
+.L2436:
   mov QWORD PTR [rbp-884], 1
-.L2365:
+.L2437:
   mov rax, QWORD PTR [rbp-884]
   test rax, rax
-  jnz .L2362
+  jnz .L2434
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1004], rax
   mov QWORD PTR [rbp-1012], 128
@@ -48615,15 +50319,15 @@ pass1:
   mov QWORD PTR [rbp-1036], rax
   mov rax, QWORD PTR [rbp-1028]
   cmp rax, QWORD PTR [rbp-1036]
-  je .L2362
+  je .L2434
   mov r15, 0
-  jmp .L2363
-.L2362:
+  jmp .L2435
+.L2434:
   mov r15, 1
-.L2363:
+.L2435:
   mov rax, r15
   test rax, rax
-  jnz .L2360
+  jnz .L2432
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1060], rax
   mov QWORD PTR [rbp-1068], 128
@@ -48640,15 +50344,15 @@ pass1:
   mov QWORD PTR [rbp-1092], rax
   mov rax, QWORD PTR [rbp-1084]
   cmp rax, QWORD PTR [rbp-1092]
-  je .L2360
+  je .L2432
   mov r14, 0
-  jmp .L2361
-.L2360:
+  jmp .L2433
+.L2432:
   mov r14, 1
-.L2361:
+.L2433:
   mov rax, r14
   test rax, rax
-  jnz .L2358
+  jnz .L2430
 .loc 1 728 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1116], rax
@@ -48666,16 +50370,16 @@ pass1:
   mov QWORD PTR [rbp-1148], rax
   mov rax, QWORD PTR [rbp-1140]
   cmp rax, QWORD PTR [rbp-1148]
-  je .L2358
+  je .L2430
 .loc 1 727 0
   mov r13, 0
-  jmp .L2359
-.L2358:
+  jmp .L2431
+.L2430:
   mov r13, 1
-.L2359:
+.L2431:
   mov rax, r13
   test rax, rax
-  jnz .L2356
+  jnz .L2428
 .loc 1 728 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1172], rax
@@ -48693,16 +50397,16 @@ pass1:
   mov QWORD PTR [rbp-1204], rax
   mov rax, QWORD PTR [rbp-1196]
   cmp rax, QWORD PTR [rbp-1204]
-  je .L2356
+  je .L2428
 .loc 1 727 0
   mov r12, 0
-  jmp .L2357
-.L2356:
+  jmp .L2429
+.L2428:
   mov r12, 1
-.L2357:
+.L2429:
   mov rax, r12
   test rax, rax
-  jnz .L2354
+  jnz .L2426
 .loc 1 728 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1228], rax
@@ -48720,16 +50424,16 @@ pass1:
   mov QWORD PTR [rbp-1260], rax
   mov rax, QWORD PTR [rbp-1252]
   cmp rax, QWORD PTR [rbp-1260]
-  je .L2354
+  je .L2426
 .loc 1 727 0
   mov QWORD PTR [rbp-876], 0
-  jmp .L2355
-.L2354:
+  jmp .L2427
+.L2426:
   mov QWORD PTR [rbp-876], 1
-.L2355:
+.L2427:
   mov rax, QWORD PTR [rbp-876]
   test rax, rax
-  jz .L2352
+  jz .L2424
 .loc 1 729 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-108]
@@ -48768,7 +50472,7 @@ pass1:
   mov QWORD PTR [rbp-1364], rax
   mov rax, QWORD PTR [rbp-1356]
   cmp rax, QWORD PTR [rbp-1364]
-  jne .L2366
+  jne .L2438
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1388], rax
   mov QWORD PTR [rbp-1396], 164
@@ -48794,9 +50498,9 @@ pass1:
   mov rax, QWORD PTR [rbp-1452]
   mov rcx, QWORD PTR [rbp-1420]
   mov QWORD PTR [rcx], rax
-  jmp .L2367
-.L2366:
-.L2367:
+  jmp .L2439
+.L2438:
+.L2439:
 .loc 1 732 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1460], rax
@@ -48814,7 +50518,7 @@ pass1:
   mov QWORD PTR [rbp-1492], rax
   mov rax, QWORD PTR [rbp-1484]
   cmp rax, QWORD PTR [rbp-1492]
-  jne .L2368
+  jne .L2440
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1516], rax
   mov QWORD PTR [rbp-1524], 164
@@ -48840,9 +50544,9 @@ pass1:
   mov rax, QWORD PTR [rbp-1580]
   mov rcx, QWORD PTR [rbp-1548]
   mov QWORD PTR [rcx], rax
-  jmp .L2369
-.L2368:
-.L2369:
+  jmp .L2441
+.L2440:
+.L2441:
 .loc 1 733 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1588], rax
@@ -48860,7 +50564,7 @@ pass1:
   mov QWORD PTR [rbp-1620], rax
   mov rax, QWORD PTR [rbp-1612]
   cmp rax, QWORD PTR [rbp-1620]
-  jne .L2370
+  jne .L2442
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1644], rax
   mov QWORD PTR [rbp-1652], 164
@@ -48886,9 +50590,9 @@ pass1:
   mov rax, QWORD PTR [rbp-1708]
   mov rcx, QWORD PTR [rbp-1676]
   mov QWORD PTR [rcx], rax
-  jmp .L2371
-.L2370:
-.L2371:
+  jmp .L2443
+.L2442:
+.L2443:
 .loc 1 734 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1716], rax
@@ -48906,7 +50610,7 @@ pass1:
   mov QWORD PTR [rbp-1748], rax
   mov rax, QWORD PTR [rbp-1740]
   cmp rax, QWORD PTR [rbp-1748]
-  jne .L2372
+  jne .L2444
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1772], rax
   mov QWORD PTR [rbp-1780], 164
@@ -48932,17 +50636,17 @@ pass1:
   mov rax, QWORD PTR [rbp-1836]
   mov rcx, QWORD PTR [rbp-1804]
   mov QWORD PTR [rcx], rax
-  jmp .L2373
-.L2372:
-.L2373:
+  jmp .L2445
+.L2444:
+.L2445:
 .loc 1 727 0
-  jmp .L2353
-.L2352:
-.L2353:
-.L2351:
+  jmp .L2425
+.L2424:
+.L2425:
+.L2423:
 .loc 1 723 0
-  jmp .L2349
-.L2348:
+  jmp .L2421
+.L2420:
 .loc 1 737 0
   mov rax, QWORD PTR [rbp-108]
   mov QWORD PTR [rbp-1844], rax
@@ -48956,7 +50660,7 @@ pass1:
   mov QWORD PTR [rbp-1860], rax
   mov rax, QWORD PTR [rbp-1852]
   cmp rax, QWORD PTR [rbp-1860]
-  jne .L2374
+  jne .L2446
 .loc 1 738 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-108]
@@ -49006,11 +50710,11 @@ pass1:
   mov rcx, QWORD PTR [rbp-1964]
   mov QWORD PTR [rcx], rax
 .loc 1 737 0
-  jmp .L2375
-.L2374:
-.L2375:
-.L2349:
-.L2339:
+  jmp .L2447
+.L2446:
+.L2447:
+.L2421:
+.L2411:
 .loc 1 743 0
   lea rax, [rbp-100]
   mov QWORD PTR [rbp-2004], rax
@@ -49023,11 +50727,11 @@ pass1:
   mov rcx, QWORD PTR [rbp-2004]
   mov DWORD PTR [rcx], eax
 .loc 1 712 0
-  jmp .L2336
-.L2337:
+  jmp .L2408
+.L2409:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 2028
+  add rsp, 2024
   pop r15
   pop r14
   pop r13
@@ -49087,7 +50791,7 @@ pass2_resolve_label:
   mov r12, 99999
   mov rax, rbx
   cmp rax, r12
-  je .L2376
+  je .L2448
 .loc 1 752 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-64]
@@ -49110,11 +50814,13 @@ pass2_resolve_label:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2378
+  jne .L2450
 .loc 1 754 0
   mov rbx, QWORD PTR [rbp-72]
+  mov r12, 0
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 0
+  mov DWORD PTR [rcx], eax
 .loc 1 755 0
   mov rbx, QWORD PTR [rbp-92]
   mov r12, 16
@@ -49132,13 +50838,15 @@ pass2_resolve_label:
   pop rbp
   ret
 .loc 1 753 0
-  jmp .L2379
-.L2378:
-.L2379:
+  jmp .L2451
+.L2450:
+.L2451:
 .loc 1 757 0
   mov rbx, QWORD PTR [rbp-72]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
 .loc 1 758 0
   mov rbx, QWORD PTR [rbp-80]
   movsxd r12, DWORD PTR [rbp-84]
@@ -49157,9 +50865,9 @@ pass2_resolve_label:
   pop rbp
   ret
 .loc 1 751 0
-  jmp .L2377
-.L2376:
-.L2377:
+  jmp .L2449
+.L2448:
+.L2449:
 .loc 1 761 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-64]
@@ -49193,8 +50901,10 @@ pass2_resolve_label:
   mov DWORD PTR [rbp-96], eax
 .loc 1 762 0
   mov rbx, QWORD PTR [rbp-72]
+  mov r12, 1
+  mov rax, r12
   mov rcx, rbx
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
 .loc 1 763 0
   mov rbx, QWORD PTR [rbp-80]
   movsxd r12, DWORD PTR [rbp-96]
@@ -49230,7 +50940,7 @@ pass2_encode_rip:
   push r13
   push r14
   push r15
-  sub rsp, 156
+  sub rsp, 152
 .loc 1 6348 0
   mov rbx, rdi
   mov rax, rbx
@@ -49261,7 +50971,9 @@ pass2_encode_rip:
   mov rax, r12
   mov QWORD PTR [rbp-104], rax
 .loc 1 770 0
-  mov DWORD PTR [rbp-108], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-108], eax
 .loc 1 771 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
@@ -49274,7 +50986,7 @@ pass2_encode_rip:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2380
+  jne .L2452
 .loc 1 772 0
   lea rbx, [rbp-104]
   mov r12, QWORD PTR [rbp-56]
@@ -49298,8 +51010,8 @@ pass2_encode_rip:
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
 .loc 1 771 0
-  jmp .L2381
-.L2380:
+  jmp .L2453
+.L2452:
 .loc 1 775 0
   lea rbx, [rbp-104]
   mov r12, QWORD PTR [rbp-56]
@@ -49322,7 +51034,7 @@ pass2_encode_rip:
   mov rax, r12
   mov rcx, rbx
   mov DWORD PTR [rcx], eax
-.L2381:
+.L2453:
 .loc 1 778 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-64]
@@ -49399,7 +51111,7 @@ pass2_encode_rip:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2384
+  jne .L2456
   mov rbx, QWORD PTR [rbp-132]
   mov r12, 12
   mov r13, rbx
@@ -49411,22 +51123,24 @@ pass2_encode_rip:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2384
+  jne .L2456
   mov rbx, 1
-  jmp .L2385
-.L2384:
+  jmp .L2457
+.L2456:
   mov rbx, 0
-.L2385:
+.L2457:
   mov rax, rbx
   test rax, rax
-  jz .L2382
+  jz .L2454
 .loc 1 784 0
   mov rbx, QWORD PTR [rbp-132]
   mov r12, 24
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
 .loc 1 785 0
   mov rbx, QWORD PTR [rbp-80]
   mov r12, QWORD PTR [rbp-124]
@@ -49444,8 +51158,8 @@ pass2_encode_rip:
   call _caustic_assembler_elf_cst_reloc_add
   mov rbx, rax
 .loc 1 783 0
-  jmp .L2383
-.L2382:
+  jmp .L2455
+.L2454:
 .loc 1 787 0
   mov rbx, QWORD PTR [rbp-80]
   mov r12, QWORD PTR [rbp-124]
@@ -49462,7 +51176,7 @@ pass2_encode_rip:
   mov r8, r13
   call _caustic_assembler_elf_cst_reloc_add
   mov rbx, rax
-.L2383:
+.L2455:
 .loc 1 789 0
   mov rax, QWORD PTR [rbp-72]
   mov QWORD PTR [rbp-148], rax
@@ -49491,7 +51205,7 @@ pass2_encode_rip:
   mov rbx, rax
   mov rbx, 0
   mov rax, rbx
-  add rsp, 156
+  add rsp, 152
   pop r15
   pop r14
   pop r13
@@ -49557,11 +51271,17 @@ pass2_encode_inst:
   cld
   rep movsb
 .loc 1 798 0
-  mov DWORD PTR [rbp-188], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-188], eax
 .loc 1 799 0
-  mov DWORD PTR [rbp-192], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-192], eax
 .loc 1 800 0
-  mov QWORD PTR [rbp-200], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-200], rax
 .loc 1 801 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
@@ -49574,10 +51294,10 @@ pass2_encode_inst:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2386
+  jne .L2458
 .loc 1 802 0
   lea rbx, [rbp-200]
-  mov r10, rbx
+  xor r10, r10
   mov r12, QWORD PTR [rbp-56]
   mov r13, QWORD PTR [rbp-64]
   lea r14, [rbp-188]
@@ -49592,9 +51312,9 @@ pass2_encode_inst:
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
 .loc 1 801 0
-  jmp .L2387
-.L2386:
-.L2387:
+  jmp .L2459
+.L2458:
+.L2459:
 .loc 1 805 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 12
@@ -49607,7 +51327,7 @@ pass2_encode_inst:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2390
+  je .L2462
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 64
   mov r13, rbx
@@ -49619,15 +51339,15 @@ pass2_encode_inst:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2390
+  je .L2462
   mov rbx, 0
-  jmp .L2391
-.L2390:
+  jmp .L2463
+.L2462:
   mov rbx, 1
-.L2391:
+.L2463:
   mov rax, rbx
   test rax, rax
-  jz .L2388
+  jz .L2460
 .loc 1 806 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, QWORD PTR [rbp-64]
@@ -49645,14 +51365,14 @@ pass2_encode_inst:
   call pass2_encode_rip
   mov rbx, rax
 .loc 1 805 0
-  jmp .L2389
-.L2388:
+  jmp .L2461
+.L2460:
 .loc 1 807 0
   movsxd rbx, DWORD PTR [rbp-188]
   mov r12, 1
   mov rax, rbx
   cmp rax, r12
-  jne .L2394
+  jne .L2466
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -49664,7 +51384,7 @@ pass2_encode_inst:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2396
+  je .L2468
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 8
   mov r13, rbx
@@ -49676,23 +51396,23 @@ pass2_encode_inst:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  je .L2396
+  je .L2468
   mov rbx, 0
-  jmp .L2397
-.L2396:
+  jmp .L2469
+.L2468:
   mov rbx, 1
-.L2397:
+.L2469:
   mov rax, rbx
   test rax, rax
-  jz .L2394
+  jz .L2466
   mov rbx, 1
-  jmp .L2395
-.L2394:
+  jmp .L2467
+.L2466:
   mov rbx, 0
-.L2395:
+.L2467:
   mov rax, rbx
   test rax, rax
-  jz .L2392
+  jz .L2464
 .loc 1 808 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-64]
@@ -49708,8 +51428,10 @@ pass2_encode_inst:
   mov r12, 24
   mov r13, rbx
   add r13, r12
+  mov rbx, 1
+  mov rax, rbx
   mov rcx, r13
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
 .loc 1 810 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 164
@@ -49765,8 +51487,8 @@ pass2_encode_inst:
   call _caustic_assembler_encoder_cst_encode
   mov rbx, rax
 .loc 1 807 0
-  jmp .L2393
-.L2392:
+  jmp .L2465
+.L2464:
 .loc 1 814 0
   mov rax, QWORD PTR [rbp-72]
   mov QWORD PTR [rbp-240], rax
@@ -49793,8 +51515,8 @@ pass2_encode_inst:
   mov r9, rbx
   call _caustic_assembler_encoder_cst_encode
   mov rbx, rax
-.L2393:
-.L2389:
+.L2465:
+.L2461:
   mov rbx, 0
   mov rax, rbx
   add rsp, 376
@@ -49838,7 +51560,7 @@ pass2_emit_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2398
+  jne .L2470
 .loc 1 820 0
   mov rbx, QWORD PTR [rbp-64]
   mov r12, QWORD PTR [rbp-56]
@@ -49867,8 +51589,8 @@ pass2_emit_directive:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 819 0
-  jmp .L2399
-.L2398:
+  jmp .L2471
+.L2470:
 .loc 1 823 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -49881,7 +51603,7 @@ pass2_emit_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2400
+  jne .L2472
 .loc 1 824 0
   mov rbx, QWORD PTR [rbp-64]
   mov r12, QWORD PTR [rbp-56]
@@ -49903,8 +51625,8 @@ pass2_emit_directive:
   call _caustic_assembler_buf_cst_buf_append
   mov rbx, rax
 .loc 1 823 0
-  jmp .L2401
-.L2400:
+  jmp .L2473
+.L2472:
 .loc 1 826 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -49917,7 +51639,7 @@ pass2_emit_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2402
+  jne .L2474
 .loc 1 827 0
   mov rbx, QWORD PTR [rbp-64]
   mov r12, QWORD PTR [rbp-56]
@@ -49933,8 +51655,8 @@ pass2_emit_directive:
   call _caustic_assembler_buf_cst_buf_emit8
   mov rbx, rax
 .loc 1 826 0
-  jmp .L2403
-.L2402:
+  jmp .L2475
+.L2474:
 .loc 1 829 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -49947,7 +51669,7 @@ pass2_emit_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2404
+  jne .L2476
 .loc 1 830 0
   mov rbx, QWORD PTR [rbp-64]
   mov r12, QWORD PTR [rbp-56]
@@ -49963,8 +51685,8 @@ pass2_emit_directive:
   call _caustic_assembler_buf_cst_buf_emit16_le
   mov rbx, rax
 .loc 1 829 0
-  jmp .L2405
-.L2404:
+  jmp .L2477
+.L2476:
 .loc 1 832 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -49977,7 +51699,7 @@ pass2_emit_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2406
+  jne .L2478
 .loc 1 833 0
   mov rbx, QWORD PTR [rbp-64]
   mov r12, QWORD PTR [rbp-56]
@@ -49991,8 +51713,8 @@ pass2_emit_directive:
   call _caustic_assembler_buf_cst_buf_emit32_le
   mov rbx, rax
 .loc 1 832 0
-  jmp .L2407
-.L2406:
+  jmp .L2479
+.L2478:
 .loc 1 835 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -50005,7 +51727,7 @@ pass2_emit_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2408
+  jne .L2480
 .loc 1 836 0
   mov rbx, QWORD PTR [rbp-64]
   mov r12, QWORD PTR [rbp-56]
@@ -50019,8 +51741,8 @@ pass2_emit_directive:
   call _caustic_assembler_buf_cst_buf_emit64_le
   mov rbx, rax
 .loc 1 835 0
-  jmp .L2409
-.L2408:
+  jmp .L2481
+.L2480:
 .loc 1 838 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 128
@@ -50033,7 +51755,7 @@ pass2_emit_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2410
+  jne .L2482
 .loc 1 839 0
   mov rbx, QWORD PTR [rbp-56]
   mov r12, 4
@@ -50046,7 +51768,7 @@ pass2_emit_directive:
   movsxd r13, DWORD PTR [r13]
   mov rax, rbx
   cmp rax, r13
-  jne .L2412
+  jne .L2484
 .loc 1 840 0
   mov rbx, QWORD PTR [rbp-72]
   mov r12, QWORD PTR [rbp-72]
@@ -50064,11 +51786,13 @@ pass2_emit_directive:
   mov rcx, rbx
   mov QWORD PTR [rcx], rax
 .loc 1 839 0
-  jmp .L2413
-.L2412:
+  jmp .L2485
+.L2484:
 .loc 1 842 0
-  mov QWORD PTR [rbp-80], 0
-.L2414:
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-80], rax
+.L2486:
 .loc 1 843 0
   mov rax, QWORD PTR [rbp-80]
   mov QWORD PTR [rbp-88], rax
@@ -50080,7 +51804,7 @@ pass2_emit_directive:
   mov r15, QWORD PTR [r15]
   mov rax, QWORD PTR [rbp-88]
   cmp rax, r15
-  jge .L2415
+  jge .L2487
 .loc 1 844 0
   mov rax, QWORD PTR [rbp-64]
   mov QWORD PTR [rbp-104], rax
@@ -50101,19 +51825,19 @@ pass2_emit_directive:
   mov rcx, QWORD PTR [rbp-128]
   mov QWORD PTR [rcx], rax
 .loc 1 843 0
-  jmp .L2414
-.L2415:
-.L2413:
+  jmp .L2486
+.L2487:
+.L2485:
 .loc 1 838 0
-  jmp .L2411
-.L2410:
-.L2411:
-.L2409:
-.L2407:
-.L2405:
-.L2403:
-.L2401:
-.L2399:
+  jmp .L2483
+.L2482:
+.L2483:
+.L2481:
+.L2479:
+.L2477:
+.L2475:
+.L2473:
+.L2471:
   mov rbx, 0
   mov rax, rbx
   add rsp, 152
@@ -50132,7 +51856,7 @@ pass2:
   push r13
   push r14
   push r15
-  sub rsp, 500
+  sub rsp, 504
 .loc 1 7190 0
   mov rbx, rdi
   mov rax, rbx
@@ -50162,8 +51886,10 @@ pass2:
   mov rax, rbx
   mov QWORD PTR [rbp-104], rax
 .loc 1 854 0
-  mov DWORD PTR [rbp-108], 0
-.L2416:
+  mov rbx, 0
+  mov rax, rbx
+  mov DWORD PTR [rbp-108], eax
+.L2488:
 .loc 1 856 0
   movsxd rax, DWORD PTR [rbp-108]
   mov QWORD PTR [rbp-132], rax
@@ -50175,7 +51901,7 @@ pass2:
   movsxd r15, DWORD PTR [r15]
   mov rax, QWORD PTR [rbp-132]
   cmp rax, r15
-  jge .L2417
+  jge .L2489
 .loc 1 857 0
   xor r10, r10
   mov rax, QWORD PTR [rbp-56]
@@ -50201,7 +51927,7 @@ pass2:
   mov QWORD PTR [rbp-188], rax
   mov rax, QWORD PTR [rbp-180]
   cmp rax, QWORD PTR [rbp-188]
-  jne .L2418
+  jne .L2490
 .loc 1 860 0
   mov rax, QWORD PTR [rbp-116]
   mov QWORD PTR [rbp-212], rax
@@ -50218,8 +51944,8 @@ pass2:
   call pass2_encode_inst
   mov QWORD PTR [rbp-244], rax
 .loc 1 859 0
-  jmp .L2419
-.L2418:
+  jmp .L2491
+.L2490:
 .loc 1 862 0
   mov rax, QWORD PTR [rbp-116]
   mov QWORD PTR [rbp-252], rax
@@ -50233,7 +51959,7 @@ pass2:
   mov QWORD PTR [rbp-268], rax
   mov rax, QWORD PTR [rbp-260]
   cmp rax, QWORD PTR [rbp-268]
-  jne .L2420
+  jne .L2492
 .loc 1 863 0
   mov rax, QWORD PTR [rbp-72]
   mov QWORD PTR [rbp-292], rax
@@ -50256,7 +51982,7 @@ pass2:
   mov QWORD PTR [rbp-332], rax
   mov rax, QWORD PTR [rbp-324]
   cmp rax, QWORD PTR [rbp-332]
-  jne .L2422
+  jne .L2494
   lea rax, [rbp-124]
   mov QWORD PTR [rbp-356], rax
   mov rax, QWORD PTR [rbp-80]
@@ -50264,9 +51990,9 @@ pass2:
   mov rax, QWORD PTR [rbp-364]
   mov rcx, QWORD PTR [rbp-356]
   mov QWORD PTR [rcx], rax
-  jmp .L2423
-.L2422:
-.L2423:
+  jmp .L2495
+.L2494:
+.L2495:
 .loc 1 865 0
   mov rax, QWORD PTR [rbp-116]
   mov QWORD PTR [rbp-372], rax
@@ -50284,7 +52010,7 @@ pass2:
   mov QWORD PTR [rbp-404], rax
   mov rax, QWORD PTR [rbp-396]
   cmp rax, QWORD PTR [rbp-404]
-  jne .L2424
+  jne .L2496
   lea rax, [rbp-124]
   mov QWORD PTR [rbp-428], rax
   mov rax, QWORD PTR [rbp-88]
@@ -50292,9 +52018,9 @@ pass2:
   mov rax, QWORD PTR [rbp-436]
   mov rcx, QWORD PTR [rbp-428]
   mov QWORD PTR [rcx], rax
-  jmp .L2425
-.L2424:
-.L2425:
+  jmp .L2497
+.L2496:
+.L2497:
 .loc 1 866 0
   mov rax, QWORD PTR [rbp-116]
   mov QWORD PTR [rbp-444], rax
@@ -50308,10 +52034,10 @@ pass2:
   call pass2_emit_directive
   mov QWORD PTR [rbp-468], rax
 .loc 1 862 0
-  jmp .L2421
-.L2420:
-.L2421:
-.L2419:
+  jmp .L2493
+.L2492:
+.L2493:
+.L2491:
 .loc 1 868 0
   lea rax, [rbp-108]
   mov QWORD PTR [rbp-476], rax
@@ -50324,11 +52050,11 @@ pass2:
   mov rcx, QWORD PTR [rbp-476]
   mov DWORD PTR [rcx], eax
 .loc 1 856 0
-  jmp .L2416
-.L2417:
+  jmp .L2488
+.L2489:
   mov rbx, 0
   mov rax, rbx
-  add rsp, 500
+  add rsp, 504
   pop r15
   pop r14
   pop r13
@@ -50967,7 +52693,7 @@ main:
   mov r12, 2
   mov rax, rbx
   cmp rax, r12
-  jge .L2440
+  jge .L2512
 .loc 1 968 0
   lea rbx, [rip+_std_linux_cst_STDERR]
   mov r12, rbx
@@ -50991,9 +52717,9 @@ main:
   pop rbp
   ret
 .loc 1 967 0
-  jmp .L2441
-.L2440:
-.L2441:
+  jmp .L2513
+.L2512:
+.L2513:
 .loc 1 972 0
   mov rbx, QWORD PTR [rbp-64]
   mov r12, rbx
@@ -51014,15 +52740,17 @@ main:
   mov rax, r12
   mov QWORD PTR [rbp-80], rax
 .loc 1 976 0
-  mov DWORD PTR [rbp-84], 1
-.L2442:
+  mov rbx, 1
+  mov rax, rbx
+  mov DWORD PTR [rbp-84], eax
+.L2514:
 .loc 1 977 0
   movsxd rax, DWORD PTR [rbp-84]
   mov QWORD PTR [rbp-352], rax
   mov r12, QWORD PTR [rbp-56]
   mov rax, QWORD PTR [rbp-352]
   cmp rax, r12
-  jge .L2443
+  jge .L2515
 .loc 1 978 0
   mov r14, QWORD PTR [rbp-72]
   movsxd r15, DWORD PTR [rbp-84]
@@ -51057,15 +52785,17 @@ main:
   mov QWORD PTR [rbp-440], 1
   mov rax, QWORD PTR [rbp-432]
   cmp rax, QWORD PTR [rbp-440]
-  jne .L2444
+  jne .L2516
 .loc 1 980 0
   lea rax, [rip+asm_prof_enabled]
   mov QWORD PTR [rbp-456], rax
+  mov QWORD PTR [rbp-464], 1
+  mov rax, QWORD PTR [rbp-464]
   mov rcx, QWORD PTR [rbp-456]
-  mov DWORD PTR [rcx], 1
+  mov DWORD PTR [rcx], eax
 .loc 1 979 0
-  jmp .L2445
-.L2444:
+  jmp .L2517
+.L2516:
 .loc 1 982 0
   lea rax, [rbp-80]
   mov QWORD PTR [rbp-472], rax
@@ -51074,7 +52804,7 @@ main:
   mov rax, QWORD PTR [rbp-480]
   mov rcx, QWORD PTR [rbp-472]
   mov QWORD PTR [rcx], rax
-.L2445:
+.L2517:
 .loc 1 984 0
   lea rax, [rbp-84]
   mov QWORD PTR [rbp-488], rax
@@ -51087,8 +52817,8 @@ main:
   mov rcx, QWORD PTR [rbp-488]
   mov DWORD PTR [rcx], eax
 .loc 1 977 0
-  jmp .L2442
-.L2443:
+  jmp .L2514
+.L2515:
 .loc 1 988 0
   xor r10, r10
   mov rbx, QWORD PTR [rbp-80]
@@ -51112,13 +52842,15 @@ main:
   mov r12, 16777216
   mov rax, rbx
   cmp rax, r12
-  jge .L2446
+  jge .L2518
   lea rbx, [rbp-108]
+  mov r12, 16777216
+  mov rax, r12
   mov rcx, rbx
-  mov QWORD PTR [rcx], 16777216
-  jmp .L2447
-.L2446:
-.L2447:
+  mov QWORD PTR [rcx], rax
+  jmp .L2519
+.L2518:
+.L2519:
 .loc 1 991 0
   mov rbx, QWORD PTR [rbp-108]
   mov rdi, rbx
@@ -51138,7 +52870,7 @@ main:
   mov rbx, 0
   mov rax, r12
   cmp rax, rbx
-  jne .L2448
+  jne .L2520
 .loc 1 995 0
   lea rbx, [rip+_std_linux_cst_STDERR]
   mov r12, rbx
@@ -51162,9 +52894,9 @@ main:
   pop rbp
   ret
 .loc 1 994 0
-  jmp .L2449
-.L2448:
-.L2449:
+  jmp .L2521
+.L2520:
+.L2521:
 .loc 1 999 0
   lea rbx, [rip+.LC72]
   mov rdi, rbx
@@ -51217,7 +52949,7 @@ main:
   mov rbx, 1
   mov rax, r12
   cmp rax, rbx
-  jne .L2450
+  jne .L2522
   lea rbx, [rip+asm_prof_times]
   mov r12, 0
   mov r13, 3
@@ -51234,9 +52966,9 @@ main:
   mov rax, r14
   mov rcx, r12
   mov QWORD PTR [rcx], rax
-  jmp .L2451
-.L2450:
-.L2451:
+  jmp .L2523
+.L2522:
+.L2523:
 .loc 1 1007 0
   lea rbx, [rip+.LC75]
   mov rdi, rbx
@@ -51263,12 +52995,12 @@ main:
   mov rbx, 1
   mov rax, r12
   cmp rax, rbx
-  jne .L2452
+  jne .L2524
   call print_token_profile
   mov rbx, rax
-  jmp .L2453
-.L2452:
-.L2453:
+  jmp .L2525
+.L2524:
+.L2525:
 .loc 1 1011 0
   xor r10, r10
   call asm_prof_time
@@ -51315,7 +53047,7 @@ main:
   mov rbx, 1
   mov rax, r12
   cmp rax, rbx
-  jne .L2454
+  jne .L2526
   lea rbx, [rip+asm_prof_times]
   mov r12, 1
   mov r13, 3
@@ -51332,9 +53064,9 @@ main:
   mov rax, r14
   mov rcx, r12
   mov QWORD PTR [rcx], rax
-  jmp .L2455
-.L2454:
-.L2455:
+  jmp .L2527
+.L2526:
+.L2527:
 .loc 1 1015 0
   lea rbx, [rip+.LC77]
   mov rdi, rbx
@@ -51386,7 +53118,7 @@ main:
   mov rbx, 1
   mov rax, r12
   cmp rax, rbx
-  jne .L2456
+  jne .L2528
   lea rbx, [rip+asm_prof_times]
   mov r12, 2
   mov r13, 3
@@ -51403,9 +53135,9 @@ main:
   mov rax, r14
   mov rcx, r12
   mov QWORD PTR [rcx], rax
-  jmp .L2457
-.L2456:
-.L2457:
+  jmp .L2529
+.L2528:
+.L2529:
 .loc 1 1022 0
   lea rbx, [rip+.LC79]
   mov rdi, rbx
@@ -51474,7 +53206,9 @@ main:
   cld
   rep movsb
 .loc 1 1029 0
-  mov QWORD PTR [rbp-304], 0
+  mov rbx, 0
+  mov rax, rbx
+  mov QWORD PTR [rbp-304], rax
 .loc 1 1030 0
   xor r10, r10
   lea rbx, [rbp-728]
@@ -51516,7 +53250,7 @@ main:
   mov rbx, 1
   mov rax, r12
   cmp rax, rbx
-  jne .L2458
+  jne .L2530
   lea rbx, [rip+asm_prof_times]
   mov r12, 3
   mov r13, 3
@@ -51533,9 +53267,9 @@ main:
   mov rax, r14
   mov rcx, r12
   mov QWORD PTR [rcx], rax
-  jmp .L2459
-.L2458:
-.L2459:
+  jmp .L2531
+.L2530:
+.L2531:
 .loc 1 1033 0
   lea rbx, [rbp-248]
   lea r12, [rbp-272]
@@ -51574,7 +53308,7 @@ main:
   mov r12, 0
   mov rax, rbx
   cmp rax, r12
-  jge .L2460
+  jge .L2532
 .loc 1 1039 0
   lea rbx, [rip+_std_linux_cst_STDERR]
   mov r12, rbx
@@ -51598,9 +53332,9 @@ main:
   pop rbp
   ret
 .loc 1 1038 0
-  jmp .L2461
-.L2460:
-.L2461:
+  jmp .L2533
+.L2532:
+.L2533:
 .loc 1 1042 0
   xor r10, r10
   call asm_prof_time
@@ -51641,7 +53375,7 @@ main:
   mov rbx, 1
   mov rax, r12
   cmp rax, rbx
-  jne .L2462
+  jne .L2534
   lea rbx, [rip+asm_prof_times]
   mov r12, 4
   mov r13, 3
@@ -51658,9 +53392,9 @@ main:
   mov rax, r14
   mov rcx, r12
   mov QWORD PTR [rcx], rax
-  jmp .L2463
-.L2462:
-.L2463:
+  jmp .L2535
+.L2534:
+.L2535:
 .loc 1 1047 0
   lea rbx, [rip+.LC82]
   mov rdi, rbx
@@ -51681,12 +53415,12 @@ main:
   mov rbx, 1
   mov rax, r12
   cmp rax, rbx
-  jne .L2464
+  jne .L2536
   call print_profile
   mov rbx, rax
-  jmp .L2465
-.L2464:
-.L2465:
+  jmp .L2537
+.L2536:
+.L2537:
 .loc 1 1049 0
   mov rbx, 0
   mov rax, rbx
