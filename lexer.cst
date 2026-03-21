@@ -471,7 +471,6 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
     tok_prof_counts[0] = 0; tok_prof_counts[1] = 0; tok_prof_counts[2] = 0; tok_prof_counts[3] = 0;
     tok_prof_counts[4] = 0; tok_prof_counts[5] = 0; tok_prof_counts[6] = 0; tok_prof_counts[7] = 0;
 
-    let is *u8 as base = src;
     let is i64 as base_i = cast(i64, src);
 
     while (i < src_len) {

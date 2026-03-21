@@ -193,14 +193,14 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     let is buf.ByteBuffer as out = buf.buf_init(65536);
 
     // Section indices
-    let is i32 as SEC_NULL with mut = 0;
+    let is i32 as _SEC_NULL with mut = 0;
     let is i32 as SEC_TEXT with mut = 1;
-    let is i32 as SEC_DATA with mut = 2;
-    let is i32 as SEC_RODATA with mut = 3;
-    let is i32 as SEC_BSS with mut = 4;
+    let is i32 as _SEC_DATA with mut = 2;
+    let is i32 as _SEC_RODATA with mut = 3;
+    let is i32 as _SEC_BSS with mut = 4;
     let is i32 as SEC_SYMTAB with mut = 5;
     let is i32 as SEC_STRTAB with mut = 6;
-    let is i32 as SEC_RELA with mut = 7;
+    let is i32 as _SEC_RELA with mut = 7;
     let is i32 as SEC_SHSTRTAB with mut = 8;
     let is i32 as NUM_SECTIONS = 9;
 
@@ -244,7 +244,7 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     }
 
     // Section symbols
-    let is i32 as sec_sym_start = 1;
+    let is i32 as _sec_sym_start = 1;
     let is i32 as sec_idx with mut = 0;
     while (sec_idx < 4) {
         // st_name = 0
@@ -365,7 +365,7 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
 
     // Now compute layout
     let is i64 as elf_hdr_size = 64;
-    let is i64 as sh_entry_size = 64;
+    let is i64 as _sh_entry_size = 64;
 
     // Section data starts after ELF header
     let is i64 as off with mut = elf_hdr_size;
