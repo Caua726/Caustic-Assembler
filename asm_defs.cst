@@ -154,6 +154,7 @@ let is i32 as INST_CDQ     with imut = 61;
 let is i32 as INST_DIV     with imut = 62;
 let is i32 as INST_CVTSD2SS with imut = 63;
 let is i32 as INST_CVTSS2SD with imut = 64;
+let is i32 as INST_MOVD     with imut = 65;
 let is i32 as INST_NONE    with imut = 0;
 
 // === Operand kinds ===

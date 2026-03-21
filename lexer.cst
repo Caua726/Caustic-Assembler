@@ -427,6 +427,7 @@ fn init_ht() as void {
     ht_insert(115, 101, 116, 97, 0, 4, 2, def.INST_SETA);  // seta
     ht_insert(99, 97, 108, 108, 0, 4, 2, def.INST_CALL);   // call
     ht_insert(109, 111, 118, 113, 0, 4, 2, def.INST_MOVQ); // movq
+    ht_insert(109, 111, 118, 100, 0, 4, 2, def.INST_MOVD); // movd
     // len 5
     ht_insert(109, 111, 118, 115, 120, 5, 2, def.INST_MOVSX);  // movsx
     ht_insert(109, 111, 118, 122, 120, 5, 2, def.INST_MOVZX);  // movzx
