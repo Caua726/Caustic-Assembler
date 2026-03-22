@@ -261,7 +261,7 @@ fn ht_lookup(ptr as *u8, len as i32) as i32 {
     if (len >= 5) { c4 = cast(i32, ptr[4]); }
     let is i32 as h with mut = ht_hash(c0, c1, c2, c3, c4, len);
     let is i32 as tries with mut = 0;
-    while (tries < 16) {
+    while (tries < 1024) {
         let is i64 as off = cast(i64, h) * 32;
         let is *i32 as pk = cast(*i32, cast(i64, ht_data) + off + 24);
         let is i32 as kind = *pk;

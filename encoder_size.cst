@@ -25,6 +25,10 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
     if (inst == def.INST_CALL && op1.kind == def.OP_LABEL) { return 5; }
     if (inst == def.INST_JMP && op1.kind == def.OP_LABEL)  { return 5; }
 
+    // CALL/JMP reg: optional REX(1) + FF(1) + ModRM(1) = 2 or 3
+    if (inst == def.INST_CALL && op1.kind == def.OP_REG) { return 2 + eu.reg_ext(op1.reg_id); }
+    if (inst == def.INST_JMP && op1.kind == def.OP_REG)  { return 2 + eu.reg_ext(op1.reg_id); }
+
     // Jcc label: 0F(1) + cc(1) + rel32(4) = 6
     if (inst >= def.INST_JZ && inst <= def.INST_JBE && op1.kind == def.OP_LABEL) { return 6; }
 

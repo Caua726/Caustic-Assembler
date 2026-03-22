@@ -11,7 +11,7 @@ fn reg_code(id as i32) as i32 {
 }
 
 fn reg_ext(id as i32) as i32 {
-    if (id < 0) { return 0; }
+    if (id < 0 || id >= 128) { return 0; }
     if (id >= 64) {
         if ((id - 64) >= 8) { return 1; }
         return 0;
@@ -69,7 +69,6 @@ fn lookup_register(ptr as *u8, len as i32) as i32 {
         if (c0 == 97) { // a
             if (c1 == 108) { return def.REG_AL; } // al
             if (c1 == 120) { return def.REG_AX; } // ax
-            if (c1 == 104) { return def.REG_AL; } // ah
         }
         else if (c0 == 99) { if (c1 == 108) { return def.REG_CL; } if (c1 == 120) { return def.REG_CX; } } // cl cx
         else if (c0 == 100) { if (c1 == 108) { return def.REG_DL; } if (c1 == 120) { return def.REG_DX; } if (c1 == 105) { return def.REG_DI; } } // dl dx di
@@ -220,9 +219,8 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
             if (c3 == 97) { return def.INST_SETA; }
         }
         if (c0 == 99 && c1 == 97 && ptr[2] == 108 && ptr[3] == 108) { return def.INST_CALL; } // call
-        if (c0 == 109 && c1 == 111 && ptr[2] == 118) { // movq movs
+        if (c0 == 109 && c1 == 111 && ptr[2] == 118) { // movq
             if (ptr[3] == 113) { return def.INST_MOVQ; }
-            if (ptr[3] == 115) { return def.INST_MOVSB; }
         }
     }
     else if (len == 5) {
