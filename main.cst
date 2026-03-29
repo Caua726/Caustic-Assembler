@@ -1,5 +1,6 @@
 use "../std/linux.cst" as linux;
 use "../std/mem.cst" as mem;
+use "../src/ir/opt_mem.cst" as om;
 use "lexer.cst" as lex;
 use "encoder_util.cst" as enc;
 use "encoder_emit.cst" as ence;
@@ -73,7 +74,7 @@ fn read_file(path as *u8) as *u8 {
     let is i64 as size = linux.lseek(fd, 0, linux.SEEK_END);
     linux.lseek(fd, 0, linux.SEEK_SET);
     if (size <= 0) { linux.close(fd); return cast(*u8, 0); }
-    let is *u8 as buf = mem.galloc(size + 1);
+    let is *u8 as buf = om.opt_alloc(size + 1);
     linux.read(fd, buf, size);
     buf[size] = cast(u8, 0);
     linux.close(fd);
@@ -90,7 +91,7 @@ fn read_file_size(path as *u8) as i64 {
 
 fn make_output_name(input as *u8) as *u8 {
     let is i64 as len = strlen(input);
-    let is *u8 as out = mem.galloc(len + 3);
+    let is *u8 as out = om.opt_alloc(len + 3);
     mem.memcpy(out, input, len);
     out[len] = 46;     // '.'
     out[len + 1] = 111; // 'o'
@@ -150,7 +151,7 @@ fn pl_init(hint as i32) as ParsedLines {
     let is i32 as cap with mut = hint;
     if (cap < 4096) { cap = 4096; }
     let is ParsedLines as pl;
-    pl.data = mem.galloc(cast(i64, cap) * sizeof(ParsedLine));
+    pl.data = om.opt_alloc(cast(i64, cap) * sizeof(ParsedLine));
     pl.count = 0;
     pl.cap = cap;
     return pl;
@@ -163,9 +164,9 @@ fn pl_get(pl as *ParsedLines, idx as i32) as *ParsedLine {
 fn pl_add(pl as *ParsedLines) as *ParsedLine {
     if (pl.count >= pl.cap) {
         let is i32 as new_cap = pl.cap * 2;
-        let is *u8 as new_data = mem.galloc(cast(i64, new_cap) * sizeof(ParsedLine));
+        let is *u8 as new_data = om.opt_alloc(cast(i64, new_cap) * sizeof(ParsedLine));
         mem.memcpy(new_data, pl.data, cast(i64, pl.count) * sizeof(ParsedLine));
-        mem.gfree(pl.data);
+        om.opt_free(pl.data);
         pl.data = new_data;
         pl.cap = new_cap;
     }
@@ -399,7 +400,7 @@ fn parse_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as *Par
 // === String decoding ===
 
 fn decode_string(ptr as *u8, len as i32, out_len as *i32) as *u8 {
-    let is *u8 as buf = mem.galloc(cast(i64, len));
+    let is *u8 as buf = om.opt_alloc(cast(i64, len));
     let is i32 as out with mut = 0;
     let is i32 as i with mut = 1; // skip opening quote
     let is i32 as end = len - 1; // skip closing quote
@@ -992,12 +993,7 @@ fn main(argc as i64, argv as i64) as i32 {
         ai = ai + 1;
     }
 
-    // Read file size first, then allocate heap proportionally
     let is i64 as file_size = read_file_size(filename);
-    let is i64 as heap_size with mut = file_size * 50 + 8388608;
-    if (heap_size < 16777216) { heap_size = 16777216; }
-    mem.gheapinit(heap_size);
-
     let is *u8 as src = read_file(filename);
     if (cast(i64, src) == 0) {
         linux.write(linux.STDERR, "Error: cannot read file\n", 24);
