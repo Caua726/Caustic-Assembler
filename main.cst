@@ -171,40 +171,22 @@ fn pl_add(pl as *ParsedLines) as *ParsedLine {
         pl.cap = new_cap;
     }
     let is *ParsedLine as line = pl_get(pl, pl.count);
-    line.kind = LINE_EMPTY;
-    line.section = SECTION_TEXT;
-    line.inst_id = def.INST_NONE;
-    line.op1_kind = def.OP_NONE;
+    // Fast word-at-a-time zero
+    let is *u8 as lp = cast(*u8, line);
+    let is i64 as sz = sizeof(ParsedLine);
+    let is i64 as wi with mut = 0;
+    let is i64 as wn = sz / 8;
+    while (wi < wn) {
+        let is *i64 as wp = cast(*i64, cast(i64, lp) + wi * 8);
+        *wp = 0;
+        wi = wi + 1;
+    }
     line.op1_reg_id = def.REG_NONE;
-    line.op1_imm = 0;
     line.op1_mem_base = def.REG_NONE;
-    line.op1_mem_disp = 0;
-    line.op1_mem_size = 0;
     line.op1_mem_index = def.REG_NONE;
-    line.op1_mem_scale = 0;
-    line.op1_label_ptr = cast(*u8, 0);
-    line.op1_label_len = 0;
-    line.op2_kind = def.OP_NONE;
     line.op2_reg_id = def.REG_NONE;
-    line.op2_imm = 0;
     line.op2_mem_base = def.REG_NONE;
-    line.op2_mem_disp = 0;
-    line.op2_mem_size = 0;
     line.op2_mem_index = def.REG_NONE;
-    line.op2_mem_scale = 0;
-    line.op2_label_ptr = cast(*u8, 0);
-    line.op2_label_len = 0;
-    line.label_ptr = cast(*u8, 0);
-    line.label_len = 0;
-    line.dir_kind = 0;
-    line.dir_arg_ptr = cast(*u8, 0);
-    line.dir_arg_len = 0;
-    line.dir_num = 0;
-    line.decoded_ptr = cast(*u8, 0);
-    line.decoded_len = 0;
-    line.offset = 0;
-    line.size = 0;
-    line.line_no = 0;
     pl.count = pl.count + 1;
     return line;
 }
@@ -411,9 +393,19 @@ fn decode_string(ptr as *u8, len as i32, out_len as *i32) as *u8 {
             if (i >= end) { break; }
             if (ptr[i] == 110) { buf[out] = 10; } // \n
             else if (ptr[i] == 116) { buf[out] = 9; } // \t
-            else if (ptr[i] == 48) { buf[out] = 0; } // \0
+            else if (ptr[i] == 114) { buf[out] = 13; } // \r
             else if (ptr[i] == 92) { buf[out] = 92; } // \\
             else if (ptr[i] == 34) { buf[out] = 34; } // \"
+            else if (ptr[i] >= 48 && ptr[i] <= 55) { // \NNN octal
+                let is i32 as oval with mut = cast(i32, ptr[i]) - 48;
+                if (i + 1 < end && ptr[i + 1] >= 48 && ptr[i + 1] <= 55) {
+                    i = i + 1; oval = oval * 8 + (cast(i32, ptr[i]) - 48);
+                }
+                if (i + 1 < end && ptr[i + 1] >= 48 && ptr[i + 1] <= 55) {
+                    i = i + 1; oval = oval * 8 + (cast(i32, ptr[i]) - 48);
+                }
+                buf[out] = cast(u8, oval);
+            }
             else { buf[out] = ptr[i]; }
         } else {
             buf[out] = ptr[i];
