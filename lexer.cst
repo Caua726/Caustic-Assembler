@@ -1,5 +1,6 @@
 use "../std/mem.cst" as mem;
 use "../std/linux.cst" as linux;
+use "../src/ir/opt_mem.cst" as om;
 use "asm_defs.cst" as def;
 
 // Token kinds
@@ -24,11 +25,8 @@ struct Token {
     kind as i32;
     ptr as *u8;
     len as i32;
-    line as i32;
+    id as i32;
     num_val as i64;
-    reg_id as i32;
-    inst_id as i32;
-    size_val as i32;
 }
 
 struct TokenList {
@@ -41,7 +39,7 @@ fn tl_init(hint as i32) as TokenList {
     let is i32 as cap with mut = hint;
     if (cap < 8192) { cap = 8192; }
     let is TokenList as tl;
-    tl.data = mem.galloc(cast(i64, cap) * sizeof(Token));
+    tl.data = om.opt_alloc(cast(i64, cap) * sizeof(Token));
     tl.count = 0;
     tl.cap = cap;
     return tl;
@@ -50,9 +48,9 @@ fn tl_init(hint as i32) as TokenList {
 fn tl_push(tl as *TokenList, tok as Token) as void {
     if (tl.count >= tl.cap) {
         let is i32 as new_cap = tl.cap * 2;
-        let is *u8 as new_data = mem.galloc(cast(i64, new_cap) * sizeof(Token));
+        let is *u8 as new_data = om.opt_alloc(cast(i64, new_cap) * sizeof(Token));
         mem.memcpy(new_data, tl.data, cast(i64, tl.count) * sizeof(Token));
-        mem.gfree(tl.data);
+        om.opt_free(tl.data);
         tl.data = new_data;
         tl.cap = new_cap;
     }
@@ -60,11 +58,8 @@ fn tl_push(tl as *TokenList, tok as Token) as void {
     slot.kind = tok.kind;
     slot.ptr = tok.ptr;
     slot.len = tok.len;
-    slot.line = tok.line;
+    slot.id = tok.id;
     slot.num_val = tok.num_val;
-    slot.reg_id = tok.reg_id;
-    slot.inst_id = tok.inst_id;
-    slot.size_val = tok.size_val;
     tl.count = tl.count + 1;
 }
 
@@ -72,9 +67,9 @@ fn tl_push(tl as *TokenList, tok as Token) as void {
 fn tl_next(tl as *TokenList) as *Token {
     if (tl.count >= tl.cap) {
         let is i32 as new_cap = tl.cap * 2;
-        let is *u8 as new_data = mem.galloc(cast(i64, new_cap) * sizeof(Token));
+        let is *u8 as new_data = om.opt_alloc(cast(i64, new_cap) * sizeof(Token));
         mem.memcpy(new_data, tl.data, cast(i64, tl.count) * sizeof(Token));
-        mem.gfree(tl.data);
+        om.opt_free(tl.data);
         tl.data = new_data;
         tl.cap = new_cap;
     }
@@ -87,16 +82,13 @@ fn tl_get(tl as *TokenList, idx as i32) as *Token {
     return cast(*Token, cast(i64, tl.data) + cast(i64, idx) * sizeof(Token));
 }
 
-fn make_tok(kind as i32, ptr as *u8, len as i32, line as i32) as Token {
+fn make_tok(kind as i32, ptr as *u8, len as i32) as Token {
     let is Token as t;
     t.kind = kind;
     t.ptr = ptr;
     t.len = len;
-    t.line = line;
+    t.id = 0;
     t.num_val = 0;
-    t.reg_id = def.REG_NONE;
-    t.inst_id = def.INST_NONE;
-    t.size_val = 0;
     return t;
 }
 
@@ -286,7 +278,7 @@ fn ht_lookup(ptr as *u8, len as i32) as i32 {
 }
 
 fn init_ht() as void {
-    ht_data = mem.galloc(cast(i64, HT_SIZE) * 32);
+    ht_data = om.opt_alloc(cast(i64, HT_SIZE) * 32);
     mem.memset(ht_data, 0, cast(i64, HT_SIZE) * 32);
 
     // Registers (kind=1)
@@ -486,8 +478,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
         else if (c == 10) {
             tok_prof_counts[1] = tok_prof_counts[1] + 1;
             let is *Token as t = tl_next(&tl);
-            t.kind = TK_NEWLINE; t.ptr = cast(*u8, base_i + i); t.len = 1; t.line = line;
-            t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+            t.kind = TK_NEWLINE; t.ptr = cast(*u8, base_i + i); t.len = 1;
+            t.id = 0; t.num_val = 0;
             line = line + 1;
             i = i + 1;
         }
@@ -510,8 +502,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
             }
             if (i < src_len) { i = i + 1; }
             let is *Token as t = tl_next(&tl);
-            t.kind = TK_STRING; t.ptr = cast(*u8, base_i + start); t.len = cast(i32, i - start); t.line = line;
-            t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+            t.kind = TK_STRING; t.ptr = cast(*u8, base_i + start); t.len = cast(i32, i - start);
+            t.id = 0; t.num_val = 0;
         }
         // Single-char punctuation (combined check)
         else if (c == 44 || c == 58 || c == 91 || c == 93 || c == 43 || c == 42 || c == 45) {
@@ -524,8 +516,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
             else if (c == 42) { tk = TK_STAR; }
             else if (c == 45) { tk = TK_MINUS; }
             let is *Token as t = tl_next(&tl);
-            t.kind = tk; t.ptr = cast(*u8, base_i + i); t.len = 1; t.line = line;
-            t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+            t.kind = tk; t.ptr = cast(*u8, base_i + i); t.len = 1;
+            t.id = 0; t.num_val = 0;
             i = i + 1;
         }
         // Number (0-9)
@@ -535,8 +527,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
             let is i64 as val with mut = 0;
             let is i64 as new_i = parse_number_fast(src, i, src_len, &val);
             let is *Token as t = tl_next(&tl);
-            t.kind = TK_NUMBER; t.ptr = cast(*u8, base_i + start); t.len = cast(i32, new_i - start); t.line = line;
-            t.num_val = val; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+            t.kind = TK_NUMBER; t.ptr = cast(*u8, base_i + start); t.len = cast(i32, new_i - start);
+            t.num_val = val; t.id = 0;
             i = new_i;
         }
         // Dot: directive or local label
@@ -588,8 +580,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
             } else {
                 t.kind = TK_IDENT;
             }
-            t.ptr = tptr; t.len = tlen; t.line = line;
-            t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+            t.ptr = tptr; t.len = tlen;
+            t.id = 0; t.num_val = 0;
         }
         // Identifier (starts with alpha: A-Z, a-z, _)
         else if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122) || c == 95) {
@@ -616,19 +608,19 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                     if (i + 3 <= src_len && src[i] == 80 && src[i+1] == 84 && src[i+2] == 82) {
                         i = i + 3;
                         let is *Token as t = tl_next(&tl);
-                        t.kind = TK_SIZE_PREFIX; t.ptr = tptr; t.len = cast(i32, i - start); t.line = line;
-                        t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = sz_val;
+                        t.kind = TK_SIZE_PREFIX; t.ptr = tptr; t.len = cast(i32, i - start);
+                        t.id = sz_val; t.num_val = 0;
                     } else {
                         i = save_i;
                         let is *Token as t = tl_next(&tl);
-                        t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen; t.line = line;
-                        t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+                        t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen;
+                        t.id = 0; t.num_val = 0;
                     }
                 } else {
                     // Uppercase non-size-prefix: always plain IDENT
                     let is *Token as t = tl_next(&tl);
-                    t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen; t.line = line;
-                    t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+                    t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen;
+                    t.id = 0; t.num_val = 0;
                 }
             }
             else if (tlen > 9 || ri_first[cast(i32, c)] == 0) {
@@ -637,8 +629,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                     // noprefix - skip
                 } else {
                     let is *Token as t = tl_next(&tl);
-                    t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen; t.line = line;
-                    t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+                    t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen;
+                    t.id = 0; t.num_val = 0;
                 }
             }
             else {
@@ -651,8 +643,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                         // noprefix - skip
                     } else {
                         let is *Token as t = tl_next(&tl);
-                        t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen; t.line = line;
-                        t.num_val = 0; t.reg_id = def.REG_NONE; t.inst_id = def.INST_NONE; t.size_val = 0;
+                        t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen;
+                        t.id = 0; t.num_val = 0;
                     }
                 } else {
                     let is i32 as ht_kind = ht_result >> 16;
@@ -660,15 +652,12 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                     let is *Token as t = tl_next(&tl);
                     if (ht_kind == 1) {
                         t.kind = TK_REGISTER;
-                        t.reg_id = ht_id;
-                        t.inst_id = def.INST_NONE;
                     } else {
                         t.kind = TK_INSTRUCTION;
-                        t.reg_id = def.REG_NONE;
-                        t.inst_id = ht_id;
                     }
-                    t.ptr = tptr; t.len = tlen; t.line = line;
-                    t.num_val = 0; t.size_val = 0;
+                    t.id = ht_id;
+                    t.ptr = tptr; t.len = tlen;
+                    t.num_val = 0;
                 }
             }
         }
@@ -679,7 +668,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
     }
 
     // Add EOF
-    let is Token as eof = make_tok(TK_EOF, cast(*u8, 0), 0, line);
+    let is Token as eof = make_tok(TK_EOF, cast(*u8, 0), 0);
     tl_push(&tl, eof);
     return tl;
 }

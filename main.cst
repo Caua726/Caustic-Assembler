@@ -270,7 +270,7 @@ fn set_op_rip(line as *ParsedLine, which as i32, ptr as *u8, len as i32, sz as i
 fn parse_mem_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as *ParsedLine, which as i32, mem_size as i32) as void {
     let is i32 as p with mut = pos + 1; // skip '['
     let is *lex.Token as base_tok = lex.tl_get(tl, p);
-    let is i32 as base_reg = base_tok.reg_id;
+    let is i32 as base_reg = base_tok.id;
     p = p + 1;
     if (base_reg == 99) {
         let is *lex.Token as op_tok = lex.tl_get(tl, p);
@@ -293,7 +293,7 @@ fn parse_mem_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as 
         let is *lex.Token as peek = lex.tl_get(tl, p + 1);
         if (peek.kind == lex.TK_REGISTER) {
             p = p + 1;
-            index_reg = peek.reg_id;
+            index_reg = peek.id;
             p = p + 1;
             let is *lex.Token as star = lex.tl_get(tl, p);
             if (star.kind == lex.TK_STAR) {
@@ -344,7 +344,7 @@ fn parse_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as *Par
 
     if (tok.kind == lex.TK_REGISTER) {
         *out_pos = pos + 1;
-        set_op_reg(line, which, tok.reg_id);
+        set_op_reg(line, which, tok.id);
         return;
     }
     if (tok.kind == lex.TK_NUMBER) {
@@ -363,7 +363,7 @@ fn parse_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as *Par
     if (tok.kind == lex.TK_SIZE_PREFIX) {
         let is *lex.Token as lb = lex.tl_get(tl, pos + 1);
         if (lb.kind == lex.TK_LBRACKET) {
-            parse_mem_operand(tl, pos + 1, out_pos, line, which, tok.size_val);
+            parse_mem_operand(tl, pos + 1, out_pos, line, which, tok.id);
             return;
         }
     }
@@ -623,7 +623,7 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as ParsedLines {
             let is *ParsedLine as line = pl_add(&lines);
             line.kind = LINE_DIRECTIVE;
             line.section = current_section;
-            line.line_no = tok.line;
+            line.line_no = 0;
             pos = parse_directive(tl, pos, line, &current_section);
             // Update section from directive (may have changed)
             line.section = current_section;
@@ -638,14 +638,14 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as ParsedLines {
                 lbl.section = current_section;
                 lbl.label_ptr = tok.ptr;
                 lbl.label_len = tok.len;
-                lbl.line_no = tok.line;
+                lbl.line_no = 0;
                 pos = pos + 2;
             } else {
                 let is *ParsedLine as line = pl_add(&lines);
                 line.kind = LINE_INST;
                 line.section = current_section;
-                line.inst_id = tok.inst_id;
-                line.line_no = tok.line;
+                line.inst_id = tok.id;
+                line.line_no = 0;
                 pos = parse_instruction(tl, pos + 1, line);
             }
         }
@@ -658,7 +658,7 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as ParsedLines {
                 line.section = current_section;
                 line.label_ptr = tok.ptr;
                 line.label_len = tok.len;
-                line.line_no = tok.line;
+                line.line_no = 0;
                 pos = pos + 2;
             } else {
                 pos = skip_to_eol(tl, pos + 1);
