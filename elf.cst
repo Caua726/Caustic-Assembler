@@ -1,5 +1,6 @@
 use "../std/mem.cst" as mem;
 use "../std/linux.cst" as linux;
+use "../src/ir/opt_mem.cst" as om;
 use "encoder.cst" as enc;
 use "buf.cst" as buf;
 
@@ -61,13 +62,13 @@ fn sym_init() as SymbolTable {
     let is i32 as cap = 1024;
     let is i32 as hash_sz = 16384;
     let is SymbolTable as st;
-    st.data = mem.galloc(cast(i64, cap) * sizeof(Symbol));
+    st.data = om.opt_alloc(cast(i64, cap) * sizeof(Symbol));
     st.count = 0;
     st.cap = cap;
     st.hash_size = hash_sz;
     st.hash_cap = cap;
-    st.hash_buckets = cast(*i32, mem.galloc(cast(i64, hash_sz) * 4));
-    st.hash_next = cast(*i32, mem.galloc(cast(i64, cap) * 4));
+    st.hash_buckets = cast(*i32, om.opt_alloc(cast(i64, hash_sz) * 4));
+    st.hash_next = cast(*i32, om.opt_alloc(cast(i64, cap) * 4));
     // Init buckets to -1
     let is i32 as bi with mut = 0;
     while (bi < hash_sz) {
@@ -84,15 +85,15 @@ fn sym_get(st as *SymbolTable, idx as i32) as *Symbol {
 fn sym_add(st as *SymbolTable, name_ptr as *u8, name_len as i32, section as i32, offset as i64, is_global as i32) as void {
     if (st.count >= st.cap) {
         let is i32 as new_cap = st.cap * 2;
-        let is *u8 as new_data = mem.galloc(cast(i64, new_cap) * sizeof(Symbol));
+        let is *u8 as new_data = om.opt_alloc(cast(i64, new_cap) * sizeof(Symbol));
         mem.memcpy(new_data, st.data, cast(i64, st.count) * sizeof(Symbol));
-        mem.gfree(st.data);
+        om.opt_free(st.data);
         st.data = new_data;
         st.cap = new_cap;
         // Grow hash_next array
-        let is *i32 as new_next = cast(*i32, mem.galloc(cast(i64, new_cap) * 4));
+        let is *i32 as new_next = cast(*i32, om.opt_alloc(cast(i64, new_cap) * 4));
         mem.memcpy(cast(*u8, new_next), cast(*u8, st.hash_next), cast(i64, st.hash_cap) * 4);
-        mem.gfree(cast(*u8, st.hash_next));
+        om.opt_free(cast(*u8, st.hash_next));
         st.hash_next = new_next;
         st.hash_cap = new_cap;
     }
@@ -157,7 +158,7 @@ struct RelocList {
 fn reloc_init() as RelocList {
     let is i32 as cap = 256;
     let is RelocList as rl;
-    rl.data = mem.galloc(cast(i64, cap) * sizeof(Reloc));
+    rl.data = om.opt_alloc(cast(i64, cap) * sizeof(Reloc));
     rl.count = 0;
     rl.cap = cap;
     return rl;
@@ -170,9 +171,9 @@ fn reloc_get(rl as *RelocList, idx as i32) as *Reloc {
 fn reloc_add(rl as *RelocList, offset as i64, sym_idx as i64, rtype as i64, addend as i64) as void {
     if (rl.count >= rl.cap) {
         let is i32 as new_cap = rl.cap * 2;
-        let is *u8 as new_data = mem.galloc(cast(i64, new_cap) * sizeof(Reloc));
+        let is *u8 as new_data = om.opt_alloc(cast(i64, new_cap) * sizeof(Reloc));
         mem.memcpy(new_data, rl.data, cast(i64, rl.count) * sizeof(Reloc));
-        mem.gfree(rl.data);
+        om.opt_free(rl.data);
         rl.data = new_data;
         rl.cap = new_cap;
     }
@@ -275,7 +276,7 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
 
     // Add local symbols first, then globals
     // We need to build a mapping: original sym index -> ELF sym index
-    let is *i32 as sym_map = cast(*i32, mem.galloc(cast(i64, symtab.count + 1) * 4));
+    let is *i32 as sym_map = cast(*i32, om.opt_alloc(cast(i64, symtab.count + 1) * 4));
     let is i32 as elf_sym_idx with mut = 5; // after null + 4 section syms
 
     // Pass 1: locals

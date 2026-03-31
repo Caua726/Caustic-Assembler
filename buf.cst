@@ -1,4 +1,5 @@
 use "../std/mem.cst" as mem;
+use "../src/ir/opt_mem.cst" as om;
 
 // === ByteBuffer ===
 struct ByteBuffer {
@@ -9,7 +10,7 @@ struct ByteBuffer {
 
 fn buf_init(cap as i64) as ByteBuffer {
     let is ByteBuffer as b;
-    b.data = mem.galloc(cap);
+    b.data = om.opt_alloc(cap);
     b.len = 0;
     b.cap = cap;
     return b;
@@ -21,9 +22,9 @@ fn buf_ensure(b as *ByteBuffer, needed as i64) as void {
         if (new_cap < b.len + needed) {
             new_cap = b.len + needed + 1024;
         }
-        let is *u8 as new_data = mem.galloc(new_cap);
+        let is *u8 as new_data = om.opt_alloc(new_cap);
         mem.memcpy(new_data, b.data, b.len);
-        mem.gfree(b.data);
+        om.opt_free(b.data);
         b.data = new_data;
         b.cap = new_cap;
     }
