@@ -9,12 +9,65 @@ use "asm_defs.cst" as def;
 use "buf.cst" as buf;
 use "elf.cst" as elf;
 
-// Section IDs
-let is i32 as SECTION_TEXT   with imut = 0;
-let is i32 as SECTION_DATA   with imut = 1;
-let is i32 as SECTION_RODATA with imut = 2;
-let is i32 as SECTION_BSS    with imut = 3;
-let is i32 as SECTION_UNDEF  with imut = 99;
+// Section IDs. Custom sections (declared via `.section <name>`) are numbered
+// from 4 upward; csec_* globals below hold their names and byte buffers.
+let is i32 as SECTION_TEXT        with imut = 0;
+let is i32 as SECTION_DATA        with imut = 1;
+let is i32 as SECTION_RODATA      with imut = 2;
+let is i32 as SECTION_BSS         with imut = 3;
+let is i32 as SECTION_CUSTOM_BASE with imut = 4;
+let is i32 as SECTION_UNDEF       with imut = 99;
+let is i32 as MAX_CUSTOM_SECTIONS with imut = 32;
+
+// Custom sections — parallel arrays, allocated lazily in csec_init.
+let is *u8 as csec_name_ptrs with mut;
+let is *u8 as csec_name_lens with mut;
+let is *u8 as csec_buf_ptrs  with mut;
+let is *u8 as csec_reloc_ptrs with mut;  // 32 * 8 — array of *elf.RelocList
+let is i32 as csec_count with mut = 0;
+
+fn csec_init() as void {
+    csec_name_ptrs  = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
+    csec_name_lens  = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 4);
+    csec_buf_ptrs   = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
+    csec_reloc_ptrs = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
+    csec_count = 0;
+}
+
+fn csec_find_or_add(name as *u8, name_len as i32) as i32 {
+    let is *i64 as np = cast(*i64, csec_name_ptrs);
+    let is *i32 as nl = cast(*i32, csec_name_lens);
+    let is i32 as i with mut = 0;
+    while (i < csec_count) {
+        if (nl[i] == name_len && enc.streq(cast(*u8, np[i]), nl[i], name, name_len) == 1) {
+            return i;
+        }
+        i = i + 1;
+    }
+    if (csec_count >= MAX_CUSTOM_SECTIONS) { return SECTION_DATA; } // fallback
+    let is i32 as idx = csec_count;
+    np[idx] = cast(i64, name);
+    nl[idx] = name_len;
+    let is *u8 as bb_mem = om.opt_alloc(sizeof(buf.ByteBuffer));
+    let is *buf.ByteBuffer as bbp = cast(*buf.ByteBuffer, bb_mem);
+    let is buf.ByteBuffer as tmp = buf.buf_init(512);
+    bbp.data = tmp.data;
+    bbp.len  = tmp.len;
+    bbp.cap  = tmp.cap;
+    let is *i64 as bp = cast(*i64, csec_buf_ptrs);
+    bp[idx] = cast(i64, bb_mem);
+    // Allocate a RelocList for this section (empty by default).
+    let is *u8 as rl_mem = om.opt_alloc(sizeof(elf.RelocList));
+    let is *elf.RelocList as rlp = cast(*elf.RelocList, rl_mem);
+    let is elf.RelocList as rtmp = elf.reloc_init();
+    rlp.data  = rtmp.data;
+    rlp.count = rtmp.count;
+    rlp.cap   = rtmp.cap;
+    let is *i64 as rp = cast(*i64, csec_reloc_ptrs);
+    rp[idx] = cast(i64, rl_mem);
+    csec_count = csec_count + 1;
+    return idx;
+}
 
 // Line kinds
 let is i32 as LINE_EMPTY     with imut = 0;
@@ -485,6 +538,17 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *ParsedLine, curren
             else if (enc.streq_lit(sec_tok.ptr, sec_tok.len, ".data") == 1) { *current_section = SECTION_DATA; }
             else if (enc.streq_lit(sec_tok.ptr, sec_tok.len, ".bss") == 1) { *current_section = SECTION_BSS; }
             else if (enc.streq_lit(sec_tok.ptr, sec_tok.len, ".text") == 1) { *current_section = SECTION_TEXT; }
+            else {
+                // Custom section. Strip surrounding quotes if present.
+                let is *u8 as sname with mut = sec_tok.ptr;
+                let is i32 as sname_len with mut = sec_tok.len;
+                if (sname_len > 2 && sname[0] == 34 && sname[sname_len - 1] == 34) {
+                    sname = cast(*u8, cast(i64, sname) + 1);
+                    sname_len = sname_len - 2;
+                }
+                let is i32 as cidx = csec_find_or_add(sname, sname_len);
+                *current_section = SECTION_CUSTOM_BASE + cidx;
+            }
             p = p + 1;
         }
         line.section = *current_section;
@@ -872,21 +936,26 @@ fn pass2(lines as *ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.Byt
             let is *buf.ByteBuffer as target with mut = text_buf;
             if (line.section == SECTION_DATA)   { target = data_buf; }
             if (line.section == SECTION_RODATA) { target = rodata_buf; }
+            if (line.section >= SECTION_CUSTOM_BASE) {
+                let is *i64 as bp = cast(*i64, csec_buf_ptrs);
+                target = cast(*buf.ByteBuffer, bp[line.section - SECTION_CUSTOM_BASE]);
+            }
             if (line.dir_kind == DIR_QUAD && line.dir_arg_len > 0) {
-                // `.quad <symbol>` in .data: emit R_X86_64_64 relocation +
-                // 8 zero bytes. Only .data is supported for now; other
-                // sections (.rodata, custom) need separate .rela.<name>.
-                if (line.section == SECTION_DATA) {
-                    let is i32 as sym_idx = elf.sym_find_or_add(symtab, line.dir_arg_ptr, line.dir_arg_len, 99, 0, 1);
-                    let is *elf.Symbol as ext_sym = elf.sym_get(symtab, sym_idx);
-                    ext_sym.is_global = 1;
-                    let is i64 as off = cast(i64, target.len);
-                    elf.reloc_add(data_relocs, off, cast(i64, sym_idx), elf.R_X86_64_64, 0);
-                    buf.buf_emit64_le(target, 0);
-                } else {
-                    // Unsupported: emit zeros, no reloc.
-                    buf.buf_emit64_le(target, 0);
+                // `.quad <symbol>` emits an R_X86_64_64 relocation at the
+                // current section's offset. Each section has its own reloc
+                // list so the ELF writer can emit one .rela.<name> each.
+                let is i32 as sym_idx = elf.sym_find_or_add(symtab, line.dir_arg_ptr, line.dir_arg_len, 99, 0, 1);
+                let is *elf.Symbol as ext_sym = elf.sym_get(symtab, sym_idx);
+                ext_sym.is_global = 1;
+                let is i64 as off = cast(i64, target.len);
+                let is *elf.RelocList as dest_relocs with mut = relocs;
+                if (line.section == SECTION_DATA) { dest_relocs = data_relocs; }
+                if (line.section >= SECTION_CUSTOM_BASE) {
+                    let is *i64 as rp = cast(*i64, csec_reloc_ptrs);
+                    dest_relocs = cast(*elf.RelocList, rp[line.section - SECTION_CUSTOM_BASE]);
                 }
+                elf.reloc_add(dest_relocs, off, cast(i64, sym_idx), elf.R_X86_64_64, 0);
+                buf.buf_emit64_le(target, 0);
             } else {
                 pass2_emit_directive(line, target, bss_size);
             }
@@ -920,6 +989,7 @@ fn print_profile() as void {
 // === Public API for library use ===
 
 fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
+    csec_init();
     let is i64 as file_size = read_file_size(asm_path);
     let is *u8 as src = read_file(asm_path);
     if (cast(i64, src) == 0) {
@@ -961,7 +1031,8 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
         print_str("\n");
         return 1;
     }
-    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs);
+    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs,
+                  csec_buf_ptrs, csec_name_ptrs, csec_name_lens, csec_reloc_ptrs, csec_count);
     linux.close(fd);
     if (asm_prof_enabled == 1) { asm_prof_times[4] = asm_prof_time() - t4; }
     return 0;
@@ -991,6 +1062,7 @@ fn print_section_sizes(text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer,
 }
 
 fn main(argc as i64, argv as i64) as i32 {
+    csec_init();
     if (argc < 2) {
         linux.write(linux.STDERR, "Usage: caustic-as <input.s>\n", 28);
         return 1;
@@ -1063,7 +1135,8 @@ fn main(argc as i64, argv as i64) as i32 {
         return 1;
     }
     let is i64 as t4 = asm_prof_time();
-    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs);
+    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs,
+                  csec_buf_ptrs, csec_name_ptrs, csec_name_lens, csec_reloc_ptrs, csec_count);
     linux.close(fd);
     if (asm_prof_enabled == 1) { asm_prof_times[4] = asm_prof_time() - t4; }
 
