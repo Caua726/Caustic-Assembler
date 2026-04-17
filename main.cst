@@ -554,6 +554,14 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *ParsedLine, curren
         line.dir_kind = DIR_QUAD;
         line.section = *current_section;
         p = p + 1;
+        let is *lex.Token as qt = lex.tl_get(tl, p);
+        if (qt.kind == lex.TK_IDENT) {
+            // `.quad <symbol>` — emits an R_X86_64_64 relocation at codegen.
+            line.dir_arg_ptr = qt.ptr;
+            line.dir_arg_len = qt.len;
+            line.dir_num = 0;
+            return p + 1;
+        }
         let is i32 as np with mut = p;
         line.dir_num = parse_dir_num(tl, p, &np);
         return np;
@@ -851,7 +859,7 @@ fn pass2_emit_directive(line as *ParsedLine, target as *buf.ByteBuffer, bss_size
 
 fn pass2(lines as *ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.ByteBuffer,
          data_buf as *buf.ByteBuffer, rodata_buf as *buf.ByteBuffer, bss_size as *i64,
-         relocs as *elf.RelocList) as void {
+         relocs as *elf.RelocList, data_relocs as *elf.RelocList) as void {
     let is i32 as i with mut = 0;
 
     while (i < lines.count) {
@@ -864,7 +872,24 @@ fn pass2(lines as *ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.Byt
             let is *buf.ByteBuffer as target with mut = text_buf;
             if (line.section == SECTION_DATA)   { target = data_buf; }
             if (line.section == SECTION_RODATA) { target = rodata_buf; }
-            pass2_emit_directive(line, target, bss_size);
+            if (line.dir_kind == DIR_QUAD && line.dir_arg_len > 0) {
+                // `.quad <symbol>` in .data: emit R_X86_64_64 relocation +
+                // 8 zero bytes. Only .data is supported for now; other
+                // sections (.rodata, custom) need separate .rela.<name>.
+                if (line.section == SECTION_DATA) {
+                    let is i32 as sym_idx = elf.sym_find_or_add(symtab, line.dir_arg_ptr, line.dir_arg_len, 99, 0, 1);
+                    let is *elf.Symbol as ext_sym = elf.sym_get(symtab, sym_idx);
+                    ext_sym.is_global = 1;
+                    let is i64 as off = cast(i64, target.len);
+                    elf.reloc_add(data_relocs, off, cast(i64, sym_idx), elf.R_X86_64_64, 0);
+                    buf.buf_emit64_le(target, 0);
+                } else {
+                    // Unsupported: emit zeros, no reloc.
+                    buf.buf_emit64_le(target, 0);
+                }
+            } else {
+                pass2_emit_directive(line, target, bss_size);
+            }
         }
         i = i + 1;
     }
@@ -924,7 +949,8 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
     let is buf.ByteBuffer as rodata_buf = buf.buf_init(4096);
     let is i64 as bss_size with mut = 0;
     let is elf.RelocList as relocs = elf.reloc_init();
-    pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs);
+    let is elf.RelocList as data_relocs = elf.reloc_init();
+    pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
 
     let is i64 as t4 = asm_prof_time();
@@ -935,7 +961,7 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
         print_str("\n");
         return 1;
     }
-    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs);
+    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs);
     linux.close(fd);
     if (asm_prof_enabled == 1) { asm_prof_times[4] = asm_prof_time() - t4; }
     return 0;
@@ -1024,7 +1050,8 @@ fn main(argc as i64, argv as i64) as i32 {
     let is buf.ByteBuffer as rodata_buf = buf.buf_init(4096);
     let is i64 as bss_size with mut = 0;
     let is elf.RelocList as relocs = elf.reloc_init();
-    pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs);
+    let is elf.RelocList as data_relocs = elf.reloc_init();
+    pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
     print_section_sizes(&text_buf, &data_buf, &rodata_buf, bss_size, &relocs);
 
@@ -1036,7 +1063,7 @@ fn main(argc as i64, argv as i64) as i32 {
         return 1;
     }
     let is i64 as t4 = asm_prof_time();
-    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs);
+    elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs);
     linux.close(fd);
     if (asm_prof_enabled == 1) { asm_prof_times[4] = asm_prof_time() - t4; }
 

@@ -22,8 +22,9 @@ let is i32 as STT_NOTYPE with imut = 0;
 let is i32 as STT_OBJECT with imut = 1;
 let is i32 as STT_FUNC with imut = 2;
 let is i32 as STT_SECTION with imut = 3;
-let is i64 as R_X86_64_PC32 with imut = 2;
-let is i64 as R_X86_64_PLT32 with imut = 4;
+let is i64 as R_X86_64_64      with imut = 1;
+let is i64 as R_X86_64_PC32    with imut = 2;
+let is i64 as R_X86_64_PLT32   with imut = 4;
 let is i64 as R_X86_64_GOTPCREL with imut = 9;
 
 // Symbol
@@ -186,24 +187,30 @@ fn reloc_add(rl as *RelocList, offset as i64, sym_idx as i64, rtype as i64, adde
 }
 
 // Write ELF64 relocatable object file
-// Sections: null, .text, .data, .rodata, .bss, .symtab, .strtab, .rela.text, .shstrtab
+// Sections: null, .text, .data, .rodata, .bss, .symtab, .strtab, .rela.text,
+//           [.rela.data], .shstrtab
 fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer,
              rodata_buf as *buf.ByteBuffer, bss_size as i64,
-             symtab as *SymbolTable, relocs as *RelocList) as void {
+             symtab as *SymbolTable, relocs as *RelocList,
+             data_relocs as *RelocList) as void {
 
     let is buf.ByteBuffer as out = buf.buf_init(65536);
 
-    // Section indices
+    let is i32 as has_rela_data with mut = 0;
+    if (data_relocs.count > 0) { has_rela_data = 1; }
+
+    // Section indices. When .rela.data is present, it goes at index 8 and
+    // .shstrtab shifts to 9.
     let is i32 as _SEC_NULL with mut = 0;
     let is i32 as SEC_TEXT with mut = 1;
-    let is i32 as _SEC_DATA with mut = 2;
+    let is i32 as SEC_DATA with mut = 2;
     let is i32 as _SEC_RODATA with mut = 3;
     let is i32 as _SEC_BSS with mut = 4;
     let is i32 as SEC_SYMTAB with mut = 5;
     let is i32 as SEC_STRTAB with mut = 6;
     let is i32 as _SEC_RELA with mut = 7;
-    let is i32 as SEC_SHSTRTAB with mut = 8;
-    let is i32 as NUM_SECTIONS = 9;
+    let is i32 as SEC_SHSTRTAB with mut = 8 + has_rela_data;
+    let is i32 as NUM_SECTIONS with mut = 9 + has_rela_data;
 
     // Build .shstrtab
     let is buf.ByteBuffer as shstrtab = buf.buf_init(256);
@@ -223,6 +230,11 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     buf.buf_append(&shstrtab, ".strtab", 8);
     let is i32 as sh_rela_name = cast(i32, shstrtab.len);
     buf.buf_append(&shstrtab, ".rela.text", 11);
+    let is i32 as sh_rela_data_name with mut = 0;
+    if (has_rela_data == 1) {
+        sh_rela_data_name = cast(i32, shstrtab.len);
+        buf.buf_append(&shstrtab, ".rela.data", 11);
+    }
     let is i32 as sh_shstrtab_name = cast(i32, shstrtab.len);
     buf.buf_append(&shstrtab, ".shstrtab", 10);
 
@@ -349,20 +361,33 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     let is i32 as ri with mut = 0;
     while (ri < relocs.count) {
         let is *Reloc as r = reloc_get(relocs, ri);
-        // r_offset
         buf.buf_emit64_le(&rela_buf, r.offset);
-        // r_info = (sym_idx << 32) | type
         let is i64 as mapped_idx with mut = r.sym_idx;
-        // Look up in sym_map if it's a user symbol
         if (r.sym_idx >= 0 && r.sym_idx < cast(i64, symtab.count)) {
             let is *i32 as map_slot = cast(*i32, cast(i64, sym_map) + r.sym_idx * 4);
             mapped_idx = cast(i64, *map_slot);
         }
         let is i64 as info = mapped_idx * 4294967296 + r.rtype;
         buf.buf_emit64_le(&rela_buf, info);
-        // r_addend
         buf.buf_emit64_le(&rela_buf, r.addend);
         ri = ri + 1;
+    }
+
+    // Build .rela.data (optional — empty if has_rela_data == 0).
+    let is buf.ByteBuffer as rela_data_buf = buf.buf_init(512);
+    let is i32 as rdi with mut = 0;
+    while (rdi < data_relocs.count) {
+        let is *Reloc as rd = reloc_get(data_relocs, rdi);
+        buf.buf_emit64_le(&rela_data_buf, rd.offset);
+        let is i64 as mapped_idx2 with mut = rd.sym_idx;
+        if (rd.sym_idx >= 0 && rd.sym_idx < cast(i64, symtab.count)) {
+            let is *i32 as map_slot2 = cast(*i32, cast(i64, sym_map) + rd.sym_idx * 4);
+            mapped_idx2 = cast(i64, *map_slot2);
+        }
+        let is i64 as info2 = mapped_idx2 * 4294967296 + rd.rtype;
+        buf.buf_emit64_le(&rela_data_buf, info2);
+        buf.buf_emit64_le(&rela_data_buf, rd.addend);
+        rdi = rdi + 1;
     }
 
     // Now compute layout
@@ -410,6 +435,16 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     let is i64 as rela_off = off;
     let is i64 as rela_size = rela_buf.len;
     off = off + rela_size;
+
+    // .rela.data
+    let is i64 as rela_data_off with mut = 0;
+    let is i64 as rela_data_sz  with mut = 0;
+    if (has_rela_data == 1) {
+        if (off % 8 != 0) { off = off + 8 - (off % 8); }
+        rela_data_off = off;
+        rela_data_sz = rela_data_buf.len;
+        off = off + rela_data_sz;
+    }
 
     // .shstrtab
     let is i64 as shstrtab_off = off;
@@ -475,6 +510,11 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     if (rela_size > 0) {
         buf.buf_align(&out, 8);
         buf.buf_append(&out, rela_buf.data, rela_size);
+    }
+    // .rela.data
+    if (rela_data_sz > 0) {
+        buf.buf_align(&out, 8);
+        buf.buf_append(&out, rela_data_buf.data, rela_data_sz);
     }
     // .shstrtab
     buf.buf_append(&out, shstrtab.data, shstrtab_size);
@@ -569,6 +609,20 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     buf.buf_emit32_le(&out, cast(i64, SEC_TEXT));    // info = .text section
     buf.buf_emit64_le(&out, 8);
     buf.buf_emit64_le(&out, 24); // entsize
+
+    // 7+1: .rela.data (optional)
+    if (has_rela_data == 1) {
+        buf.buf_emit32_le(&out, cast(i64, sh_rela_data_name));
+        buf.buf_emit32_le(&out, cast(i64, SHT_RELA));
+        buf.buf_emit64_le(&out, 0);
+        buf.buf_emit64_le(&out, 0);
+        buf.buf_emit64_le(&out, rela_data_off);
+        buf.buf_emit64_le(&out, rela_data_sz);
+        buf.buf_emit32_le(&out, cast(i64, SEC_SYMTAB)); // link
+        buf.buf_emit32_le(&out, cast(i64, SEC_DATA));    // info = .data
+        buf.buf_emit64_le(&out, 8);
+        buf.buf_emit64_le(&out, 24);
+    }
 
     // 8: .shstrtab
     buf.buf_emit32_le(&out, cast(i64, sh_shstrtab_name));
