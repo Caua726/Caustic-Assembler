@@ -17,6 +17,9 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
     if (inst == def.INST_MOVSB)   { return 1; }
     if (inst == def.INST_REP)     { return 1; }
 
+    // INT imm8: CD ib
+    if (inst == def.INST_INT && op1.kind == def.OP_IMM) { return 2; }
+
     // PUSH/POP reg: opcode(1) + optional REX(1)
     if (inst == def.INST_PUSH && op1.kind == def.OP_REG) { return 1 + eu.reg_ext(op1.reg_id); }
     if (inst == def.INST_POP && op1.kind == def.OP_REG)  { return 1 + eu.reg_ext(op1.reg_id); }

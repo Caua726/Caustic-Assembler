@@ -395,6 +395,7 @@ fn init_ht() as void {
     ht_insert(110, 101, 103, 0, 0, 3, 2, def.INST_NEG); // neg
     ht_insert(110, 111, 116, 0, 0, 3, 2, def.INST_NOT); // not
     ht_insert(110, 111, 112, 0, 0, 3, 2, def.INST_NOP); // nop
+    ht_insert(105, 110, 116, 0, 0, 3, 2, def.INST_INT); // int
     ht_insert(97, 110, 100, 0, 0, 3, 2, def.INST_AND);  // and
     ht_insert(120, 111, 114, 0, 0, 3, 2, def.INST_XOR); // xor
     ht_insert(114, 101, 116, 0, 0, 3, 2, def.INST_RET); // ret
