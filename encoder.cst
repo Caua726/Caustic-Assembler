@@ -420,6 +420,16 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         buf.buf_emit32_le(b, rel);
         return 5;
     }
+    // --- CALL [rip+label] (FF /5 indirect via RIP-relative memory) ---
+    // Used for Windows IAT calls: `call QWORD PTR [rip+__imp_X]`.
+    // 6 bytes: FF 15 disp32. Caller emits a REL32 relocation against the
+    // label at offset (cur_off + 2) so the loader / linker can patch disp32.
+    if (inst == def.INST_CALL && op1.kind == def.OP_RIP_LABEL) {
+        buf.buf_emit8(b, 255);   // FF
+        buf.buf_emit8(b, 21);    // ModRM 00 010 101 (call indirect via RIP-rel)
+        buf.buf_emit32_le(b, 0); // disp32 placeholder — pass2 emits the reloc
+        return 6;
+    }
     // --- JMP reg (FF /4) ---
     if (inst == def.INST_JMP && op1.kind == def.OP_REG) {
         let is i32 as r = op1.reg_id % 16;
@@ -1067,6 +1077,8 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
     // CALL/JMP label: opcode(1) + rel32(4) = 5
     if (inst == def.INST_CALL && op1.kind == def.OP_LABEL) { return 5; }
     if (inst == def.INST_JMP && op1.kind == def.OP_LABEL)  { return 5; }
+    // CALL [rip+label] (FF /5 indirect): FF(1) + ModRM(1) + disp32(4) = 6
+    if (inst == def.INST_CALL && op1.kind == def.OP_RIP_LABEL) { return 6; }
 
     // Jcc label: 0F(1) + cc(1) + rel32(4) = 6
     if (inst >= def.INST_JZ && inst <= def.INST_JBE && op1.kind == def.OP_LABEL) { return 6; }

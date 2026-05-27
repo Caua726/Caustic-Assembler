@@ -574,6 +574,12 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                 else if (c1 == 108) { // .loc
                     if (tlen == 4 && tptr[2] == 111 && tptr[3] == 99) { is_dir = 1; } // .loc
                 }
+                else if (c1 == 99 && tlen == 10
+                         && tptr[2] == 115 && tptr[3] == 116 && tptr[4] == 105
+                         && tptr[5] == 109 && tptr[6] == 112 && tptr[7] == 111
+                         && tptr[8] == 114 && tptr[9] == 116) {
+                    is_dir = 1; // .cstimport
+                }
             }
             let is *Token as t = tl_next(&tl);
             if (is_dir == 1) {

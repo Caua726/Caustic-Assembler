@@ -92,6 +92,89 @@ let is i32 as DIR_SECTION  with imut = 12;
 let is i32 as DIR_INTEL    with imut = 13;
 let is i32 as DIR_OTHER    with imut = 14;
 let is i32 as DIR_ASCII    with imut = 15;
+let is i32 as DIR_CSTIMPORT with imut = 16;
+
+// === .cstimport "dll.dll" symbol — Windows DLL import declarations ===
+//
+// Codegen emits one of these per FFI call site. The assembler records the
+// (dll, sym) pair so the COFF writer can dump them into a custom .cstimport
+// section (or, if outputting ELF as a Linux-format intermediary, leave the
+// info in an analogous ELF custom section). The linker then walks this
+// section to build the PE import table at link time.
+let is i32 as MAX_CSTIMPORTS with imut = 256;
+let is *u8 as cstimport_dll_ptrs with mut;   // 256 * 8
+let is *u8 as cstimport_dll_lens with mut;   // 256 * 4
+let is *u8 as cstimport_sym_ptrs with mut;   // 256 * 8
+let is *u8 as cstimport_sym_lens with mut;   // 256 * 4
+let is i32 as cstimport_count with mut = 0;
+
+fn cstimport_init() as void {
+    cstimport_dll_ptrs = om.opt_alloc(cast(i64, MAX_CSTIMPORTS) * 8);
+    cstimport_dll_lens = om.opt_alloc(cast(i64, MAX_CSTIMPORTS) * 4);
+    cstimport_sym_ptrs = om.opt_alloc(cast(i64, MAX_CSTIMPORTS) * 8);
+    cstimport_sym_lens = om.opt_alloc(cast(i64, MAX_CSTIMPORTS) * 4);
+    cstimport_count = 0;
+}
+
+// Serialize the collected cstimport entries into a custom ELF section
+// named ".cstimport" so the linker can consume them when building the PE
+// import table. Layout:
+//
+//   u32 count
+//   for each entry:
+//     u32 dll_len
+//     u32 sym_len
+//     byte[dll_len] dll_name  (no NUL — linker uses len)
+//     byte[sym_len] sym_name
+//
+// Variable-size records keep the format trivial to parse without a strtab.
+fn cstimport_emit_section() as void {
+    if (cstimport_count == 0) { return; }
+    let is i32 as idx = csec_find_or_add(".cstimport", 10);
+    let is *i64 as bp = cast(*i64, csec_buf_ptrs);
+    let is *buf.ByteBuffer as bb = cast(*buf.ByteBuffer, bp[idx]);
+    buf.buf_emit32_le(bb, cast(i64, cstimport_count));
+    let is *i64 as dp = cast(*i64, cstimport_dll_ptrs);
+    let is *i32 as dl = cast(*i32, cstimport_dll_lens);
+    let is *i64 as sp = cast(*i64, cstimport_sym_ptrs);
+    let is *i32 as sl = cast(*i32, cstimport_sym_lens);
+    let is i32 as i with mut = 0;
+    while (i < cstimport_count) {
+        buf.buf_emit32_le(bb, cast(i64, dl[i]));
+        buf.buf_emit32_le(bb, cast(i64, sl[i]));
+        let is *u8 as dn = cast(*u8, dp[i]);
+        let is i32 as j with mut = 0;
+        while (j < dl[i]) { buf.buf_emit8(bb, cast(i32, dn[j])); j = j + 1; }
+        let is *u8 as sn = cast(*u8, sp[i]);
+        j = 0;
+        while (j < sl[i]) { buf.buf_emit8(bb, cast(i32, sn[j])); j = j + 1; }
+        i = i + 1;
+    }
+}
+
+fn cstimport_add(dll as *u8, dll_len as i32, sym as *u8, sym_len as i32) as void {
+    if (cstimport_count >= MAX_CSTIMPORTS) { return; }
+    // Dedup — if same (dll, sym) already registered, skip.
+    let is *i64 as dp = cast(*i64, cstimport_dll_ptrs);
+    let is *i32 as dl = cast(*i32, cstimport_dll_lens);
+    let is *i64 as sp = cast(*i64, cstimport_sym_ptrs);
+    let is *i32 as sl = cast(*i32, cstimport_sym_lens);
+    let is i32 as i with mut = 0;
+    while (i < cstimport_count) {
+        if (dl[i] == dll_len && sl[i] == sym_len
+            && enc.streq(cast(*u8, dp[i]), dl[i], dll, dll_len) == 1
+            && enc.streq(cast(*u8, sp[i]), sl[i], sym, sym_len) == 1) {
+            return;
+        }
+        i = i + 1;
+    }
+    let is i32 as idx = cstimport_count;
+    dp[idx] = cast(i64, dll);
+    dl[idx] = dll_len;
+    sp[idx] = cast(i64, sym);
+    sl[idx] = sym_len;
+    cstimport_count = cstimport_count + 1;
+}
 
 // === I/O helpers ===
 
@@ -510,6 +593,24 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *ParsedLine, curren
         p = skip_to_eol(tl, p + 1);
         return p;
     }
+    if (enc.streq_lit(tok.ptr, tok.len, ".cstimport") == 1) {
+        // .cstimport "kernel32.dll" ExitProcess
+        line.dir_kind = DIR_CSTIMPORT;
+        p = p + 1;
+        let is *lex.Token as dll_tok = lex.tl_get(tl, p);
+        let is *u8 as dll_ptr with mut = dll_tok.ptr;
+        let is i32 as dll_len with mut = dll_tok.len;
+        // Strip surrounding quotes
+        if (dll_len >= 2 && dll_ptr[0] == 34 && dll_ptr[dll_len - 1] == 34) {
+            dll_ptr = cast(*u8, cast(i64, dll_ptr) + 1);
+            dll_len = dll_len - 2;
+        }
+        p = p + 1;
+        let is *lex.Token as sym_tok = lex.tl_get(tl, p);
+        cstimport_add(dll_ptr, dll_len, sym_tok.ptr, sym_tok.len);
+        p = skip_to_eol(tl, p + 1);
+        return p;
+    }
     if (enc.streq_lit(tok.ptr, tok.len, ".text") == 1) {
         line.dir_kind = DIR_TEXT;
         *current_section = SECTION_TEXT;
@@ -852,6 +953,12 @@ fn pass2_encode_rip(line as *ParsedLine, symtab as *elf.SymbolTable, text_buf as
         rip_sym.is_global = 1;
         elf.reloc_add(relocs, reloc_off, cast(i64, sym_idx), elf.R_X86_64_GOTPCREL, 0 - 4);
     } else {
+        // For CALL with RIP-relative label (the Windows __imp_ pattern),
+        // also mark the symbol global so the linker treats it as an
+        // external import to resolve from the import table.
+        if (line.inst_id == def.INST_CALL && rip_sym.section == SECTION_UNDEF) {
+            rip_sym.is_global = 1;
+        }
         elf.reloc_add(relocs, reloc_off, cast(i64, sym_idx), elf.R_X86_64_PC32, 0 - 4);
     }
     ence.encode(text_buf, line.inst_id, o1, o2, 0, line.offset);
@@ -991,6 +1098,7 @@ fn print_profile() as void {
 
 fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
     csec_init();
+    cstimport_init();
     let is i64 as file_size = read_file_size(asm_path);
     let is *u8 as src = read_file(asm_path);
     if (cast(i64, src) == 0) {
@@ -1023,6 +1131,11 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
     let is elf.RelocList as data_relocs = elf.reloc_init();
     pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
+
+    // If any .cstimport directives were encountered, serialize them into a
+    // custom ELF section ".cstimport" so the linker can read them when
+    // building the PE import table.
+    cstimport_emit_section();
 
     let is i64 as t4 = asm_prof_time();
     let is i64 as fd = linux.open(obj_path, 577, 420);
@@ -1064,6 +1177,7 @@ fn print_section_sizes(text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer,
 
 fn main(argc as i64, argv as i64) as i32 {
     csec_init();
+    cstimport_init();
     if (argc < 2) {
         linux.write(linux.STDERR, "Usage: caustic-as <input.s>\n", 28);
         return 1;
@@ -1144,6 +1258,9 @@ fn main(argc as i64, argv as i64) as i32 {
     pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
     print_section_sizes(&text_buf, &data_buf, &rodata_buf, bss_size, &relocs);
+
+    // Serialize .cstimport entries (if any) before writing ELF.
+    cstimport_emit_section();
 
     // Write ELF
     let is *u8 as out_name = make_output_name(filename);
