@@ -1,0 +1,27 @@
+use "../std/linux.cst" as linux;
+use "buf.cst" as buf;
+use "elf.cst" as elf;
+
+// =======================================================
+// caustic-assembler/coff.cst — PE/COFF object writer
+//
+// Fase 0 stub. Full implementation lands in Fase 2 of the Windows
+// port plan: COFF file header + section table + raw section data +
+// relocations (incl. REL32_N variants tracked by disp_tail_bytes
+// in the IR) + symbol table + .cstimport directive handling.
+//
+// Signature mirrors elf.write_elf so that caustic-assembler/main.cst
+// can dispatch on --target between elf.write_elf and coff.write_coff
+// once the implementation is real.
+// =======================================================
+
+fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer,
+              rodata_buf as *buf.ByteBuffer, bss_size as i64,
+              symtab as *elf.SymbolTable, relocs as *elf.RelocList,
+              data_relocs as *elf.RelocList,
+              csec_buf_ptrs as *u8, csec_name_ptrs as *u8,
+              csec_name_lens as *u8, csec_reloc_ptrs as *u8,
+              csec_count as i32) as void {
+    linux.write(linux.STDERR, "caustic-as: coff writer not yet implemented (Fase 2)\n", 53);
+    linux.exit(1);
+}
