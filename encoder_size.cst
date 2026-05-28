@@ -48,6 +48,17 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
         return 3;
     }
 
+    // IMUL reg (single-op, F7 /5): REX + opcode + ModRM = 3
+    if (inst == def.INST_IMUL && op1.kind == def.OP_REG && op2.kind == def.OP_NONE) {
+        return 3;
+    }
+
+    // IMUL reg, imm (three-op encoded as imul dest,dest,imm): REX + 69/6B /r imm
+    if (inst == def.INST_IMUL && op1.kind == def.OP_REG && op2.kind == def.OP_IMM) {
+        if (op2.imm >= 0 - 128 && op2.imm <= 127) { return 4; }   // REX + 6B + modrm + imm8
+        return 7;                                                  // REX + 69 + modrm + imm32
+    }
+
     // MOV
     if (inst == def.INST_MOV) {
         // MOV reg, reg

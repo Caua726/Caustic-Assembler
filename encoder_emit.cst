@@ -127,7 +127,7 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         return cast(i32, b.len - start);
     }
 
-    // --- IDIV/DIV/NEG/NOT reg ---
+    // --- IDIV/DIV/NEG/NOT reg, and IMUL reg single-op ---
     if ((inst == def.INST_IDIV || inst == def.INST_DIV || inst == def.INST_NEG || inst == def.INST_NOT) && op1.kind == def.OP_REG) {
         let is i32 as sz = eu.reg_size(op1.reg_id);
         let is i32 as code = eu.reg_code(op1.reg_id);
@@ -140,6 +140,37 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         if (inst == def.INST_NEG) { ext = 3; }
         if (inst == def.INST_NOT) { ext = 2; }
         buf.buf_emit8(b, eu.make_modrm(3, ext, code));
+        return cast(i32, b.len - start);
+    }
+
+    // --- IMUL reg (single-op, F7 /5): rdx:rax = rax * reg signed ---
+    if (inst == def.INST_IMUL && op1.kind == def.OP_REG && op2.kind == def.OP_NONE) {
+        let is i32 as sz = eu.reg_size(op1.reg_id);
+        let is i32 as code = eu.reg_code(op1.reg_id);
+        let is i32 as w with mut = 0;
+        if (sz == 64) { w = 1; }
+        buf.buf_emit8(b, eu.make_rex(w, 0, 0, eu.reg_ext(op1.reg_id)));
+        buf.buf_emit8(b, 247);
+        buf.buf_emit8(b, eu.make_modrm(3, 5, code));
+        return cast(i32, b.len - start);
+    }
+
+    // --- IMUL reg, imm (three-op encoded as imul dest, dest, imm) ---
+    if (inst == def.INST_IMUL && op1.kind == def.OP_REG && op2.kind == def.OP_IMM) {
+        let is i32 as sz = eu.reg_size(op1.reg_id);
+        let is i32 as code = eu.reg_code(op1.reg_id);
+        let is i32 as w with mut = 0;
+        if (sz == 64) { w = 1; }
+        buf.buf_emit8(b, eu.make_rex(w, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op1.reg_id)));
+        if (op2.imm >= 0 - 128 && op2.imm <= 127) {
+            buf.buf_emit8(b, 107);                                       // 6B
+            buf.buf_emit8(b, eu.make_modrm(3, code, code));
+            buf.buf_emit8(b, cast(i32, op2.imm) & 255);
+        } else {
+            buf.buf_emit8(b, 105);                                       // 69
+            buf.buf_emit8(b, eu.make_modrm(3, code, code));
+            buf.buf_emit32_le(b, op2.imm);
+        }
         return cast(i32, b.len - start);
     }
 
