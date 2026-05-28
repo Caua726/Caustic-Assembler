@@ -1,5 +1,5 @@
 use "../std/mem.cst" as mem;
-use "../std/linux.cst" as linux;
+use "../std/io.cst" as io;
 use "asm_defs.cst" as def;
 use "buf.cst" as buf;
 
@@ -59,6 +59,15 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         let is i64 as rel = resolve_label - (cur_off + 5);
         buf.buf_emit32_le(b, rel);
         return 5;
+    }
+    // --- CALL [rip+label] (FF /5 indirect via RIP-relative memory) ---
+    // Windows IAT calls: `call QWORD PTR [rip+__imp_X]`. 6 bytes: FF 15 disp32.
+    // Caller emits a REL32 reloc against the label at offset (cur_off + 2).
+    if (inst == def.INST_CALL && op1.kind == def.OP_RIP_LABEL) {
+        buf.buf_emit8(b, 255);
+        buf.buf_emit8(b, 21);
+        buf.buf_emit32_le(b, 0);
+        return 6;
     }
     // --- JMP reg (FF /4) ---
     if (inst == def.INST_JMP && op1.kind == def.OP_REG) {
@@ -563,8 +572,69 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         }
     }
 
-    // --- SSE arithmetic: addsd/subsd/mulsd/divsd ---
-    if (inst == def.INST_ADDSD || inst == def.INST_SUBSD || inst == def.INST_MULSD || inst == def.INST_DIVSD) {
+    // --- MOVSD ---
+    // F2 0F 10 /r — movsd xmm, xmm/m64 (load form)
+    // F2 0F 11 /r — movsd xmm/m64, xmm (store form)
+    if (inst == def.INST_MOVSD) {
+        // xmm, xmm  — use load form
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+            buf.buf_emit8(b, 242); // F2
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
+            if (need_rex == 1) {
+                buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op2.reg_id)));
+            }
+            buf.buf_emit8(b, 15);
+            buf.buf_emit8(b, 16); // 0x10
+            buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
+            return cast(i32, b.len - start);
+        }
+        // xmm, [mem]  — load
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
+            let is i32 as dst_code = eu.reg_code(op1.reg_id);
+            buf.buf_emit8(b, 242); // F2
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.mem_base) == 1) { need_rex = 1; }
+            if (eu.has_sib(op2) == 1 && eu.reg_ext(op2.mem_index) == 1) { need_rex = 1; }
+            if (need_rex == 1) {
+                let is i32 as rex_x with mut = 0;
+                if (eu.has_sib(op2) == 1) { rex_x = eu.reg_ext(op2.mem_index); }
+                buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op1.reg_id), rex_x, eu.reg_ext(op2.mem_base)));
+            }
+            buf.buf_emit8(b, 15);
+            buf.buf_emit8(b, 16); // 0x10
+            if (eu.has_sib(op2) == 1) {
+                eu.emit_mem_modrm_sib(b, dst_code, op2.mem_base, op2.mem_index, op2.mem_scale, op2.mem_disp);
+            } else {
+                eu.emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp);
+            }
+            return cast(i32, b.len - start);
+        }
+        // [mem], xmm  — store
+        if (op1.kind == def.OP_MEM && op2.kind == def.OP_REG) {
+            let is i32 as src_code = eu.reg_code(op2.reg_id);
+            buf.buf_emit8(b, 242); // F2
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op2.reg_id) == 1 || eu.reg_ext(op1.mem_base) == 1) { need_rex = 1; }
+            if (eu.has_sib(op1) == 1 && eu.reg_ext(op1.mem_index) == 1) { need_rex = 1; }
+            if (need_rex == 1) {
+                let is i32 as rex_x with mut = 0;
+                if (eu.has_sib(op1) == 1) { rex_x = eu.reg_ext(op1.mem_index); }
+                buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op2.reg_id), rex_x, eu.reg_ext(op1.mem_base)));
+            }
+            buf.buf_emit8(b, 15);
+            buf.buf_emit8(b, 17); // 0x11
+            if (eu.has_sib(op1) == 1) {
+                eu.emit_mem_modrm_sib(b, src_code, op1.mem_base, op1.mem_index, op1.mem_scale, op1.mem_disp);
+            } else {
+                eu.emit_mem_modrm(b, src_code, op1.mem_base, op1.mem_disp);
+            }
+            return cast(i32, b.len - start);
+        }
+    }
+
+    // --- SSE arithmetic: addsd/subsd/mulsd/divsd/sqrtsd ---
+    if (inst == def.INST_ADDSD || inst == def.INST_SUBSD || inst == def.INST_MULSD || inst == def.INST_DIVSD || inst == def.INST_SQRTSD) {
         if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
             buf.buf_emit8(b, 242); // F2 prefix
             let is i32 as need_rex with mut = 0;
@@ -573,10 +643,11 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
                 buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op2.reg_id)));
             }
             buf.buf_emit8(b, 15);
-            if (inst == def.INST_ADDSD) { buf.buf_emit8(b, 88); }
-            if (inst == def.INST_SUBSD) { buf.buf_emit8(b, 92); }
-            if (inst == def.INST_MULSD) { buf.buf_emit8(b, 89); }
-            if (inst == def.INST_DIVSD) { buf.buf_emit8(b, 94); }
+            if (inst == def.INST_ADDSD)  { buf.buf_emit8(b, 88); }
+            if (inst == def.INST_SUBSD)  { buf.buf_emit8(b, 92); }
+            if (inst == def.INST_MULSD)  { buf.buf_emit8(b, 89); }
+            if (inst == def.INST_DIVSD)  { buf.buf_emit8(b, 94); }
+            if (inst == def.INST_SQRTSD) { buf.buf_emit8(b, 81); } // 0x51
             buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
             return cast(i32, b.len - start);
         }
@@ -592,6 +663,20 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
         }
         buf.buf_emit8(b, 15);
         buf.buf_emit8(b, 87);
+        buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
+        return cast(i32, b.len - start);
+    }
+
+    // --- UCOMISD xmm, xmm ---  66 [REX] 0F 2E /r
+    if (inst == def.INST_UCOMISD && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+        buf.buf_emit8(b, 102); // 66 prefix
+        let is i32 as need_rex with mut = 0;
+        if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
+        if (need_rex == 1) {
+            buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op2.reg_id)));
+        }
+        buf.buf_emit8(b, 15);
+        buf.buf_emit8(b, 46); // 2E
         buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
         return cast(i32, b.len - start);
     }
@@ -679,7 +764,7 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
     }
 
     // Unknown instruction
-    linux.write(linux.STDERR, "ERR: unknown encoding\n", 22);
+    io._write_fd(io.STDERR, "ERR: unknown encoding\n", 22);
     return 0;
 }
 
