@@ -1,5 +1,5 @@
 use "../std/mem.cst" as mem;
-use "../std/linux.cst" as linux;
+use "../std/os.cst" as os;
 use "asm_defs.cst" as def;
 use "buf.cst" as buf;
 
@@ -1049,7 +1049,7 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
     }
 
     // Unknown instruction
-    linux.write(linux.STDERR, "ERR: unknown encoding\n", 22);
+    os.linux.write(os.linux.STDERR, "ERR: unknown encoding\n", 22);
     return 0;
 }
 
