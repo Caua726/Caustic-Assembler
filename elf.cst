@@ -1,5 +1,5 @@
 use "../std/mem.cst" as mem;
-use "../std/linux.cst" as linux;
+use "../std/os.cst" as os;
 use "../src/ir/opt_mem.cst" as om;
 use "encoder.cst" as enc;
 use "buf.cst" as buf;
@@ -783,5 +783,5 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     buf.buf_emit64_le(&out, 0);
 
     // Write to file
-    linux.write(fd, out.data, out.len);
+    os.linux.write(fd, out.data, out.len);
 }
