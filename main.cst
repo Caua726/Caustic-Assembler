@@ -697,9 +697,23 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *ParsedLine, curren
         line.dir_kind = DIR_BYTE;
         line.section = *current_section;
         p = p + 1;
+        // `.byte` takes a comma-separated list of values (e.g. `.byte 0x8F, 0x07`);
+        // each is one emitted byte. Store them all in decoded_ptr/decoded_len —
+        // emitting only the first dropped raw-opcode bytes and corrupted hand-
+        // written asm thunks (the smp/syscall stubs), misaligning the stream.
+        let is *u8 as bb = om.opt_alloc(256);
+        let is i32 as bn with mut = 0;
+        let is i32 as cur with mut = p;
         let is i32 as np with mut = p;
-        line.dir_num = parse_dir_num(tl, p, &np);
-        return np;
+        while (bn < 256) {
+            let is i64 as v = parse_dir_num(tl, cur, &np);
+            if (np == cur) { break; }
+            bb[bn] = cast(u8, v & 255); bn = bn + 1; cur = np;
+            let is *lex.Token as ct = lex.tl_get(tl, cur);
+            if (ct.kind == lex.TK_COMMA) { cur = cur + 1; } else { break; }
+        }
+        line.decoded_ptr = bb; line.decoded_len = bn; line.dir_num = 0;
+        return cur;
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".word") == 1 || enc.streq_lit(tok.ptr, tok.len, ".value") == 1) {
         line.dir_kind = DIR_WORD;
@@ -864,7 +878,7 @@ fn calc_dir_size(line as *ParsedLine) as i32 {
         if (line.dir_kind == DIR_STRING) { return decoded_len + 1; }
         return decoded_len; // .ascii: no null terminator
     }
-    if (line.dir_kind == DIR_BYTE) { return 1; }
+    if (line.dir_kind == DIR_BYTE) { return line.decoded_len; }
     if (line.dir_kind == DIR_WORD) { return 2; }
     if (line.dir_kind == DIR_LONG) { return 4; }
     if (line.dir_kind == DIR_QUAD) { return 8; }
@@ -1025,7 +1039,7 @@ fn pass2_emit_directive(line as *ParsedLine, target as *buf.ByteBuffer, bss_size
         buf.buf_append(target, line.decoded_ptr, cast(i64, line.decoded_len));
     }
     else if (line.dir_kind == DIR_BYTE) {
-        buf.buf_emit8(target, cast(i32, line.dir_num));
+        buf.buf_append(target, line.decoded_ptr, cast(i64, line.decoded_len));
     }
     else if (line.dir_kind == DIR_WORD) {
         buf.buf_emit16_le(target, cast(i32, line.dir_num));
