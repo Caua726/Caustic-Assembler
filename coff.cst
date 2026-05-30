@@ -1,4 +1,5 @@
 use "../std/os.cst" as os;
+use "../std/io.cst" as io;
 use "buf.cst" as buf;
 use "elf.cst" as elf;
 
@@ -22,6 +23,6 @@ fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffe
               csec_buf_ptrs as *u8, csec_name_ptrs as *u8,
               csec_name_lens as *u8, csec_reloc_ptrs as *u8,
               csec_count as i32) as void {
-    os.linux.write(os.linux.STDERR, "caustic-as: coff writer not yet implemented (Fase 2)\n", 53);
-    os.linux.exit(1);
+    io._write_fd(io.STDERR, "caustic-as: coff writer not yet implemented (Fase 2)\n", 53);
+    io.exit(1);
 }
