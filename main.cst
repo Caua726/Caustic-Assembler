@@ -1,4 +1,5 @@
 use "../std/os.cst" as os;
+use "../std/io.cst" as io;
 use "../std/mem.cst" as mem;
 use "../src/ir/opt_mem.cst" as om;
 use "lexer.cst" as lex;
@@ -185,11 +186,11 @@ fn strlen(s as *u8) as i64 {
 }
 
 fn print_str(s as *u8) as void {
-    os.linux.write(os.linux.STDOUT, s, strlen(s));
+    io._write_fd(io.STDOUT, s, strlen(s));
 }
 
 fn print_int(n as i64) as void {
-    if (n == 0) { os.linux.write(os.linux.STDOUT, "0", 1); return; }
+    if (n == 0) { io._write_fd(io.STDOUT, "0", 1); return; }
     let is [24]u8 as buf;
     let is i64 as val with mut = n;
     let is i64 as neg with mut = 0;
@@ -202,27 +203,27 @@ fn print_int(n as i64) as void {
     }
     if (neg == 1) { buf[pos] = 45; pos = pos - 1; }
     let is i64 as start = cast(i64, pos) + 1;
-    os.linux.write(os.linux.STDOUT, cast(*u8, cast(i64, &buf) + start), 24 - start);
+    io._write_fd(io.STDOUT, cast(*u8, cast(i64, &buf) + start), 24 - start);
 }
 
 fn read_file(path as *u8) as *u8 {
-    let is i64 as fd = os.linux.open(path, os.linux.O_RDONLY, 0);
+    let is i64 as fd = io._open_read(path);
     if (fd < 0) { return cast(*u8, 0); }
-    let is i64 as size = os.linux.lseek(fd, 0, os.linux.SEEK_END);
-    os.linux.lseek(fd, 0, os.linux.SEEK_SET);
-    if (size <= 0) { os.linux.close(fd); return cast(*u8, 0); }
+    let is i64 as size = io._lseek(fd, 0, io._SEEK_END);
+    io._lseek(fd, 0, io._SEEK_SET);
+    if (size <= 0) { io._close_fd(fd); return cast(*u8, 0); }
     let is *u8 as buf = om.opt_alloc(size + 1);
-    os.linux.read(fd, buf, size);
+    io._read_fd(fd, buf, size);
     buf[size] = cast(u8, 0);
-    os.linux.close(fd);
+    io._close_fd(fd);
     return buf;
 }
 
 fn read_file_size(path as *u8) as i64 {
-    let is i64 as fd = os.linux.open(path, os.linux.O_RDONLY, 0);
+    let is i64 as fd = io._open_read(path);
     if (fd < 0) { return 0; }
-    let is i64 as size = os.linux.lseek(fd, 0, os.linux.SEEK_END);
-    os.linux.close(fd);
+    let is i64 as size = io._lseek(fd, 0, io._SEEK_END);
+    io._close_fd(fd);
     return size;
 }
 
@@ -1097,9 +1098,16 @@ let is [5]i64 as asm_prof_times with mut;
 let is i32 as asm_prof_enabled with mut = 0;
 
 fn asm_prof_time() as i64 {
-    let is [2]i64 as ts;
-    syscall(228, 1, &ts);
-    return ts[0] * 1000000 + ts[1] / 1000;
+    // clock_gettime(CLOCK_MONOTONIC) — Linux-only profiling timer. Gated on the
+    // target so the raw syscall is dead-stripped on Windows/CausticOS builds
+    // (os.current() folds to a literal; the wrong-target branch never reaches
+    // codegen). Profiling simply returns 0 off-Linux.
+    if (os.current() == os.OS_LINUX) {
+        let is [2]i64 as ts;
+        syscall(228, 1, &ts);
+        return ts[0] * 1000000 + ts[1] / 1000;
+    }
+    return 0;
 }
 
 fn print_profile() as void {
@@ -1157,7 +1165,7 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
     cstimport_emit_section();
 
     let is i64 as t4 = asm_prof_time();
-    let is i64 as fd = os.linux.open(obj_path, 577, 420);
+    let is i64 as fd = io._open_write(obj_path);
     if (fd < 0) {
         print_str("caustic-as: error: cannot create ");
         print_str(obj_path);
@@ -1166,7 +1174,7 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
     }
     elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs,
                   csec_buf_ptrs, csec_name_ptrs, csec_name_lens, csec_reloc_ptrs, csec_count);
-    os.linux.close(fd);
+    io._close_fd(fd);
     if (asm_prof_enabled == 1) { asm_prof_times[4] = asm_prof_time() - t4; }
     return 0;
 }
@@ -1198,7 +1206,7 @@ fn main(argc as i64, argv as i64) as i32 {
     csec_init();
     cstimport_init();
     if (argc < 2) {
-        os.linux.write(os.linux.STDERR, "Usage: caustic-as <input.s>\n", 28);
+        io._write_fd(io.STDERR, "Usage: caustic-as <input.s>\n", 28);
         return 1;
     }
 
@@ -1221,11 +1229,11 @@ fn main(argc as i64, argv as i64) as i32 {
             let is i32 as tlen = alen - 9;
             let is i32 as ok = tgt.load_target(triple, tlen);
             if (ok == 0) {
-                os.linux.write(os.linux.STDERR, "caustic-as: unknown --target\n", 29);
+                io._write_fd(io.STDERR, "caustic-as: unknown --target\n", 29);
                 return 1;
             }
             if (tgt.str_eq_local(triple, tlen, "windows-x86_64", 14) == 1) {
-                os.linux.write(os.linux.STDERR, "caustic-as: windows-x86_64 not yet implemented\n", 47);
+                io._write_fd(io.STDERR, "caustic-as: windows-x86_64 not yet implemented\n", 47);
                 return 1;
             }
         } else {
@@ -1237,7 +1245,7 @@ fn main(argc as i64, argv as i64) as i32 {
     let is i64 as file_size = read_file_size(filename);
     let is *u8 as src = read_file(filename);
     if (cast(i64, src) == 0) {
-        os.linux.write(os.linux.STDERR, "Error: cannot read file\n", 24);
+        io._write_fd(io.STDERR, "Error: cannot read file\n", 24);
         return 1;
     }
 
@@ -1283,15 +1291,15 @@ fn main(argc as i64, argv as i64) as i32 {
 
     // Write ELF
     let is *u8 as out_name = make_output_name(filename);
-    let is i64 as fd = os.linux.open(out_name, 577, 420);
+    let is i64 as fd = io._open_write(out_name);
     if (fd < 0) {
-        os.linux.write(os.linux.STDERR, "Error: cannot create output\n", 28);
+        io._write_fd(io.STDERR, "Error: cannot create output\n", 28);
         return 1;
     }
     let is i64 as t4 = asm_prof_time();
     elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs,
                   csec_buf_ptrs, csec_name_ptrs, csec_name_lens, csec_reloc_ptrs, csec_count);
-    os.linux.close(fd);
+    io._close_fd(fd);
     if (asm_prof_enabled == 1) { asm_prof_times[4] = asm_prof_time() - t4; }
 
     print_str("  output: "); print_str(out_name); print_str("\n");
