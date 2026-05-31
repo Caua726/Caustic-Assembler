@@ -94,6 +94,7 @@ let is i32 as DIR_INTEL    with imut = 13;
 let is i32 as DIR_OTHER    with imut = 14;
 let is i32 as DIR_ASCII    with imut = 15;
 let is i32 as DIR_CSTIMPORT with imut = 16;
+let is i32 as DIR_INCBIN   with imut = 17;
 
 // === .cstimport "dll.dll" symbol — Windows DLL import declarations ===
 //
@@ -693,6 +694,44 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *ParsedLine, curren
         }
         return p;
     }
+    if (enc.streq_lit(tok.ptr, tok.len, ".incbin") == 1) {
+        line.dir_kind = DIR_INCBIN;
+        line.section = *current_section;
+        p = p + 1;
+        // `.incbin "path"` splices the raw bytes of an external file into the
+        // current section. NUL-terminate the path for the file API, slurp the
+        // file, and stash the bytes in decoded_ptr/decoded_len — the file may
+        // contain NULs, so the length is explicit, not strlen-derived.
+        let is *lex.Token as inc_tok = lex.tl_get(tl, p);
+        line.decoded_ptr = cast(*u8, 0);
+        line.decoded_len = 0;
+        if (inc_tok.kind == lex.TK_STRING) {
+            // The lexer keeps the surrounding double-quotes in the token; strip
+            // them so the path is the bare filename.
+            let is *u8 as praw with mut = inc_tok.ptr;
+            let is i32 as plen with mut = inc_tok.len;
+            if (plen >= 2 && praw[0] == cast(u8, 34)) {
+                praw = cast(*u8, cast(i64, praw) + 1);
+                plen = plen - 2;
+            }
+            let is *u8 as ipath = om.opt_alloc(cast(i64, plen) + 1);
+            let is i32 as ic with mut = 0;
+            while (ic < plen) { ipath[ic] = praw[ic]; ic = ic + 1; }
+            ipath[plen] = cast(u8, 0);
+            let is i64 as isz = read_file_size(ipath);
+            let is *u8 as idata = read_file(ipath);
+            if (cast(i64, idata) != 0 && isz > 0) {
+                line.decoded_ptr = idata;
+                line.decoded_len = cast(i32, isz);
+            } else {
+                io._write_fd(io.STDERR, ".incbin: cannot read file: ", 27);
+                io._write_fd(io.STDERR, ipath, cast(i64, plen));
+                io._write_fd(io.STDERR, "\n", 1);
+            }
+            p = p + 1;
+        }
+        return p;
+    }
     if (enc.streq_lit(tok.ptr, tok.len, ".byte") == 1) {
         line.dir_kind = DIR_BYTE;
         line.section = *current_section;
@@ -879,6 +918,7 @@ fn calc_dir_size(line as *ParsedLine) as i32 {
         return decoded_len; // .ascii: no null terminator
     }
     if (line.dir_kind == DIR_BYTE) { return line.decoded_len; }
+    if (line.dir_kind == DIR_INCBIN) { return line.decoded_len; }
     if (line.dir_kind == DIR_WORD) { return 2; }
     if (line.dir_kind == DIR_LONG) { return 4; }
     if (line.dir_kind == DIR_QUAD) { return 8; }
@@ -917,7 +957,7 @@ fn pass1(lines as *ParsedLines, symtab as *elf.SymbolTable) as void {
                 elf.sym_find_or_add(symtab, line.dir_arg_ptr, line.dir_arg_len, SECTION_UNDEF, 0, 1);
             }
             else if (line.dir_kind == DIR_STRING || line.dir_kind == DIR_ASCII || line.dir_kind == DIR_BYTE || line.dir_kind == DIR_WORD ||
-                     line.dir_kind == DIR_LONG || line.dir_kind == DIR_QUAD || line.dir_kind == DIR_ZERO) {
+                     line.dir_kind == DIR_LONG || line.dir_kind == DIR_QUAD || line.dir_kind == DIR_ZERO || line.dir_kind == DIR_INCBIN) {
                 let is i32 as sz = calc_dir_size(line);
                 line.size = sz;
                 if (line.section == SECTION_TEXT)   { line.offset = text_off; text_off = text_off + cast(i64, sz); }
@@ -1039,6 +1079,9 @@ fn pass2_emit_directive(line as *ParsedLine, target as *buf.ByteBuffer, bss_size
         buf.buf_append(target, line.decoded_ptr, cast(i64, line.decoded_len));
     }
     else if (line.dir_kind == DIR_BYTE) {
+        buf.buf_append(target, line.decoded_ptr, cast(i64, line.decoded_len));
+    }
+    else if (line.dir_kind == DIR_INCBIN) {
         buf.buf_append(target, line.decoded_ptr, cast(i64, line.decoded_len));
     }
     else if (line.dir_kind == DIR_WORD) {
