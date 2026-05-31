@@ -568,8 +568,9 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                 else if (c1 == 97 && tlen == 6 && tptr[2] == 115 && tptr[3] == 99 && tptr[4] == 105 && tptr[5] == 122) { is_dir = 1; } // .asciz
                 else if (c1 == 118 && tlen == 6 && tptr[2] == 97 && tptr[3] == 108 && tptr[4] == 117 && tptr[5] == 101) { is_dir = 1; } // .value
                 else if (c1 == 114 && tlen == 7 && tptr[2] == 111 && tptr[3] == 100 && tptr[4] == 97 && tptr[5] == 116 && tptr[6] == 97) { is_dir = 1; } // .rodata
-                else if (c1 == 105) { // .intel_syntax
+                else if (c1 == 105) { // .intel_syntax, .incbin
                     if (tlen == 14) { is_dir = 1; }
+                    else if (tlen == 7 && tptr[2] == 110 && tptr[3] == 99 && tptr[4] == 98 && tptr[5] == 105 && tptr[6] == 110) { is_dir = 1; } // .incbin
                 }
                 else if (c1 == 102) { // .file, .loc
                     if (tlen == 5 && tptr[2] == 105 && tptr[3] == 108 && tptr[4] == 101) { is_dir = 1; } // .file
