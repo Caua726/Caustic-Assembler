@@ -1,15 +1,15 @@
 use "../std/os.cst" as os;
 use "../std/io.cst" as io;
-use "util.cst" as util;
-use "lexer.cst" as lex;
-use "encoder_util.cst" as enc;
-use "parsed_line.cst" as pl;
-use "parser.cst" as parser;
-use "passes.cst" as passes;
-use "custom_sections.cst" as cs;
-use "cstimport.cst" as ci;
-use "elf.cst" as elf;
-use "buf.cst" as buf;
+use "core/util.cst" as util;
+use "lexer/lexer.cst" as lex;
+use "encoder/encoder_util.cst" as enc;
+use "parser/parsed_line.cst" as pl;
+use "parser/parser.cst" as parser;
+use "output/passes.cst" as passes;
+use "parser/custom_sections.cst" as cs;
+use "parser/cstimport.cst" as ci;
+use "output/elf.cst" as elf;
+use "core/buf.cst" as buf;
 use "../src/codegen/target.cst" as tgt;
 
 // === Assembler profiling ===

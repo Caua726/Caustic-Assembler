@@ -1,5 +1,5 @@
-use "asm_defs.cst" as def;
-use "buf.cst" as buf;
+use "../core/asm_defs.cst" as def;
+use "../core/buf.cst" as buf;
 use "encoder_util.cst" as eu;
 
 // Control-flow & stack family: no-operand ops, INT, PUSH/POP, CALL/JMP/Jcc, SETcc.

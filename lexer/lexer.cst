@@ -1,6 +1,6 @@
-use "../std/mem.cst" as mem;
-use "../src/ir/opt_mem.cst" as om;
-use "asm_defs.cst" as def;
+use "../../std/mem.cst" as mem;
+use "../../src/ir/opt_mem.cst" as om;
+use "../core/asm_defs.cst" as def;
 
 // Token kinds
 let is i32 as TK_EOF with imut = 0;

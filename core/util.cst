@@ -1,6 +1,6 @@
-use "../std/io.cst" as io;
-use "../std/mem.cst" as mem;
-use "../src/ir/opt_mem.cst" as om;
+use "../../std/io.cst" as io;
+use "../../std/mem.cst" as mem;
+use "../../src/ir/opt_mem.cst" as om;
 
 // === I/O & string helpers shared across the assembler ===
 
