@@ -2,7 +2,7 @@ use "../std/mem.cst" as mem;
 use "../std/io.cst" as io;
 use "../std/os.cst" as os;
 use "../src/ir/opt_mem.cst" as om;
-use "encoder.cst" as enc;
+use "encoder_util.cst" as enc;
 use "buf.cst" as buf;
 
 // ELF constants
