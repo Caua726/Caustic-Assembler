@@ -1,6 +1,6 @@
-use "../std/mem.cst" as mem;
-use "../src/ir/opt_mem.cst" as om;
-use "asm_defs.cst" as def;
+use "../../std/mem.cst" as mem;
+use "../../src/ir/opt_mem.cst" as om;
+use "../core/asm_defs.cst" as def;
 
 // Line kinds
 let is i32 as LINE_EMPTY     with imut = 0;

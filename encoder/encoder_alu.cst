@@ -1,5 +1,5 @@
-use "asm_defs.cst" as def;
-use "buf.cst" as buf;
+use "../core/asm_defs.cst" as def;
+use "../core/buf.cst" as buf;
 use "encoder_util.cst" as eu;
 
 // Integer ALU family: IDIV/DIV/NEG/NOT, IMUL (1-op / reg,imm / reg,reg),

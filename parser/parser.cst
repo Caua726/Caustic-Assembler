@@ -1,12 +1,12 @@
-use "../std/io.cst" as io;
-use "../src/ir/opt_mem.cst" as om;
-use "lexer.cst" as lex;
-use "asm_defs.cst" as def;
-use "encoder_util.cst" as enc;
+use "../../std/io.cst" as io;
+use "../../src/ir/opt_mem.cst" as om;
+use "../lexer/lexer.cst" as lex;
+use "../core/asm_defs.cst" as def;
+use "../encoder/encoder_util.cst" as enc;
 use "parsed_line.cst" as pl;
 use "custom_sections.cst" as cs;
 use "cstimport.cst" as ci;
-use "util.cst" as util;
+use "../core/util.cst" as util;
 
 // === Operand parsing ===
 

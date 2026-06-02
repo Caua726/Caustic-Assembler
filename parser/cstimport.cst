@@ -1,6 +1,6 @@
-use "../src/ir/opt_mem.cst" as om;
-use "buf.cst" as buf;
-use "encoder_util.cst" as enc;
+use "../../src/ir/opt_mem.cst" as om;
+use "../core/buf.cst" as buf;
+use "../encoder/encoder_util.cst" as enc;
 use "custom_sections.cst" as cs;
 
 // === .cstimport "dll.dll" symbol — Windows DLL import declarations ===

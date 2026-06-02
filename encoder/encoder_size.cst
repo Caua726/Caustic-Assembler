@@ -1,6 +1,6 @@
-use "../std/mem.cst" as mem;
-use "asm_defs.cst" as def;
-use "buf.cst" as buf;
+use "../../std/mem.cst" as mem;
+use "../core/asm_defs.cst" as def;
+use "../core/buf.cst" as buf;
 
 // === Register helpers ===
 use "encoder_util.cst" as eu;

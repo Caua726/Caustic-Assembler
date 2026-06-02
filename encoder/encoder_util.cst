@@ -1,6 +1,6 @@
-use "../std/mem.cst" as mem;
-use "asm_defs.cst" as def;
-use "buf.cst" as buf;
+use "../../std/mem.cst" as mem;
+use "../core/asm_defs.cst" as def;
+use "../core/buf.cst" as buf;
 
 // Sentinel returned by a family encoder when the instruction is not its own.
 // Valid x86 encodings are 1..15 bytes and 0 is reserved for "unknown

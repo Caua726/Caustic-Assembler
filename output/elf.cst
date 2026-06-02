@@ -1,9 +1,9 @@
-use "../std/mem.cst" as mem;
-use "../std/io.cst" as io;
-use "../std/os.cst" as os;
-use "../src/ir/opt_mem.cst" as om;
-use "encoder_util.cst" as enc;
-use "buf.cst" as buf;
+use "../../std/mem.cst" as mem;
+use "../../std/io.cst" as io;
+use "../../std/os.cst" as os;
+use "../../src/ir/opt_mem.cst" as om;
+use "../encoder/encoder_util.cst" as enc;
+use "../core/buf.cst" as buf;
 
 // ELF constants
 let is i32 as ET_REL with imut = 1;

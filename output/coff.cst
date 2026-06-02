@@ -1,6 +1,6 @@
-use "../std/os.cst" as os;
-use "../std/io.cst" as io;
-use "buf.cst" as buf;
+use "../../std/os.cst" as os;
+use "../../std/io.cst" as io;
+use "../core/buf.cst" as buf;
 use "elf.cst" as elf;
 
 // =======================================================

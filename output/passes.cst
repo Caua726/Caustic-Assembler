@@ -1,11 +1,11 @@
-use "../src/ir/opt_mem.cst" as om;
-use "asm_defs.cst" as def;
-use "buf.cst" as buf;
+use "../../src/ir/opt_mem.cst" as om;
+use "../core/asm_defs.cst" as def;
+use "../core/buf.cst" as buf;
 use "elf.cst" as elf;
-use "encoder_emit.cst" as ence;
-use "encoder_size.cst" as encs;
-use "parsed_line.cst" as pl;
-use "custom_sections.cst" as cs;
+use "../encoder/encoder_emit.cst" as ence;
+use "../encoder/encoder_size.cst" as encs;
+use "../parser/parsed_line.cst" as pl;
+use "../parser/custom_sections.cst" as cs;
 
 // === String decoding (for .string/.ascii directive data) ===
 
