@@ -1,0 +1,64 @@
+use "../src/ir/opt_mem.cst" as om;
+use "buf.cst" as buf;
+use "elf.cst" as elf;
+use "encoder_util.cst" as enc;
+
+// Section IDs. Custom sections (declared via `.section <name>`) are numbered
+// from 4 upward; csec_* globals below hold their names and byte buffers.
+let is i32 as SECTION_TEXT        with imut = 0;
+let is i32 as SECTION_DATA        with imut = 1;
+let is i32 as SECTION_RODATA      with imut = 2;
+let is i32 as SECTION_BSS         with imut = 3;
+let is i32 as SECTION_CUSTOM_BASE with imut = 4;
+let is i32 as SECTION_UNDEF       with imut = 99;
+let is i32 as MAX_CUSTOM_SECTIONS with imut = 32;
+
+// Custom sections — parallel arrays, allocated lazily in csec_init.
+let is *u8 as csec_name_ptrs with mut;
+let is *u8 as csec_name_lens with mut;
+let is *u8 as csec_buf_ptrs  with mut;
+let is *u8 as csec_reloc_ptrs with mut;  // 32 * 8 — array of *elf.RelocList
+let is i32 as csec_count with mut = 0;
+
+fn csec_init() as void {
+    csec_name_ptrs  = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
+    csec_name_lens  = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 4);
+    csec_buf_ptrs   = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
+    csec_reloc_ptrs = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
+    csec_count = 0;
+}
+
+fn csec_find_or_add(name as *u8, name_len as i32) as i32 {
+    let is *i64 as np = cast(*i64, csec_name_ptrs);
+    let is *i32 as nl = cast(*i32, csec_name_lens);
+    let is i32 as i with mut = 0;
+    while (i < csec_count) {
+        if (nl[i] == name_len && enc.streq(cast(*u8, np[i]), nl[i], name, name_len) == 1) {
+            return i;
+        }
+        i = i + 1;
+    }
+    if (csec_count >= MAX_CUSTOM_SECTIONS) { return SECTION_DATA; } // fallback
+    let is i32 as idx = csec_count;
+    np[idx] = cast(i64, name);
+    nl[idx] = name_len;
+    let is *u8 as bb_mem = om.opt_alloc(sizeof(buf.ByteBuffer));
+    let is *buf.ByteBuffer as bbp = cast(*buf.ByteBuffer, bb_mem);
+    let is buf.ByteBuffer as tmp = buf.buf_init(512);
+    bbp.data = tmp.data;
+    bbp.len  = tmp.len;
+    bbp.cap  = tmp.cap;
+    let is *i64 as bp = cast(*i64, csec_buf_ptrs);
+    bp[idx] = cast(i64, bb_mem);
+    // Allocate a RelocList for this section (empty by default).
+    let is *u8 as rl_mem = om.opt_alloc(sizeof(elf.RelocList));
+    let is *elf.RelocList as rlp = cast(*elf.RelocList, rl_mem);
+    let is elf.RelocList as rtmp = elf.reloc_init();
+    rlp.data  = rtmp.data;
+    rlp.count = rtmp.count;
+    rlp.cap   = rtmp.cap;
+    let is *i64 as rp = cast(*i64, csec_reloc_ptrs);
+    rp[idx] = cast(i64, rl_mem);
+    csec_count = csec_count + 1;
+    return idx;
+}
