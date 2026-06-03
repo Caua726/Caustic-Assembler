@@ -139,6 +139,19 @@ fn pass2_resolve_label(line as *pl.ParsedLine, symtab as *elf.SymbolTable, out_u
     if (idx != 99999) {
         let is *elf.Symbol as sym = elf.sym_get(symtab, idx);
         if (sym.section == cs.SECTION_TEXT) {
+            // Function-sections: reference a GLOBAL .text symbol (a function) via a
+            // relocation even when it is defined in THIS .o, instead of resolving
+            // the offset inline. This exposes the intra-module call edge to the
+            // linker, which is what makes per-function dead-code elimination
+            // (--gc-sections) possible. Local labels (.L — not global) keep
+            // resolving inline; they are intra-function jumps, not call edges.
+            // The linker resolves the reloc to the same offset (S+A-P == the inline
+            // rel), so the emitted binary is byte-identical.
+            if (sym.is_global == 1) {
+                *out_undef = 1;
+                *out_sym_idx = idx;
+                return 0;
+            }
             *out_undef = 0;
             return sym.offset;
         }
