@@ -400,10 +400,13 @@ fn parse_instruction(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine) a
 
 // === Parsing: main loop ===
 
-fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
-    let is pl.ParsedLines as lines = pl.pl_init(line_hint);
+// Parse one chunk's worth of tokens, APPENDING parsed lines to `lines` and
+// threading the current section through `section_ptr` (in/out). Used by both
+// parse_all (whole token list) and parse_streaming (one line-aligned chunk at
+// a time). Each chunk's token list ends in a TK_EOF, which terminates the loop.
+fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i32) as void {
     let is i32 as pos with mut = 0;
-    let is i32 as current_section with mut = cs.SECTION_TEXT;
+    let is i32 as current_section with mut = *section_ptr;
 
     while (pos < tl.count) {
         let is *lex.Token as tok = lex.tl_get(tl, pos);
@@ -415,7 +418,7 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
         }
         // Directive
         else if (tok.kind == lex.TK_DIRECTIVE) {
-            let is *pl.ParsedLine as line = pl.pl_add(&lines);
+            let is *pl.ParsedLine as line = pl.pl_add(lines);
             line.kind = pl.LINE_DIRECTIVE;
             line.section = current_section;
             line.line_no = 0;
@@ -428,7 +431,7 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
         else if (tok.kind == lex.TK_INSTRUCTION) {
             let is *lex.Token as peek = lex.tl_get(tl, pos + 1);
             if (peek.kind == lex.TK_COLON) {
-                let is *pl.ParsedLine as lbl = pl.pl_add(&lines);
+                let is *pl.ParsedLine as lbl = pl.pl_add(lines);
                 lbl.kind = pl.LINE_LABEL;
                 lbl.section = current_section;
                 lbl.label_ptr = tok.ptr;
@@ -436,7 +439,7 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
                 lbl.line_no = 0;
                 pos = pos + 2;
             } else {
-                let is *pl.ParsedLine as line = pl.pl_add(&lines);
+                let is *pl.ParsedLine as line = pl.pl_add(lines);
                 line.kind = pl.LINE_INST;
                 line.section = current_section;
                 line.inst_id = tok.id;
@@ -448,7 +451,7 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
         else if (tok.kind == lex.TK_IDENT) {
             let is *lex.Token as next = lex.tl_get(tl, pos + 1);
             if (next.kind == lex.TK_COLON) {
-                let is *pl.ParsedLine as line = pl.pl_add(&lines);
+                let is *pl.ParsedLine as line = pl.pl_add(lines);
                 line.kind = pl.LINE_LABEL;
                 line.section = current_section;
                 line.label_ptr = tok.ptr;
@@ -464,5 +467,40 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
         }
     }
 
+    *section_ptr = current_section;
+}
+
+fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
+    let is pl.ParsedLines as lines = pl.pl_init(line_hint);
+    let is i32 as section with mut = cs.SECTION_TEXT;
+    parse_chunk(tl, &lines, &section);
+    return lines;
+}
+
+// Streaming parse: tokenize the source one line-aligned chunk at a time into a
+// small reusable token buffer (freed after each chunk), instead of holding the
+// whole file's tokens at once. Bounds peak token memory to ~one chunk rather
+// than the entire token array (a large RSS cut for big .s files). ParsedLine
+// pointers reference the source text (which the caller keeps alive), not the
+// token buffers, so freeing each chunk's tokens is safe.
+fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLines {
+    let is pl.ParsedLines as lines = pl.pl_init(line_hint);
+    let is i32 as section with mut = cs.SECTION_TEXT;
+    let is i64 as CHUNK = 524288;            // 512 KiB; extended to the next newline
+    let is i64 as pos with mut = 0;
+    while (pos < src_len) {
+        let is i64 as cend with mut = pos + CHUNK;
+        if (cend >= src_len) {
+            cend = src_len;
+        } else {
+            // Extend to the next newline so no line (or token) spans a chunk.
+            while (cend < src_len && src[cend] != 10) { cend = cend + 1; }
+            if (cend < src_len) { cend = cend + 1; }   // include the newline
+        }
+        let is lex.TokenList as tl = lex.tokenize(cast(*u8, cast(i64, src) + pos), cend - pos);
+        parse_chunk(&tl, &lines, &section);
+        lex.tl_free(&tl);
+        pos = cend;
+    }
     return lines;
 }
