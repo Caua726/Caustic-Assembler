@@ -44,8 +44,6 @@ fn print_profile() as void {
 // === Public API for library use ===
 
 fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
-    cs.csec_init();
-    ci.cstimport_init();
     let is i64 as file_size = util.read_file_size(asm_path);
     let is *u8 as src = util.read_file(asm_path);
     if (cast(i64, src) == 0) {
@@ -54,6 +52,15 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
         util.print_str("\n");
         return 1;
     }
+    return assemble_buf(src, file_size, obj_path);
+}
+
+// Assemble from an in-memory .s buffer. The in-process compiler pipeline passes
+// codegen's assembly output straight here, skipping the round-trip of writing
+// the .s and reading it back from disk (the file is still written, as a cache).
+fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
+    cs.csec_init();
+    ci.cstimport_init();
 
     let is i64 as t1 = asm_prof_time();
     let is i32 as line_hint = cast(i32, file_size / 24) + 1024;
