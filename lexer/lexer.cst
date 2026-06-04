@@ -81,6 +81,15 @@ fn tl_get(tl as *TokenList, idx as i32) as *Token {
     return cast(*Token, cast(i64, tl.data) + cast(i64, idx) * sizeof(Token));
 }
 
+// Release the token array. Safe once parsing is done: ParsedLine pointers
+// reference the source text (Token.ptr), not the token array itself.
+fn tl_free(tl as *TokenList) as void {
+    om.opt_free(tl.data);
+    tl.data = cast(*u8, 0);
+    tl.count = 0;
+    tl.cap = 0;
+}
+
 fn make_tok(kind as i32, ptr as *u8, len as i32) as Token {
     let is Token as t;
     t.kind = kind;

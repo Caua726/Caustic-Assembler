@@ -29,43 +29,49 @@ let is i32 as DIR_INCBIN   with imut = 17;
 
 // === ParsedLine structs ===
 
+// Low-cardinality fields narrowed (i32->i16/i8) to shrink the line: the whole
+// .s is held as one ParsedLine array (~305K lines for the self-host .s), so each
+// byte trimmed is ~0.3MB off the assembler's resident set. Storage only — reads
+// widen back to i32. Register fields use i16, not i8, because REG_NONE == 255
+// does not fit a signed i8. Values that can be large (imm/disp/num/offset;
+// line_no for big files) stay i64/i32.
 struct ParsedLine {
-    kind as i32;
-    section as i32;
-    inst_id as i32;
+    kind as i8;
+    section as i8;
+    inst_id as i16;
     // op1 flattened
-    op1_kind as i32;
-    op1_reg_id as i32;
+    op1_kind as i8;
+    op1_reg_id as i16;        // 0..79 or REG_NONE(255)
     op1_imm as i64;
-    op1_mem_base as i32;
+    op1_mem_base as i16;
     op1_mem_disp as i64;
-    op1_mem_size as i32;
-    op1_mem_index as i32;
-    op1_mem_scale as i32;
+    op1_mem_size as i8;
+    op1_mem_index as i16;
+    op1_mem_scale as i8;
     op1_label_ptr as *u8;
-    op1_label_len as i32;
+    op1_label_len as i16;
     // op2 flattened
-    op2_kind as i32;
-    op2_reg_id as i32;
+    op2_kind as i8;
+    op2_reg_id as i16;
     op2_imm as i64;
-    op2_mem_base as i32;
+    op2_mem_base as i16;
     op2_mem_disp as i64;
-    op2_mem_size as i32;
-    op2_mem_index as i32;
-    op2_mem_scale as i32;
+    op2_mem_size as i8;
+    op2_mem_index as i16;
+    op2_mem_scale as i8;
     op2_label_ptr as *u8;
-    op2_label_len as i32;
+    op2_label_len as i16;
     // other
     label_ptr as *u8;
-    label_len as i32;
-    dir_kind as i32;
+    label_len as i16;
+    dir_kind as i8;
     dir_arg_ptr as *u8;
-    dir_arg_len as i32;
+    dir_arg_len as i16;
     dir_num as i64;
     decoded_ptr as *u8;
-    decoded_len as i32;
+    decoded_len as i16;
     offset as i64;
-    size as i32;
+    size as i16;
     line_no as i32;
 }
 
@@ -89,6 +95,15 @@ fn pl_get(pl as *ParsedLines, idx as i32) as *ParsedLine {
     return cast(*ParsedLine, cast(i64, pl.data) + cast(i64, idx) * sizeof(ParsedLine));
 }
 
+// Release the parsed-line array. Safe once encoding (pass2) is done: the
+// output buffers hold the encoded bytes; label pointers reference source text.
+fn pl_free(pl as *ParsedLines) as void {
+    om.opt_free(pl.data);
+    pl.data = cast(*u8, 0);
+    pl.count = 0;
+    pl.cap = 0;
+}
+
 fn pl_add(pl as *ParsedLines) as *ParsedLine {
     if (pl.count >= pl.cap) {
         let is i32 as new_cap = pl.cap * 2;
@@ -109,6 +124,10 @@ fn pl_add(pl as *ParsedLines) as *ParsedLine {
         *wp = 0;
         wi = wi + 1;
     }
+    // sizeof(ParsedLine) is no longer a multiple of 8 (fields narrowed), so the
+    // word loop leaves a tail; zero it byte-wise so trailing fields start clean.
+    let is i64 as bi with mut = wn * 8;
+    while (bi < sz) { lp[bi] = cast(u8, 0); bi = bi + 1; }
     line.op1_reg_id = def.REG_NONE;
     line.op1_mem_base = def.REG_NONE;
     line.op1_mem_index = def.REG_NONE;
