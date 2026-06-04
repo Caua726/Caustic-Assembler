@@ -55,13 +55,11 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
         return 1;
     }
 
-    let is i64 as t0 = asm_prof_time();
-    let is lex.TokenList as tokens = lex.tokenize(src, file_size);
-    if (asm_prof_enabled == 1) { asm_prof_times[0] = asm_prof_time() - t0; }
-
     let is i64 as t1 = asm_prof_time();
     let is i32 as line_hint = cast(i32, file_size / 24) + 1024;
-    let is pl.ParsedLines as lines = parser.parse_all(&tokens, line_hint);
+    // Streaming parse: tokenize chunk-by-chunk (bounded token memory) instead of
+    // building the whole file's token array up front.
+    let is pl.ParsedLines as lines = parser.parse_streaming(src, file_size, line_hint);
     if (asm_prof_enabled == 1) { asm_prof_times[1] = asm_prof_time() - t1; }
 
     let is i64 as t2 = asm_prof_time();
@@ -78,6 +76,7 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
     let is elf.RelocList as data_relocs = elf.reloc_init();
     passes.pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
+    pl.pl_free(&lines);   // lines consumed by pass1/pass2; output is in the buffers now
 
     // If any .cstimport directives were encountered, serialize them into a
     // custom ELF section ".cstimport" so the linker can read them when
@@ -173,17 +172,10 @@ fn main(argc as i64, argv as i64) as i32 {
     util.print_str(filename);
     util.print_str(" ("); util.print_int(file_size); util.print_str(" bytes)\n");
 
-    // Tokenize
-    let is i64 as t0 = asm_prof_time();
-    let is lex.TokenList as tokens = lex.tokenize(src, file_size);
-    if (asm_prof_enabled == 1) { asm_prof_times[0] = asm_prof_time() - t0; }
-    util.print_str("  tokens: "); util.print_int(cast(i64, tokens.count)); util.print_str("\n");
-    if (asm_prof_enabled == 1) { print_token_profile(); }
-
-    // Parse
+    // Parse (streaming: tokenize chunk-by-chunk, bounded token memory)
     let is i64 as t1 = asm_prof_time();
     let is i32 as line_hint = cast(i32, file_size / 24) + 1024;
-    let is pl.ParsedLines as lines = parser.parse_all(&tokens, line_hint);
+    let is pl.ParsedLines as lines = parser.parse_streaming(src, file_size, line_hint);
     if (asm_prof_enabled == 1) { asm_prof_times[1] = asm_prof_time() - t1; }
     util.print_str("  lines: "); util.print_int(cast(i64, lines.count)); util.print_str("\n");
 
@@ -204,6 +196,7 @@ fn main(argc as i64, argv as i64) as i32 {
     let is elf.RelocList as data_relocs = elf.reloc_init();
     passes.pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
+    pl.pl_free(&lines);   // lines consumed by pass1/pass2; output is in the buffers now
     print_section_sizes(&text_buf, &data_buf, &rodata_buf, bss_size, &relocs);
 
     // Serialize .cstimport entries (if any) before writing ELF.

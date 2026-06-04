@@ -89,6 +89,15 @@ fn pl_get(pl as *ParsedLines, idx as i32) as *ParsedLine {
     return cast(*ParsedLine, cast(i64, pl.data) + cast(i64, idx) * sizeof(ParsedLine));
 }
 
+// Release the parsed-line array. Safe once encoding (pass2) is done: the
+// output buffers hold the encoded bytes; label pointers reference source text.
+fn pl_free(pl as *ParsedLines) as void {
+    om.opt_free(pl.data);
+    pl.data = cast(*u8, 0);
+    pl.count = 0;
+    pl.cap = 0;
+}
+
 fn pl_add(pl as *ParsedLines) as *ParsedLine {
     if (pl.count >= pl.cap) {
         let is i32 as new_cap = pl.cap * 2;
