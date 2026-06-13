@@ -430,6 +430,9 @@ fn init_ht() as void {
     ht_insert(99, 97, 108, 108, 0, 4, 2, def.INST_CALL);   // call
     ht_insert(109, 111, 118, 113, 0, 4, 2, def.INST_MOVQ); // movq
     ht_insert(109, 111, 118, 100, 0, 4, 2, def.INST_MOVD); // movd
+    ht_insert(108, 111, 99, 107, 0, 4, 2, def.INST_LOCK);  // lock
+    ht_insert(120, 99, 104, 103, 0, 4, 2, def.INST_XCHG);  // xchg
+    ht_insert(120, 97, 100, 100, 0, 4, 2, def.INST_XADD);  // xadd
     // len 5
     ht_insert(109, 111, 118, 115, 120, 5, 2, def.INST_MOVSX);  // movsx
     ht_insert(109, 111, 118, 122, 120, 5, 2, def.INST_MOVZX);  // movzx
@@ -445,11 +448,14 @@ fn init_ht() as void {
     ht_insert(109, 117, 108, 115, 100, 5, 2, def.INST_MULSD);  // mulsd
     ht_insert(100, 105, 118, 115, 100, 5, 2, def.INST_DIVSD);  // divsd
     ht_insert(120, 111, 114, 112, 100, 5, 2, def.INST_XORPD);  // xorpd
+    ht_insert(112, 97, 117, 115, 101, 5, 2, def.INST_PAUSE);   // pause
     // len 6
     ht_insert(109, 111, 118, 115, 120, 6, 2, def.INST_MOVSXD);    // movsxd
     ht_insert(115, 113, 114, 116, 115, 6, 2, def.INST_SQRTSD);    // sqrtsd
+    ht_insert(109, 102, 101, 110, 99, 6, 2, def.INST_MFENCE);     // mfence
     // len 7
     ht_insert(115, 121, 115, 99, 97, 7, 2, def.INST_SYSCALL);     // syscall
+    ht_insert(99, 109, 112, 120, 99, 7, 2, def.INST_CMPXCHG);     // cmpxchg
     ht_insert(117, 99, 111, 109, 105, 7, 2, def.INST_UCOMISD);    // ucomisd
     // len 8
     ht_insert(99, 118, 116, 115, 105, 8, 2, def.INST_CVTSI2SD);   // cvtsi2sd

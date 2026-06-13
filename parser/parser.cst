@@ -373,8 +373,10 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
 fn parse_instruction(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine) as i32 {
     let is i32 as p with mut = pos;
 
-    // Handle "rep movsb" — don't parse operands for REP
-    if (line.inst_id == def.INST_REP) {
+    // Handle "rep movsb" / "lock cmpxchg ..." — prefix-only line, don't parse
+    // operands; the following mnemonic is parsed as its own instruction line so
+    // the prefix byte (F3 / F0) is emitted right before it.
+    if (line.inst_id == def.INST_REP || line.inst_id == def.INST_LOCK) {
         return p;
     }
 

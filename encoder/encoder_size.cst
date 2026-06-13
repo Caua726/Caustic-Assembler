@@ -15,6 +15,39 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
     if (inst == def.INST_CDQ)     { return 1; }
     if (inst == def.INST_MOVSB)   { return 1; }
     if (inst == def.INST_REP)     { return 1; }
+    // Atomics (B0) — sizes must EXACTLY mirror encoder_alu/encoder_ctrl.
+    if (inst == def.INST_LOCK)    { return 1; }   // F0
+    if (inst == def.INST_PAUSE)   { return 2; }   // F3 90
+    if (inst == def.INST_MFENCE)  { return 3; }   // 0F AE F0
+    if (inst == def.INST_XCHG || inst == def.INST_CMPXCHG || inst == def.INST_XADD) {
+        let is *def.Operand as d with mut = op1;
+        let is *def.Operand as s with mut = op2;
+        if (inst == def.INST_XCHG && op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
+            d = op2;
+            s = op1;
+        }
+        if (s.kind == def.OP_REG) {
+            let is i32 as sz = eu.reg_size(s.reg_id);
+            let is i32 as opcode_bytes with mut = 1;
+            if (inst == def.INST_CMPXCHG || inst == def.INST_XADD) { opcode_bytes = 2; }
+            if (d.kind == def.OP_MEM) {
+                let is i32 as total with mut = 1 + opcode_bytes;   // REX always + opcode
+                if (sz == 16) { total = total + 1; }               // 0x66
+                let is i32 as mm with mut = eu.mem_modrm_size(d.mem_base, d.mem_disp);
+                if (eu.has_sib(d) == 1) { mm = eu.mem_modrm_sib_size(d.mem_base, d.mem_disp); }
+                return total + mm;
+            }
+            if (d.kind == def.OP_REG) {
+                let is i32 as total with mut = opcode_bytes + 1;   // opcode + modrm
+                if (sz == 16) { total = total + 1; }
+                let is i32 as need_rex with mut = 0;
+                if (sz == 64) { need_rex = 1; }
+                if (eu.reg_ext(d.reg_id) == 1 || eu.reg_ext(s.reg_id) == 1) { need_rex = 1; }
+                if (sz == 8 && (eu.needs_rex_for_8bit(d.reg_id) == 1 || eu.needs_rex_for_8bit(s.reg_id) == 1)) { need_rex = 1; }
+                return total + need_rex;
+            }
+        }
+    }
 
     // INT imm8: CD ib
     if (inst == def.INST_INT && op1.kind == def.OP_IMM) { return 2; }

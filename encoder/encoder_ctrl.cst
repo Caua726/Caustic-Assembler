@@ -17,6 +17,9 @@ fn encode_ctrl(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *d
     if (inst == def.INST_CDQ)     { buf.buf_emit8(b, 153); return 1; }
     if (inst == def.INST_MOVSB)   { buf.buf_emit8(b, 164); return 1; }
     if (inst == def.INST_REP)     { buf.buf_emit8(b, 243); return 1; }
+    if (inst == def.INST_LOCK)    { buf.buf_emit8(b, 240); return 1; }                       // F0 prefix (standalone)
+    if (inst == def.INST_PAUSE)   { buf.buf_emit8(b, 243); buf.buf_emit8(b, 144); return 2; } // F3 90
+    if (inst == def.INST_MFENCE)  { buf.buf_emit8(b, 15); buf.buf_emit8(b, 174); buf.buf_emit8(b, 240); return 3; } // 0F AE F0
 
     // INT imm8: CD ib
     if (inst == def.INST_INT && op1.kind == def.OP_IMM) {

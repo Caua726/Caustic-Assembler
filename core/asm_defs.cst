@@ -157,6 +157,13 @@ let is i32 as INST_INT      with imut = 66;
 let is i32 as INST_UCOMISD  with imut = 67;
 let is i32 as INST_SQRTSD   with imut = 68;
 let is i32 as INST_MOVSD    with imut = 69;
+// Atomics (B0)
+let is i32 as INST_LOCK     with imut = 70;  // F0 prefix (standalone line, like REP)
+let is i32 as INST_XCHG     with imut = 71;  // 87 /r (MR), implicit lock with mem
+let is i32 as INST_CMPXCHG  with imut = 72;  // 0F B1 /r (MR)
+let is i32 as INST_XADD     with imut = 73;  // 0F C1 /r (MR)
+let is i32 as INST_MFENCE   with imut = 74;  // 0F AE F0
+let is i32 as INST_PAUSE    with imut = 75;  // F3 90
 let is i32 as INST_NONE    with imut = 0;
 
 // === Operand kinds ===
