@@ -454,6 +454,7 @@ fn init_ht() as void {
     ht_insert(100, 105, 118, 112, 100, 5, 2, def.INST_DIVPD);  // divpd
     ht_insert(112, 97, 100, 100, 100, 5, 2, def.INST_PADDD);   // paddd
     ht_insert(112, 97, 100, 100, 113, 5, 2, def.INST_PADDQ);   // paddq
+    ht_insert(112, 120, 111, 114, 0, 4, 2, def.INST_PXOR);     // pxor
     ht_insert(112, 97, 117, 115, 101, 5, 2, def.INST_PAUSE);   // pause
     // len 6
     ht_insert(109, 111, 118, 115, 120, 6, 2, def.INST_MOVSXD);    // movsxd
@@ -462,6 +463,7 @@ fn init_ht() as void {
     ht_insert(99, 109, 111, 118, 110, 6, 2, def.INST_CMOVNE);     // cmovne
     ht_insert(109, 111, 118, 117, 112, 6, 2, def.INST_MOVUPD);    // movupd
     ht_insert(109, 111, 118, 100, 113, 6, 2, def.INST_MOVDQU);    // movdqu
+    ht_insert(112, 115, 114, 108, 100, 6, 2, def.INST_PSRLDQ);    // psrldq
     // len 7
     ht_insert(115, 121, 115, 99, 97, 7, 2, def.INST_SYSCALL);     // syscall
     ht_insert(99, 109, 112, 120, 99, 7, 2, def.INST_CMPXCHG);     // cmpxchg

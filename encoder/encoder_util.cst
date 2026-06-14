@@ -211,6 +211,7 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
     else if (len == 4) {
         let is u8 as c1 = ptr[1];
         if (c0 == 112 && c1 == 117 && ptr[2] == 115 && ptr[3] == 104) { return def.INST_PUSH; } // push
+        if (c0 == 112 && c1 == 120 && ptr[2] == 111 && ptr[3] == 114) { return def.INST_PXOR; } // pxor
         if (c0 == 105) { // imul idiv
             if (c1 == 109 && ptr[2] == 117 && ptr[3] == 108) { return def.INST_IMUL; }
             if (c1 == 100 && ptr[2] == 105 && ptr[3] == 118) { return def.INST_IDIV; }
@@ -260,6 +261,9 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
     }
     else if (len == 6 && c0 == 99) { // cmovne
         if (ptr[1] == 109 && ptr[2] == 111 && ptr[3] == 118 && ptr[4] == 110 && ptr[5] == 101) { return def.INST_CMOVNE; }
+    }
+    else if (len == 6 && c0 == 112) { // psrldq
+        if (ptr[1] == 115 && ptr[2] == 114 && ptr[3] == 108 && ptr[4] == 100 && ptr[5] == 113) { return def.INST_PSRLDQ; }
     }
     else if (len == 7 && c0 == 115) { // syscall
         if (ptr[1] == 121 && ptr[2] == 115 && ptr[3] == 99 && ptr[4] == 97 && ptr[5] == 108 && ptr[6] == 108) { return def.INST_SYSCALL; }

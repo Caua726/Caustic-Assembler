@@ -353,12 +353,19 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
 
     // Packed SSE2 arithmetic (reg,reg): 66 + [REX] + 0F + opcode + ModRM
     if (inst == def.INST_ADDPD || inst == def.INST_SUBPD || inst == def.INST_MULPD
-        || inst == def.INST_DIVPD || inst == def.INST_PADDD || inst == def.INST_PADDQ) {
+        || inst == def.INST_DIVPD || inst == def.INST_PADDD || inst == def.INST_PADDQ
+        || inst == def.INST_PXOR) {
         if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
             let is i32 as need_rex with mut = 0;
             if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
             return 4 + need_rex;
         }
+    }
+    // PSRLDQ xmm, imm8: 66 + [REX] + 0F + 73 + ModRM + ib
+    if (inst == def.INST_PSRLDQ && op1.kind == def.OP_REG && op2.kind == def.OP_IMM) {
+        let is i32 as need_rex with mut = 0;
+        if (eu.reg_ext(op1.reg_id) == 1) { need_rex = 1; }
+        return 5 + need_rex;
     }
     // MOVUPD / MOVDQU: prefix + [REX] + 0F + opcode + ModRM(+SIB+disp) — same shape as MOVSD
     if (inst == def.INST_MOVUPD || inst == def.INST_MOVDQU) {
