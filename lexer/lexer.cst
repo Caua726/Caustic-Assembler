@@ -454,6 +454,8 @@ fn init_ht() as void {
     ht_insert(100, 105, 118, 112, 100, 5, 2, def.INST_DIVPD);  // divpd
     ht_insert(112, 97, 100, 100, 100, 5, 2, def.INST_PADDD);   // paddd
     ht_insert(112, 97, 100, 100, 113, 5, 2, def.INST_PADDQ);   // paddq
+    ht_insert(112, 115, 117, 98, 100, 5, 2, def.INST_PSUBD);   // psubd
+    ht_insert(112, 115, 117, 98, 113, 5, 2, def.INST_PSUBQ);   // psubq
     ht_insert(112, 120, 111, 114, 0, 4, 2, def.INST_PXOR);     // pxor
     ht_insert(112, 97, 117, 115, 101, 5, 2, def.INST_PAUSE);   // pause
     // len 6

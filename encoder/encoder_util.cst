@@ -44,6 +44,14 @@ fn needs_rex_for_8bit(id as i32) as i32 {
     return 0;
 }
 
+// True iff id names an XMM register (64..79). Distinct from reg_size()==128,
+// which also returns 128 for REG_NONE(255); SSE encoders use this to reject a
+// GP register where an XMM operand is required (e.g. `pxor rax, rbx`).
+fn is_xmm(id as i32) as i32 {
+    if (id >= 64 && id <= 79) { return 1; }
+    return 0;
+}
+
 // === String helpers ===
 fn streq(a as *u8, alen as i32, b as *u8, blen as i32) as i32 {
     if (alen != blen) { return 0; }
@@ -253,6 +261,8 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
         if (c0 == 100 && c1 == 105 && ptr[2] == 118 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_DIVPD; } // divpd
         if (c0 == 112 && c1 == 97 && ptr[2] == 100 && ptr[3] == 100 && ptr[4] == 100) { return def.INST_PADDD; } // paddd
         if (c0 == 112 && c1 == 97 && ptr[2] == 100 && ptr[3] == 100 && ptr[4] == 113) { return def.INST_PADDQ; } // paddq
+        if (c0 == 112 && c1 == 115 && ptr[2] == 117 && ptr[3] == 98 && ptr[4] == 100) { return def.INST_PSUBD; } // psubd
+        if (c0 == 112 && c1 == 115 && ptr[2] == 117 && ptr[3] == 98 && ptr[4] == 113) { return def.INST_PSUBQ; } // psubq
     }
     else if (len == 6 && c0 == 109) { // movsxd / movupd / movdqu
         if (ptr[1] == 111 && ptr[2] == 118 && ptr[3] == 115 && ptr[4] == 120 && ptr[5] == 100) { return def.INST_MOVSXD; }

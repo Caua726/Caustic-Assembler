@@ -177,6 +177,8 @@ let is i32 as INST_PADDD    with imut = 83;  // 66 0F FE /r — 4x i32
 let is i32 as INST_PADDQ    with imut = 84;  // 66 0F D4 /r — 2x i64
 let is i32 as INST_PXOR     with imut = 85;  // 66 0F EF /r — zero/xor xmm
 let is i32 as INST_PSRLDQ   with imut = 86;  // 66 0F 73 /3 ib — byte shift right (lane extract)
+let is i32 as INST_PSUBD    with imut = 87;  // 66 0F FA /r — 4x i32
+let is i32 as INST_PSUBQ    with imut = 88;  // 66 0F FB /r — 2x i64
 let is i32 as INST_NONE    with imut = 0;
 
 // === Operand kinds ===
@@ -198,6 +200,103 @@ struct Operand {
     mem_scale as i32;
     label_ptr as *u8;
     label_len as i32;
+}
+
+// Reverse of lookup_instruction: map an INST_ id back to its mnemonic, for
+// diagnostics. The encoder reaches its "unknown encoding" fall-through when the
+// mnemonic IS recognized (so it has a known id) but the *operand form* is not
+// implemented by any family encoder — so naming the instruction points the user
+// straight at the offending line's opcode.
+fn inst_name(id as i32) as *u8 {
+    if (id == INST_MOV) { return "mov"; }
+    if (id == INST_MOVSX) { return "movsx"; }
+    if (id == INST_MOVSXD) { return "movsxd"; }
+    if (id == INST_MOVZX) { return "movzx"; }
+    if (id == INST_LEA) { return "lea"; }
+    if (id == INST_ADD) { return "add"; }
+    if (id == INST_SUB) { return "sub"; }
+    if (id == INST_IMUL) { return "imul"; }
+    if (id == INST_IDIV) { return "idiv"; }
+    if (id == INST_CQO) { return "cqo"; }
+    if (id == INST_NEG) { return "neg"; }
+    if (id == INST_AND) { return "and"; }
+    if (id == INST_OR) { return "or"; }
+    if (id == INST_XOR) { return "xor"; }
+    if (id == INST_NOT) { return "not"; }
+    if (id == INST_SHL) { return "shl"; }
+    if (id == INST_SHR) { return "shr"; }
+    if (id == INST_SAR) { return "sar"; }
+    if (id == INST_CMP) { return "cmp"; }
+    if (id == INST_TEST) { return "test"; }
+    if (id == INST_SETE) { return "sete"; }
+    if (id == INST_SETNE) { return "setne"; }
+    if (id == INST_SETL) { return "setl"; }
+    if (id == INST_SETLE) { return "setle"; }
+    if (id == INST_SETG) { return "setg"; }
+    if (id == INST_SETGE) { return "setge"; }
+    if (id == INST_SETB) { return "setb"; }
+    if (id == INST_SETBE) { return "setbe"; }
+    if (id == INST_SETA) { return "seta"; }
+    if (id == INST_SETAE) { return "setae"; }
+    if (id == INST_PUSH) { return "push"; }
+    if (id == INST_POP) { return "pop"; }
+    if (id == INST_CALL) { return "call"; }
+    if (id == INST_RET) { return "ret"; }
+    if (id == INST_JMP) { return "jmp"; }
+    if (id == INST_JZ) { return "jz"; }
+    if (id == INST_JNZ) { return "jnz"; }
+    if (id == INST_JE) { return "je"; }
+    if (id == INST_JNE) { return "jne"; }
+    if (id == INST_JL) { return "jl"; }
+    if (id == INST_JLE) { return "jle"; }
+    if (id == INST_JG) { return "jg"; }
+    if (id == INST_JGE) { return "jge"; }
+    if (id == INST_JA) { return "ja"; }
+    if (id == INST_JAE) { return "jae"; }
+    if (id == INST_JB) { return "jb"; }
+    if (id == INST_JBE) { return "jbe"; }
+    if (id == INST_SYSCALL) { return "syscall"; }
+    if (id == INST_CLD) { return "cld"; }
+    if (id == INST_REP) { return "rep"; }
+    if (id == INST_MOVSB) { return "movsb"; }
+    if (id == INST_NOP) { return "nop"; }
+    if (id == INST_MOVQ) { return "movq"; }
+    if (id == INST_ADDSD) { return "addsd"; }
+    if (id == INST_SUBSD) { return "subsd"; }
+    if (id == INST_MULSD) { return "mulsd"; }
+    if (id == INST_DIVSD) { return "divsd"; }
+    if (id == INST_XORPD) { return "xorpd"; }
+    if (id == INST_CVTTSD2SI) { return "cvttsd2si"; }
+    if (id == INST_CVTSI2SD) { return "cvtsi2sd"; }
+    if (id == INST_CDQ) { return "cdq"; }
+    if (id == INST_DIV) { return "div"; }
+    if (id == INST_CVTSD2SS) { return "cvtsd2ss"; }
+    if (id == INST_CVTSS2SD) { return "cvtss2sd"; }
+    if (id == INST_MOVD) { return "movd"; }
+    if (id == INST_INT) { return "int"; }
+    if (id == INST_UCOMISD) { return "ucomisd"; }
+    if (id == INST_SQRTSD) { return "sqrtsd"; }
+    if (id == INST_MOVSD) { return "movsd"; }
+    if (id == INST_LOCK) { return "lock"; }
+    if (id == INST_XCHG) { return "xchg"; }
+    if (id == INST_CMPXCHG) { return "cmpxchg"; }
+    if (id == INST_XADD) { return "xadd"; }
+    if (id == INST_MFENCE) { return "mfence"; }
+    if (id == INST_PAUSE) { return "pause"; }
+    if (id == INST_CMOVNE) { return "cmovne"; }
+    if (id == INST_MOVUPD) { return "movupd"; }
+    if (id == INST_ADDPD) { return "addpd"; }
+    if (id == INST_SUBPD) { return "subpd"; }
+    if (id == INST_MULPD) { return "mulpd"; }
+    if (id == INST_DIVPD) { return "divpd"; }
+    if (id == INST_MOVDQU) { return "movdqu"; }
+    if (id == INST_PADDD) { return "paddd"; }
+    if (id == INST_PADDQ) { return "paddq"; }
+    if (id == INST_PSUBD) { return "psubd"; }
+    if (id == INST_PSUBQ) { return "psubq"; }
+    if (id == INST_PXOR) { return "pxor"; }
+    if (id == INST_PSRLDQ) { return "psrldq"; }
+    return "<unknown>";
 }
 
 fn operand_none() as Operand {

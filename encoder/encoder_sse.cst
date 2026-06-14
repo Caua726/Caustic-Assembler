@@ -35,7 +35,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     // F2 0F 11 /r — movsd xmm/m64, xmm (store form)
     if (inst == def.INST_MOVSD) {
         // xmm, xmm  — use load form
-        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 1) {
             buf.buf_emit8(b, 242); // F2
             let is i32 as need_rex with mut = 0;
             if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
@@ -48,7 +48,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
             return cast(i32, b.len - start);
         }
         // xmm, [mem]  — load
-        if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM && eu.is_xmm(op1.reg_id) == 1) {
             let is i32 as dst_code = eu.reg_code(op1.reg_id);
             buf.buf_emit8(b, 242); // F2
             let is i32 as need_rex with mut = 0;
@@ -69,7 +69,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
             return cast(i32, b.len - start);
         }
         // [mem], xmm  — store
-        if (op1.kind == def.OP_MEM && op2.kind == def.OP_REG) {
+        if (op1.kind == def.OP_MEM && op2.kind == def.OP_REG && eu.is_xmm(op2.reg_id) == 1) {
             let is i32 as src_code = eu.reg_code(op2.reg_id);
             buf.buf_emit8(b, 242); // F2
             let is i32 as need_rex with mut = 0;
@@ -93,7 +93,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
 
     // --- SSE arithmetic: addsd/subsd/mulsd/divsd/sqrtsd ---
     if (inst == def.INST_ADDSD || inst == def.INST_SUBSD || inst == def.INST_MULSD || inst == def.INST_DIVSD || inst == def.INST_SQRTSD) {
-        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 1) {
             buf.buf_emit8(b, 242); // F2 prefix
             let is i32 as need_rex with mut = 0;
             if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
@@ -112,7 +112,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     }
 
     // --- XORPD xmm, xmm ---
-    if (inst == def.INST_XORPD && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+    if (inst == def.INST_XORPD && op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 1) {
         buf.buf_emit8(b, 102); // 66 prefix
         let is i32 as need_rex with mut = 0;
         if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
@@ -126,7 +126,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     }
 
     // --- UCOMISD xmm, xmm ---  66 [REX] 0F 2E /r
-    if (inst == def.INST_UCOMISD && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+    if (inst == def.INST_UCOMISD && op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 1) {
         buf.buf_emit8(b, 102); // 66 prefix
         let is i32 as need_rex with mut = 0;
         if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
@@ -140,8 +140,8 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     }
 
     // --- CVTTSD2SI r64, xmm ---
-    if (inst == def.INST_CVTTSD2SI && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
-        // F2 REX.W 0F 2C /r (mod=11)
+    if (inst == def.INST_CVTTSD2SI && op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 0 && eu.is_xmm(op2.reg_id) == 1) {
+        // F2 REX.W 0F 2C /r (mod=11) — dst is a GP reg, src an xmm
         buf.buf_emit8(b, 242); // F2
         buf.buf_emit8(b, eu.make_rex(1, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op2.reg_id)));
         buf.buf_emit8(b, 15);  // 0F
@@ -151,8 +151,8 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     }
 
     // --- CVTSI2SD xmm, r64 ---
-    if (inst == def.INST_CVTSI2SD && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
-        // F2 REX.W 0F 2A /r (mod=11)
+    if (inst == def.INST_CVTSI2SD && op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 0) {
+        // F2 REX.W 0F 2A /r (mod=11) — dst is an xmm, src a GP reg
         buf.buf_emit8(b, 242); // F2
         buf.buf_emit8(b, eu.make_rex(1, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op2.reg_id)));
         buf.buf_emit8(b, 15);  // 0F
@@ -162,7 +162,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     }
 
     // --- CVTSD2SS xmm, xmm ---
-    if (inst == def.INST_CVTSD2SS && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+    if (inst == def.INST_CVTSD2SS && op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 1) {
         // F2 0F 5A /r (mod=11)
         buf.buf_emit8(b, 242); // F2
         let is i32 as need_rex with mut = 0;
@@ -177,7 +177,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     }
 
     // --- CVTSS2SD xmm, xmm ---
-    if (inst == def.INST_CVTSS2SD && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+    if (inst == def.INST_CVTSS2SD && op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 1) {
         // F3 0F 5A /r (mod=11)
         buf.buf_emit8(b, 243); // F3
         let is i32 as need_rex with mut = 0;
@@ -224,8 +224,9 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     // --- Packed SSE2 arithmetic (reg,reg): 66 [REX] 0F <op> /r ---
     if (inst == def.INST_ADDPD || inst == def.INST_SUBPD || inst == def.INST_MULPD
         || inst == def.INST_DIVPD || inst == def.INST_PADDD || inst == def.INST_PADDQ
+        || inst == def.INST_PSUBD || inst == def.INST_PSUBQ
         || inst == def.INST_PXOR) {
-        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 1) {
             buf.buf_emit8(b, 102); // 66
             let is i32 as need_rex with mut = 0;
             if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
@@ -239,6 +240,8 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
             if (inst == def.INST_DIVPD) { buf.buf_emit8(b, 94); }   // 0x5E
             if (inst == def.INST_PADDD) { buf.buf_emit8(b, 254); }  // 0xFE
             if (inst == def.INST_PADDQ) { buf.buf_emit8(b, 212); }  // 0xD4
+            if (inst == def.INST_PSUBD) { buf.buf_emit8(b, 250); }  // 0xFA
+            if (inst == def.INST_PSUBQ) { buf.buf_emit8(b, 251); }  // 0xFB
             if (inst == def.INST_PXOR)  { buf.buf_emit8(b, 239); }  // 0xEF
             buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
             return cast(i32, b.len - start);
@@ -246,7 +249,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
     }
 
     // --- PSRLDQ xmm, imm8 (byte shift right): 66 [REX] 0F 73 /3 ib ---
-    if (inst == def.INST_PSRLDQ && op1.kind == def.OP_REG && op2.kind == def.OP_IMM) {
+    if (inst == def.INST_PSRLDQ && op1.kind == def.OP_REG && op2.kind == def.OP_IMM && eu.is_xmm(op1.reg_id) == 1) {
         buf.buf_emit8(b, 102); // 66
         if (eu.reg_ext(op1.reg_id) == 1) { buf.buf_emit8(b, eu.make_rex(0, 0, 0, eu.reg_ext(op1.reg_id))); }
         buf.buf_emit8(b, 15);
@@ -264,7 +267,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
         let is i32 as ld with mut = 16;     // 0x10
         let is i32 as st with mut = 17;     // 0x11
         if (inst == def.INST_MOVDQU) { pfx = 243; ld = 111; st = 127; }  // F3, 0x6F, 0x7F
-        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG && eu.is_xmm(op1.reg_id) == 1 && eu.is_xmm(op2.reg_id) == 1) {
             buf.buf_emit8(b, pfx);
             let is i32 as need_rex with mut = 0;
             if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
@@ -274,7 +277,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
             buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
             return cast(i32, b.len - start);
         }
-        if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {   // load: dst xmm, [mem]
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM && eu.is_xmm(op1.reg_id) == 1) {   // load: dst xmm, [mem]
             let is i32 as dst_code = eu.reg_code(op1.reg_id);
             buf.buf_emit8(b, pfx);
             let is i32 as need_rex with mut = 0;
@@ -291,7 +294,7 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
             else { eu.emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp); }
             return cast(i32, b.len - start);
         }
-        if (op1.kind == def.OP_MEM && op2.kind == def.OP_REG) {   // store: [mem], src xmm
+        if (op1.kind == def.OP_MEM && op2.kind == def.OP_REG && eu.is_xmm(op2.reg_id) == 1) {   // store: [mem], src xmm
             let is i32 as src_code = eu.reg_code(op2.reg_id);
             buf.buf_emit8(b, pfx);
             let is i32 as need_rex with mut = 0;
