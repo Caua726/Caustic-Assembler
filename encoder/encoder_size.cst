@@ -351,5 +351,39 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
         return 4 + has_rex;
     }
 
+    // Packed SSE2 arithmetic (reg,reg): 66 + [REX] + 0F + opcode + ModRM
+    if (inst == def.INST_ADDPD || inst == def.INST_SUBPD || inst == def.INST_MULPD
+        || inst == def.INST_DIVPD || inst == def.INST_PADDD || inst == def.INST_PADDQ) {
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
+            return 4 + need_rex;
+        }
+    }
+    // MOVUPD / MOVDQU: prefix + [REX] + 0F + opcode + ModRM(+SIB+disp) — same shape as MOVSD
+    if (inst == def.INST_MOVUPD || inst == def.INST_MOVDQU) {
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
+            return 4 + need_rex;
+        }
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.mem_base) == 1) { need_rex = 1; }
+            if (eu.has_sib(op2) == 1 && eu.reg_ext(op2.mem_index) == 1) { need_rex = 1; }
+            let is i32 as mm with mut = eu.mem_modrm_size(op2.mem_base, op2.mem_disp);
+            if (eu.has_sib(op2) == 1) { mm = eu.mem_modrm_sib_size(op2.mem_base, op2.mem_disp); }
+            return 3 + need_rex + mm;
+        }
+        if (op1.kind == def.OP_MEM && op2.kind == def.OP_REG) {
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op2.reg_id) == 1 || eu.reg_ext(op1.mem_base) == 1) { need_rex = 1; }
+            if (eu.has_sib(op1) == 1 && eu.reg_ext(op1.mem_index) == 1) { need_rex = 1; }
+            let is i32 as mm with mut = eu.mem_modrm_size(op1.mem_base, op1.mem_disp);
+            if (eu.has_sib(op1) == 1) { mm = eu.mem_modrm_sib_size(op1.mem_base, op1.mem_disp); }
+            return 3 + need_rex + mm;
+        }
+    }
+
     return 0;
 }

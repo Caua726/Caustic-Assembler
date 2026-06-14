@@ -165,6 +165,16 @@ let is i32 as INST_XADD     with imut = 73;  // 0F C1 /r (MR)
 let is i32 as INST_MFENCE   with imut = 74;  // 0F AE F0
 let is i32 as INST_PAUSE    with imut = 75;  // F3 90
 let is i32 as INST_CMOVNE   with imut = 76;  // 0F 45 /r (cmovnz dest, src)
+// Packed SSE2 (128-bit) for the auto-vectorizer. Arithmetic forms are reg,reg
+// (mirror addsd, prefix F2->66); movupd/movdqu have load/store mem forms.
+let is i32 as INST_MOVUPD   with imut = 77;  // 66 0F 10 (load) / 66 0F 11 (store) — 2x f64
+let is i32 as INST_ADDPD    with imut = 78;  // 66 0F 58 /r
+let is i32 as INST_SUBPD    with imut = 79;  // 66 0F 5C /r
+let is i32 as INST_MULPD    with imut = 80;  // 66 0F 59 /r
+let is i32 as INST_DIVPD    with imut = 81;  // 66 0F 5E /r
+let is i32 as INST_MOVDQU   with imut = 82;  // F3 0F 6F (load) / F3 0F 7F (store) — 128-bit int
+let is i32 as INST_PADDD    with imut = 83;  // 66 0F FE /r — 4x i32
+let is i32 as INST_PADDQ    with imut = 84;  // 66 0F D4 /r — 2x i64
 let is i32 as INST_NONE    with imut = 0;
 
 // === Operand kinds ===

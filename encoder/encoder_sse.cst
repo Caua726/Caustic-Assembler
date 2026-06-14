@@ -221,5 +221,81 @@ fn encode_sse(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
         }
     }
 
+    // --- Packed SSE2 arithmetic (reg,reg): 66 [REX] 0F <op> /r ---
+    if (inst == def.INST_ADDPD || inst == def.INST_SUBPD || inst == def.INST_MULPD
+        || inst == def.INST_DIVPD || inst == def.INST_PADDD || inst == def.INST_PADDQ) {
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+            buf.buf_emit8(b, 102); // 66
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
+            if (need_rex == 1) {
+                buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op2.reg_id)));
+            }
+            buf.buf_emit8(b, 15);
+            if (inst == def.INST_ADDPD) { buf.buf_emit8(b, 88); }   // 0x58
+            if (inst == def.INST_SUBPD) { buf.buf_emit8(b, 92); }   // 0x5C
+            if (inst == def.INST_MULPD) { buf.buf_emit8(b, 89); }   // 0x59
+            if (inst == def.INST_DIVPD) { buf.buf_emit8(b, 94); }   // 0x5E
+            if (inst == def.INST_PADDD) { buf.buf_emit8(b, 254); }  // 0xFE
+            if (inst == def.INST_PADDQ) { buf.buf_emit8(b, 212); }  // 0xD4
+            buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
+            return cast(i32, b.len - start);
+        }
+    }
+
+    // --- MOVUPD (66 0F 10 load / 11 store) and MOVDQU (F3 0F 6F load / 7F store) ---
+    // mirror MOVSD's three forms (reg,reg / xmm,[mem] / [mem],xmm) with the packed
+    // prefix+opcode.
+    if (inst == def.INST_MOVUPD || inst == def.INST_MOVDQU) {
+        let is i32 as pfx with mut = 102;   // 66
+        let is i32 as ld with mut = 16;     // 0x10
+        let is i32 as st with mut = 17;     // 0x11
+        if (inst == def.INST_MOVDQU) { pfx = 243; ld = 111; st = 127; }  // F3, 0x6F, 0x7F
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+            buf.buf_emit8(b, pfx);
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
+            if (need_rex == 1) { buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op2.reg_id))); }
+            buf.buf_emit8(b, 15);
+            buf.buf_emit8(b, ld);
+            buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
+            return cast(i32, b.len - start);
+        }
+        if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {   // load: dst xmm, [mem]
+            let is i32 as dst_code = eu.reg_code(op1.reg_id);
+            buf.buf_emit8(b, pfx);
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.mem_base) == 1) { need_rex = 1; }
+            if (eu.has_sib(op2) == 1 && eu.reg_ext(op2.mem_index) == 1) { need_rex = 1; }
+            if (need_rex == 1) {
+                let is i32 as rex_x with mut = 0;
+                if (eu.has_sib(op2) == 1) { rex_x = eu.reg_ext(op2.mem_index); }
+                buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op1.reg_id), rex_x, eu.reg_ext(op2.mem_base)));
+            }
+            buf.buf_emit8(b, 15);
+            buf.buf_emit8(b, ld);
+            if (eu.has_sib(op2) == 1) { eu.emit_mem_modrm_sib(b, dst_code, op2.mem_base, op2.mem_index, op2.mem_scale, op2.mem_disp); }
+            else { eu.emit_mem_modrm(b, dst_code, op2.mem_base, op2.mem_disp); }
+            return cast(i32, b.len - start);
+        }
+        if (op1.kind == def.OP_MEM && op2.kind == def.OP_REG) {   // store: [mem], src xmm
+            let is i32 as src_code = eu.reg_code(op2.reg_id);
+            buf.buf_emit8(b, pfx);
+            let is i32 as need_rex with mut = 0;
+            if (eu.reg_ext(op2.reg_id) == 1 || eu.reg_ext(op1.mem_base) == 1) { need_rex = 1; }
+            if (eu.has_sib(op1) == 1 && eu.reg_ext(op1.mem_index) == 1) { need_rex = 1; }
+            if (need_rex == 1) {
+                let is i32 as rex_x with mut = 0;
+                if (eu.has_sib(op1) == 1) { rex_x = eu.reg_ext(op1.mem_index); }
+                buf.buf_emit8(b, eu.make_rex(0, eu.reg_ext(op2.reg_id), rex_x, eu.reg_ext(op1.mem_base)));
+            }
+            buf.buf_emit8(b, 15);
+            buf.buf_emit8(b, st);
+            if (eu.has_sib(op1) == 1) { eu.emit_mem_modrm_sib(b, src_code, op1.mem_base, op1.mem_index, op1.mem_scale, op1.mem_disp); }
+            else { eu.emit_mem_modrm(b, src_code, op1.mem_base, op1.mem_disp); }
+            return cast(i32, b.len - start);
+        }
+    }
+
     return eu.ENC_SKIP;
 }

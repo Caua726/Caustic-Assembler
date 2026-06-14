@@ -246,9 +246,17 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
         if (c0 == 109 && c1 == 117 && ptr[2] == 108 && ptr[3] == 115 && ptr[4] == 100) { return def.INST_MULSD; } // mulsd
         if (c0 == 100 && c1 == 105 && ptr[2] == 118 && ptr[3] == 115 && ptr[4] == 100) { return def.INST_DIVSD; } // divsd
         if (c0 == 120 && c1 == 111 && ptr[2] == 114 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_XORPD; } // xorpd
+        if (c0 == 97 && c1 == 100 && ptr[2] == 100 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_ADDPD; } // addpd
+        if (c0 == 115 && c1 == 117 && ptr[2] == 98 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_SUBPD; } // subpd
+        if (c0 == 109 && c1 == 117 && ptr[2] == 108 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_MULPD; } // mulpd
+        if (c0 == 100 && c1 == 105 && ptr[2] == 118 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_DIVPD; } // divpd
+        if (c0 == 112 && c1 == 97 && ptr[2] == 100 && ptr[3] == 100 && ptr[4] == 100) { return def.INST_PADDD; } // paddd
+        if (c0 == 112 && c1 == 97 && ptr[2] == 100 && ptr[3] == 100 && ptr[4] == 113) { return def.INST_PADDQ; } // paddq
     }
-    else if (len == 6 && c0 == 109) { // movsxd
+    else if (len == 6 && c0 == 109) { // movsxd / movupd / movdqu
         if (ptr[1] == 111 && ptr[2] == 118 && ptr[3] == 115 && ptr[4] == 120 && ptr[5] == 100) { return def.INST_MOVSXD; }
+        if (ptr[1] == 111 && ptr[2] == 118 && ptr[3] == 117 && ptr[4] == 112 && ptr[5] == 100) { return def.INST_MOVUPD; }
+        if (ptr[1] == 111 && ptr[2] == 118 && ptr[3] == 100 && ptr[4] == 113 && ptr[5] == 117) { return def.INST_MOVDQU; }
     }
     else if (len == 6 && c0 == 99) { // cmovne
         if (ptr[1] == 109 && ptr[2] == 111 && ptr[3] == 118 && ptr[4] == 110 && ptr[5] == 101) { return def.INST_CMOVNE; }
