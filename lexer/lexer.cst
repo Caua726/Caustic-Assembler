@@ -193,6 +193,7 @@ fn init_ri_first() as void {
     ri_first[99] = 1;  // c
     ri_first[100] = 1; // d
     ri_first[101] = 1; // e
+    ri_first[104] = 1; // h  (for hlt)
     ri_first[105] = 1; // i
     ri_first[106] = 1; // j
     ri_first[108] = 1; // l
@@ -405,6 +406,9 @@ fn init_ht() as void {
     ht_insert(110, 111, 116, 0, 0, 3, 2, def.INST_NOT); // not
     ht_insert(110, 111, 112, 0, 0, 3, 2, def.INST_NOP); // nop
     ht_insert(105, 110, 116, 0, 0, 3, 2, def.INST_INT); // int
+    ht_insert(99, 108, 105, 0, 0, 3, 2, def.INST_CLI);  // cli
+    ht_insert(115, 116, 105, 0, 0, 3, 2, def.INST_STI); // sti
+    ht_insert(104, 108, 116, 0, 0, 3, 2, def.INST_HLT); // hlt
     ht_insert(97, 110, 100, 0, 0, 3, 2, def.INST_AND);  // and
     ht_insert(120, 111, 114, 0, 0, 3, 2, def.INST_XOR); // xor
     ht_insert(114, 101, 116, 0, 0, 3, 2, def.INST_RET); // ret

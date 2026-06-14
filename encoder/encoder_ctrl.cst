@@ -12,6 +12,9 @@ fn encode_ctrl(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *d
     if (inst == def.INST_RET)     { buf.buf_emit8(b, 195); return 1; }
     if (inst == def.INST_SYSCALL) { buf.buf_emit8(b, 15); buf.buf_emit8(b, 5); return 2; }
     if (inst == def.INST_CLD)     { buf.buf_emit8(b, 252); return 1; }
+    if (inst == def.INST_CLI)     { buf.buf_emit8(b, 250); return 1; }                       // FA
+    if (inst == def.INST_STI)     { buf.buf_emit8(b, 251); return 1; }                       // FB
+    if (inst == def.INST_HLT)     { buf.buf_emit8(b, 244); return 1; }                       // F4
     if (inst == def.INST_NOP)     { buf.buf_emit8(b, 144); return 1; }
     if (inst == def.INST_CQO)     { buf.buf_emit8(b, eu.make_rex(1,0,0,0)); buf.buf_emit8(b, 153); return 2; }
     if (inst == def.INST_CDQ)     { buf.buf_emit8(b, 153); return 1; }

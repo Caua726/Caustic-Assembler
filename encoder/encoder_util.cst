@@ -187,6 +187,7 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
             if (c1 == 117 && c2 == 98) { return def.INST_SUB; } // sub
             if (c1 == 104) { if (c2 == 108) { return def.INST_SHL; } if (c2 == 114) { return def.INST_SHR; } } // shl shr
             if (c1 == 97 && c2 == 114) { return def.INST_SAR; } // sar
+            if (c1 == 116 && c2 == 105) { return def.INST_STI; } // sti
         }
         else if (c0 == 100 && c1 == 105 && c2 == 118) { return def.INST_DIV; } // div
         else if (c0 == 99) { // c
@@ -194,7 +195,9 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
             if (c1 == 100 && c2 == 113) { return def.INST_CDQ; } // cdq
             if (c1 == 109 && c2 == 112) { return def.INST_CMP; } // cmp
             if (c1 == 108 && c2 == 100) { return def.INST_CLD; } // cld
+            if (c1 == 108 && c2 == 105) { return def.INST_CLI; } // cli
         }
+        else if (c0 == 104 && c1 == 108 && c2 == 116) { return def.INST_HLT; } // hlt
         else if (c0 == 110) { // n
             if (c1 == 101 && c2 == 103) { return def.INST_NEG; } // neg
             if (c1 == 111 && c2 == 116) { return def.INST_NOT; } // not

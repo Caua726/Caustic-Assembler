@@ -179,6 +179,11 @@ let is i32 as INST_PXOR     with imut = 85;  // 66 0F EF /r — zero/xor xmm
 let is i32 as INST_PSRLDQ   with imut = 86;  // 66 0F 73 /3 ib — byte shift right (lane extract)
 let is i32 as INST_PSUBD    with imut = 87;  // 66 0F FA /r — 4x i32
 let is i32 as INST_PSUBQ    with imut = 88;  // 66 0F FB /r — 2x i64
+// System / interrupt control — no-operand, single-byte (kernel uses these via
+// asm("cli\n") / asm("hlt\n") / asm("sti\n") in the idle loop, panic, idt, sched).
+let is i32 as INST_CLI      with imut = 89;  // FA — clear interrupt flag
+let is i32 as INST_STI      with imut = 90;  // FB — set interrupt flag
+let is i32 as INST_HLT      with imut = 91;  // F4 — halt until next interrupt
 let is i32 as INST_NONE    with imut = 0;
 
 // === Operand kinds ===
@@ -296,6 +301,9 @@ fn inst_name(id as i32) as *u8 {
     if (id == INST_PSUBQ) { return "psubq"; }
     if (id == INST_PXOR) { return "pxor"; }
     if (id == INST_PSRLDQ) { return "psrldq"; }
+    if (id == INST_CLI) { return "cli"; }
+    if (id == INST_STI) { return "sti"; }
+    if (id == INST_HLT) { return "hlt"; }
     return "<unknown>";
 }
 
