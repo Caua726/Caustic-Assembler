@@ -8,6 +8,15 @@ use "custom_sections.cst" as cs;
 use "cstimport.cst" as ci;
 use "../core/util.cst" as util;
 
+// Count of statement-initial bare words that are neither a label nor a known
+// instruction (i.e. unknown mnemonics). main/assemble_buf reads this after
+// parsing and refuses to emit an object — previously such lines were silently
+// dropped, producing a .o missing whatever the typo'd instruction stood for.
+let is i32 as parse_errors with mut = 0;
+
+fn parse_reset() as void { parse_errors = 0; }
+fn parse_had_error() as i32 { return parse_errors; }
+
 // === Operand parsing ===
 
 // Parse a memory operand: [base +/- disp] with optional size prefix
@@ -406,9 +415,15 @@ fn parse_instruction(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine) a
 // threading the current section through `section_ptr` (in/out). Used by both
 // parse_all (whole token list) and parse_streaming (one line-aligned chunk at
 // a time). Each chunk's token list ends in a TK_EOF, which terminates the loop.
-fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i32) as void {
+fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i32, line_ptr as *i32) as void {
     let is i32 as pos with mut = 0;
     let is i32 as current_section with mut = *section_ptr;
+    // Running 1-based source line number. Persisted across streaming chunks via
+    // line_ptr so diagnostics report the true file line, not a per-chunk offset.
+    // Every source `\n` is exactly one TK_NEWLINE (the lexer never coalesces),
+    // and parse_instruction/parse_directive stop at the newline, so the main
+    // loop sees — and counts — each line break exactly once.
+    let is i32 as cur_line with mut = *line_ptr;
 
     while (pos < tl.count) {
         let is *lex.Token as tok = lex.tl_get(tl, pos);
@@ -416,6 +431,7 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
         // Skip newlines
         if (tok.kind == lex.TK_NEWLINE || tok.kind == lex.TK_EOF) {
             if (tok.kind == lex.TK_EOF) { break; }
+            cur_line = cur_line + 1;
             pos = pos + 1;
         }
         // Directive
@@ -423,7 +439,7 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
             let is *pl.ParsedLine as line = pl.pl_add(lines);
             line.kind = pl.LINE_DIRECTIVE;
             line.section = current_section;
-            line.line_no = 0;
+            line.line_no = cur_line;
             pos = parse_directive(tl, pos, line, &current_section);
             // Update section from directive (may have changed)
             line.section = current_section;
@@ -438,14 +454,14 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
                 lbl.section = current_section;
                 lbl.label_ptr = tok.ptr;
                 lbl.label_len = tok.len;
-                lbl.line_no = 0;
+                lbl.line_no = cur_line;
                 pos = pos + 2;
             } else {
                 let is *pl.ParsedLine as line = pl.pl_add(lines);
                 line.kind = pl.LINE_INST;
                 line.section = current_section;
                 line.inst_id = tok.id;
-                line.line_no = 0;
+                line.line_no = cur_line;
                 pos = parse_instruction(tl, pos + 1, line);
             }
         }
@@ -458,9 +474,22 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
                 line.section = current_section;
                 line.label_ptr = tok.ptr;
                 line.label_len = tok.len;
-                line.line_no = 0;
+                line.line_no = cur_line;
                 pos = pos + 2;
             } else {
+                // A bare word at statement start that is not a label (no ':')
+                // and was not recognized as an instruction/register. A leading
+                // '.' means an unrecognized directive or local label — skip
+                // those silently as before; anything else is an unknown
+                // mnemonic, which must not pass silently.
+                if (tok.ptr[0] != 46) {
+                    parse_errors = parse_errors + 1;
+                    util.eprint_str("caustic-as: error: line ");
+                    util.eprint_int(cast(i64, cur_line));
+                    util.eprint_str(": unknown instruction '");
+                    io._write_fd(io.STDERR, tok.ptr, cast(i64, tok.len));
+                    util.eprint_str("'\n");
+                }
                 pos = skip_to_eol(tl, pos + 1);
             }
         }
@@ -470,12 +499,14 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
     }
 
     *section_ptr = current_section;
+    *line_ptr = cur_line;
 }
 
 fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
     let is pl.ParsedLines as lines = pl.pl_init(line_hint);
     let is i32 as section with mut = cs.SECTION_TEXT;
-    parse_chunk(tl, &lines, &section);
+    let is i32 as cur_line with mut = 1;
+    parse_chunk(tl, &lines, &section, &cur_line);
     return lines;
 }
 
@@ -488,6 +519,7 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
 fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLines {
     let is pl.ParsedLines as lines = pl.pl_init(line_hint);
     let is i32 as section with mut = cs.SECTION_TEXT;
+    let is i32 as cur_line with mut = 1;     // running source line, threaded across chunks
     let is i64 as CHUNK = 524288;            // 512 KiB; extended to the next newline
     let is i64 as pos with mut = 0;
     while (pos < src_len) {
@@ -500,7 +532,7 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
             if (cend < src_len) { cend = cend + 1; }   // include the newline
         }
         let is lex.TokenList as tl = lex.tokenize(cast(*u8, cast(i64, src) + pos), cend - pos);
-        parse_chunk(&tl, &lines, &section);
+        parse_chunk(&tl, &lines, &section, &cur_line);
         lex.tl_free(&tl);
         pos = cend;
     }

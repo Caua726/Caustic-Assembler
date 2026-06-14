@@ -6,6 +6,7 @@ use "encoder/encoder_util.cst" as enc;
 use "parser/parsed_line.cst" as pl;
 use "parser/parser.cst" as parser;
 use "output/passes.cst" as passes;
+use "encoder/encoder_emit.cst" as ence;
 use "parser/custom_sections.cst" as cs;
 use "parser/cstimport.cst" as ci;
 use "output/elf.cst" as elf;
@@ -61,6 +62,8 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
 fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
     cs.csec_init();
     ci.cstimport_init();
+    ence.enc_reset();
+    parser.parse_reset();
 
     let is i64 as t1 = asm_prof_time();
     let is i32 as line_hint = cast(i32, file_size / 24) + 1024;
@@ -68,6 +71,10 @@ fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
     // building the whole file's token array up front.
     let is pl.ParsedLines as lines = parser.parse_streaming(src, file_size, line_hint);
     if (asm_prof_enabled == 1) { asm_prof_times[1] = asm_prof_time() - t1; }
+
+    // An unknown mnemonic was silently dropped during parse — the object would
+    // be missing whatever it stood for. Refuse to emit it.
+    if (parser.parse_had_error() != 0) { pl.pl_free(&lines); return 1; }
 
     let is i64 as t2 = asm_prof_time();
     let is elf.SymbolTable as symtab = elf.sym_init();
@@ -84,6 +91,10 @@ fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
     passes.pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
     pl.pl_free(&lines);   // lines consumed by pass1/pass2; output is in the buffers now
+
+    // An unencodable instruction emits 0 bytes, desyncing every later offset —
+    // the object would be silently corrupt. Refuse to write it.
+    if (ence.enc_had_error() != 0) { return 1; }
 
     // If any .cstimport directives were encountered, serialize them into a
     // custom ELF section ".cstimport" so the linker can read them when
@@ -131,6 +142,8 @@ fn print_section_sizes(text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer,
 fn main(argc as i64, argv as i64) as i32 {
     cs.csec_init();
     ci.cstimport_init();
+    ence.enc_reset();
+    parser.parse_reset();
     if (argc < 2) {
         io._write_fd(io.STDERR, "Usage: caustic-as <input.s>\n", 28);
         return 1;
@@ -186,6 +199,14 @@ fn main(argc as i64, argv as i64) as i32 {
     if (asm_prof_enabled == 1) { asm_prof_times[1] = asm_prof_time() - t1; }
     util.print_str("  lines: "); util.print_int(cast(i64, lines.count)); util.print_str("\n");
 
+    // An unknown mnemonic was reported (and dropped) during parse — bail before
+    // emitting an object that silently omits it.
+    if (parser.parse_had_error() != 0) {
+        io._write_fd(io.STDERR, "caustic-as: aborting: unknown instruction(s)\n", 45);
+        pl.pl_free(&lines);
+        return 1;
+    }
+
     // Pass 1
     let is i64 as t2 = asm_prof_time();
     let is elf.SymbolTable as symtab = elf.sym_init();
@@ -205,6 +226,13 @@ fn main(argc as i64, argv as i64) as i32 {
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
     pl.pl_free(&lines);   // lines consumed by pass1/pass2; output is in the buffers now
     print_section_sizes(&text_buf, &data_buf, &rodata_buf, bss_size, &relocs);
+
+    // Refuse to emit a corrupt object if any instruction failed to encode
+    // (the diagnostic was already printed to stderr by encode()).
+    if (ence.enc_had_error() != 0) {
+        io._write_fd(io.STDERR, "caustic-as: aborting: instruction encoding failed\n", 50);
+        return 1;
+    }
 
     // Serialize .cstimport entries (if any) before writing ELF.
     ci.cstimport_emit_section();

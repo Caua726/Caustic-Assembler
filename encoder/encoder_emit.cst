@@ -1,11 +1,21 @@
 use "../../std/io.cst" as io;
 use "../core/asm_defs.cst" as def;
 use "../core/buf.cst" as buf;
+use "../core/util.cst" as util;
 use "encoder_util.cst" as eu;
 use "encoder_ctrl.cst" as ectrl;
 use "encoder_alu.cst" as ealu;
 use "encoder_mov.cst" as emov;
 use "encoder_sse.cst" as esse;
+
+// Count of instructions that no family encoder could lower. main/assemble_buf
+// reads this after pass2 and refuses to write a (corrupt) object file when it
+// is non-zero — a missed encoding silently emits 0 bytes, which would desync
+// every following label offset from pass1's reserved sizes.
+let is i32 as enc_errors with mut = 0;
+
+fn enc_reset() as void { enc_errors = 0; }
+fn enc_had_error() as i32 { return enc_errors; }
 
 // Instruction encoder dispatcher. The actual per-family encoders live in
 // encoder_{ctrl,alu,mov,sse}.cst. Each family returns the encoded size in
@@ -13,7 +23,7 @@ use "encoder_sse.cst" as esse;
 // order and return the first concrete result. Families touch disjoint sets of
 // instruction ids, so the order between them is irrelevant — it only fixes a
 // deterministic fall-through to the "unknown encoding" error.
-fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Operand, resolve_label as i64, cur_off as i64) as i32 {
+fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Operand, resolve_label as i64, cur_off as i64, line_no as i32) as i32 {
     let is i32 as r with mut = ectrl.encode_ctrl(b, inst, op1, op2, resolve_label, cur_off);
     if (r != eu.ENC_SKIP) { return r; }
 
@@ -26,7 +36,14 @@ fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Op
     r = esse.encode_sse(b, inst, op1, op2);
     if (r != eu.ENC_SKIP) { return r; }
 
-    // Unknown instruction
-    io._write_fd(io.STDERR, "ERR: unknown encoding\n", 22);
+    // No family could encode this (id, operand-form) pair. Name the instruction
+    // and the source line so the failure points at the offending opcode instead
+    // of a bare "unknown encoding".
+    enc_errors = enc_errors + 1;
+    util.eprint_str("caustic-as: error: line ");
+    util.eprint_int(cast(i64, line_no));
+    util.eprint_str(": cannot encode '");
+    util.eprint_str(def.inst_name(inst));
+    util.eprint_str("' with this operand form\n");
     return 0;
 }
