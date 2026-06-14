@@ -166,6 +166,18 @@ fn encode_alu(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
         return cast(i32, b.len - start);
     }
 
+    // --- CMOVNE reg, reg (0F 45 /r): dest = src if ZF==0 ---
+    if (inst == def.INST_CMOVNE && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+        let is i32 as sz = eu.reg_size(op1.reg_id);
+        let is i32 as w with mut = 0;
+        if (sz == 64) { w = 1; }
+        buf.buf_emit8(b, eu.make_rex(w, eu.reg_ext(op1.reg_id), 0, eu.reg_ext(op2.reg_id)));
+        buf.buf_emit8(b, 15);
+        buf.buf_emit8(b, 69);
+        buf.buf_emit8(b, eu.make_modrm(3, eu.reg_code(op1.reg_id), eu.reg_code(op2.reg_id)));
+        return cast(i32, b.len - start);
+    }
+
     // --- SHL/SHR/SAR reg, cl ---
     if ((inst == def.INST_SHL || inst == def.INST_SHR || inst == def.INST_SAR) && op1.kind == def.OP_REG) {
         let is i32 as sz = eu.reg_size(op1.reg_id);

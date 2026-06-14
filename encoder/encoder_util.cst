@@ -250,6 +250,9 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
     else if (len == 6 && c0 == 109) { // movsxd
         if (ptr[1] == 111 && ptr[2] == 118 && ptr[3] == 115 && ptr[4] == 120 && ptr[5] == 100) { return def.INST_MOVSXD; }
     }
+    else if (len == 6 && c0 == 99) { // cmovne
+        if (ptr[1] == 109 && ptr[2] == 111 && ptr[3] == 118 && ptr[4] == 110 && ptr[5] == 101) { return def.INST_CMOVNE; }
+    }
     else if (len == 7 && c0 == 115) { // syscall
         if (ptr[1] == 121 && ptr[2] == 115 && ptr[3] == 99 && ptr[4] == 97 && ptr[5] == 108 && ptr[6] == 108) { return def.INST_SYSCALL; }
     }

@@ -230,6 +230,9 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
     // IMUL reg, reg — always REX + 0F + opcode + ModRM = 4
     if (inst == def.INST_IMUL && op1.kind == def.OP_REG && op2.kind == def.OP_REG) { return 4; }
 
+    // CMOVNE reg, reg — REX + 0F + opcode + ModRM = 4
+    if (inst == def.INST_CMOVNE && op1.kind == def.OP_REG && op2.kind == def.OP_REG) { return 4; }
+
     // SHL/SHR/SAR — always emits REX
     if ((inst == def.INST_SHL || inst == def.INST_SHR || inst == def.INST_SAR) && op1.kind == def.OP_REG) {
         if (op2.kind == def.OP_REG) { return 3; }

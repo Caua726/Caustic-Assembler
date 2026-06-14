@@ -453,6 +453,7 @@ fn init_ht() as void {
     ht_insert(109, 111, 118, 115, 120, 6, 2, def.INST_MOVSXD);    // movsxd
     ht_insert(115, 113, 114, 116, 115, 6, 2, def.INST_SQRTSD);    // sqrtsd
     ht_insert(109, 102, 101, 110, 99, 6, 2, def.INST_MFENCE);     // mfence
+    ht_insert(99, 109, 111, 118, 110, 6, 2, def.INST_CMOVNE);     // cmovne
     // len 7
     ht_insert(115, 121, 115, 99, 97, 7, 2, def.INST_SYSCALL);     // syscall
     ht_insert(99, 109, 112, 120, 99, 7, 2, def.INST_CMPXCHG);     // cmpxchg

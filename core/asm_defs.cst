@@ -164,6 +164,7 @@ let is i32 as INST_CMPXCHG  with imut = 72;  // 0F B1 /r (MR)
 let is i32 as INST_XADD     with imut = 73;  // 0F C1 /r (MR)
 let is i32 as INST_MFENCE   with imut = 74;  // 0F AE F0
 let is i32 as INST_PAUSE    with imut = 75;  // F3 90
+let is i32 as INST_CMOVNE   with imut = 76;  // 0F 45 /r (cmovnz dest, src)
 let is i32 as INST_NONE    with imut = 0;
 
 // === Operand kinds ===
