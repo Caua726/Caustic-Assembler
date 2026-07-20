@@ -12,6 +12,7 @@ use "parser/cstimport.cst" as ci;
 use "output/elf.cst" as elf;
 use "core/buf.cst" as buf;
 use "../src/codegen/target.cst" as tgt;
+use "aarch64/assembler.cst" as a64;
 
 // === Assembler profiling ===
 
@@ -25,7 +26,8 @@ fn asm_prof_time() as i64 {
     // codegen). Profiling simply returns 0 off-Linux.
     if (os.current() == os.OS_LINUX) {
         let is [2]i64 as ts;
-        syscall(228, 1, &ts);
+        if (__target_is_aarch64 == 1) { syscall(113, 1, &ts); }
+        else { syscall(228, 1, &ts); }
         return ts[0] * 1000000 + ts[1] / 1000;
     }
     return 0;
@@ -60,6 +62,9 @@ fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
 // codegen's assembly output straight here, skipping the round-trip of writing
 // the .s and reading it back from disk (the file is still written, as a cache).
 fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
+    if (tgt.target_get().arch == tgt.ARCH_AARCH64) {
+        return a64.assemble_buf(src, file_size, obj_path);
+    }
     cs.csec_init();
     ci.cstimport_init();
     ence.enc_reset();
@@ -191,6 +196,15 @@ fn main(argc as i64, argv as i64) as i32 {
     util.print_str("caustic-as: assembling ");
     util.print_str(filename);
     util.print_str(" ("); util.print_int(file_size); util.print_str(" bytes)\n");
+
+    if (tgt.target_get().arch == tgt.ARCH_AARCH64) {
+        let is *u8 as a64_out_name = util.make_output_name(filename);
+        let is i32 as a64_rc = a64.assemble_buf(src, file_size, a64_out_name);
+        if (a64_rc == 0) {
+            util.print_str("  output: "); util.print_str(a64_out_name); util.print_str("\n");
+        }
+        return a64_rc;
+    }
 
     // Parse (streaming: tokenize chunk-by-chunk, bounded token memory)
     let is i64 as t1 = asm_prof_time();

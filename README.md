@@ -1,11 +1,14 @@
 # Caustic-Assembler
 
-A minimal x86_64 assembler written from scratch in [Caustic](https://github.com/Caua726/Caustic). Currently targeting Linux ELF relocatable objects, using Intel syntax `.s` files and producing `.o` files directly — no LLVM, no GNU as, and no C linker dependencies.
+An x86_64/AArch64 assembler written from scratch in
+[Caustic](https://github.com/Caua726/Caustic). It produces Linux ELF64
+relocatable objects directly from Intel-syntax x86_64 or GNU-like AArch64
+assembly — no LLVM, GNU `as`, or C linker dependency in the production path.
 
 ## How it works
 
 ```
-.s (Intel syntax) → Lexer → Parser → Pass 1 (symbols) → Pass 2 (encode) → ELF .o
+.s (x86_64 or AArch64) → target assembler → two passes → ELF64 .o
 ```
 
 The assembler runs in two passes:
@@ -32,6 +35,7 @@ gcc -no-pie caustic-assembler/main.cst.s -o caustic-as
 ```bash
 # Assemble a .s file
 ./caustic-as input.s          # produces input.s.o
+./caustic-as --target=linux-aarch64 input-aarch64.s
 
 # Link with gcc
 gcc -no-pie input.s.o -o program
@@ -106,12 +110,16 @@ Generates standard ELF64 relocatable objects with:
 
 ## Status
 
-Covers 100% of the x86_64 instructions emitted by the Caustic compiler's codegen, verified against GCC's assembler with a 30-test suite covering arithmetic, floats, structs, generics, impl blocks and the full standard library (mem, string, linux).
+Covers the x86_64 instructions and the scalar AArch64 instructions emitted by
+the corresponding Caustic code generators. The AArch64 path is also checked
+against GNU `as` as a test oracle.
 
 ## Limitations
 
-- Linux x86_64 only
-- Intel syntax only (no AT&T)
+- Linux ELF64 output for x86_64 and AArch64
+- Intel syntax only for x86_64 (no AT&T); the AArch64 path accepts the
+  compiler's GNU-like scalar syntax
+- No AArch64 NEON/SIMD encoding yet
 - No macro support
 - No indirect calls/jumps (`call *rax`)
 - No scale/index addressing (`[rdi + rsi*4]`)
@@ -124,8 +132,9 @@ Covers 100% of the x86_64 instructions emitted by the Caustic compiler's codegen
 |------|---------|
 | `lexer.cst` | Tokenizer — registers, instructions, directives, numbers, strings |
 | `encoder.cst` | x86_64 instruction encoder — opcodes, ModR/M, REX prefixes |
-| `main.cst` | Parser + two-pass assembler + entry point |
-| `elf.cst` | ELF64 object file writer — headers, sections, symbols, relocations |
+| `aarch64/assembler.cst` | AArch64 parser, fixed-width encoder and relocation generation |
+| `main.cst` | Target dispatch, x86_64 parser and CLI entry point |
+| `output/elf.cst` | Target-aware ELF64 object writer — headers, sections, symbols, relocations |
 
 ## License
 

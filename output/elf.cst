@@ -4,10 +4,12 @@ use "../../std/os.cst" as os;
 use "../../src/ir/opt_mem.cst" as om;
 use "../encoder/encoder_util.cst" as enc;
 use "../core/buf.cst" as buf;
+use "../../src/codegen/target.cst" as tgt;
 
 // ELF constants
 let is i32 as ET_REL with imut = 1;
 let is i32 as EM_X86_64 with imut = 62;
+let is i32 as EM_AARCH64 with imut = 183;
 let is i32 as SHT_NULL with imut = 0;
 let is i32 as SHT_PROGBITS with imut = 1;
 let is i32 as SHT_SYMTAB with imut = 2;
@@ -556,8 +558,10 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     buf.buf_emit64_le(&out, 0); // padding
     // e_type = ET_REL
     buf.buf_emit16_le(&out, ET_REL);
-    // e_machine = EM_X86_64
-    buf.buf_emit16_le(&out, EM_X86_64);
+    // e_machine follows the selected compiler target.
+    let is i32 as machine with mut = EM_X86_64;
+    if (tgt.target_get().arch == tgt.ARCH_AARCH64) { machine = EM_AARCH64; }
+    buf.buf_emit16_le(&out, machine);
     // e_version
     buf.buf_emit32_le(&out, 1);
     // e_entry
