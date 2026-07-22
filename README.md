@@ -15,19 +15,17 @@ The assembler runs in two passes:
 - **Pass 1**: Collects all labels and symbols, calculates instruction sizes and section offsets
 - **Pass 2**: Encodes instructions to machine code, emits data directives, generates relocations
 
-The output is a standard ELF64 relocatable object file (`.o`) that can be linked with `gcc` or `ld`.
+The output is a standard ELF64 relocatable object file (`.o`), linked into an
+executable by `caustic-ld`. The whole path — assemble and link — stays inside
+the Caustic toolchain.
 
 ## Building
 
-Requires the [Caustic compiler](https://github.com/Caua726/Caustic):
+Built by the Caustic toolchain itself — no `make`, `gcc`, or any external tool:
 
 ```bash
 # From the Caustic repo root
-make assembler    # produces ./caustic-as
-
-# Or manually
-./caustic caustic-assembler/main.cst
-gcc -no-pie caustic-assembler/main.cst.s -o caustic-as
+./caustic-mk build caustic-as    # produces ./caustic-as
 ```
 
 ## Usage
@@ -37,13 +35,15 @@ gcc -no-pie caustic-assembler/main.cst.s -o caustic-as
 ./caustic-as input.s          # produces input.s.o
 ./caustic-as --target=linux-aarch64 input-aarch64.s
 
-# Link with gcc
-gcc -no-pie input.s.o -o program
+# Link with the Caustic linker
+./caustic-ld input.s.o -o program
 
-# Full pipeline from Caustic source
+# Full pipeline from Caustic source (compiler -> assembler -> linker)
 ./caustic program.cst
 ./caustic-as program.cst.s
-gcc -no-pie program.cst.s.o -o program
+./caustic-ld program.cst.s.o -o program
+
+# In practice, `./caustic program.cst -o program` runs all three in-process.
 ```
 
 ## Supported instructions
@@ -121,10 +121,6 @@ against GNU `as` as a test oracle.
   compiler's GNU-like scalar syntax
 - No AArch64 NEON/SIMD encoding yet
 - No macro support
-- No indirect calls/jumps (`call *rax`)
-- No scale/index addressing (`[rdi + rsi*4]`)
-- No GOT relocations (use `gcc -no-pie` for linking)
-- Single value per data directive (no `.byte 1, 2, 3`)
 
 ## Architecture
 
