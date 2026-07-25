@@ -11,6 +11,9 @@ use "../encoder/encoder_util.cst" as enc;
 use "../output/elf.cst" as elf;
 use "../output/passes.cst" as passes;
 use "../parser/custom_sections.cst" as cs;
+use "../parser/cstimport.cst" as ci;
+use "../output/coff.cst" as coffw;
+use "../../src/codegen/target.cst" as tgt;
 
 let is i64 as R_AARCH64_ABS64 with imut = 257;
 let is i64 as R_AARCH64_ADR_PREL_PG_HI21 with imut = 275;
@@ -474,6 +477,24 @@ fn encode_inst(line as *Slice, pc as i64, st as *elf.SymbolTable,
 
 fn emit_data(line as *Slice, target as *buf.ByteBuffer, section as i32,
              bss_size as *i64, st as *elf.SymbolTable, relocs as *elf.RelocList) as i32 {
+    // `.cstimport "<dll>" <symbol>` — emitted by the backend beside every FFI
+    // call. Unknown directives fall through this function returning 0, so before
+    // this the AArch64 path dropped them silently and no import table was built.
+    if (starts(line, ".cstimport", 10) == 1) {
+        let is Slice as a = after_prefix(line, 10);
+        let is i32 as p with mut = 0;
+        let is Slice as dll = next_tok(&a, &p);
+        let is Slice as sym = next_tok(&a, &p);
+        if (dll.len == 0 || sym.len == 0) { return 1; }
+        let is *u8 as dp with mut = dll.ptr;
+        let is i32 as dlen with mut = dll.len;
+        if (dlen >= 2 && dp[0] == 34 && dp[dlen - 1] == 34) {
+            dp = cast(*u8, cast(i64, dp) + 1);
+            dlen = dlen - 2;
+        }
+        ci.cstimport_add(dp, dlen, sym.ptr, sym.len);
+        return 0;
+    }
     if (starts(line, ".string", 7) == 1 || starts(line, ".ascii", 6) == 1) {
         let is i32 as n with mut = 7; if (starts(line, ".ascii", 6) == 1) { n = 6; }
         let is Slice as a = after_prefix(line, n); let is i32 as dl with mut = 0;
@@ -547,6 +568,7 @@ fn pass2(src as *u8, size as i64, st as *elf.SymbolTable, text as *buf.ByteBuffe
 
 fn assemble_buf(src as *u8, size as i64, obj_path as *u8) as i32 {
     cs.csec_init();
+    ci.cstimport_init();
     let is elf.SymbolTable as st = elf.sym_init();
     if (pass1(src, size, &st) != 0) { return 1; }
     let is buf.ByteBuffer as text = buf.buf_init(65536);
@@ -556,8 +578,17 @@ fn assemble_buf(src as *u8, size as i64, obj_path as *u8) as i32 {
     let is elf.RelocList as text_relocs = elf.reloc_init();
     let is elf.RelocList as data_relocs = elf.reloc_init();
     if (pass2(src, size, &st, &text, &data, &rodata, &bss_size, &text_relocs, &data_relocs) != 0) { return 1; }
+    // Serialize any .cstimport entries into the custom section the linker reads.
+    ci.cstimport_emit_section();
     let is i64 as fd = io._open_write(obj_path);
     if (fd < 0) { io.eprint_str("caustic-as: cannot create output\n"); return 1; }
+    // A Windows target wants a COFF .obj; everything else gets ELF.
+    if (tgt.target_get().object_format == 2) {
+        coffw.write_coff(fd, &text, &data, &rodata, bss_size, &st, &text_relocs, &data_relocs,
+                         cs.csec_buf_ptrs, cs.csec_name_ptrs, cs.csec_name_lens, cs.csec_reloc_ptrs, cs.csec_count);
+        io._close_fd(fd);
+        return 0;
+    }
     elf.write_elf(fd, &text, &data, &rodata, bss_size, &st, &text_relocs, &data_relocs,
                   cs.csec_buf_ptrs, cs.csec_name_ptrs, cs.csec_name_lens, cs.csec_reloc_ptrs, cs.csec_count);
     io._close_fd(fd);

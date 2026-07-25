@@ -10,6 +10,7 @@ use "encoder/encoder_emit.cst" as ence;
 use "parser/custom_sections.cst" as cs;
 use "parser/cstimport.cst" as ci;
 use "output/elf.cst" as elf;
+use "output/coff.cst" as coffw;
 use "core/buf.cst" as buf;
 use "../src/codegen/target.cst" as tgt;
 use "aarch64/assembler.cst" as a64;
@@ -114,6 +115,13 @@ fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
         util.print_str("\n");
         return 1;
     }
+    // A Windows target wants a COFF .obj; everything else gets ELF.
+    if (tgt.target_get().object_format == 2) {
+        coffw.write_coff(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs,
+                         cs.csec_buf_ptrs, cs.csec_name_ptrs, cs.csec_name_lens, cs.csec_reloc_ptrs, cs.csec_count);
+        io._close_fd(fd);
+        return 0;
+    }
     elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs,
                   cs.csec_buf_ptrs, cs.csec_name_ptrs, cs.csec_name_lens, cs.csec_reloc_ptrs, cs.csec_count);
     io._close_fd(fd);
@@ -174,10 +182,6 @@ fn main(argc as i64, argv as i64) as i32 {
             let is i32 as ok = tgt.load_target(triple, tlen);
             if (ok == 0) {
                 io._write_fd(io.STDERR, "caustic-as: unknown --target\n", 29);
-                return 1;
-            }
-            if (tgt.str_eq_local(triple, tlen, "windows-x86_64", 14) == 1) {
-                io._write_fd(io.STDERR, "caustic-as: windows-x86_64 not yet implemented\n", 47);
                 return 1;
             }
         } else {
@@ -259,6 +263,13 @@ fn main(argc as i64, argv as i64) as i32 {
         return 1;
     }
     let is i64 as t4 = asm_prof_time();
+    // A Windows target wants a COFF .obj; everything else gets ELF.
+    if (tgt.target_get().object_format == 2) {
+        coffw.write_coff(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs,
+                         cs.csec_buf_ptrs, cs.csec_name_ptrs, cs.csec_name_lens, cs.csec_reloc_ptrs, cs.csec_count);
+        io._close_fd(fd);
+        return 0;
+    }
     elf.write_elf(fd, &text_buf, &data_buf, &rodata_buf, bss_size, &symtab, &relocs, &data_relocs,
                   cs.csec_buf_ptrs, cs.csec_name_ptrs, cs.csec_name_lens, cs.csec_reloc_ptrs, cs.csec_count);
     io._close_fd(fd);
