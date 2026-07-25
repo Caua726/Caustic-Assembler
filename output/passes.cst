@@ -273,7 +273,19 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
         let is *pl.ParsedLine as line = pl.pl_get(lines, i);
 
         if (line.kind == pl.LINE_INST) {
-            pass2_encode_inst(line, symtab, text_buf, relocs);
+            // pass1 already assigns per-section offsets to instructions; pass2
+            // used to encode every one into text_buf regardless, so a function
+            // emitted under `.section .foo` silently landed in .text. Route the
+            // bytes (and its relocations) to the section the line belongs to.
+            let is *buf.ByteBuffer as itgt with mut = text_buf;
+            let is *elf.RelocList as irl with mut = relocs;
+            if (line.section >= cs.SECTION_CUSTOM_BASE) {
+                let is *i64 as ibp = cast(*i64, cs.csec_buf_ptrs);
+                itgt = cast(*buf.ByteBuffer, ibp[line.section - cs.SECTION_CUSTOM_BASE]);
+                let is *i64 as irp = cast(*i64, cs.csec_reloc_ptrs);
+                irl = cast(*elf.RelocList, irp[line.section - cs.SECTION_CUSTOM_BASE]);
+            }
+            pass2_encode_inst(line, symtab, itgt, irl);
         }
         else if (line.kind == pl.LINE_DIRECTIVE) {
             let is *buf.ByteBuffer as target with mut = text_buf;

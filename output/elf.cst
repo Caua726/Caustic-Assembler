@@ -19,6 +19,16 @@ let is i32 as SHT_NOBITS with imut = 8;
 let is i32 as SHF_WRITE with imut = 1;
 let is i32 as SHF_ALLOC with imut = 2;
 let is i32 as SHF_EXECINSTR with imut = 4;
+
+// Per-custom-section "holds code" bits (32 * i32), published by
+// custom_sections.csec_init. It lives here rather than being imported because
+// custom_sections already depends on this module; a direct import would cycle.
+let is *u8 as csec_exec_ptr with mut;
+fn csec_exec_flags(idx as i32) as i32 {
+    if (cast(i64, csec_exec_ptr) == 0) { return 0; }
+    let is *i32 as p = cast(*i32, csec_exec_ptr);
+    return p[idx];
+}
 let is i32 as STB_LOCAL with imut = 0;
 let is i32 as STB_GLOBAL with imut = 1;
 let is i32 as STT_NOTYPE with imut = 0;
@@ -690,12 +700,16 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     buf.buf_emit64_le(&out, 8);
     buf.buf_emit64_le(&out, 0);
 
-    // 5..5+N: custom sections
+    // 5..5+N: custom sections. A section declared with an "x" flag holds code
+    // (a function carrying `with section(...)`), so it gets ALLOC+EXECINSTR and
+    // the linker maps it executable; everything else stays ALLOC+WRITE data.
     csi = 0;
     while (csi < csec_count) {
+        let is i64 as cs_flags with mut = cast(i64, SHF_ALLOC + SHF_WRITE);
+        if (csec_exec_flags(csi) == 1) { cs_flags = cast(i64, SHF_ALLOC + SHF_EXECINSTR); }
         buf.buf_emit32_le(&out, cast(i64, csec_sh_names[csi]));
         buf.buf_emit32_le(&out, cast(i64, SHT_PROGBITS));
-        buf.buf_emit64_le(&out, cast(i64, SHF_ALLOC + SHF_WRITE));
+        buf.buf_emit64_le(&out, cs_flags);
         buf.buf_emit64_le(&out, 0);
         buf.buf_emit64_le(&out, csec_file_offs[csi]);
         buf.buf_emit64_le(&out, csec_file_sizes[csi]);

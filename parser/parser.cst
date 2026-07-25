@@ -228,6 +228,26 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
                 }
                 let is i32 as cidx = cs.csec_find_or_add(sname, sname_len);
                 *current_section = cs.SECTION_CUSTOM_BASE + cidx;
+                // `.section .name, "ax", @progbits` — the flag string decides
+                // whether this section holds code. These flags used to be
+                // skipped wholesale, so a section carrying a function was
+                // indistinguishable from one carrying data and ended up mapped
+                // non-executable. Walk the rest of the line for the quoted flag
+                // token (skipping commas and @progbits) and look for 'x'.
+                let is i32 as fp with mut = p + 1;
+                while (1 == 1) {
+                    let is *lex.Token as ft = lex.tl_get(tl, fp);
+                    if (ft.kind == lex.TK_NEWLINE || ft.kind == lex.TK_EOF) { break; }
+                    if (ft.len >= 2 && ft.ptr[0] == 34) {          // a "..." token
+                        let is i32 as fi with mut = 1;
+                        while (fi < ft.len - 1) {
+                            if (ft.ptr[fi] == 120) { cs.csec_mark_exec(cidx); }  // 'x'
+                            fi = fi + 1;
+                        }
+                        break;
+                    }
+                    fp = fp + 1;
+                }
             }
             p = p + 1;
         }

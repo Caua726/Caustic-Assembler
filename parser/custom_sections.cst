@@ -18,6 +18,11 @@ let is *u8 as csec_name_ptrs with mut;
 let is *u8 as csec_name_lens with mut;
 let is *u8 as csec_buf_ptrs  with mut;
 let is *u8 as csec_reloc_ptrs with mut;  // 32 * 8 — array of *elf.RelocList
+// 32 * 4 — 1 when the `.section` directive carried an "x" in its flag string.
+// Set from the flags the parser used to discard entirely; it becomes
+// SHF_EXECINSTR in the object, which is how the linker learns a custom section
+// holds code and must land in an executable segment rather than beside .data.
+let is *u8 as csec_is_exec with mut;
 let is i32 as csec_count with mut = 0;
 
 fn csec_init() as void {
@@ -25,7 +30,23 @@ fn csec_init() as void {
     csec_name_lens  = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 4);
     csec_buf_ptrs   = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
     csec_reloc_ptrs = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
+    csec_is_exec    = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 4);
+    elf.csec_exec_ptr = csec_is_exec;   // ELF writer reads the bits from here
     csec_count = 0;
+}
+
+// Mark section `idx` executable. Called by the parser when the directive's
+// flag string contains 'x'.
+fn csec_mark_exec(idx as i32) as void {
+    if (idx < 0 || idx >= MAX_CUSTOM_SECTIONS) { return; }
+    let is *i32 as xp = cast(*i32, csec_is_exec);
+    xp[idx] = 1;
+}
+
+fn csec_get_exec(idx as i32) as i32 {
+    if (idx < 0 || idx >= csec_count) { return 0; }
+    let is *i32 as xp = cast(*i32, csec_is_exec);
+    return xp[idx];
 }
 
 fn csec_find_or_add(name as *u8, name_len as i32) as i32 {
