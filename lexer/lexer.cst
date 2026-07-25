@@ -398,6 +398,7 @@ fn init_ht() as void {
     ht_insert(115, 104, 114, 0, 0, 3, 2, def.INST_SHR); // shr
     ht_insert(115, 97, 114, 0, 0, 3, 2, def.INST_SAR);  // sar
     ht_insert(100, 105, 118, 0, 0, 3, 2, def.INST_DIV); // div
+    ht_insert(109, 117, 108, 0, 0, 3, 2, def.INST_MUL); // mul
     ht_insert(99, 113, 111, 0, 0, 3, 2, def.INST_CQO);  // cqo
     ht_insert(99, 100, 113, 0, 0, 3, 2, def.INST_CDQ);  // cdq
     ht_insert(99, 109, 112, 0, 0, 3, 2, def.INST_CMP);  // cmp

@@ -96,6 +96,11 @@ let is i32 as INST_LEA     with imut = 5;
 let is i32 as INST_ADD     with imut = 6;
 let is i32 as INST_SUB     with imut = 7;
 let is i32 as INST_IMUL    with imut = 8;
+// MUL r/m64 (F7 /4): rdx:rax = rax * operand, UNSIGNED. The signed
+// counterpart (IMUL, F7 /5) was here and this was not, so the only
+// instruction that yields the high half of an unsigned product could
+// not be assembled at all.
+let is i32 as INST_MUL     with imut = 256;
 let is i32 as INST_IDIV    with imut = 9;
 let is i32 as INST_CQO     with imut = 10;
 let is i32 as INST_NEG     with imut = 11;
@@ -221,6 +226,7 @@ fn inst_name(id as i32) as *u8 {
     if (id == INST_ADD) { return "add"; }
     if (id == INST_SUB) { return "sub"; }
     if (id == INST_IMUL) { return "imul"; }
+    if (id == INST_MUL) { return "mul"; }
     if (id == INST_IDIV) { return "idiv"; }
     if (id == INST_CQO) { return "cqo"; }
     if (id == INST_NEG) { return "neg"; }

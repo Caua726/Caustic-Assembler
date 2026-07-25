@@ -178,8 +178,9 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
     else if (len == 3) {
         let is u8 as c1 = ptr[1];
         let is u8 as c2 = ptr[2];
-        if (c0 == 109) { // mov
+        if (c0 == 109) { // mov, mul
             if (c1 == 111 && c2 == 118) { return def.INST_MOV; }
+            if (c1 == 117 && c2 == 108) { return def.INST_MUL; }
         }
         else if (c0 == 108 && c1 == 101 && c2 == 97) { return def.INST_LEA; } // lea
         else if (c0 == 97 && c1 == 100 && c2 == 100) { return def.INST_ADD; } // add

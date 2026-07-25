@@ -80,7 +80,7 @@ fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 
     }
 
     // IDIV/DIV/NEG/NOT reg: always REX + opcode + ModRM = 3
-    if ((inst == def.INST_IDIV || inst == def.INST_DIV || inst == def.INST_NEG || inst == def.INST_NOT) && op1.kind == def.OP_REG) {
+    if ((inst == def.INST_IDIV || inst == def.INST_DIV || inst == def.INST_MUL || inst == def.INST_NEG || inst == def.INST_NOT) && op1.kind == def.OP_REG) {
         return 3;
     }
 
