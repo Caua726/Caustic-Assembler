@@ -6,6 +6,43 @@ use "../encoder/encoder_emit.cst" as ence;
 use "../encoder/encoder_size.cst" as encs;
 use "../parser/parsed_line.cst" as pl;
 use "../parser/custom_sections.cst" as cs;
+use "../core/util.cst" as util;
+
+// === Duplicate definitions ===
+//
+// The symbol table is keyed by name with no per-function scope, and
+// sym_find_or_add updates a symbol only while it is still a forward reference
+// (section == UNDEF). So a name defined a SECOND time used to be swallowed:
+// the first definition kept its offset, and every jump to that name resolved
+// there — often inside a different function entirely.
+//
+// That is how an -O1 miscompile in the caller reached the user as a segfault
+// with no diagnostic. The compiler was duplicating a `naked` asm body, the
+// label inside it landed in the output twice, and the assembler had no opinion
+// about it. It has one now. The compiler side is fixed; this is so the next
+// producer of a bad .s hears about it here.
+let is i32 as _dup_err with mut = 0;
+fn pass_had_error() as i32 { return _dup_err; }
+
+fn _report_dup(line as *pl.ParsedLine, prev as *elf.Symbol) as void {
+    _dup_err = 1;
+    util.eprint_str("caustic-as: error: line ");
+    util.eprint_int(cast(i64, line.line_no));
+    util.eprint_str(": label '");
+    let is i32 as i with mut = 0;
+    while (i < line.label_len) {
+        let is [2]u8 as ch;
+        ch[0] = line.label_ptr[i];
+        ch[1] = cast(u8, 0);
+        util.eprint_str(cast(*u8, &ch));
+        i = i + 1;
+    }
+    util.eprint_str("' is defined twice (first at offset ");
+    util.eprint_int(prev.offset);
+    util.eprint_str(" of section ");
+    util.eprint_int(cast(i64, prev.section));
+    util.eprint_str(")\n");
+}
 
 // === String decoding (for .string/.ascii directive data) ===
 
@@ -95,6 +132,15 @@ fn pass1(lines as *pl.ParsedLines, symtab as *elf.SymbolTable) as void {
             else if (line.section == cs.SECTION_RODATA) { off = rodata_off; }
             else if (line.section == cs.SECTION_BSS) { off = bss_off; }
             else if (line.section >= cs.SECTION_CUSTOM_BASE) { off = csec_offs[line.section - cs.SECTION_CUSTOM_BASE]; }
+            // A name already carrying a real section is a second definition,
+            // not a forward reference being satisfied. `.globl foo` before
+            // `foo:` is the legitimate case and arrives as UNDEF, so it is not
+            // caught here.
+            let is i32 as prev_idx = elf.sym_find(symtab, line.label_ptr, line.label_len);
+            if (prev_idx != 99999) {
+                let is *elf.Symbol as prev = elf.sym_get(symtab, prev_idx);
+                if (prev.section != cs.SECTION_UNDEF) { _report_dup(line, prev); }
+            }
             elf.sym_find_or_add(symtab, line.label_ptr, line.label_len, line.section, off, 0);
         }
         else if (line.kind == pl.LINE_DIRECTIVE) {

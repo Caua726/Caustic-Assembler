@@ -87,6 +87,10 @@ fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
     passes.pass1(&lines, &symtab);
     if (asm_prof_enabled == 1) { asm_prof_times[2] = asm_prof_time() - t2; }
 
+    // A label defined twice used to resolve to whichever definition pass1 saw
+    // first, in silence, and every jump to that name landed there. Refuse.
+    if (passes.pass_had_error() != 0) { pl.pl_free(&lines); return 1; }
+
     let is i64 as t3 = asm_prof_time();
     let is buf.ByteBuffer as text_buf = buf.buf_init(65536);
     let is buf.ByteBuffer as data_buf = buf.buf_init(4096);
@@ -231,6 +235,13 @@ fn main(argc as i64, argv as i64) as i32 {
     passes.pass1(&lines, &symtab);
     if (asm_prof_enabled == 1) { asm_prof_times[2] = asm_prof_time() - t2; }
     util.print_str("  symbols: "); util.print_int(cast(i64, symtab.count)); util.print_str("\n");
+
+    // See the note at the other pass1 call site.
+    if (passes.pass_had_error() != 0) {
+        io._write_fd(io.STDERR, "caustic-as: aborting: duplicate label definition(s)\n", 52);
+        pl.pl_free(&lines);
+        return 1;
+    }
 
     // Pass 2
     let is i64 as t3 = asm_prof_time();
