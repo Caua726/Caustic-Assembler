@@ -35,6 +35,14 @@ let is i32 as DIR_INCBIN   with imut = 17;
 // widen back to i32. Register fields use i16, not i8, because REG_NONE == 255
 // does not fit a signed i8. Values that can be large (imm/disp/num/offset;
 // line_no for big files) stay i64/i32.
+//
+// A DIRECTIVE'S ARGUMENT IS NOT LOW-CARDINALITY. `.string` carries a whole
+// string literal and `.zero` a whole array's size, and both were i16: a literal
+// of 32768 source characters wrapped to negative, the data landed truncated or
+// garbled, and every later offset was computed off it. Silently — the only
+// symptom was a program reading nonsense out of its own constant. 32767 worked.
+// A 40 KB string literal in a generated table is an ordinary thing to write, so
+// dir_arg_len, decoded_len and size are i32.
 struct ParsedLine {
     kind as i8;
     section as i8;
@@ -66,12 +74,12 @@ struct ParsedLine {
     label_len as i16;
     dir_kind as i8;
     dir_arg_ptr as *u8;
-    dir_arg_len as i16;
+    dir_arg_len as i32;
     dir_num as i64;
     decoded_ptr as *u8;
-    decoded_len as i16;
+    decoded_len as i32;
     offset as i64;
-    size as i16;
+    size as i32;
     line_no as i32;
 }
 
