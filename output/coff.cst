@@ -3,6 +3,7 @@ use "../core/buf.cst" as buf;
 use "elf.cst" as elf;
 use "../parser/custom_sections.cst" as cs;
 use "../../src/codegen/target.cst" as tgt;
+use "../../src/ir/opt_mem.cst" as om;
 
 // =======================================================
 // caustic-assembler/coff.cst — PE/COFF object writer
@@ -122,7 +123,10 @@ fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffe
     // are relative to the table start and begin at 4, past its own size field.
     let is buf.ByteBuffer as strtab = buf.buf_init(1024);
     buf.buf_emit32_le(&strtab, 0);          // size, patched below
-    let is [32]i64 as csec_name_offs;
+    // This and the per-section arrays below are sized by the section count.
+    // They were [32] and [36] (4 standard + 32 custom) on the stack, indexed
+    // past their end by a 33rd custom section.
+    let is *i64 as csec_name_offs = cast(*i64, om.opt_alloc(cast(i64, csec_count + 1) * 8));
     let is i32 as i with mut = 0;
     while (i < csec_count) {
         csec_name_offs[i] = 0;
@@ -134,9 +138,10 @@ fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffe
         i = i + 1;
     }
 
-    let is [36]i64 as sec_size;
-    let is [36]i64 as sec_data;     // byte pointer, 0 for bss
-    let is [36]i64 as sec_relocs;   // *RelocList, 0 when none
+    let is i64 as nslots = cast(i64, nsec) + 1;
+    let is *i64 as sec_size = cast(*i64, om.opt_alloc(nslots * 8));
+    let is *i64 as sec_data = cast(*i64, om.opt_alloc(nslots * 8));     // byte pointer, 0 for bss
+    let is *i64 as sec_relocs = cast(*i64, om.opt_alloc(nslots * 8));   // *RelocList, 0 when none
     sec_size[0] = text_buf.len;   sec_data[0] = cast(i64, text_buf.data);   sec_relocs[0] = cast(i64, relocs);
     sec_size[1] = data_buf.len;   sec_data[1] = cast(i64, data_buf.data);   sec_relocs[1] = cast(i64, data_relocs);
     sec_size[2] = rodata_buf.len; sec_data[2] = cast(i64, rodata_buf.data); sec_relocs[2] = 0;
@@ -150,9 +155,9 @@ fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffe
         i = i + 1;
     }
 
-    let is [36]i64 as sec_raw_ptr;
-    let is [36]i64 as sec_rel_ptr;
-    let is [36]i64 as sec_rel_n;
+    let is *i64 as sec_raw_ptr = cast(*i64, om.opt_alloc(nslots * 8));
+    let is *i64 as sec_rel_ptr = cast(*i64, om.opt_alloc(nslots * 8));
+    let is *i64 as sec_rel_n = cast(*i64, om.opt_alloc(nslots * 8));
     let is i64 as cursor with mut = 20 + cast(i64, nsec) * 40;
     i = 0;
     while (i < nsec) {

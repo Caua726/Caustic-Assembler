@@ -117,9 +117,11 @@ fn pass1(lines as *pl.ParsedLines, symtab as *elf.SymbolTable) as void {
     // directive in a `with section(".x")` block (and esp. a section entered
     // more than once) gets offset 0 — so a 2nd global in the same custom
     // section aliases the 1st. Indexed by (section - SECTION_CUSTOM_BASE).
-    let is [32]i64 as csec_offs;
+    // Sized by the section count; this was a [32] indexed past its end once a
+    // file had a 33rd custom section.
+    let is *i64 as csec_offs = cast(*i64, om.opt_alloc(cast(i64, cs.csec_count) * 8 + 8));
     let is i32 as cz with mut = 0;
-    while (cz < 32) { csec_offs[cz] = 0; cz = cz + 1; }
+    while (cz <= cs.csec_count) { csec_offs[cz] = 0; cz = cz + 1; }
     let is i32 as i with mut = 0;
 
     while (i < lines.count) {

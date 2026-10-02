@@ -20,7 +20,7 @@ let is i32 as SHF_WRITE with imut = 1;
 let is i32 as SHF_ALLOC with imut = 2;
 let is i32 as SHF_EXECINSTR with imut = 4;
 
-// Per-custom-section "holds code" bits (32 * i32), published by
+// Per-custom-section "holds code" bits (one i32 each), published by
 // custom_sections.csec_init. It lives here rather than being imported because
 // custom_sections already depends on this module; a direct import would cycle.
 let is *u8 as csec_exec_ptr with mut;
@@ -251,7 +251,7 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     let is i32 as sh_bss_name = cast(i32, shstrtab.len);
     buf.buf_append(&shstrtab, ".bss", 5);
     // Custom section names.
-    let is [32]i32 as csec_sh_names;
+    let is *i32 as csec_sh_names = cast(*i32, om.opt_alloc(cast(i64, csec_count + 1) * 4));
     let is *i64 as csec_nps = cast(*i64, csec_name_ptrs);
     let is *i32 as csec_nls = cast(*i32, csec_name_lens);
     let is i32 as csi with mut = 0;
@@ -273,7 +273,7 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
         buf.buf_append(&shstrtab, ".rela.data", 11);
     }
     // .rela.<csec_name> — one per custom section with relocs.
-    let is [32]i32 as csec_rela_sh_names;
+    let is *i32 as csec_rela_sh_names = cast(*i32, om.opt_alloc(cast(i64, csec_count + 1) * 4));
     let is i32 as _sn with mut = 0;
     while (_sn < csec_count) {
         let is *RelocList as _rl2 = cast(*RelocList, csec_rps[_sn]);
@@ -442,7 +442,9 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     }
 
     // Build .rela.<csec> for each custom section with relocs.
-    let is [32]buf.ByteBuffer as csec_rela_bufs;
+    // This and the four offset/size arrays below are sized by csec_count. They
+    // were [32] on the stack, indexed past their end by a 33rd custom section.
+    let is *buf.ByteBuffer as csec_rela_bufs = cast(*buf.ByteBuffer, om.opt_alloc(cast(i64, csec_count + 1) * sizeof(buf.ByteBuffer)));
     let is i32 as _crb with mut = 0;
     while (_crb < csec_count) {
         csec_rela_bufs[_crb] = buf.buf_init(128);
@@ -495,8 +497,8 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
 
     // Custom sections layout. csec_buf_ptrs is *u8 → array of i64 pointers
     // (one per ByteBuffer). Dereference each to get its real buffer.
-    let is [32]i64 as csec_file_offs;
-    let is [32]i64 as csec_file_sizes;
+    let is *i64 as csec_file_offs = cast(*i64, om.opt_alloc(cast(i64, csec_count + 1) * 8));
+    let is *i64 as csec_file_sizes = cast(*i64, om.opt_alloc(cast(i64, csec_count + 1) * 8));
     let is *i64 as csec_bps = cast(*i64, csec_buf_ptrs);
     csi = 0;
     while (csi < csec_count) {
@@ -536,8 +538,8 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
     }
 
     // .rela.<csec> layout (one per non-empty csec reloc list).
-    let is [32]i64 as csec_rela_offs;
-    let is [32]i64 as csec_rela_sizes;
+    let is *i64 as csec_rela_offs = cast(*i64, om.opt_alloc(cast(i64, csec_count + 1) * 8));
+    let is *i64 as csec_rela_sizes = cast(*i64, om.opt_alloc(cast(i64, csec_count + 1) * 8));
     let is i32 as _cro with mut = 0;
     while (_cro < csec_count) {
         csec_rela_offs[_cro] = 0;

@@ -14,6 +14,7 @@ use "../parser/custom_sections.cst" as cs;
 use "../parser/cstimport.cst" as ci;
 use "../output/coff.cst" as coffw;
 use "../../src/codegen/target.cst" as tgt;
+use "../../src/ir/opt_mem.cst" as om;
 
 let is i64 as R_AARCH64_ABS64 with imut = 257;
 let is i64 as R_AARCH64_ADR_PREL_PG_HI21 with imut = 275;
@@ -209,8 +210,12 @@ fn pass1(src as *u8, size as i64, st as *elf.SymbolTable) as i32 {
     let is i64 as data_off with mut = 0;
     let is i64 as ro_off with mut = 0;
     let is i64 as bss_off with mut = 0;
-    let is [32]i64 as csec_offs;
-    let is i32 as zi with mut = 0; while (zi < 32) { csec_offs[zi] = 0; zi = zi + 1; }
+    // Sections are discovered during this scan, so the count is not known yet;
+    // MAX_CUSTOM_SECTIONS bounds every index csec_find_or_add can hand out. This
+    // was a [32], indexed past its end by a 33rd custom section.
+    let is i64 as ncs = cast(i64, cs.MAX_CUSTOM_SECTIONS) + 1;
+    let is *i64 as csec_offs = cast(*i64, om.opt_alloc(ncs * 8));
+    let is i64 as zi with mut = 0; while (zi < ncs) { csec_offs[zi] = 0; zi = zi + 1; }
     let is i32 as section with mut = cs.SECTION_TEXT;
     let is i64 as p with mut = 0;
     while (p < size) {
@@ -228,7 +233,7 @@ fn pass1(src as *u8, size as i64, st as *elf.SymbolTable) as i32 {
         }
         if (line.ptr[line.len - 1] == 58) {
             let is Slice as name = make_slice(line.ptr, line.len - 1);
-            let is i64 as off = current_off(section, text_off, data_off, ro_off, bss_off, &csec_offs);
+            let is i64 as off = current_off(section, text_off, data_off, ro_off, bss_off, csec_offs);
             elf.sym_find_or_add(st, name.ptr, name.len, section, off, 0);
             continue;
         }

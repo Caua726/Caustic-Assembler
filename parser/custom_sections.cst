@@ -2,6 +2,8 @@ use "../../src/ir/opt_mem.cst" as om;
 use "../core/buf.cst" as buf;
 use "../output/elf.cst" as elf;
 use "../encoder/encoder_util.cst" as enc;
+use "../core/util.cst" as util;
+use "../../std/io.cst" as io;
 
 // Section IDs. Custom sections (declared via `.section <name>`) are numbered
 // from 4 upward; csec_* globals below hold their names and byte buffers.
@@ -11,14 +13,23 @@ let is i32 as SECTION_RODATA      with imut = 2;
 let is i32 as SECTION_BSS         with imut = 3;
 let is i32 as SECTION_CUSTOM_BASE with imut = 4;
 let is i32 as SECTION_UNDEF       with imut = 99;
-let is i32 as MAX_CUSTOM_SECTIONS with imut = 32;
+// Custom section ids run from SECTION_CUSTOM_BASE up, and must stop short of
+// SECTION_UNDEF: the 96th custom section would be id 99, and every symbol
+// defined in it would be written to the object as undefined — its label
+// resolving to address 0. (ParsedLine.section is an i8 as well, which would
+// allow 123; SECTION_UNDEF is the tighter of the two.) Past the limit it is an
+// error rather than a collision.
+let is i32 as MAX_CUSTOM_SECTIONS with imut = SECTION_UNDEF - SECTION_CUSTOM_BASE;
 
-// Custom sections — parallel arrays, allocated lazily in csec_init.
+// Custom sections — parallel arrays, csec_cap entries each, grown on demand.
+// They were a fixed 32, and the 33rd name came back as SECTION_DATA: its bytes
+// were appended to .data and its own section never reached the object.
 let is *u8 as csec_name_ptrs with mut;
 let is *u8 as csec_name_lens with mut;
 let is *u8 as csec_buf_ptrs  with mut;
-let is *u8 as csec_reloc_ptrs with mut;  // 32 * 8 — array of *elf.RelocList
-// 32 * 4 — 1 when the `.section` directive carried an "x" in its flag string.
+let is *u8 as csec_reloc_ptrs with mut;  // cap * 8 — array of *elf.RelocList
+let is i32 as csec_cap with mut = 0;
+// cap * 4 — 1 when the `.section` directive carried an "x" in its flag string.
 // Set from the flags the parser used to discard entirely; it becomes
 // SHF_EXECINSTR in the object, which is how the linker learns a custom section
 // holds code and must land in an executable segment rather than beside .data.
@@ -26,19 +37,42 @@ let is *u8 as csec_is_exec with mut;
 let is i32 as csec_count with mut = 0;
 
 fn csec_init() as void {
-    csec_name_ptrs  = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
-    csec_name_lens  = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 4);
-    csec_buf_ptrs   = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
-    csec_reloc_ptrs = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 8);
-    csec_is_exec    = om.opt_alloc(cast(i64, MAX_CUSTOM_SECTIONS) * 4);
+    csec_cap = 32;
+    csec_name_ptrs  = om.opt_alloc(cast(i64, csec_cap) * 8);
+    csec_name_lens  = om.opt_alloc(cast(i64, csec_cap) * 4);
+    csec_buf_ptrs   = om.opt_alloc(cast(i64, csec_cap) * 8);
+    csec_reloc_ptrs = om.opt_alloc(cast(i64, csec_cap) * 8);
+    csec_is_exec    = om.opt_alloc(cast(i64, csec_cap) * 4);
     elf.csec_exec_ptr = csec_is_exec;   // ELF writer reads the bits from here
     csec_count = 0;
+}
+
+fn _csec_grow_one(old as *u8, used as i64, new_size as i64) as *u8 {
+    let is *u8 as nb = om.opt_alloc(new_size);
+    let is i64 as i with mut = 0;
+    while (i < used) { nb[i] = old[i]; i = i + 1; }
+    om.opt_free(old);
+    return nb;
+}
+
+// Double the five parallel arrays. Every reader takes cs.csec_* afresh when it
+// needs them, except the ELF writer's copy of the exec bits, updated here.
+fn _csec_grow() as void {
+    let is i64 as n = cast(i64, csec_count);
+    let is i64 as nc = cast(i64, csec_cap) * 2;
+    csec_name_ptrs  = _csec_grow_one(csec_name_ptrs, n * 8, nc * 8);
+    csec_name_lens  = _csec_grow_one(csec_name_lens, n * 4, nc * 4);
+    csec_buf_ptrs   = _csec_grow_one(csec_buf_ptrs, n * 8, nc * 8);
+    csec_reloc_ptrs = _csec_grow_one(csec_reloc_ptrs, n * 8, nc * 8);
+    csec_is_exec    = _csec_grow_one(csec_is_exec, n * 4, nc * 4);
+    elf.csec_exec_ptr = csec_is_exec;
+    csec_cap = cast(i32, nc);
 }
 
 // Mark section `idx` executable. Called by the parser when the directive's
 // flag string contains 'x'.
 fn csec_mark_exec(idx as i32) as void {
-    if (idx < 0 || idx >= MAX_CUSTOM_SECTIONS) { return; }
+    if (idx < 0 || idx >= csec_count) { return; }
     let is *i32 as xp = cast(*i32, csec_is_exec);
     xp[idx] = 1;
 }
@@ -59,10 +93,18 @@ fn csec_find_or_add(name as *u8, name_len as i32) as i32 {
         }
         i = i + 1;
     }
-    if (csec_count >= MAX_CUSTOM_SECTIONS) { return SECTION_DATA; } // fallback
+    if (csec_count >= MAX_CUSTOM_SECTIONS) {
+        util.eprint_str("caustic-as: more than ");
+        util.eprint_int(cast(i64, MAX_CUSTOM_SECTIONS));
+        util.eprint_str(" custom sections in one object\n");
+        io.exit(1);
+    }
+    if (csec_count >= csec_cap) { _csec_grow(); }
     let is i32 as idx = csec_count;
-    np[idx] = cast(i64, name);
-    nl[idx] = name_len;
+    let is *i64 as gnp = cast(*i64, csec_name_ptrs);
+    let is *i32 as gnl = cast(*i32, csec_name_lens);
+    gnp[idx] = cast(i64, name);
+    gnl[idx] = name_len;
     let is *u8 as bb_mem = om.opt_alloc(sizeof(buf.ByteBuffer));
     let is *buf.ByteBuffer as bbp = cast(*buf.ByteBuffer, bb_mem);
     let is buf.ByteBuffer as tmp = buf.buf_init(512);
