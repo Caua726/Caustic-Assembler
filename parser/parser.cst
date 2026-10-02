@@ -251,7 +251,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
             }
             p = p + 1;
         }
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = skip_to_eol(tl, p);
         return p;
     }
@@ -268,7 +268,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".ascii") == 1) {
         line.dir_kind = pl.DIR_ASCII;
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = p + 1;
         let is *lex.Token as asc_tok = lex.tl_get(tl, p);
         if (asc_tok.kind == lex.TK_STRING) {
@@ -280,7 +280,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".string") == 1 || enc.streq_lit(tok.ptr, tok.len, ".asciz") == 1) {
         line.dir_kind = pl.DIR_STRING;
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = p + 1;
         let is *lex.Token as str_tok = lex.tl_get(tl, p);
         if (str_tok.kind == lex.TK_STRING) {
@@ -292,7 +292,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".incbin") == 1) {
         line.dir_kind = pl.DIR_INCBIN;
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = p + 1;
         // `.incbin "path"` splices the raw bytes of an external file into the
         // current section. NUL-terminate the path for the file API, slurp the
@@ -330,7 +330,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".byte") == 1) {
         line.dir_kind = pl.DIR_BYTE;
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = p + 1;
         // `.byte` takes a comma-separated list of values (e.g. `.byte 0x8F, 0x07`);
         // each is one emitted byte. Store them all in decoded_ptr/decoded_len —
@@ -352,7 +352,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".word") == 1 || enc.streq_lit(tok.ptr, tok.len, ".value") == 1) {
         line.dir_kind = pl.DIR_WORD;
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = p + 1;
         let is i32 as np with mut = p;
         line.dir_num = parse_dir_num(tl, p, &np);
@@ -360,7 +360,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".long") == 1) {
         line.dir_kind = pl.DIR_LONG;
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = p + 1;
         let is i32 as np with mut = p;
         line.dir_num = parse_dir_num(tl, p, &np);
@@ -368,7 +368,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".quad") == 1) {
         line.dir_kind = pl.DIR_QUAD;
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = p + 1;
         let is *lex.Token as qt = lex.tl_get(tl, p);
         if (qt.kind == lex.TK_IDENT) {
@@ -384,7 +384,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".zero") == 1) {
         line.dir_kind = pl.DIR_ZERO;
-        line.section = *current_section;
+        line.section = cast(i8, *current_section);
         p = p + 1;
         let is *lex.Token as val_tok = lex.tl_get(tl, p);
         if (val_tok.kind == lex.TK_NUMBER) {
@@ -458,11 +458,11 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
         else if (tok.kind == lex.TK_DIRECTIVE) {
             let is *pl.ParsedLine as line = pl.pl_add(lines);
             line.kind = pl.LINE_DIRECTIVE;
-            line.section = current_section;
+            line.section = cast(i8, current_section);
             line.line_no = cur_line;
             pos = parse_directive(tl, pos, line, &current_section);
             // Update section from directive (may have changed)
-            line.section = current_section;
+            line.section = cast(i8, current_section);
             pos = skip_to_eol(tl, pos);
         }
         // Instruction (but check for label first: "add:" etc.)
@@ -471,16 +471,16 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
             if (peek.kind == lex.TK_COLON) {
                 let is *pl.ParsedLine as lbl = pl.pl_add(lines);
                 lbl.kind = pl.LINE_LABEL;
-                lbl.section = current_section;
+                lbl.section = cast(i8, current_section);
                 lbl.label_ptr = tok.ptr;
-                lbl.label_len = tok.len;
+                lbl.label_len = cast(i16, tok.len);
                 lbl.line_no = cur_line;
                 pos = pos + 2;
             } else {
                 let is *pl.ParsedLine as line = pl.pl_add(lines);
                 line.kind = pl.LINE_INST;
-                line.section = current_section;
-                line.inst_id = tok.id;
+                line.section = cast(i8, current_section);
+                line.inst_id = cast(i16, tok.id);
                 line.line_no = cur_line;
                 pos = parse_instruction(tl, pos + 1, line);
             }
@@ -491,9 +491,9 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
             if (next.kind == lex.TK_COLON) {
                 let is *pl.ParsedLine as line = pl.pl_add(lines);
                 line.kind = pl.LINE_LABEL;
-                line.section = current_section;
+                line.section = cast(i8, current_section);
                 line.label_ptr = tok.ptr;
-                line.label_len = tok.len;
+                line.label_len = cast(i16, tok.len);
                 line.line_no = cur_line;
                 pos = pos + 2;
             } else {

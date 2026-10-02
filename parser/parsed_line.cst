@@ -177,8 +177,8 @@ fn make_op(line as *ParsedLine, which as i32) as def.Operand {
 }
 
 fn set_op_reg(line as *ParsedLine, which as i32, reg_id as i32) as void {
-    if (which == 1) { line.op1_kind = def.OP_REG; line.op1_reg_id = reg_id; }
-    else { line.op2_kind = def.OP_REG; line.op2_reg_id = reg_id; }
+    if (which == 1) { line.op1_kind = def.OP_REG; line.op1_reg_id = cast(i16, reg_id); }
+    else { line.op2_kind = def.OP_REG; line.op2_reg_id = cast(i16, reg_id); }
 }
 
 fn set_op_imm(line as *ParsedLine, which as i32, val as i64) as void {
@@ -187,34 +187,34 @@ fn set_op_imm(line as *ParsedLine, which as i32, val as i64) as void {
 }
 
 fn set_op_mem(line as *ParsedLine, which as i32, base as i32, disp as i64, sz as i32) as void {
-    if (which == 1) { line.op1_kind = def.OP_MEM; line.op1_mem_base = base; line.op1_mem_disp = disp; line.op1_mem_size = sz; line.op1_mem_index = def.REG_NONE; line.op1_mem_scale = 0; }
-    else { line.op2_kind = def.OP_MEM; line.op2_mem_base = base; line.op2_mem_disp = disp; line.op2_mem_size = sz; line.op2_mem_index = def.REG_NONE; line.op2_mem_scale = 0; }
+    if (which == 1) { line.op1_kind = def.OP_MEM; line.op1_mem_base = cast(i16, base); line.op1_mem_disp = disp; line.op1_mem_size = cast(i8, sz); line.op1_mem_index = def.REG_NONE; line.op1_mem_scale = 0; }
+    else { line.op2_kind = def.OP_MEM; line.op2_mem_base = cast(i16, base); line.op2_mem_disp = disp; line.op2_mem_size = cast(i8, sz); line.op2_mem_index = def.REG_NONE; line.op2_mem_scale = 0; }
 }
 
 fn set_op_mem_sib(line as *ParsedLine, which as i32, base as i32, index as i32, scale as i32, disp as i64, sz as i32) as void {
     if (which == 1) {
         line.op1_kind = def.OP_MEM;
-        line.op1_mem_base = base;
-        line.op1_mem_index = index;
-        line.op1_mem_scale = scale;
+        line.op1_mem_base = cast(i16, base);
+        line.op1_mem_index = cast(i16, index);
+        line.op1_mem_scale = cast(i8, scale);
         line.op1_mem_disp = disp;
-        line.op1_mem_size = sz;
+        line.op1_mem_size = cast(i8, sz);
     } else {
         line.op2_kind = def.OP_MEM;
-        line.op2_mem_base = base;
-        line.op2_mem_index = index;
-        line.op2_mem_scale = scale;
+        line.op2_mem_base = cast(i16, base);
+        line.op2_mem_index = cast(i16, index);
+        line.op2_mem_scale = cast(i8, scale);
         line.op2_mem_disp = disp;
-        line.op2_mem_size = sz;
+        line.op2_mem_size = cast(i8, sz);
     }
 }
 
 fn set_op_label(line as *ParsedLine, which as i32, ptr as *u8, len as i32) as void {
-    if (which == 1) { line.op1_kind = def.OP_LABEL; line.op1_label_ptr = ptr; line.op1_label_len = len; }
-    else { line.op2_kind = def.OP_LABEL; line.op2_label_ptr = ptr; line.op2_label_len = len; }
+    if (which == 1) { line.op1_kind = def.OP_LABEL; line.op1_label_ptr = ptr; line.op1_label_len = cast(i16, len); }
+    else { line.op2_kind = def.OP_LABEL; line.op2_label_ptr = ptr; line.op2_label_len = cast(i16, len); }
 }
 
 fn set_op_rip(line as *ParsedLine, which as i32, ptr as *u8, len as i32, sz as i32) as void {
-    if (which == 1) { line.op1_kind = def.OP_RIP_LABEL; line.op1_label_ptr = ptr; line.op1_label_len = len; line.op1_mem_size = sz; }
-    else { line.op2_kind = def.OP_RIP_LABEL; line.op2_label_ptr = ptr; line.op2_label_len = len; line.op2_mem_size = sz; }
+    if (which == 1) { line.op1_kind = def.OP_RIP_LABEL; line.op1_label_ptr = ptr; line.op1_label_len = cast(i16, len); line.op1_mem_size = cast(i8, sz); }
+    else { line.op2_kind = def.OP_RIP_LABEL; line.op2_label_ptr = ptr; line.op2_label_len = cast(i16, len); line.op2_mem_size = cast(i8, sz); }
 }

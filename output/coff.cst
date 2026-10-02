@@ -89,7 +89,7 @@ fn coff_secnum(section as i32) as i32 {
 fn emit_name8(out as *buf.ByteBuffer, name as *u8, len as i32, strtab_off as i64) as void {
     if (len <= 8) {
         let is i32 as i with mut = 0;
-        while (i < len) { buf.buf_emit8(out, cast(i64, name[i])); i = i + 1; }
+        while (i < len) { buf.buf_emit8(out, cast(i32, name[i])); i = i + 1; }
         while (i < 8) { buf.buf_emit8(out, 0); i = i + 1; }
         return;
     }
@@ -100,7 +100,7 @@ fn emit_name8(out as *buf.ByteBuffer, name as *u8, len as i32, strtab_off as i64
     while (v > 0 && n < 7) { tmp[n] = cast(u8, 48 + cast(i32, v % 10)); v = v / 10; n = n + 1; }
     buf.buf_emit8(out, 47);   // '/'
     let is i32 as k with mut = n;
-    while (k > 0) { k = k - 1; buf.buf_emit8(out, cast(i64, tmp[k])); }
+    while (k > 0) { k = k - 1; buf.buf_emit8(out, cast(i32, tmp[k])); }
     let is i32 as pad with mut = 7 - n;
     while (pad > 0) { buf.buf_emit8(out, 0); pad = pad - 1; }
 }
@@ -198,8 +198,8 @@ fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffe
     let is buf.ByteBuffer as out = buf.buf_init(65536);
 
     // File header (20 bytes).
-    buf.buf_emit16_le(&out, cast(i64, coff_machine()));
-    buf.buf_emit16_le(&out, cast(i64, nsec));
+    buf.buf_emit16_le(&out, cast(i32, coff_machine()));
+    buf.buf_emit16_le(&out, cast(i32, nsec));
     buf.buf_emit32_le(&out, 0);                       // TimeDateStamp
     buf.buf_emit32_le(&out, symtab_ptr);
     buf.buf_emit32_le(&out, cast(i64, symtab.count));
@@ -223,7 +223,7 @@ fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffe
         buf.buf_emit32_le(&out, sec_raw_ptr[i]);
         buf.buf_emit32_le(&out, sec_rel_ptr[i]);
         buf.buf_emit32_le(&out, 0);                   // PointerToLinenumbers
-        buf.buf_emit16_le(&out, sec_rel_n[i]);
+        buf.buf_emit16_le(&out, cast(i32, sec_rel_n[i]));
         buf.buf_emit16_le(&out, 0);                   // NumberOfLinenumbers
         let is i64 as chars with mut = 0;
         if (i == 0) { chars = SCN_CNT_CODE + SCN_MEM_EXECUTE + SCN_MEM_READ + SCN_ALIGN_16; }
@@ -257,7 +257,7 @@ fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffe
                 let is *elf.Reloc as r = elf.reloc_get(rl, ri);
                 buf.buf_emit32_le(&out, r.offset);          // VirtualAddress
                 buf.buf_emit32_le(&out, r.sym_idx);         // SymbolTableIndex
-                buf.buf_emit16_le(&out, reloc_to_coff(r.rtype, r.addend));
+                buf.buf_emit16_le(&out, cast(i32, reloc_to_coff(r.rtype, r.addend)));
                 ri = ri + 1;
             }
         }
@@ -275,7 +275,7 @@ fn write_coff(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffe
             emit_name8(&out, sy.name_ptr, sy.name_len, 0);
         }
         buf.buf_emit32_le(&out, sy.offset);                 // Value
-        buf.buf_emit16_le(&out, cast(i64, coff_secnum(sy.section)));
+        buf.buf_emit16_le(&out, cast(i32, coff_secnum(sy.section)));
         // Type 0x20 marks a function, which link.exe expects on .text globals.
         if (sy.section == cs.SECTION_TEXT && sy.is_global == 1) { buf.buf_emit16_le(&out, 32); }
         else { buf.buf_emit16_le(&out, 0); }
