@@ -14,6 +14,7 @@ use "output/coff.cst" as coffw;
 use "core/buf.cst" as buf;
 use "../src/codegen/target.cst" as tgt;
 use "aarch64/assembler.cst" as a64;
+use "version.cst" as ver;
 
 // === Assembler profiling ===
 
@@ -168,6 +169,18 @@ fn main(argc as i64, argv as i64) as i32 {
 
     let is *i64 as argv_arr = cast(*i64, argv);
     let is *u8 as filename with mut = cast(*u8, argv_arr[1]);
+
+    // `--version` was read as the name of a file to assemble. A build from
+    // source reports the commit it came from: install.sh --from-source writes
+    // it into version.cst for the length of the build.
+    let is i32 as flen with mut = 0;
+    while (filename[flen] != cast(u8, 0)) { flen = flen + 1; }
+    if (flen == 9 && enc.streq(filename, 9, "--version", 9) == 1) {
+        io.write_str(io.STDOUT, "caustic-as ");
+        io.write_str(io.STDOUT, ver.VERSION);
+        io.write_str(io.STDOUT, "\n");
+        return 0;
+    }
 
     tgt.target_init();
 
