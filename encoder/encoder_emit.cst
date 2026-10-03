@@ -23,7 +23,19 @@ fn enc_had_error() as i32 { return enc_errors; }
 // order and return the first concrete result. Families touch disjoint sets of
 // instruction ids, so the order between them is irrelevant — it only fixes a
 // deterministic fall-through to the "unknown encoding" error.
+//
+// A segment override is a legacy prefix, so it goes first — ahead of 66/F2/F3
+// and REX, which every family emits itself.
 fn encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Operand, resolve_label as i64, cur_off as i64, line_no as i32) as i32 {
+    let is i32 as seg = eu.seg_prefix(op1, op2);
+    if (seg == 0) { return _encode(b, inst, op1, op2, resolve_label, cur_off, line_no); }
+    buf.buf_emit8(b, seg);
+    let is i32 as r = _encode(b, inst, op1, op2, resolve_label, cur_off + 1, line_no);
+    if (r == 0) { return 0; }
+    return r + 1;
+}
+
+fn _encode(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *def.Operand, resolve_label as i64, cur_off as i64, line_no as i32) as i32 {
     let is i32 as r with mut = ectrl.encode_ctrl(b, inst, op1, op2, resolve_label, cur_off);
     if (r != eu.ENC_SKIP) { return r; }
 

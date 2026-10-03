@@ -19,13 +19,29 @@ fn parse_had_error() as i32 { return parse_errors; }
 
 // === Operand parsing ===
 
-// Parse a memory operand: [base +/- disp] with optional size prefix
+// Parse a memory operand: [base +/- disp], [base + index*scale +/- disp] or
+// [disp] (an absolute address, no base), with optional size prefix.
 fn parse_mem_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as *pl.ParsedLine, which as i32, mem_size as i32) as void {
     let is i32 as p with mut = pos + 1; // skip '['
     let is *lex.Token as base_tok = lex.tl_get(tl, p);
+    // An address with no register in it: [0x58], [-8]. What it is relative to
+    // is the segment's base — this is how fs:[0] names a thread's own block.
+    if (base_tok.kind == lex.TK_NUMBER || base_tok.kind == lex.TK_MINUS) {
+        let is i64 as adisp with mut = base_tok.num_val;
+        if (base_tok.kind == lex.TK_MINUS) {
+            p = p + 1;
+            adisp = 0 - lex.tl_get(tl, p).num_val;
+        }
+        p = p + 1;
+        let is *lex.Token as arb = lex.tl_get(tl, p);
+        if (arb.kind == lex.TK_RBRACKET) { p = p + 1; }
+        *out_pos = p;
+        pl.set_op_mem(line, which, def.REG_NONE, adisp, mem_size);
+        return;
+    }
     let is i32 as base_reg = base_tok.id;
     p = p + 1;
-    if (base_reg == 99) {
+    if (base_reg == def.REG_RIP) {
         let is *lex.Token as op_tok = lex.tl_get(tl, p);
         if (op_tok.kind == lex.TK_PLUS) {
             p = p + 1;
@@ -91,6 +107,19 @@ fn parse_mem_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as 
     }
 }
 
+// The segment prefix byte when the tokens at `at` are `fs : [` or `gs : [`,
+// else 0.
+fn _segment(tl as *lex.TokenList, at as i32) as i32 {
+    if (at + 2 >= tl.count) { return 0; }
+    let is *lex.Token as nm = lex.tl_get(tl, at);
+    if (nm.kind != lex.TK_IDENT || nm.len != 2 || nm.ptr[1] != 115) { return 0; }   // ?s
+    if (lex.tl_get(tl, at + 1).kind != lex.TK_COLON) { return 0; }
+    if (lex.tl_get(tl, at + 2).kind != lex.TK_LBRACKET) { return 0; }
+    if (nm.ptr[0] == 102) { return def.SEG_FS; }                                    // fs
+    if (nm.ptr[0] == 103) { return def.SEG_GS; }                                    // gs
+    return 0;
+}
+
 // Parse an operand starting at token index pos, stores into line's op1 or op2
 fn parse_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as *pl.ParsedLine, which as i32) as void {
     let is *lex.Token as tok = lex.tl_get(tl, pos);
@@ -112,6 +141,26 @@ fn parse_operand(tl as *lex.TokenList, pos as i32, out_pos as *i32, line as *pl.
             pl.set_op_imm(line, which, 0 - next.num_val);
             return;
         }
+    }
+    // A segment override: [SIZE PTR] fs:[...] or gs:[...].
+    let is i32 as sz_at with mut = 0;
+    let is i32 as seg_at with mut = pos;
+    if (tok.kind == lex.TK_SIZE_PREFIX) { sz_at = tok.id; seg_at = pos + 1; }
+    let is i32 as seg = _segment(tl, seg_at);
+    if (seg != 0) {
+        let is i32 as lb_at = seg_at + 2;
+        let is *lex.Token as ml = lex.tl_get(tl, lb_at + 1);
+        if (ml.kind == lex.TK_REGISTER && ml.id == def.REG_RIP) {
+            // fs:[rip+x] reads x's offset from the segment base, which is
+            // never what was meant; nothing emits it, so nothing accepts it.
+            parse_errors = parse_errors + 1;
+            util.eprint_str("caustic-as: error: line ");
+            util.eprint_int(cast(i64, line.line_no));
+            util.eprint_str(": a segment override cannot be rip-relative\n");
+        }
+        parse_mem_operand(tl, lb_at, out_pos, line, which, sz_at);
+        pl.set_op_seg(line, which, seg);
+        return;
     }
     if (tok.kind == lex.TK_SIZE_PREFIX) {
         let is *lex.Token as lb = lex.tl_get(tl, pos + 1);

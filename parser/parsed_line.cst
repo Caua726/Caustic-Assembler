@@ -56,6 +56,7 @@ struct ParsedLine {
     op1_mem_size as i8;
     op1_mem_index as i16;
     op1_mem_scale as i8;
+    op1_mem_seg as i8;          // segment override prefix byte, 0 = none
     op1_label_ptr as *u8;
     op1_label_len as i16;
     // op2 flattened
@@ -67,6 +68,7 @@ struct ParsedLine {
     op2_mem_size as i8;
     op2_mem_index as i16;
     op2_mem_scale as i8;
+    op2_mem_seg as i8;
     op2_label_ptr as *u8;
     op2_label_len as i16;
     // other
@@ -159,6 +161,7 @@ fn make_op(line as *ParsedLine, which as i32) as def.Operand {
         op.mem_size = line.op1_mem_size;
         op.mem_index = line.op1_mem_index;
         op.mem_scale = line.op1_mem_scale;
+        op.mem_seg = line.op1_mem_seg;
         op.label_ptr = line.op1_label_ptr;
         op.label_len = line.op1_label_len;
     } else {
@@ -170,6 +173,7 @@ fn make_op(line as *ParsedLine, which as i32) as def.Operand {
         op.mem_size = line.op2_mem_size;
         op.mem_index = line.op2_mem_index;
         op.mem_scale = line.op2_mem_scale;
+        op.mem_seg = line.op2_mem_seg;
         op.label_ptr = line.op2_label_ptr;
         op.label_len = line.op2_label_len;
     }
@@ -212,6 +216,12 @@ fn set_op_mem_sib(line as *ParsedLine, which as i32, base as i32, index as i32, 
 fn set_op_label(line as *ParsedLine, which as i32, ptr as *u8, len as i32) as void {
     if (which == 1) { line.op1_kind = def.OP_LABEL; line.op1_label_ptr = ptr; line.op1_label_len = cast(i16, len); }
     else { line.op2_kind = def.OP_LABEL; line.op2_label_ptr = ptr; line.op2_label_len = cast(i16, len); }
+}
+
+// The segment a memory operand already set by set_op_mem/_sib is read through.
+fn set_op_seg(line as *ParsedLine, which as i32, seg as i32) as void {
+    if (which == 1) { line.op1_mem_seg = cast(i8, seg); }
+    else { line.op2_mem_seg = cast(i8, seg); }
 }
 
 fn set_op_rip(line as *ParsedLine, which as i32, ptr as *u8, len as i32, sz as i32) as void {

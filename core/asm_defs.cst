@@ -85,6 +85,7 @@ let is i32 as REG_XMM12 with imut = 76;
 let is i32 as REG_XMM13 with imut = 77;
 let is i32 as REG_XMM14 with imut = 78;
 let is i32 as REG_XMM15 with imut = 79;
+let is i32 as REG_RIP   with imut = 99;    // only as a base: [rip+label]
 let is i32 as REG_NONE  with imut = 255;
 
 // === Instruction IDs ===
@@ -210,7 +211,14 @@ struct Operand {
     mem_scale as i32;
     label_ptr as *u8;
     label_len as i32;
+    // Segment override for a memory operand: 0, or the prefix byte itself —
+    // SEG_FS (0x64) or SEG_GS (0x65). Long mode ignores the other four; these
+    // two are the ones with a base of their own (thread and per-cpu blocks).
+    mem_seg as i32;
 }
+
+let is i32 as SEG_FS with imut = 0x64;
+let is i32 as SEG_GS with imut = 0x65;
 
 // Reverse of lookup_instruction: map an INST_ id back to its mnemonic, for
 // diagnostics. The encoder reaches its "unknown encoding" fall-through when the
@@ -325,6 +333,7 @@ fn operand_none() as Operand {
     op.mem_scale = 0;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
+    op.mem_seg = 0;
     return op;
 }
 
@@ -340,6 +349,7 @@ fn operand_reg(id as i32) as Operand {
     op.mem_scale = 0;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
+    op.mem_seg = 0;
     return op;
 }
 
@@ -355,6 +365,7 @@ fn operand_imm(val as i64) as Operand {
     op.mem_scale = 0;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
+    op.mem_seg = 0;
     return op;
 }
 
@@ -370,6 +381,7 @@ fn operand_mem(base as i32, disp as i64, size as i32) as Operand {
     op.mem_scale = 0;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
+    op.mem_seg = 0;
     return op;
 }
 
@@ -385,6 +397,7 @@ fn operand_mem_sib(base as i32, index as i32, scale as i32, disp as i64, size as
     op.mem_scale = scale;
     op.label_ptr = cast(*u8, 0);
     op.label_len = 0;
+    op.mem_seg = 0;
     return op;
 }
 
@@ -400,6 +413,7 @@ fn operand_label(ptr as *u8, len as i32) as Operand {
     op.mem_scale = 0;
     op.label_ptr = ptr;
     op.label_len = len;
+    op.mem_seg = 0;
     return op;
 }
 
@@ -415,5 +429,6 @@ fn operand_rip_label(ptr as *u8, len as i32) as Operand {
     op.mem_scale = 0;
     op.label_ptr = ptr;
     op.label_len = len;
+    op.mem_seg = 0;
     return op;
 }

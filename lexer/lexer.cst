@@ -335,7 +335,7 @@ fn init_ht() as void {
     ht_insert(98, 112, 108, 0, 0, 3, 1, def.REG_BPL);  // bpl
     ht_insert(115, 105, 108, 0, 0, 3, 1, def.REG_SIL); // sil
     ht_insert(100, 105, 108, 0, 0, 3, 1, def.REG_DIL); // dil
-    ht_insert(114, 105, 112, 0, 0, 3, 1, 99);          // rip (special, id=99)
+    ht_insert(114, 105, 112, 0, 0, 3, 1, def.REG_RIP); // rip (only as a base)
     ht_insert(114, 56, 100, 0, 0, 3, 1, def.REG_R8D);  // r8d
     ht_insert(114, 56, 119, 0, 0, 3, 1, def.REG_R8W);  // r8w
     ht_insert(114, 56, 98, 0, 0, 3, 1, def.REG_R8B);   // r8b

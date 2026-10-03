@@ -6,6 +6,12 @@ use "../core/buf.cst" as buf;
 use "encoder_util.cst" as eu;
 
 fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
+    // A segment override is one prefix byte in front of whatever follows.
+    if (eu.seg_prefix(op1, op2) != 0) { return 1 + _inst_size(inst, op1, op2); }
+    return _inst_size(inst, op1, op2);
+}
+
+fn _inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
     // No-operand instructions
     if (inst == def.INST_RET)     { return 1; }
     if (inst == def.INST_SYSCALL) { return 2; }
