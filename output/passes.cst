@@ -23,6 +23,10 @@ let is *i64 as dbg_lines with mut;
 let is i32 as dbg_cap with mut = 0;
 let is i32 as dbg_count with mut = 0;
 let is i32 as dbg_last_line with mut = 0;
+// Prologue-end offsets (`.dbg_prologue_end`), appended after the loc table.
+let is *i64 as dbg_pend with mut;
+let is i32 as dbg_pend_cap with mut = 0;
+let is i32 as dbg_pend_count with mut = 0;
 
 fn _dbg_reset() as void {
     dbg_file_ptr = cast(*u8, 0);
@@ -32,6 +36,21 @@ fn _dbg_reset() as void {
     dbg_lines = cast(*i64, om.opt_alloc(cast(i64, dbg_cap) * 8));
     dbg_count = 0;
     dbg_last_line = 0;
+    dbg_pend_cap = 16;
+    dbg_pend = cast(*i64, om.opt_alloc(cast(i64, dbg_pend_cap) * 8));
+    dbg_pend_count = 0;
+}
+
+fn _dbg_pend_add(off as i64) as void {
+    if (dbg_pend_count >= dbg_pend_cap) {
+        let is i32 as nc = dbg_pend_cap * 2;
+        let is *i64 as np = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
+        let is i32 as i with mut = 0;
+        while (i < dbg_pend_count) { np[i] = dbg_pend[i]; i = i + 1; }
+        dbg_pend = np; dbg_pend_cap = nc;
+    }
+    dbg_pend[dbg_pend_count] = off;
+    dbg_pend_count = dbg_pend_count + 1;
 }
 
 fn _dbg_add(off as i64, line as i64) as void {
@@ -67,6 +86,14 @@ fn _dbg_emit_section() as void {
     while (i < dbg_count) {
         buf.buf_emit32_le(bb, dbg_offs[i]);
         buf.buf_emit32_le(bb, dbg_lines[i]);
+        i = i + 1;
+    }
+    // Prologue-end offsets, appended after the loc table. Readers that only
+    // want the lines (the PDB writer) read `dbg_count` entries and ignore this.
+    buf.buf_emit32_le(bb, cast(i64, dbg_pend_count));
+    i = 0;
+    while (i < dbg_pend_count) {
+        buf.buf_emit32_le(bb, dbg_pend[i]);
         i = i + 1;
     }
 }
@@ -547,6 +574,8 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
                     _dbg_add(text_buf.len, cast(i64, ln));
                     dbg_last_line = ln;
                 }
+            } else if (line.dir_kind == pl.DIR_DBG_PROLOGUE_END) {
+                if (text_buf.len > 0) { _dbg_pend_add(text_buf.len); }
             } else if (line.dir_kind == pl.DIR_CFI_STARTPROC) {
                 if (_cfi_enabled == 1) {
                     _cfi_active = 1;

@@ -36,6 +36,11 @@ let is i32 as DIR_CFI_ENDPROC          with imut = 21;
 let is i32 as DIR_CFI_DEF_CFA_OFFSET   with imut = 22;
 let is i32 as DIR_CFI_DEF_CFA_REGISTER with imut = 23;
 let is i32 as DIR_CFI_OFFSET           with imut = 24;
+// `.dbg_prologue_end`: the offset where the prologue (frame setup + parameter
+// spills) is done. The line-table row at it is flagged DW_LNS_set_prologue_end
+// so a debugger sets a breakpoint on a function past it, where the parameters
+// are already in their stack slots.
+let is i32 as DIR_DBG_PROLOGUE_END     with imut = 25;
 
 // === ParsedLine structs ===
 

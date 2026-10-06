@@ -474,6 +474,10 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         p = skip_to_eol(tl, p);
         return p;
     }
+    if (enc.streq_lit(tok.ptr, tok.len, ".dbg_prologue_end") == 1) {
+        line.dir_kind = pl.DIR_DBG_PROLOGUE_END;
+        return skip_to_eol(tl, p + 1);
+    }
     if (enc.streq_lit(tok.ptr, tok.len, ".cfi_startproc") == 1) {
         line.dir_kind = pl.DIR_CFI_STARTPROC;
         p = p + 1;
