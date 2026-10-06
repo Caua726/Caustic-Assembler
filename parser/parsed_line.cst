@@ -26,6 +26,8 @@ let is i32 as DIR_OTHER    with imut = 14;
 let is i32 as DIR_ASCII    with imut = 15;
 let is i32 as DIR_CSTIMPORT with imut = 16;
 let is i32 as DIR_INCBIN   with imut = 17;
+let is i32 as DIR_FILE     with imut = 18;
+let is i32 as DIR_LOC      with imut = 19;
 
 // === ParsedLine structs ===
 

@@ -442,6 +442,38 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         }
         return p;
     }
+    if (enc.streq_lit(tok.ptr, tok.len, ".file") == 1) {
+        // `.file <num> "<path>"` — record the source path for .cstdebug.
+        line.dir_kind = pl.DIR_FILE;
+        p = p + 1;
+        let is *lex.Token as num_tok = lex.tl_get(tl, p);
+        if (num_tok.kind == lex.TK_NUMBER) { line.dir_num = num_tok.num_val; p = p + 1; }
+        let is *lex.Token as path_tok = lex.tl_get(tl, p);
+        if (path_tok.kind == lex.TK_STRING) {
+            let is *u8 as praw with mut = path_tok.ptr;
+            let is i32 as plen with mut = path_tok.len;
+            if (plen >= 2 && praw[0] == cast(u8, 34) && praw[plen - 1] == cast(u8, 34)) {
+                praw = cast(*u8, cast(i64, praw) + 1);
+                plen = plen - 2;
+            }
+            line.dir_arg_ptr = praw;
+            line.dir_arg_len = plen;
+            p = p + 1;
+        }
+        p = skip_to_eol(tl, p);
+        return p;
+    }
+    if (enc.streq_lit(tok.ptr, tok.len, ".loc") == 1) {
+        // `.loc <file> <line> <column>` — keep the line number.
+        line.dir_kind = pl.DIR_LOC;
+        p = p + 1;
+        let is *lex.Token as f_tok = lex.tl_get(tl, p);
+        if (f_tok.kind == lex.TK_NUMBER) { p = p + 1; }
+        let is *lex.Token as l_tok = lex.tl_get(tl, p);
+        if (l_tok.kind == lex.TK_NUMBER) { line.dir_num = l_tok.num_val; p = p + 1; }
+        p = skip_to_eol(tl, p);
+        return p;
+    }
     line.dir_kind = pl.DIR_OTHER;
     return p + 1;
 }

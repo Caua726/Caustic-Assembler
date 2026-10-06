@@ -7,6 +7,69 @@ use "../encoder/encoder_size.cst" as encs;
 use "../parser/parsed_line.cst" as pl;
 use "../parser/custom_sections.cst" as cs;
 use "../core/util.cst" as util;
+use "../../src/debug_proto.cst" as dbgproto;
+use "../../src/codegen/target.cst" as tgt;
+
+// === .cstdebug line table (PE/COFF only) ===
+//
+// The compiler emits `.file n "path"` once and `.loc n <line> 0` before each
+// instruction. We collect (text offset, line) pairs into `.cstdebug`, which
+// the PE linker turns into the module's CodeView line table. Collected here
+// because pass2 is exactly where each instruction's final text offset is known.
+let is *u8 as dbg_file_ptr with mut = cast(*u8, 0);
+let is i32 as dbg_file_len with mut = 0;
+let is *i64 as dbg_offs with mut;
+let is *i64 as dbg_lines with mut;
+let is i32 as dbg_cap with mut = 0;
+let is i32 as dbg_count with mut = 0;
+let is i32 as dbg_last_line with mut = 0;
+
+fn _dbg_reset() as void {
+    dbg_file_ptr = cast(*u8, 0);
+    dbg_file_len = 0;
+    dbg_cap = 64;
+    dbg_offs = cast(*i64, om.opt_alloc(cast(i64, dbg_cap) * 8));
+    dbg_lines = cast(*i64, om.opt_alloc(cast(i64, dbg_cap) * 8));
+    dbg_count = 0;
+    dbg_last_line = 0;
+}
+
+fn _dbg_add(off as i64, line as i64) as void {
+    if (dbg_count >= dbg_cap) {
+        let is i32 as nc = dbg_cap * 2;
+        let is *i64 as no = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
+        let is *i64 as nl = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
+        let is i32 as i with mut = 0;
+        while (i < dbg_count) { no[i] = dbg_offs[i]; nl[i] = dbg_lines[i]; i = i + 1; }
+        dbg_offs = no; dbg_lines = nl; dbg_cap = nc;
+    }
+    dbg_offs[dbg_count] = off;
+    dbg_lines[dbg_count] = line;
+    dbg_count = dbg_count + 1;
+}
+
+// Serialize the collected line table into the `.cstdebug` custom section.
+// Layout: u32 magic, u32 reserved, u32 src_len, byte[src_len] path, pad to 4,
+// u32 count, count × (u32 text_offset, u32 line).
+fn _dbg_emit_section() as void {
+    if (dbg_count == 0 || dbg_file_len == 0) { return; }
+    let is i32 as idx = cs.csec_find_or_add(".cstdebug", 9);
+    let is *i64 as bp = cast(*i64, cs.csec_buf_ptrs);
+    let is *buf.ByteBuffer as bb = cast(*buf.ByteBuffer, bp[idx]);
+    buf.buf_emit32_le(bb, cast(i64, dbgproto.CSTDEBUG_MAGIC));
+    buf.buf_emit32_le(bb, 0);
+    buf.buf_emit32_le(bb, cast(i64, dbg_file_len));
+    let is i32 as i with mut = 0;
+    while (i < dbg_file_len) { buf.buf_emit8(bb, cast(i32, dbg_file_ptr[i])); i = i + 1; }
+    while ((bb.len & 3) != 0) { buf.buf_emit8(bb, 0); }
+    buf.buf_emit32_le(bb, cast(i64, dbg_count));
+    i = 0;
+    while (i < dbg_count) {
+        buf.buf_emit32_le(bb, dbg_offs[i]);
+        buf.buf_emit32_le(bb, dbg_lines[i]);
+        i = i + 1;
+    }
+}
 
 // === Duplicate definitions ===
 //
@@ -316,6 +379,7 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
          data_buf as *buf.ByteBuffer, rodata_buf as *buf.ByteBuffer, bss_size as *i64,
          relocs as *elf.RelocList, data_relocs as *elf.RelocList) as void {
     let is i32 as i with mut = 0;
+    _dbg_reset();
 
     while (i < lines.count) {
         let is *pl.ParsedLine as line = pl.pl_get(lines, i);
@@ -336,6 +400,20 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
             pass2_encode_inst(line, symtab, itgt, irl);
         }
         else if (line.kind == pl.LINE_DIRECTIVE) {
+            // Debug directives: `.file` records the source path, `.loc`
+            // registers the current .text offset with the line it starts.
+            if (line.dir_kind == pl.DIR_FILE) {
+                if (line.dir_arg_len > 0) {
+                    dbg_file_ptr = line.dir_arg_ptr;
+                    dbg_file_len = line.dir_arg_len;
+                }
+            } else if (line.dir_kind == pl.DIR_LOC) {
+                let is i32 as ln = cast(i32, line.dir_num);
+                if (ln != dbg_last_line) {
+                    _dbg_add(text_buf.len, cast(i64, ln));
+                    dbg_last_line = ln;
+                }
+            } else {
             let is *buf.ByteBuffer as target with mut = text_buf;
             if (line.section == cs.SECTION_DATA)   { target = data_buf; }
             if (line.section == cs.SECTION_RODATA) { target = rodata_buf; }
@@ -362,7 +440,12 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
             } else {
                 pass2_emit_directive(line, target, bss_size);
             }
+            }
         }
         i = i + 1;
     }
+
+    // Only PE/COFF objects carry .cstdebug (the linker reads it there). ELF,
+    // CSE and wasm objects are byte-identical to before.
+    if (tgt.target_get().object_format == 2) { _dbg_emit_section(); }
 }
