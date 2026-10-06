@@ -81,25 +81,29 @@ fn _dbg_emit_section() as void {
 // final addresses are known.
 let is i32 as _cfi_count with mut = 0;
 let is i32 as _cfi_cap with mut = 0;
-let is *i64 as _cfi_start with mut;
-let is *i64 as _cfi_end with mut;
 let is *i64 as _cfi_data with mut;
 let is *i32 as _cfi_dlen with mut;
+let is *i64 as _cfi_nptr with mut;   // function name (pointer into the .s buffer)
+let is *i32 as _cfi_nlen with mut;
 let is i32 as _cfi_active with mut = 0;
 let is i32 as _cfi_enabled with mut = 0;
 let is i64 as _cfi_fn_start with mut = 0;
 let is i64 as _cfi_last with mut = 0;
+let is *u8 as _cfi_cur_name with mut;
+let is i32 as _cfi_cur_nlen with mut = 0;
 let is buf.ByteBuffer as _cfi_buf with mut;
 
 fn _cfi_reset() as void {
     _cfi_count = 0;
     _cfi_cap = 64;
-    _cfi_start = cast(*i64, om.opt_alloc(cast(i64, _cfi_cap) * 8));
-    _cfi_end = cast(*i64, om.opt_alloc(cast(i64, _cfi_cap) * 8));
     _cfi_data = cast(*i64, om.opt_alloc(cast(i64, _cfi_cap) * 8));
     _cfi_dlen = cast(*i32, om.opt_alloc(cast(i64, _cfi_cap) * 4));
+    _cfi_nptr = cast(*i64, om.opt_alloc(cast(i64, _cfi_cap) * 8));
+    _cfi_nlen = cast(*i32, om.opt_alloc(cast(i64, _cfi_cap) * 4));
     _cfi_active = 0;
     _cfi_last = 0;
+    _cfi_cur_name = cast(*u8, 0);
+    _cfi_cur_nlen = 0;
     _cfi_buf = buf.buf_init(256);
 }
 
@@ -145,25 +149,37 @@ fn _cfi_advance(off as i64) as void {
     _cfi_last = off;
 }
 
-fn _cfi_record(start as i64, end as i64, data as *u8, dlen as i32) as void {
+fn _cfi_record(name_ptr as *u8, name_len as i32, data as *u8, dlen as i32) as void {
     if (_cfi_count >= _cfi_cap) {
         let is i32 as nc = _cfi_cap * 2;
-        let is *i64 as ns = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
-        let is *i64 as ne = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
         let is *i64 as nd = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
         let is *i32 as nl = cast(*i32, om.opt_alloc(cast(i64, nc) * 4));
+        let is *i64 as nnp = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
+        let is *i32 as nnl = cast(*i32, om.opt_alloc(cast(i64, nc) * 4));
         let is i32 as i with mut = 0;
-        while (i < _cfi_count) { ns[i] = _cfi_start[i]; ne[i] = _cfi_end[i]; nd[i] = _cfi_data[i]; nl[i] = _cfi_dlen[i]; i = i + 1; }
-        _cfi_start = ns; _cfi_end = ne; _cfi_data = nd; _cfi_dlen = nl; _cfi_cap = nc;
+        while (i < _cfi_count) {
+            nd[i] = _cfi_data[i]; nl[i] = _cfi_dlen[i];
+            nnp[i] = _cfi_nptr[i]; nnl[i] = _cfi_nlen[i];
+            i = i + 1;
+        }
+        _cfi_data = nd; _cfi_dlen = nl; _cfi_nptr = nnp; _cfi_nlen = nnl; _cfi_cap = nc;
     }
-    _cfi_start[_cfi_count] = start;
-    _cfi_end[_cfi_count] = end;
-    _cfi_data[_cfi_count] = cast(i64, data);
+    _cfi_nptr[_cfi_count] = cast(i64, name_ptr);
+    _cfi_nlen[_cfi_count] = name_len;
+    // Copy: _cfi_buf is reused for the next function, so storing its pointer
+    // would leave every record pointing at the last function's opcodes.
+    let is *u8 as copy = om.opt_alloc(dlen + 1);
+    let is i32 as i with mut = 0;
+    while (i < dlen) { copy[i] = data[i]; i = i + 1; }
+    _cfi_data[_cfi_count] = cast(i64, copy);
     _cfi_dlen[_cfi_count] = dlen;
     _cfi_count = _cfi_count + 1;
 }
 
-// Serialize the collected records into `.cstcfi`.
+// Serialize the collected records into `.cstcfi`. Per record:
+//   u32 name_len, byte[name_len] name, u32 cfi_len, byte[cfi_len] cfi
+// The name is the key: DCE repacks each object's .text, so an object-local
+// offset would be stale by link time.
 fn _cfi_emit_section() as void {
     if (_cfi_count == 0) { return; }
     // The custom-section id space is finite and shared with the user's own
@@ -178,8 +194,8 @@ fn _cfi_emit_section() as void {
     buf.buf_emit32_le(bb, cast(i64, _cfi_count));
     let is i32 as i with mut = 0;
     while (i < _cfi_count) {
-        buf.buf_emit32_le(bb, _cfi_start[i]);
-        buf.buf_emit32_le(bb, _cfi_end[i]);
+        buf.buf_emit32_le(bb, cast(i64, _cfi_nlen[i]));
+        buf.buf_append(bb, cast(*u8, _cfi_nptr[i]), cast(i64, _cfi_nlen[i]));
         buf.buf_emit32_le(bb, cast(i64, _cfi_dlen[i]));
         buf.buf_append(bb, cast(*u8, _cfi_data[i]), cast(i64, _cfi_dlen[i]));
         i = i + 1;
@@ -537,11 +553,13 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
                     _cfi_fn_start = text_buf.len;
                     _cfi_last = 0;
                     _cfi_buf.len = 0;
+                    _cfi_cur_name = line.dir_arg_ptr;
+                    _cfi_cur_nlen = line.dir_arg_len;
                 }
             } else if (line.dir_kind == pl.DIR_CFI_ENDPROC) {
                 if (_cfi_enabled == 1 && _cfi_active == 1) {
                     _cfi_active = 0;
-                    _cfi_record(_cfi_fn_start, text_buf.len, _cfi_buf.data, cast(i32, _cfi_buf.len));
+                    _cfi_record(_cfi_cur_name, _cfi_cur_nlen, _cfi_buf.data, cast(i32, _cfi_buf.len));
                 }
             } else if (line.dir_kind == pl.DIR_CFI_DEF_CFA_OFFSET) {
                 if (_cfi_enabled == 1 && _cfi_active == 1) {

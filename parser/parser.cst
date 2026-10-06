@@ -476,7 +476,15 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".cfi_startproc") == 1) {
         line.dir_kind = pl.DIR_CFI_STARTPROC;
-        return skip_to_eol(tl, p + 1);
+        p = p + 1;
+        // Optional function name (the assembler keys the record by symbol).
+        let is *lex.Token as nm = lex.tl_get(tl, p);
+        if (nm.kind == lex.TK_IDENT) {
+            line.dir_arg_ptr = nm.ptr;
+            line.dir_arg_len = nm.len;
+            p = p + 1;
+        }
+        return skip_to_eol(tl, p);
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".cfi_endproc") == 1) {
         line.dir_kind = pl.DIR_CFI_ENDPROC;
