@@ -289,8 +289,31 @@ fn encode_inst(line as *Slice, pc as i64, st as *elf.SymbolTable,
         if (eq(&t[1], "sp", 2) == 1 || eq(&t[2], "sp", 2) == 1) {
             ins = 0x91000000 + cast(i64, rn << 5) + cast(i64, rd);
         } else {
-            ins = 0xAA0003E0 + cast(i64, rn << 16) + cast(i64, rd);
-            if (is_w(&t[1]) == 1) { ins = ins - 0x80000000; }
+            // `mov Rd, #imm` is an alias for movz when the value fits one
+            // 16-bit field. Without this branch the numeric operand was read
+            // as a register, so `mov x0, 0` encoded as a wrong `mvn` and
+            // silently produced ~x3 — the compiler only ever emits movz/movk,
+            // which is why it went unnoticed until hand-written asm used it.
+            let is i32 as iok with mut = 0;
+            let is i64 as iv = parse_num(&t[2], &iok);
+            if (iok == 1) {
+                let is i64 as sh with mut = 0;
+                let is i32 as placed with mut = 0;
+                if (iv >= 0) {
+                    if ((iv & 65535) == iv) { sh = 0; placed = 1; }
+                    else if ((iv & 4294901760) == iv) { sh = 16; placed = 1; }
+                    else if ((iv & 281470681743360) == iv) { sh = 32; placed = 1; }
+                    else if ((iv & 281474976710655) == 0) { sh = 48; placed = 1; }
+                }
+                // A value that is not one 16-bit field needs movz/movk; reject
+                // it rather than encode something else.
+                if (placed == 0) { return 1; }
+                ins = 0xD2800000 + (sh / 16) * 0x200000 + ((iv >> sh) & 65535) * 32 + cast(i64, rd);
+                if (is_w(&t[1]) == 1) { ins = ins - 0x80000000; }
+            } else {
+                ins = 0xAA0003E0 + cast(i64, rn << 16) + cast(i64, rd);
+                if (is_w(&t[1]) == 1) { ins = ins - 0x80000000; }
+            }
         }
     }
     else if (eq(&t[0], "movz", 4) == 1 || eq(&t[0], "movk", 4) == 1) {
