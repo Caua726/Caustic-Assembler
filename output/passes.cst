@@ -445,7 +445,7 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
         i = i + 1;
     }
 
-    // Only PE/COFF objects carry .cstdebug (the linker reads it there). ELF,
-    // CSE and wasm objects are byte-identical to before.
-    if (tgt.target_get().object_format == 2) { _dbg_emit_section(); }
+    // PE/COFF objects always carry .cstdebug (the linker reads it there); ELF
+    // objects only with -g, so a plain build's object stays byte-identical.
+    if (tgt.target_get().object_format == 2 || tgt.debug_get() == 1) { _dbg_emit_section(); }
 }
