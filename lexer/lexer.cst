@@ -579,6 +579,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
 
             // Fast directive check: dispatch on second char + length
             let is i32 as is_dir with mut = 0;
+            // .cfi_* (Call Frame Information) — any suffix, so match the prefix.
+            if (tlen >= 5 && tptr[1] == 99 && tptr[2] == 102 && tptr[3] == 105 && tptr[4] == 95) { is_dir = 1; }
             if (tlen >= 4 && tlen <= 14) {
                 let is u8 as c1 = tptr[1];
                 if (c1 == 116 && tlen == 5 && tptr[2] == 101 && tptr[3] == 120 && tptr[4] == 116) { is_dir = 1; } // .text

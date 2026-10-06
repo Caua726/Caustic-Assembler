@@ -18,7 +18,9 @@ let is i32 as SECTION_UNDEF       with imut = 99;
 // defined in it would be written to the object as undefined — its label
 // resolving to address 0. (ParsedLine.section is an i8 as well, which would
 // allow 123; SECTION_UNDEF is the tighter of the two.) Past the limit it is an
-// error rather than a collision.
+// error rather than a collision. Toolchain-internal metadata sections
+// (.cstcfi, .cstimport, ...) share this space; the assembler drops the
+// optional ones rather than refuse the user's program when it is full.
 let is i32 as MAX_CUSTOM_SECTIONS with imut = SECTION_UNDEF - SECTION_CUSTOM_BASE;
 
 // Custom sections — parallel arrays, csec_cap entries each, grown on demand.

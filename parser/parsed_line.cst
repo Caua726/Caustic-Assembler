@@ -28,6 +28,14 @@ let is i32 as DIR_CSTIMPORT with imut = 16;
 let is i32 as DIR_INCBIN   with imut = 17;
 let is i32 as DIR_FILE     with imut = 18;
 let is i32 as DIR_LOC      with imut = 19;
+// Call Frame Information directives (SysV .eh_frame). dir_num carries the
+// numeric operand (offset), dir_arg_len the register id for the reg-taking
+// forms (dir_arg_len is otherwise unused by these directives).
+let is i32 as DIR_CFI_STARTPROC        with imut = 20;
+let is i32 as DIR_CFI_ENDPROC          with imut = 21;
+let is i32 as DIR_CFI_DEF_CFA_OFFSET   with imut = 22;
+let is i32 as DIR_CFI_DEF_CFA_REGISTER with imut = 23;
+let is i32 as DIR_CFI_OFFSET           with imut = 24;
 
 // === ParsedLine structs ===
 

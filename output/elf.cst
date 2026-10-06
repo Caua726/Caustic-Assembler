@@ -35,6 +35,10 @@ let is i32 as STT_NOTYPE with imut = 0;
 let is i32 as STT_OBJECT with imut = 1;
 let is i32 as STT_FUNC with imut = 2;
 let is i32 as STT_SECTION with imut = 3;
+// The assembler's "undefined section" id. Must equal cs.SECTION_UNDEF
+// (parser/custom_sections.cst); elf.cst can't import custom_sections (that
+// would be an import cycle), so the value is repeated here.
+let is i32 as SECTION_UNDEF with imut = 99;
 let is i64 as R_X86_64_64      with imut = 1;
 let is i64 as R_X86_64_PC32    with imut = 2;
 let is i64 as R_X86_64_PLT32   with imut = 4;
@@ -144,7 +148,7 @@ fn sym_find_or_add(st as *SymbolTable, name_ptr as *u8, name_len as i32, section
     if (idx != 99999) {
         // Update if it was a forward reference
         let is *Symbol as s = sym_get(st, idx);
-        if (s.section == 99 && section != 99) {
+        if (s.section == SECTION_UNDEF && section != SECTION_UNDEF) {
             s.section = section;
             s.offset = offset;
         }
@@ -361,7 +365,7 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
             buf.buf_emit8(&symtab_buf, 0);
             // st_shndx
             let is i32 as shndx with mut = s.section + 1;
-            if (s.section == 99) { shndx = 0; }
+            if (s.section == SECTION_UNDEF) { shndx = 0; }
             buf.buf_emit16_le(&symtab_buf, shndx);
             // st_value
             buf.buf_emit64_le(&symtab_buf, s.offset);
@@ -390,12 +394,12 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
             // STT_FUNC for .text, STT_OBJECT for .data/.rodata/.bss, STT_NOTYPE for undefined
             let is i32 as sym_type with mut = STT_FUNC;
             if (s.section == 1 || s.section == 2 || s.section == 3) { sym_type = STT_OBJECT; }
-            if (s.section == 99) { sym_type = 0; }
+            if (s.section == SECTION_UNDEF) { sym_type = 0; }
             let is i32 as info = sym_type + STB_GLOBAL * 16;
             buf.buf_emit8(&symtab_buf, info);
             buf.buf_emit8(&symtab_buf, 0);
             let is i32 as shndx with mut = s.section + 1;
-            if (s.section == 99) { shndx = 0; }
+            if (s.section == SECTION_UNDEF) { shndx = 0; }
             buf.buf_emit16_le(&symtab_buf, shndx);
             buf.buf_emit64_le(&symtab_buf, s.offset);
             buf.buf_emit64_le(&symtab_buf, 0);

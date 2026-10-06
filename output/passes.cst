@@ -71,6 +71,121 @@ fn _dbg_emit_section() as void {
     }
 }
 
+// === .cstcfi: Call Frame Information (SysV .eh_frame) ===
+//
+// Codegen emits `.cfi_startproc` / `.cfi_def_cfa_offset` / `.cfi_offset` /
+// `.cfi_def_cfa_register` / `.cfi_endproc` around each function's prologue.
+// pass2 turns each into the DW_CFA opcode stream an FDE carries, using the
+// text offset at the directive as the advance_loc point. The records go into
+// `.cstcfi`, which the ELF linker wraps into `.eh_frame` (CIE + FDEs) once the
+// final addresses are known.
+let is i32 as _cfi_count with mut = 0;
+let is i32 as _cfi_cap with mut = 0;
+let is *i64 as _cfi_start with mut;
+let is *i64 as _cfi_end with mut;
+let is *i64 as _cfi_data with mut;
+let is *i32 as _cfi_dlen with mut;
+let is i32 as _cfi_active with mut = 0;
+let is i32 as _cfi_enabled with mut = 0;
+let is i64 as _cfi_fn_start with mut = 0;
+let is i64 as _cfi_last with mut = 0;
+let is buf.ByteBuffer as _cfi_buf with mut;
+
+fn _cfi_reset() as void {
+    _cfi_count = 0;
+    _cfi_cap = 64;
+    _cfi_start = cast(*i64, om.opt_alloc(cast(i64, _cfi_cap) * 8));
+    _cfi_end = cast(*i64, om.opt_alloc(cast(i64, _cfi_cap) * 8));
+    _cfi_data = cast(*i64, om.opt_alloc(cast(i64, _cfi_cap) * 8));
+    _cfi_dlen = cast(*i32, om.opt_alloc(cast(i64, _cfi_cap) * 4));
+    _cfi_active = 0;
+    _cfi_last = 0;
+    _cfi_buf = buf.buf_init(256);
+}
+
+// Assembler register id -> DWARF register number (x86_64).
+fn _cfi_dwarf_reg(regid as i32) as i32 {
+    if (regid == 0) { return 0; }   // rax
+    if (regid == 1) { return 2; }   // rcx
+    if (regid == 2) { return 1; }   // rdx
+    if (regid == 3) { return 3; }   // rbx
+    if (regid == 4) { return 7; }   // rsp
+    if (regid == 5) { return 6; }   // rbp
+    if (regid == 6) { return 4; }   // rsi
+    if (regid == 7) { return 5; }   // rdi
+    if (regid >= 8 && regid <= 15) { return regid; }  // r8..r15
+    return regid;
+}
+
+fn _cfi_uleb(v_in as i64) as void {
+    let is i64 as v with mut = v_in;
+    while (v >= 128) {
+        buf.buf_emit8(&_cfi_buf, cast(i32, (v & 127) | 128));
+        v = v >> 7;
+    }
+    buf.buf_emit8(&_cfi_buf, cast(i32, v & 127));
+}
+
+// Emit DW_CFA_advance_loc from the last recorded offset to `off`.
+fn _cfi_advance(off as i64) as void {
+    let is i64 as delta = off - _cfi_last;
+    if (delta <= 0) { return; }
+    if (delta <= 63) {
+        buf.buf_emit8(&_cfi_buf, cast(i32, 64 | delta));
+    } else if (delta <= 255) {
+        buf.buf_emit8(&_cfi_buf, 2);
+        buf.buf_emit8(&_cfi_buf, cast(i32, delta));
+    } else if (delta <= 65535) {
+        buf.buf_emit8(&_cfi_buf, 3);
+        buf.buf_emit16_le(&_cfi_buf, cast(i32, delta));
+    } else {
+        buf.buf_emit8(&_cfi_buf, 4);
+        buf.buf_emit32_le(&_cfi_buf, delta);
+    }
+    _cfi_last = off;
+}
+
+fn _cfi_record(start as i64, end as i64, data as *u8, dlen as i32) as void {
+    if (_cfi_count >= _cfi_cap) {
+        let is i32 as nc = _cfi_cap * 2;
+        let is *i64 as ns = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
+        let is *i64 as ne = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
+        let is *i64 as nd = cast(*i64, om.opt_alloc(cast(i64, nc) * 8));
+        let is *i32 as nl = cast(*i32, om.opt_alloc(cast(i64, nc) * 4));
+        let is i32 as i with mut = 0;
+        while (i < _cfi_count) { ns[i] = _cfi_start[i]; ne[i] = _cfi_end[i]; nd[i] = _cfi_data[i]; nl[i] = _cfi_dlen[i]; i = i + 1; }
+        _cfi_start = ns; _cfi_end = ne; _cfi_data = nd; _cfi_dlen = nl; _cfi_cap = nc;
+    }
+    _cfi_start[_cfi_count] = start;
+    _cfi_end[_cfi_count] = end;
+    _cfi_data[_cfi_count] = cast(i64, data);
+    _cfi_dlen[_cfi_count] = dlen;
+    _cfi_count = _cfi_count + 1;
+}
+
+// Serialize the collected records into `.cstcfi`.
+fn _cfi_emit_section() as void {
+    if (_cfi_count == 0) { return; }
+    // The custom-section id space is finite and shared with the user's own
+    // `with section(...)` sections. `.cstcfi` is optional (unwind info), so
+    // when the budget is exhausted it is dropped rather than failing a build
+    // that would otherwise succeed — a program at the 95-section limit keeps
+    // building, just without .eh_frame.
+    if (cs.csec_count >= cs.MAX_CUSTOM_SECTIONS) { return; }
+    let is i32 as idx = cs.csec_find_or_add(".cstcfi", 7);
+    let is *i64 as bp = cast(*i64, cs.csec_buf_ptrs);
+    let is *buf.ByteBuffer as bb = cast(*buf.ByteBuffer, bp[idx]);
+    buf.buf_emit32_le(bb, cast(i64, _cfi_count));
+    let is i32 as i with mut = 0;
+    while (i < _cfi_count) {
+        buf.buf_emit32_le(bb, _cfi_start[i]);
+        buf.buf_emit32_le(bb, _cfi_end[i]);
+        buf.buf_emit32_le(bb, cast(i64, _cfi_dlen[i]));
+        buf.buf_append(bb, cast(*u8, _cfi_data[i]), cast(i64, _cfi_dlen[i]));
+        i = i + 1;
+    }
+}
+
 // === Duplicate definitions ===
 //
 // The symbol table is keyed by name with no per-function scope, and
@@ -380,6 +495,9 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
          relocs as *elf.RelocList, data_relocs as *elf.RelocList) as void {
     let is i32 as i with mut = 0;
     _dbg_reset();
+    _cfi_reset();
+    _cfi_enabled = 0;
+    if (tgt.target_get().object_format == 1) { _cfi_enabled = 1; }
 
     while (i < lines.count) {
         let is *pl.ParsedLine as line = pl.pl_get(lines, i);
@@ -412,6 +530,37 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
                 if (ln != dbg_last_line) {
                     _dbg_add(text_buf.len, cast(i64, ln));
                     dbg_last_line = ln;
+                }
+            } else if (line.dir_kind == pl.DIR_CFI_STARTPROC) {
+                if (_cfi_enabled == 1) {
+                    _cfi_active = 1;
+                    _cfi_fn_start = text_buf.len;
+                    _cfi_last = 0;
+                    _cfi_buf.len = 0;
+                }
+            } else if (line.dir_kind == pl.DIR_CFI_ENDPROC) {
+                if (_cfi_enabled == 1 && _cfi_active == 1) {
+                    _cfi_active = 0;
+                    _cfi_record(_cfi_fn_start, text_buf.len, _cfi_buf.data, cast(i32, _cfi_buf.len));
+                }
+            } else if (line.dir_kind == pl.DIR_CFI_DEF_CFA_OFFSET) {
+                if (_cfi_enabled == 1 && _cfi_active == 1) {
+                    _cfi_advance(text_buf.len - _cfi_fn_start);
+                    buf.buf_emit8(&_cfi_buf, 14);              // DW_CFA_def_cfa_offset
+                    _cfi_uleb(line.dir_num);
+                }
+            } else if (line.dir_kind == pl.DIR_CFI_DEF_CFA_REGISTER) {
+                if (_cfi_enabled == 1 && _cfi_active == 1) {
+                    _cfi_advance(text_buf.len - _cfi_fn_start);
+                    buf.buf_emit8(&_cfi_buf, 13);              // DW_CFA_def_cfa_register
+                    _cfi_uleb(cast(i64, _cfi_dwarf_reg(line.dir_arg_len)));
+                }
+            } else if (line.dir_kind == pl.DIR_CFI_OFFSET) {
+                if (_cfi_enabled == 1 && _cfi_active == 1) {
+                    _cfi_advance(text_buf.len - _cfi_fn_start);
+                    let is i32 as dr = _cfi_dwarf_reg(line.dir_arg_len);
+                    buf.buf_emit8(&_cfi_buf, 128 | dr);        // DW_CFA_offset
+                    _cfi_uleb((0 - line.dir_num) / 8);          // factored by -8
                 }
             } else {
             let is *buf.ByteBuffer as target with mut = text_buf;
@@ -448,4 +597,6 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
     // PE/COFF objects always carry .cstdebug (the linker reads it there); ELF
     // objects only with -g, so a plain build's object stays byte-identical.
     if (tgt.target_get().object_format == 2 || tgt.debug_get() == 1) { _dbg_emit_section(); }
+    // .cstcfi (SysV unwind) for ELF objects.
+    if (_cfi_enabled == 1) { _cfi_emit_section(); }
 }

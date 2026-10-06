@@ -474,6 +474,39 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         p = skip_to_eol(tl, p);
         return p;
     }
+    if (enc.streq_lit(tok.ptr, tok.len, ".cfi_startproc") == 1) {
+        line.dir_kind = pl.DIR_CFI_STARTPROC;
+        return skip_to_eol(tl, p + 1);
+    }
+    if (enc.streq_lit(tok.ptr, tok.len, ".cfi_endproc") == 1) {
+        line.dir_kind = pl.DIR_CFI_ENDPROC;
+        return skip_to_eol(tl, p + 1);
+    }
+    if (enc.streq_lit(tok.ptr, tok.len, ".cfi_def_cfa_offset") == 1) {
+        line.dir_kind = pl.DIR_CFI_DEF_CFA_OFFSET;
+        p = p + 1;
+        let is *lex.Token as n = lex.tl_get(tl, p);
+        if (n.kind == lex.TK_NUMBER) { line.dir_num = n.num_val; p = p + 1; }
+        return skip_to_eol(tl, p);
+    }
+    if (enc.streq_lit(tok.ptr, tok.len, ".cfi_def_cfa_register") == 1) {
+        line.dir_kind = pl.DIR_CFI_DEF_CFA_REGISTER;
+        p = p + 1;
+        let is *lex.Token as r = lex.tl_get(tl, p);
+        if (r.kind == lex.TK_REGISTER) { line.dir_arg_len = r.id; p = p + 1; }
+        return skip_to_eol(tl, p);
+    }
+    if (enc.streq_lit(tok.ptr, tok.len, ".cfi_offset") == 1) {
+        line.dir_kind = pl.DIR_CFI_OFFSET;
+        p = p + 1;
+        let is *lex.Token as r = lex.tl_get(tl, p);
+        if (r.kind == lex.TK_REGISTER) { line.dir_arg_len = r.id; p = p + 1; }
+        let is *lex.Token as cm = lex.tl_get(tl, p);
+        if (cm.kind == lex.TK_COMMA) { p = p + 1; }
+        let is i32 as np with mut = p;
+        line.dir_num = parse_dir_num(tl, p, &np);
+        return skip_to_eol(tl, np);
+    }
     line.dir_kind = pl.DIR_OTHER;
     return p + 1;
 }
