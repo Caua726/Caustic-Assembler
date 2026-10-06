@@ -67,7 +67,7 @@ fn after_prefix(s as *Slice, n as i32) as Slice {
 }
 
 fn is_sep(c as u8) as i32 {
-    if (c == 32 || c == 9 || c == 44 || c == 91 || c == 93 || c == 35) { return 1; }
+    if (c == 0 || c == 32 || c == 9 || c == 44 || c == 91 || c == 93 || c == 35) { return 1; }
     return 0;
 }
 
@@ -541,6 +541,46 @@ fn emit_data(line as *Slice, target as *buf.ByteBuffer, section as i32,
     return 0;
 }
 
+// `.cfi_*` directives from the AArch64 codegen. They feed the shared CFI
+// collector (passes.cfi_*), which the ELF writer turns into .cstcfi. AArch64
+// register numbers are already DWARF numbers (x0..x30 = 0..30, sp = 31).
+// Returns 1 when the line is not a .cfi_ directive.
+fn emit_cfi(line as *Slice, off as i64) as i32 {
+    if (starts(line, ".cfi_startproc", 14) == 1) {
+        let is Slice as a = after_prefix(line, 14);
+        let is i32 as p with mut = 0;
+        let is Slice as nm = next_tok(&a, &p);
+        passes.cfi_begin(nm.ptr, nm.len, off);
+        return 0;
+    }
+    if (starts(line, ".cfi_endproc", 12) == 1) { passes.cfi_end(off); return 0; }
+    if (starts(line, ".cfi_def_cfa_offset", 19) == 1) {
+        let is Slice as a = after_prefix(line, 19);
+        let is i32 as p with mut = 0;
+        let is Slice as n = next_tok(&a, &p);
+        let is i32 as ok with mut = 0;
+        passes.cfi_def_cfa_offset(off, parse_num(&n, &ok));
+        return 0;
+    }
+    if (starts(line, ".cfi_def_cfa_register", 21) == 1) {
+        let is Slice as a = after_prefix(line, 21);
+        let is i32 as p with mut = 0;
+        let is Slice as r = next_tok(&a, &p);
+        passes.cfi_def_cfa_register(off, reg_num(&r));
+        return 0;
+    }
+    if (starts(line, ".cfi_offset", 11) == 1) {
+        let is Slice as a = after_prefix(line, 11);
+        let is i32 as p with mut = 0;
+        let is Slice as r = next_tok(&a, &p);
+        let is Slice as n = next_tok(&a, &p);
+        let is i32 as ok with mut = 0;
+        passes.cfi_offset(off, reg_num(&r), parse_num(&n, &ok));
+        return 0;
+    }
+    return 1;
+}
+
 fn pass2(src as *u8, size as i64, st as *elf.SymbolTable, text as *buf.ByteBuffer,
          data as *buf.ByteBuffer, rodata as *buf.ByteBuffer, bss_size as *i64,
          text_relocs as *elf.RelocList, data_relocs as *elf.RelocList) as i32 {
@@ -560,7 +600,10 @@ fn pass2(src as *u8, size as i64, st as *elf.SymbolTable, text as *buf.ByteBuffe
             let is *i64 as rp = cast(*i64, cs.csec_reloc_ptrs); rl = cast(*elf.RelocList, rp[section - cs.SECTION_CUSTOM_BASE]);
         }
         let is i32 as bad with mut = 0;
-        if (line.ptr[0] == 46) { bad = emit_data(&line, target, section, bss_size, st, rl); }
+        if (line.ptr[0] == 46) {
+            if (starts(&line, ".cfi_", 5) == 1) { bad = emit_cfi(&line, target.len); }
+            else { bad = emit_data(&line, target, section, bss_size, st, rl); }
+        }
         else { bad = encode_inst(&line, target.len, st, rl, target); }
         if (bad != 0) {
             io.eprint_str("caustic-as: unsupported or invalid AArch64 line: ");
@@ -582,7 +625,9 @@ fn assemble_buf(src as *u8, size as i64, obj_path as *u8) as i32 {
     let is i64 as bss_size with mut = 0;
     let is elf.RelocList as text_relocs = elf.reloc_init();
     let is elf.RelocList as data_relocs = elf.reloc_init();
+    passes.cfi_init(4);                          // AArch64: 4-byte instruction units
     if (pass2(src, size, &st, &text, &data, &rodata, &bss_size, &text_relocs, &data_relocs) != 0) { return 1; }
+    passes.cfi_flush();
     // Serialize any .cstimport entries into the custom section the linker reads.
     ci.cstimport_emit_section();
     let is i64 as fd = io._open_write(obj_path);

@@ -229,6 +229,63 @@ fn _cfi_emit_section() as void {
     }
 }
 
+// === Public CFI API ===
+//
+// The AArch64 assembler parses its own dialect and does not build ParsedLines,
+// so it drives the same collector through these entry points. Offsets are byte
+// offsets into .text; the caller passes DWARF register numbers directly.
+// `caf` is the CIE's code_alignment_factor (1 for x86_64, 4 for AArch64),
+// which scales DW_CFA_advance_loc.
+let is i32 as _cfi_caf with mut = 1;
+
+fn cfi_init(caf as i32) as void {
+    _cfi_enabled = 0;
+    if (tgt.target_get().object_format == 1) { _cfi_enabled = 1; }
+    _cfi_caf = caf;
+    if (_cfi_enabled == 1) { _cfi_reset(); }
+}
+
+fn cfi_begin(name_ptr as *u8, name_len as i32, off as i64) as void {
+    if (_cfi_enabled == 0) { return; }
+    _cfi_active = 1;
+    _cfi_fn_start = off;
+    _cfi_last = 0;
+    _cfi_buf.len = 0;
+    _cfi_cur_name = name_ptr;
+    _cfi_cur_nlen = name_len;
+}
+
+fn cfi_end(off as i64) as void {
+    if (_cfi_enabled == 0 || _cfi_active == 0) { return; }
+    _cfi_active = 0;
+    _cfi_record(_cfi_cur_name, _cfi_cur_nlen, _cfi_buf.data, cast(i32, _cfi_buf.len));
+}
+
+fn cfi_def_cfa_offset(off as i64, n as i64) as void {
+    if (_cfi_enabled == 0 || _cfi_active == 0) { return; }
+    _cfi_advance((off - _cfi_fn_start) / cast(i64, _cfi_caf));
+    buf.buf_emit8(&_cfi_buf, 14);              // DW_CFA_def_cfa_offset
+    _cfi_uleb(n);
+}
+
+fn cfi_def_cfa_register(off as i64, dreg as i32) as void {
+    if (_cfi_enabled == 0 || _cfi_active == 0) { return; }
+    _cfi_advance((off - _cfi_fn_start) / cast(i64, _cfi_caf));
+    buf.buf_emit8(&_cfi_buf, 13);              // DW_CFA_def_cfa_register
+    _cfi_uleb(cast(i64, dreg));
+}
+
+fn cfi_offset(off as i64, dreg as i32, n as i64) as void {
+    if (_cfi_enabled == 0 || _cfi_active == 0) { return; }
+    _cfi_advance((off - _cfi_fn_start) / cast(i64, _cfi_caf));
+    buf.buf_emit8(&_cfi_buf, 128 | dreg);      // DW_CFA_offset
+    _cfi_uleb((0 - n) / 8);                    // factored by -8
+}
+
+fn cfi_flush() as void {
+    if (_cfi_enabled == 1) { _cfi_emit_section(); }
+}
+
 // === Duplicate definitions ===
 //
 // The symbol table is keyed by name with no per-function scope, and
