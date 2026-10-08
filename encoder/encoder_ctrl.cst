@@ -90,7 +90,7 @@ fn encode_ctrl(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *d
         return 5;
     }
     // Jcc: 0F 8x + rel32
-    if (inst >= def.INST_JZ && inst <= def.INST_JBE && op1.kind == def.OP_LABEL) {
+    if (((inst >= def.INST_JZ && inst <= def.INST_JBE) || inst == def.INST_JP || inst == def.INST_JNP) && op1.kind == def.OP_LABEL) {
         buf.buf_emit8(b, 15);
         let is i32 as cc with mut = 0;
         if (inst == def.INST_JZ || inst == def.INST_JE) { cc = 132; }
@@ -103,6 +103,8 @@ fn encode_ctrl(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *d
         if (inst == def.INST_JAE) { cc = 131; }
         if (inst == def.INST_JB) { cc = 130; }
         if (inst == def.INST_JBE) { cc = 134; }
+        if (inst == def.INST_JP) { cc = 138; }
+        if (inst == def.INST_JNP) { cc = 139; }
         buf.buf_emit8(b, cc);
         let is i64 as rel = resolve_label - (cur_off + 6);
         buf.buf_emit32_le(b, rel);
@@ -110,7 +112,7 @@ fn encode_ctrl(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *d
     }
 
     // --- SETcc reg8 ---
-    if (inst >= def.INST_SETE && inst <= def.INST_SETAE && op1.kind == def.OP_REG) {
+    if (((inst >= def.INST_SETE && inst <= def.INST_SETAE) || inst == def.INST_SETP || inst == def.INST_SETNP) && op1.kind == def.OP_REG) {
         let is i32 as cc with mut = 0;
         if (inst == def.INST_SETE) { cc = 148; }
         if (inst == def.INST_SETNE) { cc = 149; }
@@ -122,6 +124,8 @@ fn encode_ctrl(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *d
         if (inst == def.INST_SETBE) { cc = 150; }
         if (inst == def.INST_SETA) { cc = 151; }
         if (inst == def.INST_SETAE) { cc = 147; }
+        if (inst == def.INST_SETP) { cc = 154; }
+        if (inst == def.INST_SETNP) { cc = 155; }
         let is i32 as code = eu.reg_code(op1.reg_id);
         if (eu.reg_ext(op1.reg_id) == 1 || eu.needs_rex_for_8bit(op1.reg_id) == 1) {
             buf.buf_emit8(b, eu.make_rex(0, 0, 0, eu.reg_ext(op1.reg_id)));

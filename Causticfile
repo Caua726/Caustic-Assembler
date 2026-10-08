@@ -6,3 +6,8 @@ target "caustic-as" {
     src "main.cst"
     out "caustic-as"
 }
+
+script "test-scalar-sse" {
+    "caustic -q -O1 main.cst -o caustic-as"
+    "sh tests/run_scalar_sse.sh ./caustic-as caustic-ld"
+}

@@ -5,6 +5,25 @@ use "../core/buf.cst" as buf;
 // === Register helpers ===
 use "encoder_util.cst" as eu;
 
+fn _xmm_source_size(op1 as *def.Operand, op2 as *def.Operand, memory_width as i32) as i32 {
+    if (op1.kind != def.OP_REG || eu.is_xmm(op1.reg_id) != 1) { return 0; }
+    let is i32 as has_rex with mut = eu.reg_ext(op1.reg_id);
+    if (op2.kind == def.OP_REG && eu.is_xmm(op2.reg_id) == 1) {
+        if (eu.reg_ext(op2.reg_id) != 0) { has_rex = 1; }
+        return 4 + has_rex;
+    }
+    if (op2.kind == def.OP_MEM || op2.kind == def.OP_RIP_LABEL) {
+        if (op2.mem_size != 0 && op2.mem_size != memory_width) { return 0; }
+        if (op2.kind == def.OP_RIP_LABEL) { return 8 + has_rex; }
+        if (op2.mem_base != def.REG_NONE && eu.reg_ext(op2.mem_base) != 0) { has_rex = 1; }
+        if (eu.has_sib(op2) == 1 && eu.reg_ext(op2.mem_index) != 0) { has_rex = 1; }
+        let is i32 as mm with mut = eu.mem_modrm_size(op2.mem_base, op2.mem_disp);
+        if (eu.has_sib(op2) == 1) { mm = eu.mem_modrm_sib_size(op2.mem_base, op2.mem_disp); }
+        return 3 + has_rex + mm;
+    }
+    return 0;
+}
+
 fn fast_inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
     // A segment override is one prefix byte in front of whatever follows.
     if (eu.seg_prefix(op1, op2) != 0) { return 1 + _inst_size(inst, op1, op2); }
@@ -76,10 +95,10 @@ fn _inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
     if (inst == def.INST_JMP && op1.kind == def.OP_REG)  { return 2 + eu.reg_ext(op1.reg_id); }
 
     // Jcc label: 0F(1) + cc(1) + rel32(4) = 6
-    if (inst >= def.INST_JZ && inst <= def.INST_JBE && op1.kind == def.OP_LABEL) { return 6; }
+    if (((inst >= def.INST_JZ && inst <= def.INST_JBE) || inst == def.INST_JP || inst == def.INST_JNP) && op1.kind == def.OP_LABEL) { return 6; }
 
     // SETcc reg: optional REX + 0F + cc + ModRM = 3 or 4
-    if (inst >= def.INST_SETE && inst <= def.INST_SETAE && op1.kind == def.OP_REG) {
+    if (((inst >= def.INST_SETE && inst <= def.INST_SETAE) || inst == def.INST_SETP || inst == def.INST_SETNP) && op1.kind == def.OP_REG) {
         let is i32 as has_rex with mut = 0;
         if (eu.reg_ext(op1.reg_id) == 1 || eu.needs_rex_for_8bit(op1.reg_id) == 1) { has_rex = 1; }
         return 3 + has_rex;
@@ -310,13 +329,12 @@ fn _inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
         }
     }
 
-    // SSE arithmetic: F2 + optional REX + 0F + opcode + ModRM
+    // Scalar arithmetic must exactly mirror register/ModRM/SIB/RIP emission.
     if (inst == def.INST_ADDSD || inst == def.INST_SUBSD || inst == def.INST_MULSD || inst == def.INST_DIVSD || inst == def.INST_SQRTSD) {
-        if (op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
-            let is i32 as need_rex with mut = 0;
-            if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { need_rex = 1; }
-            return 4 + need_rex;
-        }
+        return _xmm_source_size(op1, op2, 64);
+    }
+    if (inst >= def.INST_ADDSS && inst <= def.INST_SQRTSS) {
+        return _xmm_source_size(op1, op2, 32);
     }
 
     // XORPD: 66 + optional REX + 0F + opcode + ModRM
@@ -339,19 +357,13 @@ fn _inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
     // CVTSI2SD: F2 + REX + 0F + opcode + ModRM = 5
     if (inst == def.INST_CVTSI2SD && op1.kind == def.OP_REG && op2.kind == def.OP_REG) { return 5; }
 
-    // CVTSD2SS: F2 + [REX] + 0F + 5A + ModRM = 4 or 5
-    if (inst == def.INST_CVTSD2SS && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
+    if (inst == def.INST_CVTSI2SS && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
         let is i32 as has_rex with mut = 0;
-        if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { has_rex = 1; }
+        if (eu.reg_size(op2.reg_id) == 64 || eu.reg_ext(op1.reg_id) != 0 || eu.reg_ext(op2.reg_id) != 0) { has_rex = 1; }
         return 4 + has_rex;
     }
-
-    // CVTSS2SD: F3 + [REX] + 0F + 5A + ModRM = 4 or 5
-    if (inst == def.INST_CVTSS2SD && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {
-        let is i32 as has_rex with mut = 0;
-        if (eu.reg_ext(op1.reg_id) == 1 || eu.reg_ext(op2.reg_id) == 1) { has_rex = 1; }
-        return 4 + has_rex;
-    }
+    if (inst == def.INST_CVTSD2SS) { return _xmm_source_size(op1, op2, 64); }
+    if (inst == def.INST_CVTSS2SD) { return _xmm_source_size(op1, op2, 32); }
 
     // MOVD: 66 + [REX] + 0F + opcode + ModRM = 4 or 5
     if (inst == def.INST_MOVD && op1.kind == def.OP_REG && op2.kind == def.OP_REG) {

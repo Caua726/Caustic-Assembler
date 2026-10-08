@@ -58,13 +58,30 @@ Built by the Caustic toolchain itself — no `make`, `gcc`, or any external tool
 `and`, `or`, `xor`, `not`, `shl`, `shr`, `sar`
 
 ### Comparison & branching
-`cmp`, `test`, `jmp`, `jz`/`je`, `jnz`/`jne`, `jl`, `jle`, `jg`, `jge`, `ja`, `jae`, `jb`, `jbe`
+`cmp`, `test`, `jmp`, `jz`/`je`, `jnz`/`jne`, `jl`, `jle`, `jg`, `jge`, `ja`, `jae`, `jb`, `jbe`, `jp`, `jnp`
 
 ### Set byte on condition
-`sete`, `setne`, `setl`, `setle`, `setg`, `setge`, `setb`, `setbe`, `seta`, `setae`
+`sete`, `setne`, `setl`, `setle`, `setg`, `setge`, `setb`, `setbe`, `seta`, `setae`, `setp`, `setnp`
 
-### Floating point (SSE2)
-`addsd`, `subsd`, `mulsd`, `divsd`, `xorpd`, `cvtsi2sd`, `cvttsd2si`
+### Scalar floating point (SSE/SSE2)
+`addsd`, `subsd`, `mulsd`, `divsd`, `sqrtsd`, `addss`, `subss`, `mulss`,
+`divss`, `sqrtss`, `xorpd`, `ucomisd`, `cvtsi2sd`, `cvtsi2ss`, `cvttsd2si`,
+`cvtsd2ss`, `cvtss2sd`, `movsd`, `movd`
+
+Arithmetic, square root and float-width conversion accept XMM registers,
+base/displacement, SIB and RIP-relative sources. Explicit memory widths must
+match the instruction; an omitted width is inferred. Integer-to-single
+conversion accepts 32-bit or 64-bit GPR sources.
+
+```sh
+# From caustic-assembler; uses the selected caustic and caustic-ld on PATH.
+caustic-mk run test-scalar-sse
+```
+
+The test compares instruction bytes with clang and GNU `as`, links and runs
+scalar arithmetic/rounding and external parity branches on the native CPU,
+and rejects invalid operands and misspelled long mnemonics. The external
+assemblers are test oracles, not production dependencies.
 
 ### System
 `syscall`, `call`, `ret`, `nop`, `cld`, `rep movsb`

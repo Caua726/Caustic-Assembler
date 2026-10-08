@@ -190,6 +190,17 @@ let is i32 as INST_PSUBQ    with imut = 88;  // 66 0F FB /r — 2x i64
 let is i32 as INST_CLI      with imut = 89;  // FA — clear interrupt flag
 let is i32 as INST_STI      with imut = 90;  // FB — set interrupt flag
 let is i32 as INST_HLT      with imut = 91;  // F4 — halt until next interrupt
+// IEEE unordered conditions and scalar single precision. Keep existing IDs.
+let is i32 as INST_JP       with imut = 92;
+let is i32 as INST_JNP      with imut = 93;
+let is i32 as INST_SETP     with imut = 94;
+let is i32 as INST_SETNP    with imut = 95;
+let is i32 as INST_ADDSS    with imut = 96;
+let is i32 as INST_SUBSS    with imut = 97;
+let is i32 as INST_MULSS    with imut = 98;
+let is i32 as INST_DIVSS    with imut = 99;
+let is i32 as INST_SQRTSS   with imut = 100;
+let is i32 as INST_CVTSI2SS with imut = 101;
 let is i32 as INST_NONE    with imut = 0;
 
 // === Operand kinds ===
@@ -318,6 +329,16 @@ fn inst_name(id as i32) as *u8 {
     if (id == INST_CLI) { return "cli"; }
     if (id == INST_STI) { return "sti"; }
     if (id == INST_HLT) { return "hlt"; }
+    if (id == INST_JP) { return "jp"; }
+    if (id == INST_JNP) { return "jnp"; }
+    if (id == INST_SETP) { return "setp"; }
+    if (id == INST_SETNP) { return "setnp"; }
+    if (id == INST_ADDSS) { return "addss"; }
+    if (id == INST_SUBSS) { return "subss"; }
+    if (id == INST_MULSS) { return "mulss"; }
+    if (id == INST_DIVSS) { return "divss"; }
+    if (id == INST_SQRTSS) { return "sqrtss"; }
+    if (id == INST_CVTSI2SS) { return "cvtsi2ss"; }
     return "<unknown>";
 }
 

@@ -173,6 +173,7 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
             if (c1 == 122) { return def.INST_JZ; } if (c1 == 101) { return def.INST_JE; }
             if (c1 == 108) { return def.INST_JL; } if (c1 == 103) { return def.INST_JG; }
             if (c1 == 97) { return def.INST_JA; } if (c1 == 98) { return def.INST_JB; }
+            if (c1 == 112) { return def.INST_JP; } // jp
         }
     }
     else if (len == 3) {
@@ -217,6 +218,7 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
             if (c1 == 103 && c2 == 101) { return def.INST_JGE; } // jge
             if (c1 == 97 && c2 == 101) { return def.INST_JAE; } // jae
             if (c1 == 98 && c2 == 101) { return def.INST_JBE; } // jbe
+            if (c1 == 110 && c2 == 112) { return def.INST_JNP; } // jnp
         }
         else if (c0 == 112 && c1 == 111 && c2 == 112) { return def.INST_POP; } // pop
     }
@@ -234,6 +236,7 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
             if (c3 == 101) { return def.INST_SETE; } if (c3 == 108) { return def.INST_SETL; }
             if (c3 == 103) { return def.INST_SETG; } if (c3 == 98) { return def.INST_SETB; }
             if (c3 == 97) { return def.INST_SETA; }
+            if (c3 == 112) { return def.INST_SETP; }
         }
         if (c0 == 99 && c1 == 97 && ptr[2] == 108 && ptr[3] == 108) { return def.INST_CALL; } // call
         if (c0 == 109 && c1 == 111 && ptr[2] == 118) { // movq
@@ -253,11 +256,16 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
             if (c3 == 103 && c4 == 101) { return def.INST_SETGE; }
             if (c3 == 98 && c4 == 101) { return def.INST_SETBE; }
             if (c3 == 97 && c4 == 101) { return def.INST_SETAE; }
+            if (c3 == 110 && c4 == 112) { return def.INST_SETNP; }
         }
         if (c0 == 97 && c1 == 100 && ptr[2] == 100 && ptr[3] == 115 && ptr[4] == 100) { return def.INST_ADDSD; } // addsd
         if (c0 == 115 && c1 == 117 && ptr[2] == 98 && ptr[3] == 115 && ptr[4] == 100) { return def.INST_SUBSD; } // subsd
         if (c0 == 109 && c1 == 117 && ptr[2] == 108 && ptr[3] == 115 && ptr[4] == 100) { return def.INST_MULSD; } // mulsd
         if (c0 == 100 && c1 == 105 && ptr[2] == 118 && ptr[3] == 115 && ptr[4] == 100) { return def.INST_DIVSD; } // divsd
+        if (c0 == 97 && c1 == 100 && ptr[2] == 100 && ptr[3] == 115 && ptr[4] == 115) { return def.INST_ADDSS; } // addss
+        if (c0 == 115 && c1 == 117 && ptr[2] == 98 && ptr[3] == 115 && ptr[4] == 115) { return def.INST_SUBSS; } // subss
+        if (c0 == 109 && c1 == 117 && ptr[2] == 108 && ptr[3] == 115 && ptr[4] == 115) { return def.INST_MULSS; } // mulss
+        if (c0 == 100 && c1 == 105 && ptr[2] == 118 && ptr[3] == 115 && ptr[4] == 115) { return def.INST_DIVSS; } // divss
         if (c0 == 120 && c1 == 111 && ptr[2] == 114 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_XORPD; } // xorpd
         if (c0 == 97 && c1 == 100 && ptr[2] == 100 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_ADDPD; } // addpd
         if (c0 == 115 && c1 == 117 && ptr[2] == 98 && ptr[3] == 112 && ptr[4] == 100) { return def.INST_SUBPD; } // subpd
@@ -267,6 +275,12 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
         if (c0 == 112 && c1 == 97 && ptr[2] == 100 && ptr[3] == 100 && ptr[4] == 113) { return def.INST_PADDQ; } // paddq
         if (c0 == 112 && c1 == 115 && ptr[2] == 117 && ptr[3] == 98 && ptr[4] == 100) { return def.INST_PSUBD; } // psubd
         if (c0 == 112 && c1 == 115 && ptr[2] == 117 && ptr[3] == 98 && ptr[4] == 113) { return def.INST_PSUBQ; } // psubq
+    }
+    else if (len == 6 && c0 == 115) { // sqrtsd / sqrtss
+        if (ptr[1] == 113 && ptr[2] == 114 && ptr[3] == 116 && ptr[4] == 115) {
+            if (ptr[5] == 100) { return def.INST_SQRTSD; }
+            if (ptr[5] == 115) { return def.INST_SQRTSS; }
+        }
     }
     else if (len == 6 && c0 == 109) { // movsxd / movupd / movdqu
         if (ptr[1] == 111 && ptr[2] == 118 && ptr[3] == 115 && ptr[4] == 120 && ptr[5] == 100) { return def.INST_MOVSXD; }
@@ -284,6 +298,7 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
     }
     else if (len == 8 && c0 == 99) { // cvtsi2sd, cvtsd2ss, cvtss2sd
         if (ptr[1] == 118 && ptr[2] == 116 && ptr[3] == 115 && ptr[4] == 105 && ptr[5] == 50 && ptr[6] == 115 && ptr[7] == 100) { return def.INST_CVTSI2SD; }
+        if (ptr[1] == 118 && ptr[2] == 116 && ptr[3] == 115 && ptr[4] == 105 && ptr[5] == 50 && ptr[6] == 115 && ptr[7] == 115) { return def.INST_CVTSI2SS; }
         if (ptr[1] == 118 && ptr[2] == 116 && ptr[3] == 115 && ptr[4] == 100 && ptr[5] == 50 && ptr[6] == 115 && ptr[7] == 115) { return def.INST_CVTSD2SS; }
         if (ptr[1] == 118 && ptr[2] == 116 && ptr[3] == 115 && ptr[4] == 115 && ptr[5] == 50 && ptr[6] == 115 && ptr[7] == 100) { return def.INST_CVTSS2SD; }
     }
