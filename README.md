@@ -131,6 +131,11 @@ Covers the x86_64 instructions and the scalar AArch64 instructions emitted by
 the corresponding Caustic code generators. The AArch64 path is also checked
 against GNU `as` as a test oracle.
 
+The scalar AArch64 arithmetic, negation, square root and integer conversions
+encode the selected `sN`/`dN` precision. Single- and double-precision forms,
+including high-numbered registers, match clang's bytes; compiler IEEE
+consumers execute at O0/O1/O2 under QEMU.
+
 ## Limitations
 
 - Linux ELF64 output for x86_64 and AArch64

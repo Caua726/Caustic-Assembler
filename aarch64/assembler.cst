@@ -428,10 +428,12 @@ fn encode_inst(line as *Slice, pc as i64, st as *elf.SymbolTable,
         if (eq(&t[0], "fadd", 4) == 1) { ins = 0x1E602800; }
         else if (eq(&t[0], "fsub", 4) == 1) { ins = 0x1E603800; }
         else if (eq(&t[0], "fmul", 4) == 1) { ins = 0x1E600800; } else { ins = 0x1E601800; }
+        if (is_s(&t[1]) == 1) { ins = ins - 0x400000; }
         ins = ins + cast(i64, rm << 16) + cast(i64, rn << 5) + cast(i64, rd);
     }
     else if (eq(&t[0], "fneg", 4) == 1 || eq(&t[0], "fsqrt", 5) == 1) {
         if (eq(&t[0], "fneg", 4) == 1) { ins = 0x1E614000; } else { ins = 0x1E61C000; }
+        if (is_s(&t[1]) == 1) { ins = ins - 0x400000; }
         ins = ins + cast(i64, rn << 5) + cast(i64, rd);
     }
     else if (eq(&t[0], "fcmp", 4) == 1) { ins = 0x1E602000 + cast(i64, rn << 16) + cast(i64, rd << 5); }
@@ -444,6 +446,11 @@ fn encode_inst(line as *Slice, pc as i64, st as *elf.SymbolTable,
         if (eq(&t[0], "scvtf", 5) == 1) { ins = 0x9E620000; }
         else if (eq(&t[0], "ucvtf", 5) == 1) { ins = 0x9E630000; }
         else if (eq(&t[0], "fcvtzs", 6) == 1) { ins = 0x9E780000; } else { ins = 0x9E790000; }
+        if ((eq(&t[0], "scvtf", 5) == 1 || eq(&t[0], "ucvtf", 5) == 1) && is_s(&t[1]) == 1) {
+            ins = ins - 0x400000;
+        } else if ((eq(&t[0], "fcvtzs", 6) == 1 || eq(&t[0], "fcvtzu", 6) == 1) && is_s(&t[2]) == 1) {
+            ins = ins - 0x400000;
+        }
         ins = ins + cast(i64, rn << 5) + cast(i64, rd);
     }
     else if (eq(&t[0], "sxtb", 4) == 1 || eq(&t[0], "sxth", 4) == 1 || eq(&t[0], "sxtw", 4) == 1
