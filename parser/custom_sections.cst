@@ -107,6 +107,10 @@ fn csec_find_or_add(name as *u8, name_len as i32) as i32 {
     let is *i32 as gnl = cast(*i32, csec_name_lens);
     gnp[idx] = cast(i64, name);
     gnl[idx] = name_len;
+    // Allocator reuse does not imply zeroed flags. A data section must not
+    // inherit executable protection from an earlier allocation.
+    let is *i32 as execs = cast(*i32, csec_is_exec);
+    execs[idx] = 0;
     let is *u8 as bb_mem = om.opt_alloc(sizeof(buf.ByteBuffer));
     let is *buf.ByteBuffer as bbp = cast(*buf.ByteBuffer, bb_mem);
     let is buf.ByteBuffer as tmp = buf.buf_init(512);

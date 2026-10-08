@@ -125,6 +125,14 @@ Generates standard ELF64 relocatable objects with:
 - `.rela.text` with PC-relative relocations
 - `.shstrtab` for section names
 
+Absolute `.quad symbol` relocations preserve a defined label's local/global
+binding; only unresolved symbols become external. From this repository,
+`caustic-mk run test-local-relocations` executes duplicate private labels,
+forward references, public/external pointers and two merged custom sections.
+The same consumer also links and runs from clang and GNU `as` objects.
+New named sections initialize their executable flags explicitly: allocator
+reuse must not turn writable pointer storage into an executable-only mapping.
+
 ## Status
 
 Covers the x86_64 instructions and the scalar AArch64 instructions emitted by

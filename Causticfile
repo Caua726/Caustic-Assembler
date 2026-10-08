@@ -11,3 +11,8 @@ script "test-scalar-sse" {
     "caustic -q -O1 main.cst -o caustic-as"
     "sh tests/run_scalar_sse.sh ./caustic-as caustic-ld"
 }
+
+script "test-local-relocations" {
+    "caustic -q -O1 main.cst -o caustic-as"
+    "sh tests/run_local_relocations.sh ./caustic-as caustic-ld"
+}

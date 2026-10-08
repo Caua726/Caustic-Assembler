@@ -679,9 +679,10 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
                 // `.quad <symbol>` emits an R_X86_64_64 relocation at the
                 // current section's offset. Each section has its own reloc
                 // list so the ELF writer can emit one .rela.<name> each.
-                let is i32 as sym_idx = elf.sym_find_or_add(symtab, line.dir_arg_ptr, line.dir_arg_len, 99, 0, 1);
+                let is i32 as sym_idx = elf.sym_find_or_add(symtab, line.dir_arg_ptr, line.dir_arg_len, cs.SECTION_UNDEF, 0, 0);
                 let is *elf.Symbol as ext_sym = elf.sym_get(symtab, sym_idx);
-                ext_sym.is_global = 1;
+                // Absolute relocation does not change a defined label's binding.
+                if (ext_sym.section == cs.SECTION_UNDEF) { ext_sym.is_global = 1; }
                 let is i64 as off = cast(i64, target.len);
                 let is *elf.RelocList as dest_relocs with mut = relocs;
                 if (line.section == cs.SECTION_DATA) { dest_relocs = data_relocs; }
