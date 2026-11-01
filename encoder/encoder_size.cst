@@ -255,6 +255,10 @@ fn _inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
         return s + need_rex + 2;
     }
 
+    // TEST reg64, imm32 — REX.W + F7 + ModRM + imm32 = 7
+    if (inst == def.INST_TEST && op1.kind == def.OP_REG && op2.kind == def.OP_IMM
+        && eu.reg_size(op1.reg_id) == 64) { return 7; }
+
     // IMUL reg, reg — always REX + 0F + opcode + ModRM = 4
     if (inst == def.INST_IMUL && op1.kind == def.OP_REG && op2.kind == def.OP_REG) { return 4; }
 
