@@ -431,6 +431,26 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         line.dir_num = parse_dir_num(tl, p, &np);
         return np;
     }
+    if (enc.streq_lit(tok.ptr, tok.len, ".p2align") == 1) {
+        line.dir_kind = pl.DIR_P2ALIGN;
+        line.section = cast(i8, *current_section);
+        p = p + 1;
+        let is *lex.Token as pw = lex.tl_get(tl, p);
+        if (pw.kind == lex.TK_NUMBER) { line.dir_num = pw.num_val; p = p + 1; }
+        line.op1_imm = 0;
+        // `, fill` (empty only) then `, max`
+        let is *lex.Token as c1 = lex.tl_get(tl, p);
+        if (c1.kind == lex.TK_COMMA) {
+            p = p + 1;
+            let is *lex.Token as c2 = lex.tl_get(tl, p);
+            if (c2.kind == lex.TK_COMMA) {
+                p = p + 1;
+                let is *lex.Token as mx = lex.tl_get(tl, p);
+                if (mx.kind == lex.TK_NUMBER) { line.op1_imm = mx.num_val; p = p + 1; }
+            }
+        }
+        return skip_to_eol(tl, p);
+    }
     if (enc.streq_lit(tok.ptr, tok.len, ".zero") == 1) {
         line.dir_kind = pl.DIR_ZERO;
         line.section = cast(i8, *current_section);

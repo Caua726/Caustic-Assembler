@@ -627,6 +627,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                 else if (c1 == 108 && tlen == 5 && tptr[2] == 111 && tptr[3] == 110 && tptr[4] == 103) { is_dir = 1; } // .long
                 else if (c1 == 113 && tlen == 5 && tptr[2] == 117 && tptr[3] == 97 && tptr[4] == 100) { is_dir = 1; } // .quad
                 else if (c1 == 122 && tlen == 5 && tptr[2] == 101 && tptr[3] == 114 && tptr[4] == 111) { is_dir = 1; } // .zero
+                else if (c1 == 112 && tlen == 8 && tptr[2] == 50 && tptr[3] == 97 && tptr[4] == 108 && tptr[5] == 105 && tptr[6] == 103 && tptr[7] == 110) { is_dir = 1; } // .p2align
                 else if (c1 == 97 && tlen == 6 && tptr[2] == 115 && tptr[3] == 99 && tptr[4] == 105 && tptr[5] == 105) { is_dir = 1; } // .ascii
                 else if (c1 == 97 && tlen == 6 && tptr[2] == 115 && tptr[3] == 99 && tptr[4] == 105 && tptr[5] == 122) { is_dir = 1; } // .asciz
                 else if (c1 == 118 && tlen == 6 && tptr[2] == 97 && tptr[3] == 108 && tptr[4] == 117 && tptr[5] == 101) { is_dir = 1; } // .value

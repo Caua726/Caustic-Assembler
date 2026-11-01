@@ -41,6 +41,10 @@ let is i32 as DIR_CFI_OFFSET           with imut = 24;
 // so a debugger sets a breakpoint on a function past it, where the parameters
 // are already in their stack slots.
 let is i32 as DIR_DBG_PROLOGUE_END     with imut = 25;
+// `.p2align N[, fill[, max]]`: pad to a 2^N boundary of the section, with
+// multi-byte nops in code; skipped when it would take more than `max` bytes
+// (max in op1_imm, 0 = no limit; the fill operand is not supported).
+let is i32 as DIR_P2ALIGN              with imut = 26;
 
 // === ParsedLine structs ===
 
