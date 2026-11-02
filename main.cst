@@ -1,7 +1,6 @@
 use "../std/os.cst" as os;
 use "../std/io.cst" as io;
 use "core/util.cst" as util;
-use "lexer/lexer.cst" as lex;
 use "encoder/encoder_util.cst" as enc;
 use "parser/parsed_line.cst" as pl;
 use "parser/parser.cst" as parser;
@@ -46,19 +45,7 @@ fn print_profile() as void {
     util.print_str("  total:     "); util.print_int(total / 1000); util.print_str("ms\n");
 }
 
-// === Public API for library use ===
-
-fn assemble_file(asm_path as *u8, obj_path as *u8) as i32 {
-    let is i64 as file_size = util.read_file_size(asm_path);
-    let is *u8 as src = util.read_file(asm_path);
-    if (cast(i64, src) == 0) {
-        util.print_str("caustic-as: error: cannot read ");
-        util.print_str(asm_path);
-        util.print_str("\n");
-        return 1;
-    }
-    return assemble_buf(src, file_size, obj_path);
-}
+// === Public API (the compiler calls this in-process) ===
 
 // Assemble from an in-memory .s buffer. The in-process compiler pipeline passes
 // codegen's assembly output straight here, skipping the round-trip of writing
@@ -135,18 +122,6 @@ fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
 }
 
 // === Main ===
-
-fn print_token_profile() as void {
-    util.print_str("  tok: spaces="); util.print_int(lex.tok_prof_counts[0]);
-    util.print_str(" nl="); util.print_int(lex.tok_prof_counts[1]);
-    util.print_str(" comment="); util.print_int(lex.tok_prof_counts[2]);
-    util.print_str(" punct="); util.print_int(lex.tok_prof_counts[3]);
-    util.print_str(" num="); util.print_int(lex.tok_prof_counts[4]);
-    util.print_str(" dot="); util.print_int(lex.tok_prof_counts[5]);
-    util.print_str(" id_short="); util.print_int(lex.tok_prof_counts[6]);
-    util.print_str(" id_long="); util.print_int(lex.tok_prof_counts[7]);
-    util.print_str("\n");
-}
 
 fn print_section_sizes(text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer,
                        rodata_buf as *buf.ByteBuffer, bss_size as i64, relocs as *elf.RelocList) as void {

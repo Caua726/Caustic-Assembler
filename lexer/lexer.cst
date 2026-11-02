@@ -140,12 +140,6 @@ fn is_alnum(c as u8) as i32 {
     return 0;
 }
 
-fn is_alnum_dot(c as u8) as i32 {
-    let is u8 as v = char_tab[cast(i32, c)];
-    if (v != 0) { return 1; }
-    return 0;
-}
-
 // Parse number and return new position. Value written to *out_val.
 fn parse_number_fast(src as *u8, pos as i64, src_len as i64, out_val as *i64) as i64 {
     let is i64 as i with mut = pos;
@@ -519,10 +513,6 @@ fn init_ht() as void {
     ht_ready = 1;
 }
 
-// Tokenizer profiling counters
-let is [8]i64 as tok_prof_counts with mut;
-// 0=spaces, 1=newlines, 2=comments, 3=punct, 4=numbers, 5=dots, 6=idents_short, 7=idents_long
-
 fn tokenize(src as *u8, src_len as i64) as TokenList {
     if (char_tab_ready == 0) { init_char_tab(); }
     if (ri_first_ready == 0) { init_ri_first(); }
@@ -532,8 +522,6 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
     let is TokenList as tl = tl_init(tok_hint);
     let is i64 as i with mut = 0;
     let is i32 as line with mut = 1;
-    tok_prof_counts[0] = 0; tok_prof_counts[1] = 0; tok_prof_counts[2] = 0; tok_prof_counts[3] = 0;
-    tok_prof_counts[4] = 0; tok_prof_counts[5] = 0; tok_prof_counts[6] = 0; tok_prof_counts[7] = 0;
 
     let is i64 as base_i = cast(i64, src);
 
@@ -542,13 +530,11 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
 
         // Skip whitespace (not newline) — fast skip loop
         if (c == 32 || c == 9 || c == 13) {
-            tok_prof_counts[0] = tok_prof_counts[0] + 1;
             i = i + 1;
             while (i < src_len && src[i] == 32) { i = i + 1; }
         }
         // Newline
         else if (c == 10) {
-            tok_prof_counts[1] = tok_prof_counts[1] + 1;
             let is *Token as t = tl_next(&tl);
             t.kind = TK_NEWLINE; t.ptr = cast(*u8, base_i + i); t.len = 1;
             t.id = 0; t.num_val = 0;
@@ -557,11 +543,9 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
         }
         // Comment: # or //
         else if (c == 35) {
-            tok_prof_counts[2] = tok_prof_counts[2] + 1;
             while (i < src_len && src[i] != 10) { i = i + 1; }
         }
         else if (c == 47 && i + 1 < src_len && src[i + 1] == 47) {
-            tok_prof_counts[2] = tok_prof_counts[2] + 1;
             while (i < src_len && src[i] != 10) { i = i + 1; }
         }
         // String literal
@@ -579,7 +563,6 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
         }
         // Single-char punctuation (combined check)
         else if (c == 44 || c == 58 || c == 91 || c == 93 || c == 43 || c == 42 || c == 45) {
-            tok_prof_counts[3] = tok_prof_counts[3] + 1;
             let is i32 as tk with mut = TK_COMMA;
             if (c == 58) { tk = TK_COLON; }
             else if (c == 91) { tk = TK_LBRACKET; }
@@ -594,7 +577,6 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
         }
         // Number (0-9)
         else if (c >= 48 && c <= 57) {
-            tok_prof_counts[4] = tok_prof_counts[4] + 1;
             let is i64 as start = i;
             let is i64 as val with mut = 0;
             let is i64 as new_i = parse_number_fast(src, i, src_len, &val);
@@ -605,7 +587,6 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
         }
         // Dot: directive or local label
         else if (c == 46) {
-            tok_prof_counts[5] = tok_prof_counts[5] + 1;
             let is i64 as start = i;
             i = i + 1;
             while (i < src_len && char_tab[cast(i32, src[i])] != 0) { i = i + 1; }
@@ -675,9 +656,6 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
             while (i < src_len && char_tab[cast(i32, src[i])] != 0) { i = i + 1; }
             let is i32 as tlen = cast(i32, i - start);
             let is *u8 as tptr = cast(*u8, base_i + start);
-
-            if (tlen <= 9) { tok_prof_counts[6] = tok_prof_counts[6] + 1; }
-            else { tok_prof_counts[7] = tok_prof_counts[7] + 1; }
 
             // Fast check size prefix (uppercase first char B-W, len 4-5)
             if (c >= 66 && c <= 87 && tlen >= 4 && tlen <= 5) {

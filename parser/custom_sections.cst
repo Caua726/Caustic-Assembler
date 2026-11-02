@@ -79,12 +79,6 @@ fn csec_mark_exec(idx as i32) as void {
     xp[idx] = 1;
 }
 
-fn csec_get_exec(idx as i32) as i32 {
-    if (idx < 0 || idx >= csec_count) { return 0; }
-    let is *i32 as xp = cast(*i32, csec_is_exec);
-    return xp[idx];
-}
-
 fn csec_find_or_add(name as *u8, name_len as i32) as i32 {
     let is *i64 as np = cast(*i64, csec_name_ptrs);
     let is *i32 as nl = cast(*i32, csec_name_lens);

@@ -65,13 +65,6 @@ fn buf_emit64_le(b as *ByteBuffer, val as i64) as void {
     b.len = b.len + 8;
 }
 
-fn buf_patch32_le(b as *ByteBuffer, offset as i64, val as i64) as void {
-    b.data[offset]     = cast(u8, val & 255);
-    b.data[offset + 1] = cast(u8, (val >> 8) & 255);
-    b.data[offset + 2] = cast(u8, (val >> 16) & 255);
-    b.data[offset + 3] = cast(u8, (val >> 24) & 255);
-}
-
 fn buf_append(dst as *ByteBuffer, src as *u8, len as i64) as void {
     buf_ensure(dst, len);
     mem.memcpy(cast(*u8, cast(i64, dst.data) + dst.len), src, len);
