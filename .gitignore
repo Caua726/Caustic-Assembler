@@ -2,3 +2,4 @@
 *.cst.s
 *.cst.s.o
 .caustic/
+/caustic
