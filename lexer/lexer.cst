@@ -493,6 +493,15 @@ fn init_ht() as void {
     ht_insert(115, 113, 114, 116, 115, 6, 2, def.INST_SQRTSS); // sqrtss
     ht_insert(109, 102, 101, 110, 99, 6, 2, def.INST_MFENCE);     // mfence
     ht_insert(99, 109, 111, 118, 110, 6, 2, def.INST_CMOVNE);     // cmovne
+    ht_insert(99, 109, 111, 118, 101, 5, 2, def.INST_CMOVE);     // cmove
+    ht_insert(99, 109, 111, 118, 108, 5, 2, def.INST_CMOVL);     // cmovl
+    ht_insert(99, 109, 111, 118, 103, 6, 2, def.INST_CMOVGE);     // cmovge
+    ht_insert(99, 109, 111, 118, 108, 6, 2, def.INST_CMOVLE);     // cmovle
+    ht_insert(99, 109, 111, 118, 103, 5, 2, def.INST_CMOVG);     // cmovg
+    ht_insert(99, 109, 111, 118, 98, 5, 2, def.INST_CMOVB);     // cmovb
+    ht_insert(99, 109, 111, 118, 97, 6, 2, def.INST_CMOVAE);     // cmovae
+    ht_insert(99, 109, 111, 118, 98, 6, 2, def.INST_CMOVBE);     // cmovbe
+    ht_insert(99, 109, 111, 118, 97, 5, 2, def.INST_CMOVA);     // cmova
     ht_insert(109, 111, 118, 117, 112, 6, 2, def.INST_MOVUPD);    // movupd
     ht_insert(109, 111, 118, 100, 113, 6, 2, def.INST_MOVDQU);    // movdqu
     ht_insert(112, 115, 114, 108, 100, 6, 2, def.INST_PSRLDQ);    // psrldq

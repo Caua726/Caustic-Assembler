@@ -201,6 +201,35 @@ let is i32 as INST_MULSS    with imut = 98;
 let is i32 as INST_DIVSS    with imut = 99;
 let is i32 as INST_SQRTSS   with imut = 100;
 let is i32 as INST_CVTSI2SS with imut = 101;
+// The rest of the cmov family (cmovne is 76): 0F 40+cc /r, reg, reg.
+let is i32 as INST_CMOVE    with imut = 102;  // 0F 44 /r
+let is i32 as INST_CMOVL    with imut = 103;  // 0F 4C /r
+let is i32 as INST_CMOVGE   with imut = 104;  // 0F 4D /r
+let is i32 as INST_CMOVLE   with imut = 105;  // 0F 4E /r
+let is i32 as INST_CMOVG    with imut = 106;  // 0F 4F /r
+let is i32 as INST_CMOVB    with imut = 107;  // 0F 42 /r
+let is i32 as INST_CMOVAE   with imut = 108;  // 0F 43 /r
+let is i32 as INST_CMOVBE   with imut = 109;  // 0F 46 /r
+let is i32 as INST_CMOVA    with imut = 110;  // 0F 47 /r
+
+fn is_cmov(id as i32) as i32 {
+    if (id == INST_CMOVNE || (id >= INST_CMOVE && id <= INST_CMOVA)) { return 1; }
+    return 0;
+}
+
+// Second opcode byte of a cmov: 0x40 + condition code.
+fn cmov_opcode(id as i32) as i32 {
+    if (id == INST_CMOVE) { return 68; }
+    if (id == INST_CMOVL) { return 76; }
+    if (id == INST_CMOVGE) { return 77; }
+    if (id == INST_CMOVLE) { return 78; }
+    if (id == INST_CMOVG) { return 79; }
+    if (id == INST_CMOVB) { return 66; }
+    if (id == INST_CMOVAE) { return 67; }
+    if (id == INST_CMOVBE) { return 70; }
+    if (id == INST_CMOVA) { return 71; }
+    return 69;   // cmovne
+}
 let is i32 as INST_NONE    with imut = 0;
 
 // === Operand kinds ===
@@ -314,6 +343,15 @@ fn inst_name(id as i32) as *u8 {
     if (id == INST_MFENCE) { return "mfence"; }
     if (id == INST_PAUSE) { return "pause"; }
     if (id == INST_CMOVNE) { return "cmovne"; }
+    if (id == INST_CMOVE) { return "cmove"; }
+    if (id == INST_CMOVL) { return "cmovl"; }
+    if (id == INST_CMOVGE) { return "cmovge"; }
+    if (id == INST_CMOVLE) { return "cmovle"; }
+    if (id == INST_CMOVG) { return "cmovg"; }
+    if (id == INST_CMOVB) { return "cmovb"; }
+    if (id == INST_CMOVAE) { return "cmovae"; }
+    if (id == INST_CMOVBE) { return "cmovbe"; }
+    if (id == INST_CMOVA) { return "cmova"; }
     if (id == INST_MOVUPD) { return "movupd"; }
     if (id == INST_ADDPD) { return "addpd"; }
     if (id == INST_SUBPD) { return "subpd"; }

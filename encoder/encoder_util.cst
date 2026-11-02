@@ -245,6 +245,12 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
     }
     else if (len == 5) {
         let is u8 as c1 = ptr[1];
+        if (c0 == 99 && c1 == 109 && ptr[2] == 111 && ptr[3] == 118) { // cmove cmovl cmovg cmovb cmova
+            let is u8 as c4 = ptr[4];
+            if (c4 == 101) { return def.INST_CMOVE; } if (c4 == 108) { return def.INST_CMOVL; }
+            if (c4 == 103) { return def.INST_CMOVG; } if (c4 == 98) { return def.INST_CMOVB; }
+            if (c4 == 97) { return def.INST_CMOVA; }
+        }
         if (c0 == 109 && c1 == 111 && ptr[2] == 118) { // movsb movsx movzx
             if (ptr[3] == 115) { if (ptr[4] == 98) { return def.INST_MOVSB; } if (ptr[4] == 120) { return def.INST_MOVSX; } }
             if (ptr[3] == 122 && ptr[4] == 120) { return def.INST_MOVZX; }
@@ -287,8 +293,14 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
         if (ptr[1] == 111 && ptr[2] == 118 && ptr[3] == 117 && ptr[4] == 112 && ptr[5] == 100) { return def.INST_MOVUPD; }
         if (ptr[1] == 111 && ptr[2] == 118 && ptr[3] == 100 && ptr[4] == 113 && ptr[5] == 117) { return def.INST_MOVDQU; }
     }
-    else if (len == 6 && c0 == 99) { // cmovne
-        if (ptr[1] == 109 && ptr[2] == 111 && ptr[3] == 118 && ptr[4] == 110 && ptr[5] == 101) { return def.INST_CMOVNE; }
+    else if (len == 6 && c0 == 99) { // cmovne cmovge cmovle cmovae cmovbe
+        if (ptr[1] == 109 && ptr[2] == 111 && ptr[3] == 118 && ptr[5] == 101) {
+            if (ptr[4] == 110) { return def.INST_CMOVNE; }
+            if (ptr[4] == 103) { return def.INST_CMOVGE; }
+            if (ptr[4] == 108) { return def.INST_CMOVLE; }
+            if (ptr[4] == 97) { return def.INST_CMOVAE; }
+            if (ptr[4] == 98) { return def.INST_CMOVBE; }
+        }
     }
     else if (len == 6 && c0 == 112) { // psrldq
         if (ptr[1] == 115 && ptr[2] == 114 && ptr[3] == 108 && ptr[4] == 100 && ptr[5] == 113) { return def.INST_PSRLDQ; }
