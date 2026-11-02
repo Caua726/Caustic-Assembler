@@ -590,7 +590,9 @@ fn _loop_pad(lines as *pl.ParsedLines, at as i32, line as *pl.ParsedLine, cur as
     let is *pl.ParsedLine as be = pl.pl_get(lines, bi);
     let is i64 as head = line.offset + cast(i64, line.size);
     let is i64 as len = be.offset + cast(i64, be.size) - head;
-    if (len <= 0 || len > LOOP_MAX_LEN) { return p2align_pad(line, cur); }
+    // too long to place by lines: its head on 16, whatever that takes
+    if (len > LOOP_MAX_LEN) { return cast(i32, (16 - cur % 16) % 16); }
+    if (len <= 0) { return p2align_pad(line, cur); }
     // An inner loop's pad depends on where this one starts, and this one's
     // length on that pad: then each candidate lays the body out again.
     let is i32 as nested with mut = 0;
