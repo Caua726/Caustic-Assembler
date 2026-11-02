@@ -115,6 +115,24 @@ fn encode_alu(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
             return cast(i32, b.len - start);
         }
 
+        // BYTE PTR [mem], imm8 — 80 /ext ib
+        if (op1.kind == def.OP_MEM && op2.kind == def.OP_IMM && op1.mem_size == 8
+            && op2.imm >= 0 - 128 && op2.imm <= 255) {
+            let is i32 as rex_x with mut = 0;
+            if (eu.has_sib(op1) == 1) { rex_x = eu.reg_ext(op1.mem_index); }
+            if (rex_x == 1 || eu.reg_ext(op1.mem_base) == 1) {
+                buf.buf_emit8(b, eu.make_rex(0, 0, rex_x, eu.reg_ext(op1.mem_base)));
+            }
+            buf.buf_emit8(b, 128);
+            if (eu.has_sib(op1) == 1) {
+                eu.emit_mem_modrm_sib(b, imm_ext, op1.mem_base, op1.mem_index, op1.mem_scale, op1.mem_disp);
+            } else {
+                eu.emit_mem_modrm(b, imm_ext, op1.mem_base, op1.mem_disp);
+            }
+            buf.buf_emit8(b, cast(i32, op2.imm) & 255);
+            return cast(i32, b.len - start);
+        }
+
         // reg, [mem]
         if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
             let is i32 as sz = eu.reg_size(op1.reg_id);
