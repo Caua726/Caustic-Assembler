@@ -451,6 +451,18 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         }
         return skip_to_eol(tl, p);
     }
+    // `.loopalign`: before a loop head label. Laid out like `.p2align 4,,10`
+    // until the loop's length is known, then padded so the loop spans as few
+    // 64-byte lines (then 32-byte fetch windows) as it can (passes.cst).
+    if (enc.streq_lit(tok.ptr, tok.len, ".loopalign") == 1) {
+        line.dir_kind = pl.DIR_P2ALIGN;
+        line.section = cast(i8, *current_section);
+        line.dir_num = 4;
+        line.op1_imm = 10;
+        line.op2_imm = 1;
+        line.op2_mem_disp = 0 - 1;
+        return skip_to_eol(tl, p + 1);
+    }
     if (enc.streq_lit(tok.ptr, tok.len, ".zero") == 1) {
         line.dir_kind = pl.DIR_ZERO;
         line.section = cast(i8, *current_section);

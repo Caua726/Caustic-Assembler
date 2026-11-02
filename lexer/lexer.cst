@@ -648,8 +648,9 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                 else if (c1 == 102) { // .file, .loc
                     if (tlen == 5 && tptr[2] == 105 && tptr[3] == 108 && tptr[4] == 101) { is_dir = 1; } // .file
                 }
-                else if (c1 == 108) { // .loc
+                else if (c1 == 108) { // .loc, .loopalign
                     if (tlen == 4 && tptr[2] == 111 && tptr[3] == 99) { is_dir = 1; } // .loc
+                    else if (tlen == 10 && tptr[2] == 111 && tptr[3] == 111 && tptr[4] == 112 && tptr[5] == 97) { is_dir = 1; } // .loopalign
                 }
                 else if (c1 == 99 && tlen == 10
                          && tptr[2] == 115 && tptr[3] == 116 && tptr[4] == 105

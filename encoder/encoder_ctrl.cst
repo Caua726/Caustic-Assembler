@@ -92,20 +92,7 @@ fn encode_ctrl(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *d
     // Jcc: 0F 8x + rel32
     if (((inst >= def.INST_JZ && inst <= def.INST_JBE) || inst == def.INST_JP || inst == def.INST_JNP) && op1.kind == def.OP_LABEL) {
         buf.buf_emit8(b, 15);
-        let is i32 as cc with mut = 0;
-        if (inst == def.INST_JZ || inst == def.INST_JE) { cc = 132; }
-        if (inst == def.INST_JNZ || inst == def.INST_JNE) { cc = 133; }
-        if (inst == def.INST_JL) { cc = 140; }
-        if (inst == def.INST_JLE) { cc = 142; }
-        if (inst == def.INST_JG) { cc = 143; }
-        if (inst == def.INST_JGE) { cc = 141; }
-        if (inst == def.INST_JA) { cc = 135; }
-        if (inst == def.INST_JAE) { cc = 131; }
-        if (inst == def.INST_JB) { cc = 130; }
-        if (inst == def.INST_JBE) { cc = 134; }
-        if (inst == def.INST_JP) { cc = 138; }
-        if (inst == def.INST_JNP) { cc = 139; }
-        buf.buf_emit8(b, cc);
+        buf.buf_emit8(b, jcc_cc(inst));
         let is i64 as rel = resolve_label - (cur_off + 6);
         buf.buf_emit32_le(b, rel);
         return 6;
@@ -137,4 +124,20 @@ fn encode_ctrl(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *d
     }
 
     return eu.ENC_SKIP;
+}
+
+// Second byte of the rel32 Jcc (0F 8x); the rel8 form is that minus 0x10 (7x).
+fn jcc_cc(inst as i32) as i32 {
+    if (inst == def.INST_JZ || inst == def.INST_JE) { return 132; }
+    if (inst == def.INST_JNZ || inst == def.INST_JNE) { return 133; }
+    if (inst == def.INST_JL) { return 140; }
+    if (inst == def.INST_JLE) { return 142; }
+    if (inst == def.INST_JG) { return 143; }
+    if (inst == def.INST_JGE) { return 141; }
+    if (inst == def.INST_JA) { return 135; }
+    if (inst == def.INST_JAE) { return 131; }
+    if (inst == def.INST_JB) { return 130; }
+    if (inst == def.INST_JBE) { return 134; }
+    if (inst == def.INST_JP) { return 138; }
+    return 139;
 }
