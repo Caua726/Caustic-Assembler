@@ -245,6 +245,22 @@ fn _inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
             if (eu.has_sib(op1) == 1) { mm = eu.mem_modrm_sib_size(op1.mem_base, op1.mem_disp); }
             return need_rex + 1 + mm + 1;
         }
+        // WORD/DWORD/QWORD PTR [mem], imm — [66] [REX] 83 ib / 81 iw|id
+        if (op1.kind == def.OP_MEM && op2.kind == def.OP_IMM
+            && (op1.mem_size == 16 || op1.mem_size == 32 || op1.mem_size == 64)
+            && op2.imm >= 0 - 2147483648 && op2.imm <= 2147483647) {
+            let is i32 as s with mut = 0;
+            if (op1.mem_size == 16) { s = s + 1; }
+            let is i32 as need_rex with mut = 0;
+            if (op1.mem_size == 64) { need_rex = 1; }
+            if (eu.reg_ext(op1.mem_base) == 1) { need_rex = 1; }
+            if (eu.has_sib(op1) == 1 && eu.reg_ext(op1.mem_index) == 1) { need_rex = 1; }
+            let is i32 as mm with mut = eu.mem_modrm_size(op1.mem_base, op1.mem_disp);
+            if (eu.has_sib(op1) == 1) { mm = eu.mem_modrm_sib_size(op1.mem_base, op1.mem_disp); }
+            if (eu.imm_is8(op2.imm) == 1) { return s + need_rex + 1 + mm + 1; }
+            if (op1.mem_size == 16) { return s + need_rex + 1 + mm + 2; }
+            return s + need_rex + 1 + mm + 4;
+        }
         // reg, [mem] — always emits REX
         if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
             let is i32 as sz = eu.reg_size(op1.reg_id);

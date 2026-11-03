@@ -136,6 +136,34 @@ fn encode_alu(b as *buf.ByteBuffer, inst as i32, op1 as *def.Operand, op2 as *de
             return cast(i32, b.len - start);
         }
 
+        // WORD/DWORD/QWORD PTR [mem], imm — [66] [REX] 83 /ext ib, or 81 /ext
+        // iw/id (the imm is sign-extended to the operand size). Codegen emits
+        // `add QWORD PTR [rbp-8], 1` for a counter that stays in memory.
+        if (op1.kind == def.OP_MEM && op2.kind == def.OP_IMM
+            && (op1.mem_size == 16 || op1.mem_size == 32 || op1.mem_size == 64)
+            && op2.imm >= 0 - 2147483648 && op2.imm <= 2147483647) {
+            let is i32 as w with mut = 0;
+            if (op1.mem_size == 64) { w = 1; }
+            if (op1.mem_size == 16) { buf.buf_emit8(b, 102); }
+            let is i32 as rex_x with mut = 0;
+            if (eu.has_sib(op1) == 1) { rex_x = eu.reg_ext(op1.mem_index); }
+            if (w == 1 || rex_x == 1 || eu.reg_ext(op1.mem_base) == 1) {
+                buf.buf_emit8(b, eu.make_rex(w, 0, rex_x, eu.reg_ext(op1.mem_base)));
+            }
+            let is i32 as short with mut = 0;
+            if (eu.imm_is8(op2.imm) == 1) { short = 1; }
+            if (short == 1) { buf.buf_emit8(b, 131); } else { buf.buf_emit8(b, 129); }
+            if (eu.has_sib(op1) == 1) {
+                eu.emit_mem_modrm_sib(b, imm_ext, op1.mem_base, op1.mem_index, op1.mem_scale, op1.mem_disp);
+            } else {
+                eu.emit_mem_modrm(b, imm_ext, op1.mem_base, op1.mem_disp);
+            }
+            if (short == 1) { buf.buf_emit8(b, cast(i32, op2.imm) & 255); }
+            else if (op1.mem_size == 16) { buf.buf_emit16_le(b, cast(i32, op2.imm)); }
+            else { buf.buf_emit32_le(b, op2.imm); }
+            return cast(i32, b.len - start);
+        }
+
         // reg, [mem]
         if (op1.kind == def.OP_REG && op2.kind == def.OP_MEM) {
             let is i32 as sz = eu.reg_size(op1.reg_id);
