@@ -5,6 +5,7 @@ use "elf.cst" as elf;
 use "../encoder/encoder_emit.cst" as ence;
 use "../encoder/encoder_size.cst" as encs;
 use "../encoder/encoder_ctrl.cst" as encc;
+use "../encoder/encoder_util.cst" as eu;
 use "../parser/parsed_line.cst" as pl;
 use "../parser/custom_sections.cst" as cs;
 use "../core/util.cst" as util;
@@ -787,6 +788,20 @@ fn pass2_encode_rip(line as *pl.ParsedLine, symtab as *elf.SymbolTable, text_buf
         lab_len = line.op2_label_len;
     }
     let is i32 as sym_idx = elf.sym_find_or_add(symtab, lab_ptr, lab_len, cs.SECTION_UNDEF, 0, 0);
+    // A rip operand encoded as a memory operand: the encoder says where its
+    // disp32 went, and whatever follows it (an immediate) moves the addend.
+    if ((o1.kind == def.OP_MEM && o1.mem_base == def.REG_RIP)
+        || (o2.kind == def.OP_MEM && o2.mem_base == def.REG_RIP)) {
+        let is i64 as start = text_buf.len;
+        eu.rip_disp_at = 0 - 1;
+        ence.encode(text_buf, line.inst_id, o1, o2, 0, line.offset, line.line_no);
+        if (eu.rip_disp_at >= 0) {
+            let is i64 as tail = text_buf.len - (eu.rip_disp_at + 4);
+            elf.reloc_add(relocs, line.offset + (eu.rip_disp_at - start), cast(i64, sym_idx),
+                          elf.R_X86_64_PC32, 0 - 4 - tail);
+        }
+        return;
+    }
     let is i32 as sz = encs.fast_inst_size(line.inst_id, o1, o2);
     let is i64 as reloc_off = line.offset + cast(i64, sz) - 4;
 

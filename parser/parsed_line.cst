@@ -169,6 +169,18 @@ fn pl_add(pl as *ParsedLines) as *ParsedLine {
 
 // === Operand helpers ===
 
+// A [rip+label] operand is an ordinary memory operand with rip as its base,
+// except in the forms that had their own encoding before every instruction
+// took one: lea, call, and the 64-bit load `mov r64, [rip+label]`, which on an
+// undefined label means the label's GOT slot (an `extern let`).
+fn _rip_is_memory(line as *ParsedLine, which as i32) as i32 {
+    let is i32 as inst = cast(i32, line.inst_id);
+    if (inst == def.INST_LEA || inst == def.INST_CALL) { return 0; }
+    if (inst == def.INST_MOV && which == 2 && line.op1_kind == def.OP_REG
+        && line.op1_reg_id >= 0 && line.op1_reg_id < 16) { return 0; }
+    return 1;
+}
+
 fn make_op(line as *ParsedLine, which as i32) as def.Operand {
     let is def.Operand as op;
     if (which == 1) {
@@ -195,6 +207,13 @@ fn make_op(line as *ParsedLine, which as i32) as def.Operand {
         op.mem_seg = line.op2_mem_seg;
         op.label_ptr = line.op2_label_ptr;
         op.label_len = line.op2_label_len;
+    }
+    if (op.kind == def.OP_RIP_LABEL && _rip_is_memory(line, which) == 1) {
+        op.kind = def.OP_MEM;
+        op.mem_base = def.REG_RIP;
+        op.mem_index = def.REG_NONE;
+        op.mem_scale = 0;
+        op.mem_disp = 0;
     }
     return op;
 }

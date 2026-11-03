@@ -215,6 +215,8 @@ let is i32 as INST_MOVSS     with imut = 111;  // F3 0F 10 load / F3 0F 11 store
 let is i32 as INST_MOVAPS    with imut = 112;  // 0F 28 /r (full register copy)
 let is i32 as INST_UCOMISS   with imut = 113;  // 0F 2E /r
 let is i32 as INST_CVTTSS2SI with imut = 114;  // F3 REX.W 0F 2C /r
+let is i32 as INST_ROL       with imut = 115;  // C1 /0 ib (D1 /0, D3 /0)
+let is i32 as INST_ROR       with imut = 116;  // C1 /1 ib (D1 /1, D3 /1)
 
 fn is_cmov(id as i32) as i32 {
     if (id == INST_CMOVNE || (id >= INST_CMOVE && id <= INST_CMOVA)) { return 1; }
@@ -385,5 +387,7 @@ fn inst_name(id as i32) as *u8 {
     if (id == INST_MOVAPS) { return "movaps"; }
     if (id == INST_UCOMISS) { return "ucomiss"; }
     if (id == INST_CVTTSS2SI) { return "cvttss2si"; }
+    if (id == INST_ROL) { return "rol"; }
+    if (id == INST_ROR) { return "ror"; }
     return "<unknown>";
 }

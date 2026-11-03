@@ -15,7 +15,7 @@ fn reg_code(id as i32) as i32 {
 }
 
 fn reg_ext(id as i32) as i32 {
-    if (id < 0 || id >= 128) { return 0; }
+    if (id < 0 || id >= 128 || id == def.REG_RIP) { return 0; }
     if (id >= 64) {
         if ((id - 64) >= 8) { return 1; }
         return 0;
@@ -114,6 +114,10 @@ fn lookup_instruction(ptr as *u8, len as i32) as i32 {
         else if (c0 == 114 && c1 == 101) { // re
             if (c2 == 116) { return def.INST_RET; } // ret
             if (c2 == 112) { return def.INST_REP; } // rep
+        }
+        else if (c0 == 114 && c1 == 111) { // ro
+            if (c2 == 108) { return def.INST_ROL; } // rol
+            if (c2 == 114) { return def.INST_ROR; } // ror
         }
         else if (c0 == 106) { // j
             if (c1 == 109 && c2 == 112) { return def.INST_JMP; } // jmp
@@ -252,8 +256,20 @@ fn imm_is32(v as i64) as i32 {
     return 0;
 }
 
+// Where the disp32 of the last [rip+label] operand was written (b.len before
+// it), or -1. The caller turns it into the relocation: the bytes after the
+// disp32 (an immediate) decide the addend, and only the encoder knows them.
+let is i64 as rip_disp_at with mut = 0 - 1;
+
 // Emit memory operand ModR/M (+ optional SIB + displacement)
 fn emit_mem_modrm(b as *buf.ByteBuffer, reg_field as i32, base_id as i32, disp as i64) as void {
+    // [rip+label]: mod=00 rm=101 and a disp32 the relocation fills in.
+    if (base_id == def.REG_RIP) {
+        buf.buf_emit8(b, make_modrm(0, reg_field, 5));
+        rip_disp_at = b.len;
+        buf.buf_emit32_le(b, 0);
+        return;
+    }
     // No base: [disp32]. In long mode mod=00 rm=101 means [rip+disp32], so an
     // absolute address takes the SIB form with neither base nor index.
     if (base_id == def.REG_NONE) {
@@ -292,6 +308,7 @@ fn emit_mem_modrm(b as *buf.ByteBuffer, reg_field as i32, base_id as i32, disp a
 // Calculate memory operand size (ModR/M + SIB + disp)
 fn mem_modrm_size(base_id as i32, disp as i64) as i32 {
     if (base_id == def.REG_NONE) { return 6; }          // ModR/M + SIB + disp32
+    if (base_id == def.REG_RIP) { return 5; }           // ModR/M + disp32
     let is i32 as base_code = reg_code(base_id);
     let is i32 as sib with mut = 0;
     if (base_code == 4) { sib = 1; }
