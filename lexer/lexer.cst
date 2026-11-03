@@ -463,6 +463,7 @@ fn init_ht() as void {
     ht_insert(115, 101, 116, 110, 112, 5, 2, def.INST_SETNP); // setnp
     ht_insert(97, 100, 100, 115, 100, 5, 2, def.INST_ADDSD);   // addsd
     ht_insert(109, 111, 118, 115, 100, 5, 2, def.INST_MOVSD);  // movsd
+    ht_insert(109, 111, 118, 115, 115, 5, 2, def.INST_MOVSS);  // movss
     ht_insert(115, 117, 98, 115, 100, 5, 2, def.INST_SUBSD);   // subsd
     ht_insert(109, 117, 108, 115, 100, 5, 2, def.INST_MULSD);  // mulsd
     ht_insert(100, 105, 118, 115, 100, 5, 2, def.INST_DIVSD);  // divsd
@@ -498,11 +499,13 @@ fn init_ht() as void {
     ht_insert(99, 109, 111, 118, 97, 5, 2, def.INST_CMOVA);     // cmova
     ht_insert(109, 111, 118, 117, 112, 6, 2, def.INST_MOVUPD);    // movupd
     ht_insert(109, 111, 118, 100, 113, 6, 2, def.INST_MOVDQU);    // movdqu
+    ht_insert(109, 111, 118, 97, 112, 6, 2, def.INST_MOVAPS);     // movaps
     ht_insert(112, 115, 114, 108, 100, 6, 2, def.INST_PSRLDQ);    // psrldq
     // len 7
     ht_insert(115, 121, 115, 99, 97, 7, 2, def.INST_SYSCALL);     // syscall
     ht_insert(99, 109, 112, 120, 99, 7, 2, def.INST_CMPXCHG);     // cmpxchg
     ht_insert(117, 99, 111, 109, 105, 7, 2, def.INST_UCOMISD);    // ucomisd
+    ht_insert(117, 99, 111, 109, 105, 7, 2, def.INST_UCOMISS);    // ucomiss
     // len 8
     ht_insert(99, 118, 116, 115, 105, 8, 2, def.INST_CVTSI2SD);   // cvtsi2sd
     ht_insert(99, 118, 116, 115, 105, 8, 2, def.INST_CVTSI2SS); // cvtsi2ss
@@ -510,6 +513,7 @@ fn init_ht() as void {
     ht_insert(99, 118, 116, 115, 115, 8, 2, def.INST_CVTSS2SD);   // cvtss2sd
     // len 9
     ht_insert(99, 118, 116, 116, 115, 9, 2, def.INST_CVTTSD2SI);  // cvttsd2si
+    ht_insert(99, 118, 116, 116, 115, 9, 2, def.INST_CVTTSS2SI);  // cvttss2si
     ht_ready = 1;
 }
 

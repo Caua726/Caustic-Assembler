@@ -365,6 +365,29 @@ fn _inst_size(inst as i32, op1 as *def.Operand, op2 as *def.Operand) as i32 {
         return 4 + need_rex;
     }
 
+    // MOVSS load (xmm, xmm/m32) mirrors the scalar arithmetic layout; the
+    // store form has the same length with the operands swapped.
+    if (inst == def.INST_MOVSS) {
+        if (op1.kind == def.OP_MEM) { return _xmm_source_size(op2, op1, 32); }
+        return _xmm_source_size(op1, op2, 32);
+    }
+    // MOVAPS / UCOMISS: no prefix, so one byte shorter than the F3/F2 forms.
+    if (inst == def.INST_MOVAPS) {
+        let is i32 as n = _xmm_source_size(op1, op2, 128);
+        if (n == 0) { return 0; }
+        return n - 1;
+    }
+    if (inst == def.INST_UCOMISS) {
+        let is i32 as n = _xmm_source_size(op1, op2, 32);
+        if (n == 0) { return 0; }
+        return n - 1;
+    }
+    if (inst == def.INST_UCOMISD && op1.kind == def.OP_REG && op2.kind != def.OP_REG) {
+        return _xmm_source_size(op1, op2, 64);
+    }
+    // CVTTSS2SI r64, xmm: F3 + REX.W + 0F + 2C + ModRM = 5
+    if (inst == def.INST_CVTTSS2SI && op1.kind == def.OP_REG && op2.kind == def.OP_REG) { return 5; }
+
     // CVTTSD2SI: F2 + REX + 0F + opcode + ModRM = 5
     if (inst == def.INST_CVTTSD2SI && op1.kind == def.OP_REG && op2.kind == def.OP_REG) { return 5; }
 
