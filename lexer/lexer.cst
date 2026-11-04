@@ -614,7 +614,8 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                     if (tlen == 6 && tptr[2] == 108 && tptr[3] == 111 && tptr[4] == 98 && tptr[5] == 108) { is_dir = 1; }
                     else if (tlen == 7 && tptr[2] == 108 && tptr[3] == 111 && tptr[4] == 98 && tptr[5] == 97 && tptr[6] == 108) { is_dir = 1; }
                 }
-                else if (c1 == 115) { // .string, .section
+                else if (c1 == 115) { // .string, .section, .short
+                    if (tlen == 6 && tptr[2] == 104 && tptr[3] == 111 && tptr[4] == 114 && tptr[5] == 116) { is_dir = 1; }
                     if (tlen == 7 && tptr[2] == 116 && tptr[3] == 114 && tptr[4] == 105 && tptr[5] == 110 && tptr[6] == 103) { is_dir = 1; }
                     else if (tlen == 8 && tptr[2] == 101 && tptr[3] == 99 && tptr[4] == 116 && tptr[5] == 105 && tptr[6] == 111 && tptr[7] == 110) { is_dir = 1; }
                 }
@@ -628,6 +629,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                 else if (c1 == 97 && tlen == 6 && tptr[2] == 115 && tptr[3] == 99 && tptr[4] == 105 && tptr[5] == 122) { is_dir = 1; } // .asciz
                 else if (c1 == 118 && tlen == 6 && tptr[2] == 97 && tptr[3] == 108 && tptr[4] == 117 && tptr[5] == 101) { is_dir = 1; } // .value
                 else if (c1 == 114 && tlen == 7 && tptr[2] == 111 && tptr[3] == 100 && tptr[4] == 97 && tptr[5] == 116 && tptr[6] == 97) { is_dir = 1; } // .rodata
+                else if (c1 == 114 && tlen == 8 && tptr[2] == 105 && tptr[3] == 112 && tptr[4] == 100) { is_dir = 1; } // .ripdisp
                 else if (c1 == 105) { // .intel_syntax, .incbin
                     if (tlen == 14) { is_dir = 1; }
                     else if (tlen == 7 && tptr[2] == 110 && tptr[3] == 99 && tptr[4] == 98 && tptr[5] == 105 && tptr[6] == 110) { is_dir = 1; } // .incbin

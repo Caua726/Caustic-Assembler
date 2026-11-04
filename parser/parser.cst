@@ -399,7 +399,8 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         line.decoded_ptr = bb; line.decoded_len = bn; line.dir_num = 0;
         return cur;
     }
-    if (enc.streq_lit(tok.ptr, tok.len, ".word") == 1 || enc.streq_lit(tok.ptr, tok.len, ".value") == 1) {
+    if (enc.streq_lit(tok.ptr, tok.len, ".word") == 1 || enc.streq_lit(tok.ptr, tok.len, ".value") == 1
+        || enc.streq_lit(tok.ptr, tok.len, ".short") == 1) {
         line.dir_kind = pl.DIR_WORD;
         line.section = cast(i8, *current_section);
         p = p + 1;
@@ -414,6 +415,18 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         let is i32 as np with mut = p;
         line.dir_num = parse_dir_num(tl, p, &np);
         return np;
+    }
+    if (enc.streq_lit(tok.ptr, tok.len, ".ripdisp") == 1) {
+        // `.ripdisp <symbol>`: the disp32 of a [rip+symbol] operand, for an
+        // instruction written out with .byte. Nothing may follow it.
+        line.dir_kind = pl.DIR_LONG;
+        line.section = cast(i8, *current_section);
+        p = p + 1;
+        let is *lex.Token as rt = lex.tl_get(tl, p);
+        line.dir_arg_ptr = rt.ptr;
+        line.dir_arg_len = rt.len;
+        line.dir_num = 0;
+        return p + 1;
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".quad") == 1) {
         line.dir_kind = pl.DIR_QUAD;

@@ -996,7 +996,11 @@ fn pass2(lines as *pl.ParsedLines, symtab as *elf.SymbolTable, text_buf as *buf.
                 let is *i64 as bp = cast(*i64, cs.csec_buf_ptrs);
                 target = cast(*buf.ByteBuffer, bp[line.section - cs.SECTION_CUSTOM_BASE]);
             }
-            if (line.dir_kind == pl.DIR_QUAD && line.dir_arg_len > 0) {
+            if (line.dir_kind == pl.DIR_LONG && line.dir_arg_len > 0) {
+                let is i32 as rd_idx = elf.sym_find_or_add(symtab, line.dir_arg_ptr, line.dir_arg_len, cs.SECTION_UNDEF, 0, 0);
+                elf.reloc_add(relocs, cast(i64, target.len), cast(i64, rd_idx), elf.R_X86_64_PC32, 0 - 4);
+                buf.buf_emit32_le(target, 0);
+            } else if (line.dir_kind == pl.DIR_QUAD && line.dir_arg_len > 0) {
                 // `.quad <symbol>` emits an R_X86_64_64 relocation at the
                 // current section's offset. Each section has its own reloc
                 // list so the ELF writer can emit one .rela.<name> each.
