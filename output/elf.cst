@@ -100,6 +100,14 @@ fn sym_get(st as *SymbolTable, idx as i32) as *Symbol {
     return cast(*Symbol, cast(i64, st.data) + cast(i64, idx) * sizeof(Symbol));
 }
 
+fn sym_free(st as *SymbolTable) as void {
+    om.opt_free(st.data);
+    om.opt_free(cast(*u8, st.hash_buckets));
+    om.opt_free(cast(*u8, st.hash_next));
+    st.count = 0;
+    st.cap = 0;
+}
+
 fn sym_add(st as *SymbolTable, name_ptr as *u8, name_len as i32, section as i32, offset as i64, is_global as i32) as void {
     if (st.count >= st.cap) {
         let is i32 as new_cap = st.cap * 2;
@@ -180,6 +188,12 @@ fn reloc_init() as RelocList {
     rl.count = 0;
     rl.cap = cap;
     return rl;
+}
+
+fn reloc_free(rl as *RelocList) as void {
+    om.opt_free(rl.data);
+    rl.count = 0;
+    rl.cap = 0;
 }
 
 fn reloc_get(rl as *RelocList, idx as i32) as *Reloc {
@@ -809,4 +823,13 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
 
     // Write to file
     io._write_fd(fd, out.data, out.len);
+
+    // The compiler assembles every module in one process.
+    buf.buf_free(&out);
+    buf.buf_free(&shstrtab);
+    buf.buf_free(&strtab);
+    buf.buf_free(&symtab_buf);
+    buf.buf_free(&rela_buf);
+    buf.buf_free(&rela_data_buf);
+    om.opt_free(cast(*u8, sym_map));
 }

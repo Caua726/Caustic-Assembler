@@ -16,6 +16,13 @@ fn buf_init(cap as i64) as ByteBuffer {
     return b;
 }
 
+fn buf_free(b as *ByteBuffer) as void {
+    om.opt_free(b.data);
+    b.data = cast(*u8, 0);
+    b.len = 0;
+    b.cap = 0;
+}
+
 fn buf_ensure(b as *ByteBuffer, needed as i64) as void {
     if (b.len + needed > b.cap) {
         let is i64 as new_cap with mut = b.cap * 2;

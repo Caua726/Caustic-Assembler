@@ -72,6 +72,7 @@ fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
 
     let is i64 as t2 = asm_prof_time();
     let is elf.SymbolTable as symtab = elf.sym_init();
+    defer elf.sym_free(&symtab);      // the compiler assembles every module in one process
     passes.pass1(&lines, &symtab);
     if (asm_prof_enabled == 1) { asm_prof_times[2] = asm_prof_time() - t2; }
 
@@ -86,6 +87,11 @@ fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
     let is i64 as bss_size with mut = 0;
     let is elf.RelocList as relocs = elf.reloc_init();
     let is elf.RelocList as data_relocs = elf.reloc_init();
+    defer buf.buf_free(&text_buf);
+    defer buf.buf_free(&data_buf);
+    defer buf.buf_free(&rodata_buf);
+    defer elf.reloc_free(&relocs);
+    defer elf.reloc_free(&data_relocs);
     passes.pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
     pl.pl_free(&lines);   // lines consumed by pass1/pass2; output is in the buffers now
@@ -220,6 +226,7 @@ fn main(argc as i64, argv as i64) as i32 {
     // Pass 1
     let is i64 as t2 = asm_prof_time();
     let is elf.SymbolTable as symtab = elf.sym_init();
+    defer elf.sym_free(&symtab);      // the compiler assembles every module in one process
     passes.pass1(&lines, &symtab);
     if (asm_prof_enabled == 1) { asm_prof_times[2] = asm_prof_time() - t2; }
     util.print_str("  symbols: "); util.print_int(cast(i64, symtab.count)); util.print_str("\n");
@@ -239,6 +246,11 @@ fn main(argc as i64, argv as i64) as i32 {
     let is i64 as bss_size with mut = 0;
     let is elf.RelocList as relocs = elf.reloc_init();
     let is elf.RelocList as data_relocs = elf.reloc_init();
+    defer buf.buf_free(&text_buf);
+    defer buf.buf_free(&data_buf);
+    defer buf.buf_free(&rodata_buf);
+    defer elf.reloc_free(&relocs);
+    defer elf.reloc_free(&data_relocs);
     passes.pass2(&lines, &symtab, &text_buf, &data_buf, &rodata_buf, &bss_size, &relocs, &data_relocs);
     if (asm_prof_enabled == 1) { asm_prof_times[3] = asm_prof_time() - t3; }
     pl.pl_free(&lines);   // lines consumed by pass1/pass2; output is in the buffers now

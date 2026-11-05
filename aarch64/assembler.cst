@@ -655,6 +655,12 @@ fn assemble_buf(src as *u8, size as i64, obj_path as *u8) as i32 {
     let is i64 as bss_size with mut = 0;
     let is elf.RelocList as text_relocs = elf.reloc_init();
     let is elf.RelocList as data_relocs = elf.reloc_init();
+    defer elf.sym_free(&st);          // the compiler assembles every module in one process
+    defer buf.buf_free(&text);
+    defer buf.buf_free(&data);
+    defer buf.buf_free(&rodata);
+    defer elf.reloc_free(&text_relocs);
+    defer elf.reloc_free(&data_relocs);
     passes.cfi_init(4);                          // AArch64: 4-byte instruction units
     if (pass2(src, size, &st, &text, &data, &rodata, &bss_size, &text_relocs, &data_relocs) != 0) { return 1; }
     passes.cfi_flush();
