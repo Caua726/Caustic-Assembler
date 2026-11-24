@@ -752,6 +752,9 @@ let is *u8 as span_flag with mut;
 let is i32 as span_cap with mut = 0;
 let is i32 as SPAN_HAND with imut = 1;
 let is i32 as SPAN_PLACE with imut = 2;
+// The record came from a hint (fastline.hint_line); with an empty span the
+// compiler wrote no text for it.
+let is i32 as SPAN_HINT with imut = 4;
 
 fn _span_put(idx as i32, off as i64, len as i64, flag as i32) as void {
     if (idx >= span_cap) {
@@ -850,6 +853,7 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
         let is i64 as lstart with mut = pos;
         let is i64 as lend with mut = 0;           // end of the line's text, newline excluded
         let is i64 as eol with mut = 0 - 1;
+        let is i32 as hinted with mut = 0;
         if (src[pos] == 1) {
             // a record hint (fastline.cst): the record without parsing its text
             let is i64 as ts with mut = pos;
@@ -859,6 +863,7 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
                 if (_hint_check() == 1) { _hint_compare(src, ts, src_len, &lines, section, cur_line, hb); }
                 eol = he;
                 lstart = ts;
+                hinted = SPAN_HINT;
             } else {
                 // Only the compiler writes hints, and only shapes this assembler
                 // decodes; a hint carries no length, so its text cannot be found.
@@ -896,7 +901,7 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
                 _span_put(before, lstart, tl_len, fl_hand | SPAN_PLACE);
             } else {
                 let is i32 as r with mut = before;
-                while (r < lines.count) { _span_put(r, lstart, tl_len, fl_hand); r = r + 1; }
+                while (r < lines.count) { _span_put(r, lstart, tl_len, fl_hand | hinted); r = r + 1; }
             }
         }
     }
