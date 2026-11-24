@@ -292,3 +292,54 @@ fn tokenizer_line_end(src as *u8, s as i64, n as i64) as i64 {
     }
     return n;
 }
+
+// ── Record hints ───────────────────────────────────────────────────
+//
+// The compiler may put, before the text of a line it writes often, the record
+// that text parses to: byte 0x01, a shape letter, and operands, every byte
+// >= 0x20 so a newline never appears inside. The line's text follows
+// unchanged (it is what spans, the peephole and diagnostics see).
+//   'A' mov r64, r64             : dst+0x20 src+0x20
+//   'B' mov r64, QWORD PTR [b+d] : reg+0x20 base+0x20 d(6)
+//   'C' mov QWORD PTR [b+d], r64 : reg+0x20 base+0x20 d(6)
+// d(6): disp + 2^35 in six 6-bit groups, low first, each + 0x30.
+// hint_line adds the record and returns the line's end (its newline, or
+// src_len); *tstart gets where the text begins. -1: not a shape it knows (the
+// caller then parses the text after the hint).
+
+fn _hdisp(src as *u8, p as i64) as i64 {
+    let is i64 as v with mut = 0;
+    let is i32 as k with mut = 5;
+    while (k >= 0) { v = (v << 6) | cast(i64, cast(i32, src[p + cast(i64, k)]) - 48); k = k - 1; }
+    return v - 34359738368;
+}
+
+fn hint_line(src as *u8, pos as i64, src_len as i64, lines as *pl.ParsedLines, section as i32, line_no as i32, tstart as *i64) as i64 {
+    let is i32 as shape = cast(i32, src[pos + 1]);
+    let is i64 as t with mut = 0;
+    if (shape == 65) { t = pos + 4; }
+    else if (shape == 66 || shape == 67) { t = pos + 10; }
+    else { return 0 - 1; }
+    if (t > src_len) { return 0 - 1; }
+    let is *pl.ParsedLine as line = pl.pl_add(lines);
+    line.kind = pl.LINE_INST;
+    line.section = cast(i8, section);
+    line.inst_id = cast(i16, def.INST_MOV);
+    line.line_no = line_no;
+    let is i32 as a = cast(i32, src[pos + 2]) - 32;
+    let is i32 as b = cast(i32, src[pos + 3]) - 32;
+    if (shape == 65) {
+        pl.set_op_reg(line, 1, a);
+        pl.set_op_reg(line, 2, b);
+    } else if (shape == 66) {
+        pl.set_op_reg(line, 1, a);
+        pl.set_op_mem(line, 2, b, _hdisp(src, pos + 4), 64);
+    } else {
+        pl.set_op_mem(line, 1, b, _hdisp(src, pos + 4), 64);
+        pl.set_op_reg(line, 2, a);
+    }
+    *tstart = t;
+    let is i64 as e with mut = t;
+    while (e < src_len && src[e] != 10) { e = e + 1; }
+    return e;
+}

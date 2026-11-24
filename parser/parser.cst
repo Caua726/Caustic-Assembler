@@ -792,6 +792,43 @@ fn _line_is(src as *u8, s as i64, len as i64, word as *u8) as i32 {
 // fast path is checked against (tests/run_fastparse.sh). -1 = not read yet.
 let is i32 as _slow with mut = cast(i32, 0 - 1);
 
+// CAUSTIC_HINT_CHECK=1: every hinted record is compared with the parse of the
+// text that follows it, byte for byte; each difference is reported.
+let is i32 as _hchk with mut = 0 - 1;
+let is i64 as hint_checked with mut = 0;
+let is i64 as hint_bad with mut = 0;
+
+fn _hint_check() as i32 {
+    if (_hchk < 0) {
+        _hchk = 0;
+        let is *u8 as hv = env.getenv("CAUSTIC_HINT_CHECK");
+        if (cast(i64, hv) != 0 && hv[0] == 49) { _hchk = 1; }
+    }
+    return _hchk;
+}
+
+fn _hint_compare(src as *u8, ts as i64, src_len as i64, lines as *pl.ParsedLines, section as i32, ln as i32, hb as i32) as void {
+    hint_checked = hint_checked + 1;
+    let is i64 as e = fl.fast_line(src, ts, src_len, lines, section, ln);
+    let is i32 as same with mut = 0;
+    if (e >= 0 && lines.count == hb + 2) {
+        let is *u8 as x = cast(*u8, pl.pl_get(lines, hb));
+        let is *u8 as y = cast(*u8, pl.pl_get(lines, hb + 1));
+        same = 1;
+        let is i64 as k with mut = 0;
+        while (k < sizeof(pl.ParsedLine)) { if (x[k] != y[k]) { same = 0; } k = k + 1; }
+    }
+    if (same == 0) {
+        hint_bad = hint_bad + 1;
+        let is i64 as q with mut = ts;
+        while (q < src_len && src[q] != 10) { q = q + 1; }
+        io.write_str(io.STDERR, "hint differs from its text: ");
+        io.write_bytes(io.STDERR, cast(*u8, cast(i64, src) + ts), q - ts);
+        io.write_str(io.STDERR, "\n");
+    }
+    lines.count = hb + 1;
+}
+
 fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLines {
     if (_slow < 0) {
         _slow = 0;
@@ -810,10 +847,26 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
     while (pos < src_len) {
         let is i32 as before = lines.count;
         let is i32 as line_no = cur_line;
-        let is i64 as lstart = pos;
+        let is i64 as lstart with mut = pos;
         let is i64 as lend with mut = 0;           // end of the line's text, newline excluded
         let is i64 as eol with mut = 0 - 1;
-        if (_slow == 0) { eol = fl.fast_line(src, pos, src_len, &lines, section, cur_line); }
+        if (src[pos] == 1) {
+            // a record hint (fastline.cst): the record without parsing its text
+            let is i64 as ts with mut = pos;
+            let is i32 as hb = lines.count;
+            let is i64 as he = fl.hint_line(src, pos, src_len, &lines, section, cur_line, &ts);
+            if (he >= 0) {
+                if (_hint_check() == 1) { _hint_compare(src, ts, src_len, &lines, section, cur_line, hb); }
+                eol = he;
+                lstart = ts;
+            } else {
+                // Only the compiler writes hints, and only shapes this assembler
+                // decodes; a hint carries no length, so its text cannot be found.
+                io.write_str(io.STDERR, "internal error: unknown record hint in the assembly\n");
+                io.exit(1);
+            }
+        }
+        if (eol < 0 && _slow == 0) { eol = fl.fast_line(src, pos, src_len, &lines, section, cur_line); }
         if (eol >= 0) {
             if (eol < src_len) { cur_line = cur_line + 1; }
             lend = eol;
@@ -848,6 +901,9 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
         }
     }
     lex.tl_free(&tl);
+    if (_hint_check() == 1 && hint_checked > 0) {
+        io.printf("hint check: %d hinted lines, %d differ\n", hint_checked, hint_bad);
+    }
     return lines;
 }
 
