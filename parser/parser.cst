@@ -818,6 +818,19 @@ fn _hint_compare(src as *u8, ts as i64, src_len as i64, lines as *pl.ParsedLines
         let is *u8 as x = cast(*u8, pl.pl_get(lines, hb));
         let is *u8 as y = cast(*u8, pl.pl_get(lines, hb + 1));
         same = 1;
+        // A hinted label points at the hint's own copy of the name: the
+        // contents must agree, not the addresses.
+        let is *pl.ParsedLine as hx = pl.pl_get(lines, hb);
+        let is *pl.ParsedLine as hy = pl.pl_get(lines, hb + 1);
+        if (cast(i32, hx.op1_kind) == def.OP_LABEL && cast(i32, hy.op1_kind) == def.OP_LABEL
+            && hx.op1_label_len == hy.op1_label_len) {
+            let is i32 as q1 with mut = 0;
+            while (q1 < cast(i32, hx.op1_label_len)) {
+                if (hx.op1_label_ptr[q1] != hy.op1_label_ptr[q1]) { same = 0; }
+                q1 = q1 + 1;
+            }
+            hy.op1_label_ptr = hx.op1_label_ptr;
+        }
         let is i64 as k with mut = 0;
         while (k < sizeof(pl.ParsedLine)) { if (x[k] != y[k]) { same = 0; } k = k + 1; }
     }
