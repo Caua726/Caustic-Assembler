@@ -695,6 +695,15 @@ fn hint_line(src as *u8, pos as i64, src_len as i64, lines as *pl.ParsedLines, s
         *tstart = sp + sn;
         return sp + sn;
     }
+    if (shape == 80) {                                   // .p2align power, max
+        let is i64 as pw = cast(i64, src[pos + 2]) - 48;
+        let is i64 as px = cast(i64, src[pos + 3]) - 48;
+        let is *pl.ParsedLine as ol = _dline(lines, pl.DIR_P2ALIGN, section, line_no);
+        pl.axw(ol).dir_num = pw;
+        ol.op1_imm = px;
+        *tstart = pos + 4;
+        return pos + 4;
+    }
     if (shape == 78) {                                   // .long n
         let is i64 as lv with mut = 0;
         let is i64 as lq = _hvar(src, pos + 2, src_len, &lv);
