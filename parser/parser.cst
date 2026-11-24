@@ -793,6 +793,28 @@ fn _line_is(src as *u8, s as i64, len as i64, word as *u8) as i32 {
 
 // CAUSTIC_AS_SLOW=1 sends every line through the tokenizer: the reference the
 // fast path is checked against (tests/run_fastparse.sh). -1 = not read yet.
+// The compiler's --no-sse: an xmm or ymm register outside #APP/#NO_APP (an asm
+// block) is an error, whatever wrote it.
+let is i32 as no_simd with mut = 0;
+
+fn _simd_reg(r as i16) as i32 { return cast(i32, r >= def.REG_XMM0 && r < def.REG_XMM0 + 16); }
+
+fn _no_simd_check(lines as *pl.ParsedLines, from as i32) as void {
+    let is i32 as r with mut = from;
+    while (r < lines.count) {
+        let is *pl.ParsedLine as l = pl.pl_get(lines, r);
+        if (l.kind == pl.LINE_INST
+            && ((l.op1_kind == def.OP_REG && _simd_reg(l.op1_reg_id) == 1)
+                || (l.op2_kind == def.OP_REG && _simd_reg(l.op2_reg_id) == 1))) {
+            io.write_str(io.STDERR, "internal error: --no-sse: the compiler wrote an xmm register (assembly line ");
+            io.write_int(io.STDERR, cast(i64, l.line_no));
+            io.write_str(io.STDERR, ")\n");
+            io.exit(1);
+        }
+        r = r + 1;
+    }
+}
+
 let is i32 as _slow with mut = cast(i32, 0 - 1);
 
 // CAUSTIC_HINT_CHECK=1: every hinted record is compared with the parse of the
@@ -860,6 +882,7 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
     let is lex.TokenList as tl = lex.tl_init(0);
     let is i64 as pos with mut = 0;
     let is i32 as in_hand with mut = 0;
+    let is i32 as hand_simd with mut = 0;
     while (pos < src_len) {
         let is i32 as before = lines.count;
         let is i32 as line_no = cur_line;
@@ -899,6 +922,12 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
             lex.tokenize_into(&tl, cast(*u8, cast(i64, src) + pos), tend - pos);
             parse_chunk(&tl, &lines, &section, &cur_line);
             pos = tend;
+        }
+        if (no_simd == 1) {
+            let is i64 as nl with mut = lend - lstart;
+            if (_line_is(src, lstart, nl, "#APP") == 1) { hand_simd = 1; }
+            else if (_line_is(src, lstart, nl, "#NO_APP") == 1) { hand_simd = 0; }
+            else if (hand_simd == 0) { _no_simd_check(&lines, before); }
         }
         if (span_on == 1) {
             let is i64 as tl_len with mut = lend - lstart;
