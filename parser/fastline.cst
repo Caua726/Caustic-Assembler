@@ -666,6 +666,22 @@ fn _hint_z(src as *u8, pos as i64, src_len as i64, lines as *pl.ParsedLines, sec
 fn hint_line(src as *u8, pos as i64, src_len as i64, lines as *pl.ParsedLines, section as i32, line_no as i32, tstart as *i64) as i64 {
     let is i32 as shape = cast(i32, src[pos + 1]);
     if (shape == 90) { return hint_z(src, pos, src_len, lines, section, line_no, tstart); }
+    if (shape == 68) {                                   // a directive: kind, register, number
+        let is i64 as dk with mut = 0;
+        let is i64 as dr with mut = 0;
+        let is i64 as dn with mut = 0;
+        let is i64 as dp with mut = _hvar(src, pos + 2, src_len, &dk);
+        if (dp < 0) { return 0 - 1; }
+        dp = _hvar(src, dp, src_len, &dr);
+        if (dp < 0) { return 0 - 1; }
+        dp = _hvar(src, dp, src_len, &dn);
+        if (dp < 0) { return 0 - 1; }
+        let is *pl.ParsedLine as dl = _dline(lines, cast(i32, dk), section, line_no);
+        pl.axw(dl).dir_arg_len = cast(i32, dr);
+        pl.axw(dl).dir_num = dn;
+        *tstart = dp;
+        return dp;
+    }
     if (shape == 78) {                                   // .long n
         let is i64 as lv with mut = 0;
         let is i64 as lq = _hvar(src, pos + 2, src_len, &lv);
