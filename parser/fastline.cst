@@ -682,6 +682,19 @@ fn hint_line(src as *u8, pos as i64, src_len as i64, lines as *pl.ParsedLines, s
         *tstart = dp;
         return dp;
     }
+    if (shape == 83) {                                   // a directive naming a symbol: kind, length, name
+        let is i64 as sk with mut = 0;
+        let is i64 as sn with mut = 0;
+        let is i64 as sp with mut = _hvar(src, pos + 2, src_len, &sk);
+        if (sp < 0) { return 0 - 1; }
+        sp = _hvar(src, sp, src_len, &sn);
+        if (sp < 0 || sn < 0 || sp + sn > src_len) { return 0 - 1; }
+        let is *pl.ParsedLine as sl = _dline(lines, cast(i32, sk), section, line_no);
+        pl.axw(sl).dir_arg_ptr = cast(*u8, cast(i64, src) + sp);
+        pl.axw(sl).dir_arg_len = cast(i32, sn);
+        *tstart = sp + sn;
+        return sp + sn;
+    }
     if (shape == 78) {                                   // .long n
         let is i64 as lv with mut = 0;
         let is i64 as lq = _hvar(src, pos + 2, src_len, &lv);
