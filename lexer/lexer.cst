@@ -209,6 +209,9 @@ fn init_ri_first() as void {
 // Long instructions match their complete spelling, not just a five-byte prefix.
 // kind: 0=empty, 1=register, 2=instruction; absent characters are zero.
 let is i32 as HT_SIZE with imut = 1024;
+// Static: built once and kept, while the compiler tears the shared heap down
+// between codegen (whose literal hints use this table) and the assembler.
+let is [32768]u8 as _ht_store with mut;      // HT_SIZE * 32
 let is *u8 as ht_data with mut;
 let is i32 as ht_ready with mut = 0;
 
@@ -298,7 +301,7 @@ fn ht_lookup(ptr as *u8, len as i32) as i32 {
 }
 
 fn init_ht() as void {
-    ht_data = om.opt_alloc(cast(i64, HT_SIZE) * 32);
+    ht_data = cast(*u8, &_ht_store);
     mem.memset(ht_data, 0, cast(i64, HT_SIZE) * 32);
 
     // Registers (kind=1)
