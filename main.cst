@@ -48,6 +48,11 @@ fn print_profile() as void {
 
 // === Public API (the compiler calls this in-process) ===
 
+// Called by assemble_buf between parsing and pass1 as hook(*ParsedLines, src)
+// when set (0 = none). The caller sets parser.span_on too, so the records carry
+// their source spans; it may rewrite records and turn any into LINE_EMPTY.
+let is *u8 as line_hook with mut = cast(*u8, 0);
+
 // Assemble from an in-memory .s buffer. The in-process compiler pipeline passes
 // codegen's assembly output straight here, skipping the round-trip of writing
 // the .s and reading it back from disk (the file is still written, as a cache).
@@ -69,7 +74,13 @@ fn assemble_buf(src as *u8, file_size as i64, obj_path as *u8) as i32 {
 
     // An unknown mnemonic was silently dropped during parse — the object would
     // be missing whatever it stood for. Refuse to emit it.
-    if (parser.parse_had_error() != 0) { pl.pl_free(&lines); return 1; }
+    if (parser.parse_had_error() != 0) { pl.pl_free(&lines); parser.span_free(); return 1; }
+
+    // The compiler's peephole over the records (see line_hook).
+    if (cast(i64, line_hook) != 0) {
+        call(line_hook, cast(*u8, &lines), src);
+        parser.span_free();
+    }
 
     let is i64 as t2 = asm_prof_time();
     let is elf.SymbolTable as symtab = elf.sym_init();

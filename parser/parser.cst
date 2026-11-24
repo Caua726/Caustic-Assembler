@@ -738,6 +738,56 @@ fn line_capacity(src as *u8, src_len as i64, floor as i32) as i32 {
     return cast(i32, cap);
 }
 
+// Source spans, for a caller that works on the records with the text beside
+// them (the compiler's peephole, through main.line_hook). With span_on set,
+// every record gets the offset and length of the source line it came from and
+// a flag byte (SPAN_HAND: inside an #APP .. #NO_APP block, markers included),
+// and a line that yields no record (blank, a comment, an #APP marker) yields a
+// LINE_EMPTY placeholder with SPAN_PLACE, so record order follows line order.
+// Off by default: the standalone assembler never pays for it.
+let is i32 as span_on with mut = 0;
+let is *i32 as span_off with mut;
+let is *i32 as span_len with mut;
+let is *u8 as span_flag with mut;
+let is i32 as span_cap with mut = 0;
+let is i32 as SPAN_HAND with imut = 1;
+let is i32 as SPAN_PLACE with imut = 2;
+
+fn _span_put(idx as i32, off as i64, len as i64, flag as i32) as void {
+    if (idx >= span_cap) {
+        let is i32 as nc with mut = span_cap * 2;
+        if (nc < 65536) { nc = 65536; }
+        while (nc <= idx) { nc = nc * 2; }
+        let is *i32 as no = cast(*i32, om.opt_alloc(cast(i64, nc) * 4));
+        let is *i32 as nl = cast(*i32, om.opt_alloc(cast(i64, nc) * 4));
+        let is *u8 as nf = om.opt_alloc(cast(i64, nc));
+        let is i32 as k with mut = 0;
+        while (k < span_cap) { no[k] = span_off[k]; nl[k] = span_len[k]; nf[k] = span_flag[k]; k = k + 1; }
+        if (span_cap > 0) { om.opt_free(cast(*u8, span_off)); om.opt_free(cast(*u8, span_len)); om.opt_free(span_flag); }
+        span_off = no; span_len = nl; span_flag = nf; span_cap = nc;
+    }
+    span_off[idx] = cast(i32, off);
+    span_len[idx] = cast(i32, len);
+    span_flag[idx] = cast(u8, flag);
+}
+
+fn span_free() as void {
+    if (span_cap > 0) { om.opt_free(cast(*u8, span_off)); om.opt_free(cast(*u8, span_len)); om.opt_free(span_flag); }
+    span_cap = 0;
+}
+
+// The line src[s..s+len) is exactly `word` after leading blanks.
+fn _line_is(src as *u8, s as i64, len as i64, word as *u8) as i32 {
+    let is i64 as k with mut = s;
+    while (k < s + len && (src[k] == 32 || src[k] == 9)) { k = k + 1; }
+    let is i64 as w with mut = 0;
+    while (word[w] != 0) {
+        if (k + w >= s + len || src[k + w] != word[w]) { return 0; }
+        w = w + 1;
+    }
+    return cast(i32, k + w == s + len);
+}
+
 // CAUSTIC_AS_SLOW=1 sends every line through the tokenizer: the reference the
 // fast path is checked against (tests/run_fastparse.sh). -1 = not read yet.
 let is i32 as _slow with mut = cast(i32, 0 - 1);
@@ -756,22 +806,72 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
     // One token array for every line the fast path declines, reused.
     let is lex.TokenList as tl = lex.tl_init(0);
     let is i64 as pos with mut = 0;
+    let is i32 as in_hand with mut = 0;
     while (pos < src_len) {
+        let is i32 as before = lines.count;
+        let is i32 as line_no = cur_line;
+        let is i64 as lstart = pos;
+        let is i64 as lend with mut = 0;           // end of the line's text, newline excluded
         let is i64 as eol with mut = 0 - 1;
         if (_slow == 0) { eol = fl.fast_line(src, pos, src_len, &lines, section, cur_line); }
         if (eol >= 0) {
             if (eol < src_len) { cur_line = cur_line + 1; }
+            lend = eol;
             pos = eol + 1;
         } else {
             // The tokenizer's own line: up to the first newline outside a
             // string, which parse_chunk counts.
             let is i64 as tend with mut = fl.tokenizer_line_end(src, pos, src_len);
+            lend = tend;
             if (tend < src_len) { tend = tend + 1; }
             lex.tokenize_into(&tl, cast(*u8, cast(i64, src) + pos), tend - pos);
             parse_chunk(&tl, &lines, &section, &cur_line);
             pos = tend;
         }
+        if (span_on == 1) {
+            let is i64 as tl_len with mut = lend - lstart;
+            if (tl_len > 0 && src[lstart + tl_len - 1] == 13) { tl_len = tl_len - 1; }
+            if (in_hand == 0 && _line_is(src, lstart, tl_len, "#APP") == 1) { in_hand = 1; }
+            let is i32 as fl_hand with mut = 0;
+            if (in_hand == 1) { fl_hand = SPAN_HAND; }
+            if (in_hand == 1 && _line_is(src, lstart, tl_len, "#NO_APP") == 1) { in_hand = 0; }
+            if (lines.count == before) {
+                let is *pl.ParsedLine as ph = pl.pl_add(&lines);
+                ph.kind = pl.LINE_EMPTY;
+                ph.section = cast(i8, section);
+                ph.line_no = line_no;
+                _span_put(before, lstart, tl_len, fl_hand | SPAN_PLACE);
+            } else {
+                let is i32 as r with mut = before;
+                while (r < lines.count) { _span_put(r, lstart, tl_len, fl_hand); r = r + 1; }
+            }
+        }
     }
     lex.tl_free(&tl);
     return lines;
+}
+
+// Replace record r with the parse of the one-line text p[0..n) (no newline):
+// the line a caller rewrote. Section and line number stay r's. 1 = done,
+// 0 = the text did not yield exactly one record (r untouched).
+fn reparse_into(lines as *pl.ParsedLines, r as i32, p as *u8, n as i64) as i32 {
+    let is pl.ParsedLine as keep = *pl.pl_get(lines, r);
+    let is i32 as before = lines.count;
+    let is i32 as sec with mut = cast(i32, keep.section);
+    let is i32 as ln with mut = keep.line_no;
+    fl.lookup_begin(cast(i64, p) + n);
+    let is i64 as e = fl.fast_line(p, 0, n, lines, sec, ln);
+    if (e < 0) {
+        let is lex.TokenList as tl = lex.tl_init(0);
+        lex.tokenize_into(&tl, p, n);
+        parse_chunk(&tl, lines, &sec, &ln);
+        lex.tl_free(&tl);
+    }
+    if (lines.count != before + 1) { lines.count = before; return 0; }
+    let is *pl.ParsedLine as dst = pl.pl_get(lines, r);
+    *dst = *pl.pl_get(lines, before);
+    dst.section = keep.section;
+    dst.line_no = keep.line_no;
+    lines.count = before;
+    return 1;
 }
