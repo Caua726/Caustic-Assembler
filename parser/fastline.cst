@@ -646,6 +646,14 @@ fn _hint_z(src as *u8, pos as i64, src_len as i64, lines as *pl.ParsedLines, sec
             if (p < 0 || v < 0 || p + v > src_len) { return 0 - 1; }
             pl.set_op_label(line, w, cast(*u8, cast(i64, src) + p), cast(i32, v));
             p = p + v;
+        } else if (k == def.OP_RIP_LABEL) {             // [rip+symbol]: size, length, symbol
+            let is i64 as rsz with mut = 0;
+            p = _hvar(src, p, src_len, &rsz);
+            if (p < 0) { return 0 - 1; }
+            p = _hvar(src, p, src_len, &v);
+            if (p < 0 || v < 0 || p + v > src_len) { return 0 - 1; }
+            pl.set_op_rip(line, w, cast(*u8, cast(i64, src) + p), cast(i32, v), cast(i32, rsz));
+            p = p + v;
         } else if (k != def.OP_NONE) { return 0 - 1; }
         w = w + 1;
     }

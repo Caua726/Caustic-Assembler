@@ -832,6 +832,12 @@ fn _hint_check() as i32 {
     return _hchk;
 }
 
+fn _same_bytes(a as *u8, b as *u8, n as i32) as i32 {
+    let is i32 as k with mut = 0;
+    while (k < n) { if (a[k] != b[k]) { return 0; } k = k + 1; }
+    return 1;
+}
+
 fn _hint_compare(src as *u8, ts as i64, src_len as i64, lines as *pl.ParsedLines, section as i32, ln as i32, hb as i32) as void {
     hint_checked = hint_checked + 1;
     let is i64 as e = fl.fast_line(src, ts, src_len, lines, section, ln);
@@ -853,6 +859,10 @@ fn _hint_compare(src as *u8, ts as i64, src_len as i64, lines as *pl.ParsedLines
             }
             hy.op1_label_ptr = hx.op1_label_ptr;
         }
+        if (cast(i32, hx.op1_kind) == def.OP_RIP_LABEL && hy.op1_kind == hx.op1_kind && hx.op1_label_len == hy.op1_label_len
+            && _same_bytes(hx.op1_label_ptr, hy.op1_label_ptr, cast(i32, hx.op1_label_len)) == 1) { hy.op1_label_ptr = hx.op1_label_ptr; }
+        if (cast(i32, hx.op2_kind) == def.OP_RIP_LABEL && hy.op2_kind == hx.op2_kind && hx.op2_label_len == hy.op2_label_len
+            && _same_bytes(hx.op2_label_ptr, hy.op2_label_ptr, cast(i32, hx.op2_label_len)) == 1) { hy.op2_label_ptr = hx.op2_label_ptr; }
         let is i64 as k with mut = 0;
         while (k < sizeof(pl.ParsedLine)) { if (x[k] != y[k]) { same = 0; } k = k + 1; }
     }
