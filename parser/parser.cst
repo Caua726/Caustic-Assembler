@@ -306,8 +306,10 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         p = skip_to_eol(tl, p);
         return p;
     }
-    if (enc.streq_lit(tok.ptr, tok.len, ".globl") == 1 || enc.streq_lit(tok.ptr, tok.len, ".global") == 1) {
+    if (enc.streq_lit(tok.ptr, tok.len, ".globl") == 1 || enc.streq_lit(tok.ptr, tok.len, ".global") == 1
+        || enc.streq_lit(tok.ptr, tok.len, ".weak") == 1) {
         line.dir_kind = pl.DIR_GLOBL;
+        if (tok.len == 5) { line.dir_kind = pl.DIR_WEAK; }
         p = p + 1;
         let is *lex.Token as name_tok = lex.tl_get(tl, p);
         if (name_tok.kind != lex.TK_NEWLINE && name_tok.kind != lex.TK_EOF) {

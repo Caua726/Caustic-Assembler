@@ -30,6 +30,7 @@ fn csec_exec_flags(idx as i32) as i32 {
     return p[idx];
 }
 let is i32 as STB_LOCAL with imut = 0;
+let is i32 as STB_WEAK with imut = 2;
 let is i32 as STB_GLOBAL with imut = 1;
 let is i32 as STT_NOTYPE with imut = 0;
 let is i32 as STT_OBJECT with imut = 1;
@@ -51,6 +52,7 @@ struct Symbol {
     section as i32;
     offset as i64;
     is_global as i32;
+    is_weak as i32;
     strtab_off as i32;
 }
 
@@ -149,6 +151,7 @@ fn sym_add(st as *SymbolTable, name_ptr as *u8, name_len as i32, section as i32,
     s.section = section;
     s.offset = offset;
     s.is_global = is_global;
+    s.is_weak = 0;
     s.strtab_off = 0;
     // Keep at most one symbol per bucket on average: the bucket count was
     // fixed at 16384, and the compiler's own .s has several times that many
@@ -432,7 +435,9 @@ fn write_elf(fd as i64, text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer
             let is i32 as sym_type with mut = STT_FUNC;
             if (s.section == 1 || s.section == 2 || s.section == 3) { sym_type = STT_OBJECT; }
             if (s.section == SECTION_UNDEF) { sym_type = 0; }
-            let is i32 as info = sym_type + STB_GLOBAL * 16;
+            let is i32 as bind with mut = STB_GLOBAL;
+            if (s.is_weak == 1) { bind = STB_WEAK; }
+            let is i32 as info = sym_type + bind * 16;
             buf.buf_emit8(&symtab_buf, info);
             buf.buf_emit8(&symtab_buf, 0);
             let is i32 as shndx with mut = s.section + 1;
