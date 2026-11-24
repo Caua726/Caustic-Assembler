@@ -519,13 +519,27 @@ fn init_ht() as void {
     ht_ready = 1;
 }
 
-fn tokenize(src as *u8, src_len as i64) as TokenList {
+// The lexer's tables, built once (tokenize does it too; the parser's fast
+// path classifies words with them directly).
+fn lex_init() as void {
     if (char_tab_ready == 0) { init_char_tab(); }
     if (ri_first_ready == 0) { init_ri_first(); }
     if (ht_ready == 0) { init_ht(); }
+}
+
+fn tokenize(src as *u8, src_len as i64) as TokenList {
     // Estimate ~1 token per 3 bytes of source (avoid array resize)
     let is i32 as tok_hint = cast(i32, src_len / 3) + 4096;
     let is TokenList as tl = tl_init(tok_hint);
+    tokenize_into(&tl, src, src_len);
+    return tl;
+}
+
+// Tokenize into an existing list, replacing its contents and keeping its
+// array: the parser calls this once per line it leaves to the tokenizer.
+fn tokenize_into(tl as *TokenList, src as *u8, src_len as i64) as void {
+    lex_init();
+    tl.count = 0;
     let is i64 as i with mut = 0;
     let is i32 as line with mut = 1;
 
@@ -541,7 +555,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
         }
         // Newline
         else if (c == 10) {
-            let is *Token as t = tl_next(&tl);
+            let is *Token as t = tl_next(tl);
             t.kind = TK_NEWLINE; t.ptr = cast(*u8, base_i + i); t.len = 1;
             t.id = 0; t.num_val = 0;
             line = line + 1;
@@ -563,7 +577,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                 i = i + 1;
             }
             if (i < src_len) { i = i + 1; }
-            let is *Token as t = tl_next(&tl);
+            let is *Token as t = tl_next(tl);
             t.kind = TK_STRING; t.ptr = cast(*u8, base_i + start); t.len = cast(i32, i - start);
             t.id = 0; t.num_val = 0;
         }
@@ -576,7 +590,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
             else if (c == 43) { tk = TK_PLUS; }
             else if (c == 42) { tk = TK_STAR; }
             else if (c == 45) { tk = TK_MINUS; }
-            let is *Token as t = tl_next(&tl);
+            let is *Token as t = tl_next(tl);
             t.kind = tk; t.ptr = cast(*u8, base_i + i); t.len = 1;
             t.id = 0; t.num_val = 0;
             i = i + 1;
@@ -586,7 +600,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
             let is i64 as start = i;
             let is i64 as val with mut = 0;
             let is i64 as new_i = parse_number_fast(src, i, src_len, &val);
-            let is *Token as t = tl_next(&tl);
+            let is *Token as t = tl_next(tl);
             t.kind = TK_NUMBER; t.ptr = cast(*u8, base_i + start); t.len = cast(i32, new_i - start);
             t.num_val = val; t.id = 0;
             i = new_i;
@@ -648,7 +662,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                     is_dir = 1; // .cstimport
                 }
             }
-            let is *Token as t = tl_next(&tl);
+            let is *Token as t = tl_next(tl);
             if (is_dir == 1) {
                 t.kind = TK_DIRECTIVE;
             } else {
@@ -678,18 +692,18 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                     while (i < src_len && src[i] == 32) { i = i + 1; }
                     if (i + 3 <= src_len && src[i] == 80 && src[i+1] == 84 && src[i+2] == 82) {
                         i = i + 3;
-                        let is *Token as t = tl_next(&tl);
+                        let is *Token as t = tl_next(tl);
                         t.kind = TK_SIZE_PREFIX; t.ptr = tptr; t.len = cast(i32, i - start);
                         t.id = sz_val; t.num_val = 0;
                     } else {
                         i = save_i;
-                        let is *Token as t = tl_next(&tl);
+                        let is *Token as t = tl_next(tl);
                         t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen;
                         t.id = 0; t.num_val = 0;
                     }
                 } else {
                     // Uppercase non-size-prefix: always plain IDENT
-                    let is *Token as t = tl_next(&tl);
+                    let is *Token as t = tl_next(tl);
                     t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen;
                     t.id = 0; t.num_val = 0;
                 }
@@ -699,7 +713,7 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                 if (tlen == 8 && c == 110 && tptr[1] == 111) {
                     // noprefix - skip
                 } else {
-                    let is *Token as t = tl_next(&tl);
+                    let is *Token as t = tl_next(tl);
                     t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen;
                     t.id = 0; t.num_val = 0;
                 }
@@ -713,14 +727,14 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
                     } else if (tlen == 8 && c == 110 && tptr[1] == 111) {
                         // noprefix - skip
                     } else {
-                        let is *Token as t = tl_next(&tl);
+                        let is *Token as t = tl_next(tl);
                         t.kind = TK_IDENT; t.ptr = tptr; t.len = tlen;
                         t.id = 0; t.num_val = 0;
                     }
                 } else {
                     let is i32 as ht_kind = ht_result >> 16;
                     let is i32 as ht_id = ht_result & 65535;
-                    let is *Token as t = tl_next(&tl);
+                    let is *Token as t = tl_next(tl);
                     if (ht_kind == 1) {
                         t.kind = TK_REGISTER;
                     } else {
@@ -740,6 +754,5 @@ fn tokenize(src as *u8, src_len as i64) as TokenList {
 
     // Add EOF
     let is Token as eof = make_tok(TK_EOF, cast(*u8, 0), 0);
-    tl_push(&tl, eof);
-    return tl;
+    tl_push(tl, eof);
 }

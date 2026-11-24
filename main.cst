@@ -1,5 +1,6 @@
 use "../std/os.cst" as os;
 use "../std/io.cst" as io;
+use "../std/env.cst" as env;
 use "core/util.cst" as util;
 use "encoder/encoder_util.cst" as enc;
 use "parser/parsed_line.cst" as pl;
@@ -139,6 +140,7 @@ fn print_section_sizes(text_buf as *buf.ByteBuffer, data_buf as *buf.ByteBuffer,
 }
 
 fn main(argc as i64, argv as i64) as i32 {
+    env.init(argc, cast(*u8, argv));     // getenv (CAUSTIC_AS_SLOW) reads envp
     cs.csec_init();
     ci.cstimport_init();
     ence.enc_reset();

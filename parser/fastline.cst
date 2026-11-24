@@ -1,0 +1,294 @@
+// fastline.cst — the parser's fast path: one source line straight from its
+// bytes into a ParsedLine, with no token array in between.
+//
+// It takes the shapes the compiler writes — `name:`, `op`, `op a`, `op a, b`
+// with registers, immediates, labels, `SIZE PTR [base ± disp]`,
+// `[base + index*scale ± disp]` and `[rip + symbol]` — which are about 99 % of
+// the lines of a compiled program. Anything else (directives, comments,
+// prefixes, segment overrides, a word the tokenizer would treat specially) is
+// declined, and the caller hands that line to the tokenizer and parse_chunk as
+// before. Where it accepts a line, the result is exactly what the tokenizer
+// path builds for it: words are classified by the lexer's own tables
+// (char_tab, ri_first, ht_lookup) and operands are set with the same
+// parsed_line setters; anything the two might read differently is declined.
+use "../lexer/lexer.cst" as lex;
+use "../core/asm_defs.cst" as def;
+use "parsed_line.cst" as pl;
+
+fn _sp(src as *u8, i as i64, e as i64) as i64 {
+    let is i64 as k with mut = i;
+    while (k < e && (src[k] == 32 || src[k] == 9)) { k = k + 1; }
+    return k;
+}
+
+// The byte at i, or -1 at the end of the line (its newline or the end of
+// the buffer, e). Every scan here stops at a newline by itself: it is not a
+// blank, not an identifier character and not a digit.
+fn _at(src as *u8, i as i64, e as i64) as i32 {
+    if (i >= e || src[i] == 10) { return cast(i32, 0 - 1); }
+    return cast(i32, src[i]);
+}
+
+fn _word_start(c as i32) as i32 {
+    if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122) || c == 95 || c == 46) { return 1; }
+    return 0;
+}
+
+// End of the word starting at i (the tokenizer's identifier scan).
+fn _word_end(src as *u8, i as i64, e as i64) as i64 {
+    let is i64 as k with mut = i + 1;
+    while (k < e && lex.char_tab[cast(i32, src[k])] != 0) { k = k + 1; }
+    return k;
+}
+
+// ht_lookup behind a direct-mapped cache: a register or mnemonic of up to 8
+// bytes is keyed by those bytes (loaded whole, the bytes past the word masked
+// off) and its length. Words come from lines that always continue past them
+// (at least a newline or the end-of-buffer guard below), so the 8-byte load is
+// only made when 8 bytes remain before the buffer end.
+let is [4096]i64 as _lk_key with mut;
+let is [4096]i32 as _lk_val with mut;     // ht_lookup result + 1 (0 = empty slot)
+let is i64 as _lk_end with mut = 0;        // end of the buffer being parsed
+
+fn lookup_begin(end as i64) as void { _lk_end = end; }
+
+fn _lookup(p as *u8, len as i32) as i32 {
+    if (len > 8 || cast(i64, p) + 8 > _lk_end) { return lex.ht_lookup(p, len); }
+    let is i64 as w with mut = *cast(*i64, p);
+    if (len < 8) { w = w & ((cast(i64, 1) << cast(i64, len * 8)) - 1); }
+    let is i64 as key = w ^ (cast(i64, len) << 59);
+    let is i32 as slot = cast(i32, ((key * 0x9E3779B97F4A7C15) >> 52) & 4095);
+    if (_lk_val[slot] != 0 && _lk_key[slot] == key) { return _lk_val[slot] - 1; }
+    let is i32 as r = lex.ht_lookup(p, len);
+    _lk_key[slot] = key;
+    _lk_val[slot] = r + 1;
+    return r;
+}
+
+// How the tokenizer would read the word p[0..len) when no `PTR` follows it:
+// -1 = something special (directive, size prefix, a skipped word): decline;
+// 0 = an identifier; else kind * 65536 + id with kind 1 = register,
+// 2 = instruction (ht_lookup's encoding).
+fn _word(p as *u8, len as i32) as i32 {
+    let is i32 as c = cast(i32, p[0]);
+    if (c == 46) {
+        if (len >= 2 && p[1] == 76) { return 0; }          // .L… — never a directive
+        return cast(i32, 0 - 1);
+    }
+    if (c >= 66 && c <= 87 && len >= 4 && len <= 5) { return cast(i32, 0 - 1); }
+    if (len == 8 && c == 110 && p[1] == 111) { return cast(i32, 0 - 1); }   // noprefix
+    if (len > 9 || lex.ri_first[c] == 0) { return 0; }
+    let is i32 as h = _lookup(p, len);
+    if (h == 0) {
+        if (len == 3 && c == 80 && p[1] == 84 && p[2] == 82) { return cast(i32, 0 - 1); }   // PTR
+        return 0;
+    }
+    return h;
+}
+
+// A number at i followed by a delimiter: its end, value in *out; -1 if none.
+fn _num(src as *u8, i as i64, e as i64, out as *i64) as i64 {
+    let is i32 as c = _at(src, i, e);
+    if (c < 48 || c > 57) { return 0 - 1; }
+    let is i64 as k = lex.parse_number_fast(src, i, e, out);
+    if (k < e && lex.char_tab[cast(i32, src[k])] != 0) { return 0 - 1; }
+    return k;
+}
+
+// The memory operand opening at src[i] == '['. 1 and *outp past ']' when taken.
+fn _mem(src as *u8, i0 as i64, e as i64, line as *pl.ParsedLine, which as i32, sz as i32, outp as *i64) as i32 {
+    let is i64 as i with mut = _sp(src, i0 + 1, e);
+    let is i32 as c with mut = _at(src, i, e);
+    if (c < 97 || c > 122) { return 0; }
+    let is i64 as we with mut = _word_end(src, i, e);
+    let is i32 as bc = _word(cast(*u8, cast(i64, src) + i), cast(i32, we - i));
+    if ((bc >> 16) != 1) { return 0; }
+    let is i32 as base = bc & 65535;
+    i = _sp(src, we, e);
+    let is i64 as v with mut = 0;
+    if (base == def.REG_RIP) {
+        if (_at(src, i, e) != 43) { return 0; }
+        i = _sp(src, i + 1, e);
+        if (_word_start(_at(src, i, e)) == 0) { return 0; }
+        we = _word_end(src, i, e);
+        let is *u8 as lp = cast(*u8, cast(i64, src) + i);
+        let is i32 as ll = cast(i32, we - i);
+        if (_word(lp, ll) < 0) { return 0; }
+        i = _sp(src, we, e);
+        if (_at(src, i, e) != 93) { return 0; }
+        pl.set_op_rip(line, which, lp, ll, sz);
+        *outp = i + 1;
+        return 1;
+    }
+    let is i64 as disp with mut = 0;
+    let is i32 as index with mut = def.REG_NONE;
+    let is i32 as scale with mut = 0;
+    c = _at(src, i, e);
+    if (c == 43) {
+        i = _sp(src, i + 1, e);
+        c = _at(src, i, e);
+        if (c >= 97 && c <= 122) {
+            we = _word_end(src, i, e);
+            let is i32 as ic = _word(cast(*u8, cast(i64, src) + i), cast(i32, we - i));
+            if ((ic >> 16) != 1) { return 0; }
+            index = ic & 65535;
+            i = _sp(src, we, e);
+            if (_at(src, i, e) == 42) {
+                let is i64 as k = _num(src, _sp(src, i + 1, e), e, &v);
+                if (k < 0) { return 0; }
+                scale = cast(i32, v);
+                i = _sp(src, k, e);
+            } else {
+                scale = 1;
+            }
+            c = _at(src, i, e);
+            if (c == 43 || c == 45) {
+                let is i64 as k2 = _num(src, _sp(src, i + 1, e), e, &v);
+                if (k2 < 0) { return 0; }
+                if (c == 43) { disp = v; } else { disp = 0 - v; }
+                i = _sp(src, k2, e);
+            }
+        } else {
+            let is i64 as k3 = _num(src, i, e, &v);
+            if (k3 < 0) { return 0; }
+            disp = v;
+            i = _sp(src, k3, e);
+        }
+    } else if (c == 45) {
+        let is i64 as k4 = _num(src, _sp(src, i + 1, e), e, &v);
+        if (k4 < 0) { return 0; }
+        disp = 0 - v;
+        i = _sp(src, k4, e);
+    }
+    if (_at(src, i, e) != 93) { return 0; }
+    *outp = i + 1;
+    if (index != def.REG_NONE) { pl.set_op_mem_sib(line, which, base, index, scale, disp, sz); }
+    else { pl.set_op_mem(line, which, base, disp, sz); }
+    return 1;
+}
+
+// QWORD/DWORD/WORD/BYTE at p[0..len): the size in bits, else 0.
+fn _size_word(p as *u8, len as i32) as i32 {
+    if (len == 5 && p[1] == 87 && p[2] == 79 && p[3] == 82 && p[4] == 68) {
+        if (p[0] == 81) { return 64; }
+        if (p[0] == 68) { return 32; }
+    }
+    if (len == 4 && p[0] == 87 && p[1] == 79 && p[2] == 82 && p[3] == 68) { return 16; }
+    if (len == 4 && p[0] == 66 && p[1] == 89 && p[2] == 84 && p[3] == 69) { return 8; }
+    return 0;
+}
+
+fn _operand(src as *u8, i0 as i64, e as i64, line as *pl.ParsedLine, which as i32, outp as *i64) as i32 {
+    let is i64 as i = _sp(src, i0, e);
+    let is i32 as c = _at(src, i, e);
+    let is i64 as v with mut = 0;
+    if (c >= 48 && c <= 57) {
+        let is i64 as k = _num(src, i, e, &v);
+        if (k < 0) { return 0; }
+        pl.set_op_imm(line, which, v);
+        *outp = k;
+        return 1;
+    }
+    if (c == 45) {
+        let is i64 as k2 = _num(src, _sp(src, i + 1, e), e, &v);
+        if (k2 < 0) { return 0; }
+        pl.set_op_imm(line, which, 0 - v);
+        *outp = k2;
+        return 1;
+    }
+    if (c == 91) { return _mem(src, i, e, line, which, 0, outp); }
+    if (_word_start(c) == 0) { return 0; }
+    let is i64 as we = _word_end(src, i, e);
+    let is *u8 as wp = cast(*u8, cast(i64, src) + i);
+    let is i32 as wl = cast(i32, we - i);
+    let is i32 as sz = _size_word(wp, wl);
+    if (sz != 0) {
+        // The tokenizer skips spaces only (not tabs) before PTR.
+        let is i64 as k3 with mut = we;
+        while (k3 < e && src[k3] == 32) { k3 = k3 + 1; }
+        if (_at(src, k3, e) != 80 || _at(src, k3 + 1, e) != 84 || _at(src, k3 + 2, e) != 82) { return 0; }
+        if (k3 + 3 < e && lex.char_tab[cast(i32, src[k3 + 3])] != 0) { return 0; }
+        let is i64 as lb = _sp(src, k3 + 3, e);
+        if (_at(src, lb, e) != 91) { return 0; }
+        return _mem(src, lb, e, line, which, sz, outp);
+    }
+    let is i32 as cls = _word(wp, wl);
+    if (cls < 0) { return 0; }
+    if ((cls >> 16) == 1) { pl.set_op_reg(line, which, cls & 65535); }
+    else { pl.set_op_label(line, which, wp, wl); }
+    *outp = we;
+    return 1;
+}
+
+// Parse the line starting at s (e = end of the buffer) into `lines`.
+// Returns where the line ends (its newline, or e): the line is done (a blank
+// line adds nothing). -1 = declined, `lines` untouched, for the tokenizer.
+fn fast_line(src as *u8, s as i64, e as i64, lines as *pl.ParsedLines, section as i32, line_no as i32) as i64 {
+    let is i64 as i with mut = _sp(src, s, e);
+    let is i32 as c = _at(src, i, e);
+    if (c < 0) { return i; }
+    if (_word_start(c) == 0) { return 0 - 1; }
+    let is i64 as we = _word_end(src, i, e);
+    let is *u8 as wp = cast(*u8, cast(i64, src) + i);
+    let is i32 as wl = cast(i32, we - i);
+    let is i32 as cls = _word(wp, wl);
+    if (cls < 0) { return 0 - 1; }
+    if (_at(src, we, e) == 58) {
+        if ((cls >> 16) == 1) { return 0 - 1; }
+        let is i64 as le = _sp(src, we + 1, e);
+        if (_at(src, le, e) >= 0) { return 0 - 1; }
+        let is *pl.ParsedLine as lbl = pl.pl_add(lines);
+        lbl.kind = pl.LINE_LABEL;
+        lbl.section = cast(i8, section);
+        pl.axw(lbl).label_ptr = wp;
+        pl.axw(lbl).label_len = cast(i16, wl);
+        lbl.line_no = line_no;
+        return le;
+    }
+    if ((cls >> 16) != 2) { return 0 - 1; }
+    let is i32 as id = cls & 65535;
+    if (id == def.INST_REP || id == def.INST_LOCK) { return 0 - 1; }
+    let is *pl.ParsedLine as line = pl.pl_add(lines);
+    line.kind = pl.LINE_INST;
+    line.section = cast(i8, section);
+    line.inst_id = cast(i16, id);
+    line.line_no = line_no;
+    i = _sp(src, we, e);
+    if (_at(src, i, e) >= 0) {
+        let is i64 as k with mut = 0;
+        if (_operand(src, i, e, line, 1, &k) == 0) { lines.count = lines.count - 1; return 0 - 1; }
+        i = _sp(src, k, e);
+        if (_at(src, i, e) == 44) {
+            if (_operand(src, i + 1, e, line, 2, &k) == 0) { lines.count = lines.count - 1; return 0 - 1; }
+            i = _sp(src, k, e);
+        }
+        if (_at(src, i, e) >= 0) { lines.count = lines.count - 1; return 0 - 1; }
+    }
+    return i;
+}
+
+// Where the line starting at s ends for the tokenizer: its first newline that
+// is not inside a string literal (a string runs to its closing quote, skipping
+// backslash escapes, as lex.tokenize reads it) or the end of the buffer.
+fn tokenizer_line_end(src as *u8, s as i64, n as i64) as i64 {
+    let is i64 as k with mut = s;
+    while (k < n) {
+        let is u8 as c = src[k];
+        if (c == 10) { return k; }
+        if (c == 35 || (c == 47 && k + 1 < n && src[k + 1] == 47)) {
+            while (k < n && src[k] != 10) { k = k + 1; }
+            return k;
+        }
+        if (c == 34) {
+            k = k + 1;
+            while (k < n && src[k] != 34) {
+                if (src[k] == 92) { k = k + 1; }
+                k = k + 1;
+            }
+            if (k < n) { k = k + 1; }
+        } else {
+            k = k + 1;
+        }
+    }
+    return n;
+}

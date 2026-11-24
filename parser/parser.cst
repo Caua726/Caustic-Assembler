@@ -1,4 +1,5 @@
 use "../../std/io.cst" as io;
+use "../../std/env.cst" as env;
 use "../../src/ir/opt_mem.cst" as om;
 use "../lexer/lexer.cst" as lex;
 use "../core/asm_defs.cst" as def;
@@ -6,6 +7,7 @@ use "../encoder/encoder_util.cst" as enc;
 use "parsed_line.cst" as pl;
 use "custom_sections.cst" as cs;
 use "cstimport.cst" as ci;
+use "fastline.cst" as fl;
 use "../core/util.cst" as util;
 
 // Count of statement-initial bare words that are neither a label nor a known
@@ -714,8 +716,21 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
 // copy). Pages past the last line are never touched, so the slack costs
 // address space, not memory.
 fn line_capacity(src as *u8, src_len as i64, floor as i32) as i32 {
+    // Newlines counted eight bytes at a time: a byte of x = w ^ 0x0A.. is zero
+    // exactly where w holds a newline, and (((x & 0x7F..) + 0x7F..) | x) has
+    // its high bit clear exactly at the zero bytes (exact, no carry between
+    // bytes), so the count is the popcount of the inverted high bits.
     let is i64 as n with mut = 0;
     let is i64 as i with mut = 0;
+    let is i64 as nl8 = 723401728380766730;          // 0x0A0A0A0A0A0A0A0A
+    let is i64 as lo7 = 9187201950435737471;         // 0x7F7F7F7F7F7F7F7F
+    while (i + 8 <= src_len) {
+        let is i64 as x = *cast(*i64, cast(i64, src) + i) ^ nl8;
+        let is i64 as y = (((x & lo7) + lo7) | x) | lo7;
+        let is i64 as z with mut = ~y;              // high bit set at each newline byte
+        while (z != 0) { n = n + 1; z = z & (z - 1); }
+        i = i + 8;
+    }
     while (i < src_len) { if (src[i] == 10) { n = n + 1; } i = i + 1; }
     let is i64 as cap = n + n / 4 + 1024;
     if (cap < cast(i64, floor)) { return floor; }
@@ -723,25 +738,40 @@ fn line_capacity(src as *u8, src_len as i64, floor as i32) as i32 {
     return cast(i32, cap);
 }
 
+// CAUSTIC_AS_SLOW=1 sends every line through the tokenizer: the reference the
+// fast path is checked against (tests/run_fastparse.sh). -1 = not read yet.
+let is i32 as _slow with mut = cast(i32, 0 - 1);
+
 fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLines {
+    if (_slow < 0) {
+        _slow = 0;
+        let is *u8 as sv = env.getenv("CAUSTIC_AS_SLOW");
+        if (cast(i64, sv) != 0 && sv[0] == 49) { _slow = 1; }
+    }
     let is pl.ParsedLines as lines = pl.pl_init(line_capacity(src, src_len, line_hint));
     let is i32 as section with mut = cs.SECTION_TEXT;
-    let is i32 as cur_line with mut = 1;     // running source line, threaded across chunks
-    let is i64 as CHUNK = 524288;            // 512 KiB; extended to the next newline
+    let is i32 as cur_line with mut = 1;     // running source line
+    lex.lex_init();
+    fl.lookup_begin(cast(i64, src) + src_len);
+    // One token array for every line the fast path declines, reused.
+    let is lex.TokenList as tl = lex.tl_init(0);
     let is i64 as pos with mut = 0;
     while (pos < src_len) {
-        let is i64 as cend with mut = pos + CHUNK;
-        if (cend >= src_len) {
-            cend = src_len;
+        let is i64 as eol with mut = 0 - 1;
+        if (_slow == 0) { eol = fl.fast_line(src, pos, src_len, &lines, section, cur_line); }
+        if (eol >= 0) {
+            if (eol < src_len) { cur_line = cur_line + 1; }
+            pos = eol + 1;
         } else {
-            // Extend to the next newline so no line (or token) spans a chunk.
-            while (cend < src_len && src[cend] != 10) { cend = cend + 1; }
-            if (cend < src_len) { cend = cend + 1; }   // include the newline
+            // The tokenizer's own line: up to the first newline outside a
+            // string, which parse_chunk counts.
+            let is i64 as tend with mut = fl.tokenizer_line_end(src, pos, src_len);
+            if (tend < src_len) { tend = tend + 1; }
+            lex.tokenize_into(&tl, cast(*u8, cast(i64, src) + pos), tend - pos);
+            parse_chunk(&tl, &lines, &section, &cur_line);
+            pos = tend;
         }
-        let is lex.TokenList as tl = lex.tokenize(cast(*u8, cast(i64, src) + pos), cend - pos);
-        parse_chunk(&tl, &lines, &section, &cur_line);
-        lex.tl_free(&tl);
-        pos = cend;
     }
+    lex.tl_free(&tl);
     return lines;
 }
