@@ -885,6 +885,7 @@ fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLin
             }
         }
         if (eol < 0 && _slow == 0) { eol = fl.fast_line(src, pos, src_len, &lines, section, cur_line); }
+        if (eol < 0 && _slow == 0) { eol = fl.fast_dir(src, pos, src_len, &lines, &section, cur_line); }
         if (eol >= 0) {
             if (eol < src_len) { cur_line = cur_line + 1; }
             lend = eol;

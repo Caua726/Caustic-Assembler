@@ -4,7 +4,8 @@
 // It takes the shapes the compiler writes — `name:`, `op`, `op a`, `op a, b`
 // with registers, immediates, labels, `SIZE PTR [base ± disp]`,
 // `[base + index*scale ± disp]` and `[rip + symbol]` — which are about 99 % of
-// the lines of a compiled program. Anything else (directives, comments,
+// the lines of a compiled program, and (fast_dir) the directives it writes and
+// whole-line comments. Anything else (other directives, trailing comments,
 // prefixes, segment overrides, a word the tokenizer would treat specially) is
 // declined, and the caller hands that line to the tokenizer and parse_chunk as
 // before. Where it accepts a line, the result is exactly what the tokenizer
@@ -14,6 +15,7 @@
 use "../lexer/lexer.cst" as lex;
 use "../core/asm_defs.cst" as def;
 use "parsed_line.cst" as pl;
+use "custom_sections.cst" as cs;
 
 fn _sp(src as *u8, i as i64, e as i64) as i64 {
     let is i64 as k with mut = i;
@@ -265,6 +267,275 @@ fn fast_line(src as *u8, s as i64, e as i64, lines as *pl.ParsedLines, section a
         if (_at(src, i, e) >= 0) { lines.count = lines.count - 1; return 0 - 1; }
     }
     return i;
+}
+
+// ── Directives ─────────────────────────────────────────────────────
+
+fn _is(p as *u8, n as i32, lit as *u8, ln as i32) as i32 {
+    if (n != ln) { return 0; }
+    let is i32 as k with mut = 1;                  // [0] is the '.' already seen
+    while (k < n) { if (p[k] != lit[k]) { return 0; } k = k + 1; }
+    return 1;
+}
+
+let is *u8 as _da with mut;                        // _dsym / _dstr: the operand
+let is i32 as _dl with mut;
+
+// A symbol the tokenizer reads as an identifier: its end, or -1.
+fn _dsym(src as *u8, i as i64, e as i64) as i64 {
+    let is i32 as c = _at(src, i, e);
+    if (c < 0 || _word_start(c) == 0) { return 0 - 1; }
+    let is i64 as we = _word_end(src, i, e);
+    _da = cast(*u8, cast(i64, src) + i);
+    _dl = cast(i32, we - i);
+    if (_word(_da, _dl) != 0) { return 0 - 1; }
+    return we;
+}
+
+// A string literal closed on this line, quotes included: its end, or -1.
+fn _dstr(src as *u8, i as i64, e as i64) as i64 {
+    if (_at(src, i, e) != 34) { return 0 - 1; }
+    let is i64 as k with mut = i + 1;
+    while (k < e && src[k] != 34) {
+        if (src[k] == 10) { return 0 - 1; }
+        if (src[k] == 92) {
+            k = k + 1;
+            if (k >= e || src[k] == 10) { return 0 - 1; }
+        }
+        k = k + 1;
+    }
+    if (k >= e) { return 0 - 1; }
+    _da = cast(*u8, cast(i64, src) + i);
+    _dl = cast(i32, k + 1 - i);
+    return k + 1;
+}
+
+// A decimal or 0x number, `-` in front of it when neg is 1: its end, or -1.
+// What follows must be a blank, a comma or the end of the line.
+let is i64 as _dn with mut;
+fn _dnum(src as *u8, i0 as i64, e as i64, neg as i32) as i64 {
+    let is i64 as i with mut = i0;
+    let is i32 as minus with mut = 0;
+    if (neg == 1 && _at(src, i, e) == 45) { minus = 1; i = _sp(src, i + 1, e); }
+    let is i32 as c = _at(src, i, e);
+    if (c < 48 || c > 57) { return 0 - 1; }
+    let is i64 as k = lex.parse_number_fast(src, i, e, &_dn);
+    let is i32 as d = _at(src, k, e);
+    if (d >= 0 && d != 32 && d != 9 && d != 44) { return 0 - 1; }
+    if (minus == 1) { _dn = 0 - _dn; }
+    return k;
+}
+
+fn _dline(lines as *pl.ParsedLines, kind as i32, section as i32, line_no as i32) as *pl.ParsedLine {
+    let is *pl.ParsedLine as line = pl.pl_add(lines);
+    line.kind = pl.LINE_DIRECTIVE;
+    line.section = cast(i8, section);
+    line.line_no = line_no;
+    line.dir_kind = cast(i8, kind);
+    return line;
+}
+
+// One directive or whole-line comment (src[s..] up to its newline, e the end of
+// the buffer). Returns the line's end, or -1: the tokenizer's. Every operand is
+// read before the record is added, so a declined line leaves nothing behind.
+fn fast_dir(src as *u8, s as i64, e as i64, lines as *pl.ParsedLines, section as *i32, line_no as i32) as i64 {
+    let is i64 as i with mut = _sp(src, s, e);
+    let is i32 as c0 = _at(src, i, e);
+    if (c0 == 35) {
+        while (i < e && src[i] != 10) { i = i + 1; }
+        return i;
+    }
+    if (c0 != 46) { return 0 - 1; }
+    let is i64 as we = _word_end(src, i, e);
+    let is *u8 as p = cast(*u8, cast(i64, src) + i);
+    let is i32 as n = cast(i32, we - i);
+    if (n < 4) { return 0 - 1; }
+    let is i32 as c = cast(i32, p[1]);
+    let is i64 as a = _sp(src, we, e);
+    let is i64 as k with mut = 0;
+    let is i32 as sec = *section;
+    if (c == 99) {
+        if (_is(p, n, ".cfi_offset", 11) == 1) {
+            k = _dsym_reg(src, a, e);
+            if (k < 0) { return 0 - 1; }
+            let is i32 as reg = _dl;
+            k = _sp(src, k, e);
+            if (_at(src, k, e) != 44) { return 0 - 1; }
+            k = _dnum(src, _sp(src, k + 1, e), e, 1);
+            if (k < 0) { return 0 - 1; }
+            k = _sp(src, k, e);
+            if (_at(src, k, e) >= 0) { return 0 - 1; }
+            let is *pl.ParsedLine as o = _dline(lines, pl.DIR_CFI_OFFSET, sec, line_no);
+            pl.axw(o).dir_arg_len = reg;
+            pl.axw(o).dir_num = _dn;
+            return k;
+        }
+        if (_is(p, n, ".cfi_def_cfa_offset", 19) == 1) {
+            k = _dnum(src, a, e, 0);
+            if (k < 0) { return 0 - 1; }
+            k = _sp(src, k, e);
+            if (_at(src, k, e) >= 0) { return 0 - 1; }
+            pl.axw(_dline(lines, pl.DIR_CFI_DEF_CFA_OFFSET, sec, line_no)).dir_num = _dn;
+            return k;
+        }
+        if (_is(p, n, ".cfi_def_cfa_register", 21) == 1) {
+            k = _dsym_reg(src, a, e);
+            if (k < 0) { return 0 - 1; }
+            let is i32 as reg = _dl;
+            k = _sp(src, k, e);
+            if (_at(src, k, e) >= 0) { return 0 - 1; }
+            pl.axw(_dline(lines, pl.DIR_CFI_DEF_CFA_REGISTER, sec, line_no)).dir_arg_len = reg;
+            return k;
+        }
+        if (_is(p, n, ".cfi_endproc", 12) == 1) {
+            if (_at(src, a, e) >= 0) { return 0 - 1; }
+            _dline(lines, pl.DIR_CFI_ENDPROC, sec, line_no);
+            return a;
+        }
+        if (_is(p, n, ".cfi_startproc", 14) == 1) {
+            k = a;
+            if (_at(src, a, e) >= 0) {
+                k = _dsym(src, a, e);
+                if (k < 0) { return 0 - 1; }
+                k = _sp(src, k, e);
+                if (_at(src, k, e) >= 0) { return 0 - 1; }
+                let is *pl.ParsedLine as o = _dline(lines, pl.DIR_CFI_STARTPROC, sec, line_no);
+                pl.axw(o).dir_arg_ptr = _da;
+                pl.axw(o).dir_arg_len = _dl;
+                return k;
+            }
+            _dline(lines, pl.DIR_CFI_STARTPROC, sec, line_no);
+            return k;
+        }
+        return 0 - 1;
+    }
+    if (c == 108) {
+        if (_is(p, n, ".long", 5) == 1) { return _dnumline(src, a, e, lines, pl.DIR_LONG, sec, line_no); }
+        if (_is(p, n, ".loc", 4) == 1) {
+            // file, line, column: the line is kept
+            k = _dnum(src, a, e, 0);
+            if (k < 0) { return 0 - 1; }
+            k = _dnum(src, _sp(src, k, e), e, 0);
+            if (k < 0) { return 0 - 1; }
+            let is i64 as ln = _dn;
+            k = _sp(src, k, e);
+            if (_at(src, k, e) >= 0) {
+                k = _dnum(src, k, e, 0);
+                if (k < 0) { return 0 - 1; }
+                k = _sp(src, k, e);
+            }
+            if (_at(src, k, e) >= 0) { return 0 - 1; }
+            pl.axw(_dline(lines, pl.DIR_LOC, sec, line_no)).dir_num = ln;
+            return k;
+        }
+        return 0 - 1;
+    }
+    if (c == 112) {
+        if (_is(p, n, ".p2align", 8) == 0) { return 0 - 1; }
+        k = _dnum(src, a, e, 0);
+        if (k < 0) { return 0 - 1; }
+        let is i64 as pw = _dn;
+        let is i64 as mx with mut = 0;
+        k = _sp(src, k, e);
+        if (_at(src, k, e) == 44) {                 // `, fill` (empty only) then `, max`
+            k = _sp(src, k + 1, e);
+            if (_at(src, k, e) != 44) { return 0 - 1; }
+            k = _dnum(src, _sp(src, k + 1, e), e, 0);
+            if (k < 0) { return 0 - 1; }
+            mx = _dn;
+            k = _sp(src, k, e);
+        }
+        if (_at(src, k, e) >= 0) { return 0 - 1; }
+        let is *pl.ParsedLine as o = _dline(lines, pl.DIR_P2ALIGN, sec, line_no);
+        pl.axw(o).dir_num = pw;
+        o.op1_imm = mx;
+        return k;
+    }
+    if (c == 103) {
+        if (_is(p, n, ".globl", 6) == 0) { return 0 - 1; }
+        k = _dsym(src, a, e);
+        if (k < 0) { return 0 - 1; }
+        k = _sp(src, k, e);
+        if (_at(src, k, e) >= 0) { return 0 - 1; }
+        let is *pl.ParsedLine as o = _dline(lines, pl.DIR_GLOBL, sec, line_no);
+        pl.axw(o).dir_arg_ptr = _da;
+        pl.axw(o).dir_arg_len = _dl;
+        return k;
+    }
+    if (c == 97 || (c == 115 && n == 7)) {
+        let is i32 as kind with mut = pl.DIR_ASCII;
+        if (_is(p, n, ".string", 7) == 1 || _is(p, n, ".asciz", 6) == 1) { kind = pl.DIR_STRING; }
+        else if (_is(p, n, ".ascii", 6) == 0) { return 0 - 1; }
+        k = _dstr(src, a, e);
+        if (k < 0) { return 0 - 1; }
+        k = _sp(src, k, e);
+        if (_at(src, k, e) >= 0) { return 0 - 1; }
+        let is *pl.ParsedLine as o = _dline(lines, kind, sec, line_no);
+        pl.axw(o).dir_arg_ptr = _da;
+        pl.axw(o).dir_arg_len = _dl;
+        return k;
+    }
+    if (c == 122) {
+        if (_is(p, n, ".zero", 5) == 0) { return 0 - 1; }
+        k = _dnum(src, a, e, 0);
+        if (k < 0) { return 0 - 1; }
+        k = _sp(src, k, e);
+        if (_at(src, k, e) >= 0) { return 0 - 1; }
+        pl.axw(_dline(lines, pl.DIR_ZERO, sec, line_no)).dir_num = _dn;
+        return k;
+    }
+    if (c == 113) {
+        if (_is(p, n, ".quad", 5) == 0) { return 0 - 1; }
+        let is i32 as f = _at(src, a, e);
+        if (f == 45 || (f >= 48 && f <= 57)) { return _dnumline(src, a, e, lines, pl.DIR_QUAD, sec, line_no); }
+        k = _dsym(src, a, e);
+        if (k < 0) { return 0 - 1; }
+        k = _sp(src, k, e);
+        if (_at(src, k, e) >= 0) { return 0 - 1; }
+        let is *pl.ParsedLine as o = _dline(lines, pl.DIR_QUAD, sec, line_no);
+        pl.axw(o).dir_arg_ptr = _da;
+        pl.axw(o).dir_arg_len = _dl;
+        pl.axw(o).dir_num = 0;
+        return k;
+    }
+    if (c == 119) {
+        if (_is(p, n, ".word", 5) == 0) { return 0 - 1; }
+        return _dnumline(src, a, e, lines, pl.DIR_WORD, sec, line_no);
+    }
+    // Section switches: a record whose section is the new one (.section sets it
+    // in the directive, the others through parse_chunk's `line.section =`).
+    let is i32 as ns with mut = 0 - 1;
+    let is i32 as dk with mut = 0;
+    if (_at(src, a, e) < 0) {
+        if (_is(p, n, ".text", 5) == 1) { ns = cs.SECTION_TEXT; dk = pl.DIR_TEXT; }
+        else if (_is(p, n, ".data", 5) == 1) { ns = cs.SECTION_DATA; dk = pl.DIR_DATA; }
+        else if (_is(p, n, ".bss", 4) == 1) { ns = cs.SECTION_BSS; dk = pl.DIR_BSS; }
+        if (ns < 0) { return 0 - 1; }
+        *section = ns;
+        _dline(lines, dk, ns, line_no);
+        return a;
+    }
+    return 0 - 1;
+}
+
+// A register operand: its end and id in _dl, or -1.
+fn _dsym_reg(src as *u8, i as i64, e as i64) as i64 {
+    let is i32 as c = _at(src, i, e);
+    if (c < 0 || _word_start(c) == 0 || c == 46) { return 0 - 1; }
+    let is i64 as we = _word_end(src, i, e);
+    let is i32 as cls = _word(cast(*u8, cast(i64, src) + i), cast(i32, we - i));
+    if (cls < 0 || (cls >> 16) != 1) { return 0 - 1; }
+    _dl = cls & 65535;
+    return we;
+}
+
+fn _dnumline(src as *u8, a as i64, e as i64, lines as *pl.ParsedLines, kind as i32, sec as i32, line_no as i32) as i64 {
+    let is i64 as k with mut = _dnum(src, a, e, 1);
+    if (k < 0) { return 0 - 1; }
+    k = _sp(src, k, e);
+    if (_at(src, k, e) >= 0) { return 0 - 1; }
+    pl.axw(_dline(lines, kind, sec, line_no)).dir_num = _dn;
+    return k;
 }
 
 // Where the line starting at s ends for the tokenizer: its first newline that
