@@ -309,8 +309,8 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         p = p + 1;
         let is *lex.Token as name_tok = lex.tl_get(tl, p);
         if (name_tok.kind != lex.TK_NEWLINE && name_tok.kind != lex.TK_EOF) {
-            line.dir_arg_ptr = name_tok.ptr;
-            line.dir_arg_len = name_tok.len;
+            pl.axw(line).dir_arg_ptr = name_tok.ptr;
+            pl.axw(line).dir_arg_len = name_tok.len;
             p = p + 1;
         }
         return p;
@@ -321,8 +321,8 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         p = p + 1;
         let is *lex.Token as asc_tok = lex.tl_get(tl, p);
         if (asc_tok.kind == lex.TK_STRING) {
-            line.dir_arg_ptr = asc_tok.ptr;
-            line.dir_arg_len = asc_tok.len;
+            pl.axw(line).dir_arg_ptr = asc_tok.ptr;
+            pl.axw(line).dir_arg_len = asc_tok.len;
             p = p + 1;
         }
         return p;
@@ -333,8 +333,8 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         p = p + 1;
         let is *lex.Token as str_tok = lex.tl_get(tl, p);
         if (str_tok.kind == lex.TK_STRING) {
-            line.dir_arg_ptr = str_tok.ptr;
-            line.dir_arg_len = str_tok.len;
+            pl.axw(line).dir_arg_ptr = str_tok.ptr;
+            pl.axw(line).dir_arg_len = str_tok.len;
             p = p + 1;
         }
         return p;
@@ -348,8 +348,8 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         // file, and stash the bytes in decoded_ptr/decoded_len — the file may
         // contain NULs, so the length is explicit, not strlen-derived.
         let is *lex.Token as inc_tok = lex.tl_get(tl, p);
-        line.decoded_ptr = cast(*u8, 0);
-        line.decoded_len = 0;
+        pl.axw(line).decoded_ptr = cast(*u8, 0);
+        pl.axw(line).decoded_len = 0;
         if (inc_tok.kind == lex.TK_STRING) {
             // The lexer keeps the surrounding double-quotes in the token; strip
             // them so the path is the bare filename.
@@ -366,8 +366,8 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
             let is i64 as isz = util.read_file_size(ipath);
             let is *u8 as idata = util.read_file(ipath);
             if (cast(i64, idata) != 0 && isz > 0) {
-                line.decoded_ptr = idata;
-                line.decoded_len = cast(i32, isz);
+                pl.axw(line).decoded_ptr = idata;
+                pl.axw(line).decoded_len = cast(i32, isz);
             } else {
                 io._write_fd(io.STDERR, ".incbin: cannot read file: ", 27);
                 io._write_fd(io.STDERR, ipath, cast(i64, plen));
@@ -396,7 +396,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
             let is *lex.Token as ct = lex.tl_get(tl, cur);
             if (ct.kind == lex.TK_COMMA) { cur = cur + 1; } else { break; }
         }
-        line.decoded_ptr = bb; line.decoded_len = bn; line.dir_num = 0;
+        pl.axw(line).decoded_ptr = bb; pl.axw(line).decoded_len = bn; pl.axw(line).dir_num = 0;
         return cur;
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".word") == 1 || enc.streq_lit(tok.ptr, tok.len, ".value") == 1
@@ -405,7 +405,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         line.section = cast(i8, *current_section);
         p = p + 1;
         let is i32 as np with mut = p;
-        line.dir_num = parse_dir_num(tl, p, &np);
+        pl.axw(line).dir_num = parse_dir_num(tl, p, &np);
         return np;
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".long") == 1) {
@@ -413,7 +413,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         line.section = cast(i8, *current_section);
         p = p + 1;
         let is i32 as np with mut = p;
-        line.dir_num = parse_dir_num(tl, p, &np);
+        pl.axw(line).dir_num = parse_dir_num(tl, p, &np);
         return np;
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".ripdisp") == 1) {
@@ -423,9 +423,9 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         line.section = cast(i8, *current_section);
         p = p + 1;
         let is *lex.Token as rt = lex.tl_get(tl, p);
-        line.dir_arg_ptr = rt.ptr;
-        line.dir_arg_len = rt.len;
-        line.dir_num = 0;
+        pl.axw(line).dir_arg_ptr = rt.ptr;
+        pl.axw(line).dir_arg_len = rt.len;
+        pl.axw(line).dir_num = 0;
         return p + 1;
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".quad") == 1) {
@@ -435,13 +435,13 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         let is *lex.Token as qt = lex.tl_get(tl, p);
         if (qt.kind == lex.TK_IDENT) {
             // `.quad <symbol>` — emits an R_X86_64_64 relocation at codegen.
-            line.dir_arg_ptr = qt.ptr;
-            line.dir_arg_len = qt.len;
-            line.dir_num = 0;
+            pl.axw(line).dir_arg_ptr = qt.ptr;
+            pl.axw(line).dir_arg_len = qt.len;
+            pl.axw(line).dir_num = 0;
             return p + 1;
         }
         let is i32 as np with mut = p;
-        line.dir_num = parse_dir_num(tl, p, &np);
+        pl.axw(line).dir_num = parse_dir_num(tl, p, &np);
         return np;
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".p2align") == 1) {
@@ -449,7 +449,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         line.section = cast(i8, *current_section);
         p = p + 1;
         let is *lex.Token as pw = lex.tl_get(tl, p);
-        if (pw.kind == lex.TK_NUMBER) { line.dir_num = pw.num_val; p = p + 1; }
+        if (pw.kind == lex.TK_NUMBER) { pl.axw(line).dir_num = pw.num_val; p = p + 1; }
         line.op1_imm = 0;
         // `, fill` (empty only) then `, max`
         let is *lex.Token as c1 = lex.tl_get(tl, p);
@@ -470,7 +470,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
     if (enc.streq_lit(tok.ptr, tok.len, ".loopalign") == 1) {
         line.dir_kind = pl.DIR_P2ALIGN;
         line.section = cast(i8, *current_section);
-        line.dir_num = 4;
+        pl.axw(line).dir_num = 4;
         line.op1_imm = 10;
         line.op2_imm = 1;
         line.op2_mem_disp = 0 - 1;
@@ -482,7 +482,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         p = p + 1;
         let is *lex.Token as val_tok = lex.tl_get(tl, p);
         if (val_tok.kind == lex.TK_NUMBER) {
-            line.dir_num = val_tok.num_val;
+            pl.axw(line).dir_num = val_tok.num_val;
             p = p + 1;
         }
         return p;
@@ -492,7 +492,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         line.dir_kind = pl.DIR_FILE;
         p = p + 1;
         let is *lex.Token as num_tok = lex.tl_get(tl, p);
-        if (num_tok.kind == lex.TK_NUMBER) { line.dir_num = num_tok.num_val; p = p + 1; }
+        if (num_tok.kind == lex.TK_NUMBER) { pl.axw(line).dir_num = num_tok.num_val; p = p + 1; }
         let is *lex.Token as path_tok = lex.tl_get(tl, p);
         if (path_tok.kind == lex.TK_STRING) {
             let is *u8 as praw with mut = path_tok.ptr;
@@ -501,8 +501,8 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
                 praw = cast(*u8, cast(i64, praw) + 1);
                 plen = plen - 2;
             }
-            line.dir_arg_ptr = praw;
-            line.dir_arg_len = plen;
+            pl.axw(line).dir_arg_ptr = praw;
+            pl.axw(line).dir_arg_len = plen;
             p = p + 1;
         }
         p = skip_to_eol(tl, p);
@@ -515,7 +515,7 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         let is *lex.Token as f_tok = lex.tl_get(tl, p);
         if (f_tok.kind == lex.TK_NUMBER) { p = p + 1; }
         let is *lex.Token as l_tok = lex.tl_get(tl, p);
-        if (l_tok.kind == lex.TK_NUMBER) { line.dir_num = l_tok.num_val; p = p + 1; }
+        if (l_tok.kind == lex.TK_NUMBER) { pl.axw(line).dir_num = l_tok.num_val; p = p + 1; }
         p = skip_to_eol(tl, p);
         return p;
     }
@@ -529,8 +529,8 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         // Optional function name (the assembler keys the record by symbol).
         let is *lex.Token as nm = lex.tl_get(tl, p);
         if (nm.kind == lex.TK_IDENT) {
-            line.dir_arg_ptr = nm.ptr;
-            line.dir_arg_len = nm.len;
+            pl.axw(line).dir_arg_ptr = nm.ptr;
+            pl.axw(line).dir_arg_len = nm.len;
             p = p + 1;
         }
         return skip_to_eol(tl, p);
@@ -543,25 +543,25 @@ fn parse_directive(tl as *lex.TokenList, pos as i32, line as *pl.ParsedLine, cur
         line.dir_kind = pl.DIR_CFI_DEF_CFA_OFFSET;
         p = p + 1;
         let is *lex.Token as n = lex.tl_get(tl, p);
-        if (n.kind == lex.TK_NUMBER) { line.dir_num = n.num_val; p = p + 1; }
+        if (n.kind == lex.TK_NUMBER) { pl.axw(line).dir_num = n.num_val; p = p + 1; }
         return skip_to_eol(tl, p);
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".cfi_def_cfa_register") == 1) {
         line.dir_kind = pl.DIR_CFI_DEF_CFA_REGISTER;
         p = p + 1;
         let is *lex.Token as r = lex.tl_get(tl, p);
-        if (r.kind == lex.TK_REGISTER) { line.dir_arg_len = r.id; p = p + 1; }
+        if (r.kind == lex.TK_REGISTER) { pl.axw(line).dir_arg_len = r.id; p = p + 1; }
         return skip_to_eol(tl, p);
     }
     if (enc.streq_lit(tok.ptr, tok.len, ".cfi_offset") == 1) {
         line.dir_kind = pl.DIR_CFI_OFFSET;
         p = p + 1;
         let is *lex.Token as r = lex.tl_get(tl, p);
-        if (r.kind == lex.TK_REGISTER) { line.dir_arg_len = r.id; p = p + 1; }
+        if (r.kind == lex.TK_REGISTER) { pl.axw(line).dir_arg_len = r.id; p = p + 1; }
         let is *lex.Token as cm = lex.tl_get(tl, p);
         if (cm.kind == lex.TK_COMMA) { p = p + 1; }
         let is i32 as np with mut = p;
-        line.dir_num = parse_dir_num(tl, p, &np);
+        pl.axw(line).dir_num = parse_dir_num(tl, p, &np);
         return skip_to_eol(tl, np);
     }
     line.dir_kind = pl.DIR_OTHER;
@@ -643,8 +643,8 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
                 let is *pl.ParsedLine as lbl = pl.pl_add(lines);
                 lbl.kind = pl.LINE_LABEL;
                 lbl.section = cast(i8, current_section);
-                lbl.label_ptr = tok.ptr;
-                lbl.label_len = cast(i16, tok.len);
+                pl.axw(lbl).label_ptr = tok.ptr;
+                pl.axw(lbl).label_len = cast(i16, tok.len);
                 lbl.line_no = cur_line;
                 pos = pos + 2;
             } else {
@@ -663,8 +663,8 @@ fn parse_chunk(tl as *lex.TokenList, lines as *pl.ParsedLines, section_ptr as *i
                 let is *pl.ParsedLine as line = pl.pl_add(lines);
                 line.kind = pl.LINE_LABEL;
                 line.section = cast(i8, current_section);
-                line.label_ptr = tok.ptr;
-                line.label_len = cast(i16, tok.len);
+                pl.axw(line).label_ptr = tok.ptr;
+                pl.axw(line).label_len = cast(i16, tok.len);
                 line.line_no = cur_line;
                 pos = pos + 2;
             } else {
@@ -707,8 +707,24 @@ fn parse_all(tl as *lex.TokenList, line_hint as i32) as pl.ParsedLines {
 // than the entire token array (a large RSS cut for big .s files). ParsedLine
 // pointers reference the source text (which the caller keeps alive), not the
 // token buffers, so freeing each chunk's tokens is safe.
+// Capacity for the line array: the newline count plus a quarter (a line can
+// hold a label and an instruction), so the array is not doubled — doubling
+// copied the whole array with the old one still mapped (the self-host .s: the
+// file_size/24 guess was 604K lines for 804K, a 163 MB array plus the 81 MB
+// copy). Pages past the last line are never touched, so the slack costs
+// address space, not memory.
+fn line_capacity(src as *u8, src_len as i64, floor as i32) as i32 {
+    let is i64 as n with mut = 0;
+    let is i64 as i with mut = 0;
+    while (i < src_len) { if (src[i] == 10) { n = n + 1; } i = i + 1; }
+    let is i64 as cap = n + n / 4 + 1024;
+    if (cap < cast(i64, floor)) { return floor; }
+    if (cap > 1073741823) { return 1073741823; }
+    return cast(i32, cap);
+}
+
 fn parse_streaming(src as *u8, src_len as i64, line_hint as i32) as pl.ParsedLines {
-    let is pl.ParsedLines as lines = pl.pl_init(line_hint);
+    let is pl.ParsedLines as lines = pl.pl_init(line_capacity(src, src_len, line_hint));
     let is i32 as section with mut = cs.SECTION_TEXT;
     let is i32 as cur_line with mut = 1;     // running source line, threaded across chunks
     let is i64 as CHUNK = 524288;            // 512 KiB; extended to the next newline

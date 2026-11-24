@@ -91,17 +91,72 @@ struct ParsedLine {
     op2_label_ptr as *u8;
     op2_label_len as i16;
     // other
+    dir_kind as i8;
+    aux as i32;               // 1 + index of this line's LineAux, 0 = none
+    offset as i64;
+    size as i32;
+    line_no as i32;
+}
+
+// What only a label or a directive line carries. Nine lines in ten are
+// instructions, so these 42 bytes live in a side table that only those lines
+// fill: the self-host .s has 804K lines and 87K of them need one.
+struct LineAux {
     label_ptr as *u8;
     label_len as i16;
-    dir_kind as i8;
     dir_arg_ptr as *u8;
     dir_arg_len as i32;
     dir_num as i64;
     decoded_ptr as *u8;
     decoded_len as i32;
-    offset as i64;
-    size as i32;
-    line_no as i32;
+}
+
+// One assembly at a time per process (the compiler assembles its modules one
+// after another; parallel workers are processes), so the table is global and
+// reset with each line array.
+let is *u8 as _aux_data with mut = cast(*u8, 0);
+let is i32 as _aux_count with mut = 0;
+let is i32 as _aux_cap with mut = 0;
+let is LineAux as _aux_zero with mut;     // what a line without one reads
+
+fn _aux_reset() as void {
+    if (_aux_cap > 0) { om.opt_free(_aux_data); }
+    _aux_data = cast(*u8, 0);
+    _aux_count = 0;
+    _aux_cap = 0;
+}
+
+// The line's LineAux to read: all zero when it has none.
+fn ax(line as *ParsedLine) as *LineAux {
+    let is i32 as a = line.aux;
+    if (a == 0) {
+        _aux_zero.label_ptr = cast(*u8, 0); _aux_zero.label_len = cast(i16, 0);
+        _aux_zero.dir_arg_ptr = cast(*u8, 0); _aux_zero.dir_arg_len = 0; _aux_zero.dir_num = 0;
+        _aux_zero.decoded_ptr = cast(*u8, 0); _aux_zero.decoded_len = 0;
+        return &_aux_zero;
+    }
+    return cast(*LineAux, cast(i64, _aux_data) + cast(i64, a - 1) * sizeof(LineAux));
+}
+
+// The line's LineAux to write, made (zeroed) on first use.
+fn axw(line as *ParsedLine) as *LineAux {
+    if (line.aux != 0) { return ax(line); }
+    if (_aux_count >= _aux_cap) {
+        let is i32 as nc with mut = _aux_cap * 2;
+        if (nc < 1024) { nc = 1024; }
+        let is *u8 as nd = om.opt_alloc(cast(i64, nc) * sizeof(LineAux));
+        if (_aux_count > 0) { mem.memcpy(nd, _aux_data, cast(i64, _aux_count) * sizeof(LineAux)); }
+        if (_aux_cap > 0) { om.opt_free(_aux_data); }
+        _aux_data = nd;
+        _aux_cap = nc;
+    }
+    let is *LineAux as e = cast(*LineAux, cast(i64, _aux_data) + cast(i64, _aux_count) * sizeof(LineAux));
+    e.label_ptr = cast(*u8, 0); e.label_len = cast(i16, 0);
+    e.dir_arg_ptr = cast(*u8, 0); e.dir_arg_len = 0; e.dir_num = 0;
+    e.decoded_ptr = cast(*u8, 0); e.decoded_len = 0;
+    _aux_count = _aux_count + 1;
+    line.aux = _aux_count;
+    return e;
 }
 
 struct ParsedLines {
@@ -114,6 +169,7 @@ fn pl_init(hint as i32) as ParsedLines {
     let is i32 as cap with mut = hint;
     if (cap < 4096) { cap = 4096; }
     let is ParsedLines as pl;
+    _aux_reset();
     pl.data = om.opt_alloc(cast(i64, cap) * sizeof(ParsedLine));
     pl.count = 0;
     pl.cap = cap;
@@ -128,6 +184,7 @@ fn pl_get(pl as *ParsedLines, idx as i32) as *ParsedLine {
 // output buffers hold the encoded bytes; label pointers reference source text.
 fn pl_free(pl as *ParsedLines) as void {
     om.opt_free(pl.data);
+    _aux_reset();
     pl.data = cast(*u8, 0);
     pl.count = 0;
     pl.cap = 0;

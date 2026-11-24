@@ -108,6 +108,25 @@ fn sym_free(st as *SymbolTable) as void {
     st.cap = 0;
 }
 
+// Rebuild the buckets at a new size. Symbols are re-linked in index order,
+// each pushed on its chain's head as sym_add does, so a chain lists the newer
+// symbols first exactly as before.
+fn _sym_rehash(st as *SymbolTable, new_size as i32) as void {
+    om.opt_free(cast(*u8, st.hash_buckets));
+    st.hash_buckets = cast(*i32, om.opt_alloc(cast(i64, new_size) * 4));
+    st.hash_size = new_size;
+    let is i32 as bi with mut = 0;
+    while (bi < new_size) { st.hash_buckets[bi] = 0 - 1; bi = bi + 1; }
+    let is i32 as i with mut = 0;
+    while (i < st.count) {
+        let is *Symbol as s = sym_get(st, i);
+        let is i32 as h = sym_hash(s.name_ptr, s.name_len, new_size);
+        st.hash_next[i] = st.hash_buckets[h];
+        st.hash_buckets[h] = i;
+        i = i + 1;
+    }
+}
+
 fn sym_add(st as *SymbolTable, name_ptr as *u8, name_len as i32, section as i32, offset as i64, is_global as i32) as void {
     if (st.count >= st.cap) {
         let is i32 as new_cap = st.cap * 2;
@@ -131,6 +150,10 @@ fn sym_add(st as *SymbolTable, name_ptr as *u8, name_len as i32, section as i32,
     s.offset = offset;
     s.is_global = is_global;
     s.strtab_off = 0;
+    // Keep at most one symbol per bucket on average: the bucket count was
+    // fixed at 16384, and the compiler's own .s has several times that many
+    // labels, so every lookup walked a chain (sym_find was a fifth of the run).
+    if (idx >= st.hash_size) { _sym_rehash(st, st.hash_size * 4); }
     // Insert into hash table
     let is i32 as h = sym_hash(name_ptr, name_len, st.hash_size);
     st.hash_next[idx] = st.hash_buckets[h];
