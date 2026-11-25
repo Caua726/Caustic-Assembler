@@ -665,6 +665,13 @@ fn _hint_z(src as *u8, pos as i64, src_len as i64, lines as *pl.ParsedLines, sec
 
 fn hint_line(src as *u8, pos as i64, src_len as i64, lines as *pl.ParsedLines, section as i32, line_no as i32, tstart as *i64) as i64 {
     let is i32 as shape = cast(i32, src[pos + 1]);
+    if (shape == 81) {                                   // a record codegen wrote (pl.side_add)
+        let is *pl.ParsedLine as ql = pl.side_take(lines);
+        ql.section = cast(i8, section);
+        ql.line_no = line_no;
+        *tstart = pos + 2;
+        return pos + 2;
+    }
     if (shape == 90) { return hint_z(src, pos, src_len, lines, section, line_no, tstart); }
     if (shape == 68) {                                   // a directive: kind, register, number
         let is i64 as dk with mut = 0;
