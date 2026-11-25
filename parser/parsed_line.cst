@@ -1,3 +1,4 @@
+use "../../std/io.cst" as io;
 use "../../std/mem.cst" as mem;
 use "../../src/ir/opt_mem.cst" as om;
 use "../core/asm_defs.cst" as def;
@@ -321,21 +322,43 @@ fn set_op_rip(line as *ParsedLine, which as i32, ptr as *u8, len as i32, sz as i
 }
 
 // Records the compiler wrote itself, in order; the stream marks where each goes.
-// One assembly at a time: side_reset when its stream begins.
-let is ParsedLines as side with mut;
+// One assembly at a time: side_reset when its stream begins. They sit in blocks,
+// each released once its last record is taken, so they and the lines being made
+// are not both whole at once. A block is large enough to be a mapping of its own
+// (opt_mem, which zeroes it), which the end of codegen leaves alone.
+let is i32 as SIDE_BLOCK with imut = 1344;     // just under 128 KB
+let is i32 as SIDE_BLOCKS with imut = 65536;
+let is [65536]i64 as side_blocks with mut;
+let is i32 as side_count with mut = 0;
 let is i32 as side_next with mut = 0;
-let is i32 as side_on with mut = 0;
-fn side_reset() as void { side.count = 0; side_next = 0; }
+
+fn side_reset() as void {
+    let is i32 as b with mut = side_next / SIDE_BLOCK;
+    while (b < SIDE_BLOCKS && side_blocks[b] != 0) { om.opt_free(cast(*u8, side_blocks[b])); side_blocks[b] = 0; b = b + 1; }
+    side_count = 0;
+    side_next = 0;
+}
+
 fn side_add(id as i32) as *ParsedLine {
-    if (side_on == 0) { side_on = 1; side.cap = 4096; side.data = om.opt_alloc(4096 * sizeof(ParsedLine)); side.count = 0; }
-    let is *ParsedLine as l = pl_add(&side);
+    let is i32 as b = side_count / SIDE_BLOCK;
+    let is i32 as at = side_count - b * SIDE_BLOCK;
+    if (at == 0) {
+        if (b >= SIDE_BLOCKS) { io.write_str(io.STDERR, "internal error: too many instructions\n"); io.exit(1); }
+        side_blocks[b] = cast(i64, om.opt_alloc(cast(i64, SIDE_BLOCK) * sizeof(ParsedLine)));
+    }
+    let is *ParsedLine as l = cast(*ParsedLine, side_blocks[b] + cast(i64, at) * sizeof(ParsedLine));
     l.kind = LINE_INST;
     l.inst_id = cast(i16, id);
+    side_count = side_count + 1;
     return l;
 }
+
 fn side_take(lines as *ParsedLines) as *ParsedLine {
+    let is i32 as b = side_next / SIDE_BLOCK;
+    let is i32 as at = side_next - b * SIDE_BLOCK;
     let is *ParsedLine as l = pl_add(lines);
-    *l = *pl_get(&side, side_next);
+    *l = *cast(*ParsedLine, side_blocks[b] + cast(i64, at) * sizeof(ParsedLine));
     side_next = side_next + 1;
+    if (at == SIDE_BLOCK - 1) { om.opt_free(cast(*u8, side_blocks[b])); side_blocks[b] = 0; }
     return l;
 }
